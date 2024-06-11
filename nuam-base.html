@@ -35,6 +35,7 @@
       #main {
             max-height: 100%;
             overflow-y: auto;
+            overflow-x: none;
         }
       
       ::-webkit-scrollbar {
@@ -421,11 +422,13 @@
 
 .related-artists-container::-webkit-scrollbar-track {
     background: #282626;
+    border-radius: 0 7px 0 0;
 }
 
 .related-artists-container::-webkit-scrollbar-thumb {
     background-color: #383838;
     border-radius: 6px;
+    border-radius: 0 7px 0 0;
     border: 3px solid #282626;
 }
       
@@ -984,15 +987,18 @@ display: block;
 
   #sort-menu button {
     background: none;
-    border: none;
+    border: 1px solid #f3f3f3; /* обводка видна сразу */
     color: #f3f3f3;
     cursor: pointer;
     font-size: 16px;
     margin: 0 5px;
-  }
-
-  #sort-menu button i {
-    
+    border-radius: 4px; /* закругленные углы */
+    transition: border-color 0.3s ease;
+    width: 30px; /* квадрат */
+    height: 30px; /* квадрат */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   #sort-menu button.clear-sort {
@@ -1000,6 +1006,14 @@ display: block;
     font-size: 18px;
     visibility: hidden;
     margin-right: 5px;
+    border: 1px solid #f3f3f3; /* обводка видна сразу */
+    border-radius: 4px; /* закругленные углы */
+    transition: border-color 0.3s ease;
+    width: 30px; /* квадрат */
+    height: 30px; /* квадрат */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   #sort-menu .active-sort .clear-sort {
@@ -1378,7 +1392,7 @@ background: #282626;
             </div>
         </div>
     </div>
-    <label for="hide-russian">виконують російською у 2024 році</label>
+    <label for="hide-russian">співають російською у 2024</label>
 </div>
 
     <div id="player-wrapper">
@@ -2022,6 +2036,9 @@ function updateFilterTags() {
 }
 
 function updateArtistsDisplay() {
+    const artistScrollContainer = document.getElementById('artist-scroll-container');
+    const scrollPosition = artistScrollContainer.scrollTop;
+
     currentDisplayList = applyFilters(artistsData, minListeners, maxListeners);
 
     if (isSortActive && currentSortCriteria) {
@@ -2032,6 +2049,8 @@ function updateArtistsDisplay() {
 
     displayArtists(currentDisplayList, true);
     updateArtistCounter(currentDisplayList.length);
+
+    artistScrollContainer.scrollTop = scrollPosition; // Восстановление позиции прокрутки
 
     const container = document.getElementById('artist-scroll-container');
     if (container) {
@@ -3066,6 +3085,8 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(playerWrapper, { attributes: true, attributeFilter: ['class'] });
 });
 
+  
+  
 </script>
 </body>
 </html>
