@@ -39,7 +39,7 @@
 		 position: relative;
 		 overflow: hidden;
 		 margin: 3px;
-		 width: calc(20% - 6px);
+		 width: 200px;
 		 color: #000000;
 		 text-align: center;
 		 cursor: pointer;
@@ -346,16 +346,18 @@
 			 transition: border-radius 0.3s ease;
 		}
 		 #topBlock {
-			 display: flex;
-			 height: 70px;
-			 width: 980px;
-			 margin: auto;
-			 align-items: center;
-			 justify-content: flex-start;
-			 background-color: #282626;
-			 position: fixed;
-			 z-index: 999;
-		}
+    display: flex;
+    height: 70px;
+    width: 100%;
+    margin: 0;
+    align-items: center;
+    justify-content: flex-start; 
+    background-color: #282626;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+}
+     
 		 #logoImage2 {
 			 display: none;
 		}
@@ -375,13 +377,15 @@
 			 align-items: center;
 		}
 		 .dropdown-label {
+       margin-right: 10px;
 			 text-align: right;
 			 font-family: 'CustomFont';
 			 font-size: 12px;
 			 font-weight: 500;
 			 color: white;
 			 position: absolute;
-			 left: 402px;
+			 right: 472px;
+       left: auto;
 			 user-select: none;
 		}
 		 .dropdown-labelR {
@@ -392,14 +396,15 @@
 			 font-weight: 500;
 			 color: white;
 			 position: absolute;
-			 left: 702px;
+			 right: 175px;
+       left: auto;
 			 user-select: none;
 		}
 		 .grid-container {
 			 display: flex;
 			 flex-wrap: wrap;
-			 justify-content: flex-start;
-			 max-width: 980px;
+			 justify-content: center;
+       align-items: center;
 			 position: absolute;
 			 margin-top: 73px;
 			 padding-bottom: 74px;
@@ -550,8 +555,9 @@
 			 position: fixed;
 			 height: 70px;
 			 bottom: 0;
-			 left: 0;
-			 right: 0;
+			 width: 100%;
+       left: 0;
+       right: 0;
 			 background: linear-gradient(rgba(139, 200, 218, 0.9), rgba(215, 218, 139, 0.5));
 			 backdrop-filter: blur(10px) brightness(1.2) contrast(1.2) saturate(1.5);
 			 z-index: 1000;
@@ -765,7 +771,8 @@
 			 border-radius: 7px;
 			 transition: border-radius 0.3s;
 			 position: absolute;
-			 left: 805px;
+			 right: 20px;
+       left: auto;
 			 user-select: none;
 			 z-index: 999;
 		}
@@ -826,7 +833,8 @@
 			 border-radius: 7px;
 			 transition: border-radius 0.3s;
 			 position: absolute;
-			 left: 507px;
+			 right: 317px;
+       left: auto;
 			 user-select: none;
 			 z-index: 999;
 		}
