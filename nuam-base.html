@@ -53,7 +53,7 @@
 }
 
       #logo {
-  height: 36px;
+  height: 30px;
         top: 4px;
   margin-right: 20px;
         margin-left: 20px;
@@ -121,11 +121,11 @@
 
 #genre-button, #sort-button {
     position: relative;
-    background-color: #282626;
-    color: #f3f3f3;
+    background-color: #f3f3f3;
+    color: #282626;
     font-size: 16px;
     font-weight: bold;
-    border: 2px solid #383838;
+    border: 2px solid #f3f3f3;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 7px 7px 0 0;
@@ -133,34 +133,14 @@
     z-index: 200;
 }
 
-#genre-button::before, #sort-button::before {
-    content: '';
-    position: absolute;
-    top: -2px; 
-    left: -2px; 
-    right: -2px; 
-    bottom: -2px; 
-    background: linear-gradient(to bottom, #282626, #383838);
-    border-radius: inherit; 
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-#genre-button:hover::before, #sort-button:hover::before {
-    opacity: 1;
-}
-
-#genre-button:hover, #sort-button:hover, #genre-button.active:hover, #sort-button.active:hover {
-    color: #f3f3f3;
-    border-color: transparent;
-    border-image: linear-gradient(to bottom, #282626, #383838) 1;
-}
+#genre-button:hover, #sort-button:hover {
+      border: 2px solid #84AAFB;
+      } 
 
 #genre-button.active, #sort-button.active {
-    background-color: #383838;
+    background-color: #f3f3f3;
     border-radius: 7px 7px 0 0;
-    border: 2px solid #383838;
+    border: 2px solid #84AAFB;
 }
 
 #genres-section, #sort-section {
@@ -240,7 +220,7 @@
 
 .genre-button.removed {
     background-color: #fb8484;
-    color: #ffffff;
+    color: #f3f3f3;
     box-shadow: none !important;
     transform: none !important;
 }
@@ -252,7 +232,7 @@
     border-radius: 0 5px 5px 0px;
     right: 0;
     background-color: #e74c3c;
-    color: white;
+    color: #f3f3f3;
     border: none; 
     cursor: pointer;
     opacity: 0;
@@ -619,6 +599,7 @@ white-space: normal;
     background-color: #282626;
     height: 40px;
     flex-wrap: wrap;
+  padding-top: 20px;
 }
 
 #genre-button, #sort-button {
@@ -738,12 +719,12 @@ white-space: normal;
 .line {
     width: 100%;
     height: 1px;
-    background-color: #383838;
+    background-color: #84AAFB;
     margin: 0;
     position: relative;
     order: 1;
   top: -1px;
-  z-index: 3;
+  z-index: 201;
 }
       
       .line2 {
@@ -874,14 +855,19 @@ z-index: 3;
   width: 200px;  
   height: 30px;
     border-radius: 7px;
-    border: 2px solid #444;
+    border: 2px solid #383838;
     background-color: #282626;
     color: #f3f3f3;
     padding: 5px 30px 5px 10px;
     margin-right: 20px;
     box-sizing: border-box;
+  transition: border-color 0.3s ease;
   }
 
+      #artist-search:hover {
+      border: 2px solid #84AAFB;
+      }
+      
 input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -1098,13 +1084,14 @@ display: block;
     padding-bottom: 20px;
     position: relative;
     background-color: #282626;
-        user-select: none !important;
+    user-select: none !important;
 }
 
 #listeners-range {
     width: 95%;
+  right: 5px;
 } 
-
+ 
 .noUi-handle {
     background-color: #84AAFB;
     border: 1px solid #f3f3f3;
@@ -1112,6 +1099,11 @@ display: block;
     width: 26px !important;
     height: 26px !important;
     box-shadow: none;
+    cursor: grab;
+}
+      
+      .noUi-handle:active {
+    cursor: grabbing;
 }
 
 .noUi-connect {
@@ -1408,6 +1400,7 @@ background: #282626;
     display: flex;
     align-items: center;
     justify-content: space-between;
+      padding-top: 10px;
   }
 
   #logo {
@@ -1423,23 +1416,27 @@ background: #282626;
     width: auto;
     margin-right: 5px;
     position: relative;
-    background-color: #282626;
-    color: #f3f3f3;
+    background-color: #f3f3f3;
+    color: #282626;
     font-size: 10px;
     font-weight: bold;
-    border: 1px solid #383838;
+    border: 1px solid #f3f3f3;
     padding: 10px;
     cursor: pointer;
     border-radius: 7px 7px 0 0;
     z-index: 200;
   }
     
+    #genre-button:hover, #sort-button:hover {
+      border: 1px solid #84AAFB;
+      } 
+    
     #genre-button {
       margin-left: 5px;
     }
     
     #genre-button.active, #sort-button.active {
-    border: 1px solid #383838;
+    border: 1px solid #84AAFB;
 }
     
 .genre-button {
@@ -1564,6 +1561,7 @@ background: #282626;
 
 #listeners-range {
     width: 100%;
+  left: 0px;
 } 
 
 .noUi-handle {
@@ -1846,8 +1844,7 @@ background: #282626;
     text-align: left;
     position: absolute;
     right: 20px;
-      font-size: 10px;
-      top: 4px;
+    font-size: 10px;
 }
 
 .artist-counter {
