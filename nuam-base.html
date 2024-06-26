@@ -2,6 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUAM Base</title>
   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -23,13 +24,14 @@
             padding: 0;
             overflow: hidden;
             height: 100%;
-            width: 1200px;
+       min-width: 1220px;
         }
       
        #main-container {
             height: 100%;
             display: flex;
             flex-direction: column;
+         justify-content: center;
         }
       
       #main {
@@ -50,8 +52,14 @@
   background: #383838;
 }
 
+      #logo {
+  height: 36px;
+        top: 4px;
+  margin-right: 20px;
+        margin-left: 20px;
+}
+      
       #artist-section .artist-container {
-    padding-bottom: 300px;
         border-top: 4px solid #282626;
 }
       
@@ -68,7 +76,7 @@
         }
 
       .artist-container {
-            padding-bottom: 20px; /* Добавлено пространство внизу для скролла */
+            padding-bottom: 20px;
         }
       
 .artist-scroll-container::-webkit-scrollbar {
@@ -92,7 +100,7 @@
         
       #filter-section {
     display: flex;
-        background-color: #282626;
+    background-color: #282626;
     justify-content: space-between;
     align-items: center;
     padding: 20px 20px 20px 20px;
@@ -157,15 +165,15 @@
 
 #genres-section, #sort-section {
     display: block;
-  position: relative;
+    position: relative;
     flex-direction: column;
     background-color: #383838;
     padding: 0 20px;
     color: #282626;
-  max-height: 0;
+    max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
-  user-select: none !important;
+    user-select: none !important;
 }
 
 #genres-section.expanded, #sort-section.expanded {
@@ -187,7 +195,7 @@
     flex-wrap: wrap;
     gap: 10px;
     transition: all 0.3s;
-  user-select: none !important;
+    user-select: none !important;
 }
    
 :root {
@@ -208,7 +216,7 @@
     border-radius: 5px;
     line-height: 20px;
     transition: background-color 0.3s, color 0.3s, box-shadow 0.25s, transform 0.25s;
-  display: flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
 }
@@ -233,7 +241,7 @@
 .genre-button.removed {
     background-color: #fb8484;
     color: #ffffff;
-  box-shadow: none !important;
+    box-shadow: none !important;
     transform: none !important;
 }
 
@@ -245,7 +253,7 @@
     right: 0;
     background-color: #e74c3c;
     color: white;
-    border: none;
+    border: none; 
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
@@ -384,9 +392,7 @@
     z-index: 1;
     position: relative;
 }
-
-
-   
+ 
 .related-artists-container {
     position: absolute;
     top: 0;
@@ -396,7 +402,7 @@
     display: none;
     background-color: rgba(0, 0, 0, 0.7);
     color: #f3f3f3;
-    padding: 10px;
+    padding: 10px; 
     border-radius: 7px 7px 0 0;
     overflow-y: auto;
     font-size: 14px;
@@ -615,7 +621,11 @@ white-space: normal;
     flex-wrap: wrap;
 }
 
-#genre-button, #sort-button, #hide-russian {
+#genre-button, #sort-button {
+    margin-right: 5px;
+}
+      
+      #hide-russian {
     margin-right: 10px;
 }
       
@@ -688,7 +698,7 @@ white-space: normal;
     left: 2px;
     width: 16px;
     height: 16px;
-    background-color: #84AAFB;
+    background-color: #fb8484;
     border-radius: 50%;
     transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
 }
@@ -705,7 +715,7 @@ white-space: normal;
 #button-3 .checkbox:checked + .knobs:before {
     content: "";
     left: 22px;
-    background-color: #fb8484;
+    background-color: #84AAFB;
 }
 
 #button-3 .checkbox:checked ~ .layer {
@@ -715,12 +725,13 @@ white-space: normal;
 .checkbox-container {
     display: flex;
     align-items: center;
+  margin-left: 5px;
 }
 
 .checkbox-container label {
     margin-left: 10px;
-    line-height: 20px;
-  font-size: 16px;
+    line-height: 1.2;
+  font-size: 12px;
   user-select: none !important;
 }
    
@@ -741,8 +752,8 @@ white-space: normal;
     background-color: #383838;
     margin: 0;
     position: relative;
-    order: 1;
 
+z-index: 3;
 }
         
       .line3 {
@@ -754,7 +765,7 @@ white-space: normal;
     order: 1;
     z-index: 200;
 }
-
+      
       #player-wrapper {
     display: flex;
     align-items: center;
@@ -803,10 +814,11 @@ white-space: normal;
 #search-container {
     position: relative;
     display: flex;
+    width: 196px;
     align-items: center;
-    margin-left: 10px;
     margin-left: auto;
-    order: 0;
+    margin-right: 20px;
+    order: 1;
     user-select: none !important;
   }
 
@@ -859,7 +871,8 @@ white-space: normal;
 }
 
 #artist-search {
-    height: 30px;
+  width: 200px;  
+  height: 30px;
     border-radius: 7px;
     border: 2px solid #444;
     background-color: #282626;
@@ -987,35 +1000,43 @@ display: block;
 
   #sort-menu button {
     background: none;
-    border: 1px solid #f3f3f3; /* обводка видна сразу */
+    border: 1px solid #f3f3f3;
     color: #f3f3f3;
     cursor: pointer;
     font-size: 16px;
     margin: 0 5px;
-    border-radius: 4px; /* закругленные углы */
+    border-radius: 4px;
     transition: border-color 0.3s ease;
-    width: 30px; /* квадрат */
-    height: 30px; /* квадрат */
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
+      
+      #sort-menu button:hover {
+        border: 1px solid #84AAFB;
+      }
 
   #sort-menu button.clear-sort {
     color: #fb8484;
     font-size: 18px;
     visibility: hidden;
     margin-right: 5px;
-    border: 1px solid #f3f3f3; /* обводка видна сразу */
-    border-radius: 4px; /* закругленные углы */
+    border: 1px solid #f3f3f3;
+    border-radius: 4px;
     transition: border-color 0.3s ease;
-    width: 30px; /* квадрат */
-    height: 30px; /* квадрат */
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
+      #sort-menu button.clear-sort:hover {
+        border: 1px solid #fb8484;
+      }
+      
   #sort-menu .active-sort .clear-sort {
     visibility: visible;
   }
@@ -1035,7 +1056,7 @@ display: block;
 
       #clear-search {
     position: absolute;
-    right: 30px;
+    right: 20px;
     color: #f3f3f3;
     cursor: pointer;
     font-size: 16px;
@@ -1082,7 +1103,6 @@ display: block;
 
 #listeners-range {
     width: 95%;
-    max-width: 1200px;
 } 
 
 .noUi-handle {
@@ -1203,10 +1223,10 @@ background: #282626;
    
       #loading-screen {
     position: fixed;
-    top: -100px;
+    padding-top: 100px;
     left: 0;
     width: 100%;
-    height: 200%;
+    height: 100%;
     background-color: #282626;
     z-index: 9999;
     display: flex;
@@ -1232,7 +1252,7 @@ background: #282626;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -130px;
+  margin-top: 60px;
 }
  
 .load-10 {
@@ -1299,8 +1319,7 @@ background: #282626;
 [data-tooltip]:hover::after {
   visibility: visible;
   opacity: 1;
-}
-      
+} 
       }
 
 .date-added span::after {
@@ -1314,7 +1333,7 @@ background: #282626;
 .listeners-element .difference::after {
   top: -45px; 
 }
-      
+
       #mobile-overlay {
   display: none;
   position: fixed;
@@ -1340,17 +1359,546 @@ background: #282626;
   font-size: 16px;
 }
 
-@media (max-width: 767px) {
-  #mobile-overlay {
+      .squaredFour {
+        display: none;
+      }
+      .mobile-label {
+  display: none;
+}
+      @media (min-width: 769px) {
+    .date-added-mobile {
+        display: none;
+    }
+        .line4 {
+    display: none;
+}
+}
+      
+  @media (max-width: 768px) {
+    html, body {
+    font-family: 'CustomFont', Arial, sans-serif;
+    color: #f3f3f3;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+      background: #282626;
+      min-width: 320px;
+}
+
+#main-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#main {
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.desktop-label {
+    display: none;
+  }
+  .mobile-label {
+    display: inline;
+  }
+    #controls-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  #logo {
+    display: none;
+  }
+
+  #buttons-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #genre-button, #sort-button {
+    width: auto;
+    margin-right: 5px;
+    position: relative;
+    background-color: #282626;
+    color: #f3f3f3;
+    font-size: 10px;
+    font-weight: bold;
+    border: 1px solid #383838;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 7px 7px 0 0;
+    z-index: 200;
+  }
+    
+    #genre-button {
+      margin-left: 5px;
+    }
+    
+    #genre-button.active, #sort-button.active {
+    border: 1px solid #383838;
+}
+    
+.genre-button {
+    width: 150px;
+    }
+    
+    #genres-section.expanded, #sort-section.expanded {
+    padding: 5px;
+}
+    
+    #artist-search {
+  width: 134px;  
+  height: 33px;
+    border-radius: 7px 7px 0 0;
+    border: 1px solid #383838;
+    background-color: #282626;
+    color: #f3f3f3;
+    padding: 10px;
+    margin-right: 5px;
+    box-sizing: border-box;
+      font-size: 10px;
+  }
+    
+    #search-container {
+        width: 134px;
+        margin-left: 0;
+        order: 1;
+        margin-right: 5px;
+    }
+    
+    .toggle-button-cover {
+  display: none;
+}
+
+    .checkbox-container {
+      position: relative;
+    top: 6px;
+    }
+    
+.squaredFour {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.squaredFour label {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  background: #f3f3f3;
+  border-radius: 4px;
+  box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+}
+
+.squaredFour label:after {
+  content: '';
+  width: 6px;
+  height: 3.3px;
+  position: absolute;
+  top: 2.7px;
+  left: 2.7px;
+  border: 2px solid #383838;
+  border-top: none;
+  border-right: none;
+  background: transparent;
+  opacity: 0;
+  transform: rotate(-45deg);
+}
+
+.squaredFour label:hover::after {
+  opacity: 0.5;
+}
+
+.squaredFour input[type=checkbox] {
+  visibility: hidden;
+}
+
+.squaredFour input[type=checkbox]:checked + label:after {
+  opacity: 1;
+}
+
+.checkbox-container label {
+  font-size: 10px;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+    .checkbox-container label[for="hide-russian"] {
+        pointer-events: none;
+    }
+    
+    .line4 {
+      display: block;
+        width: 100%;
+    height: 1px;
+    background-color: #383838;
+    margin: 0;
+    position: relative;
+      top: 29px;
+    z-index: 200;
+}
+    
+    #range-container {
+    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 12px;
+      padding-bottom: 34px;
+    position: relative;
+    background-color: #282626;
+        user-select: none !important;
+      padding-left: 8px;
+      top: 24px;
+}
+
+#listeners-range {
+    width: 100%;
+} 
+
+.noUi-handle {
+    background-color: #84AAFB;
+    border: 1px solid #f3f3f3;
+    border-radius: 50%;
+    width: 20px !important;
+    height: 20px !important;
+    box-shadow: none;
+}
+
+.noUi-connect {
+    background: #383838;
+    border-color: #84AAFB;
+    color: red;
+}
+      
+      .noUi-connects {
+background: #282626;
+        border-radius: 0px;
+}
+      .noUi-handle:after, .noUi-handle:before {
+        display: none;
+      }
+      
+      .noUi-target {
+        border: 2px solid #383838;
+        box-shadow: none;
+        height: 12px;
+        align-items: center;
+      }
+      
+#range-label {
+    text-align: center;
+    margin-bottom: 9px;
+  font-size: 10px;
+}
+    
+#artist-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#artist-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+.artist-scroll-container::-webkit-scrollbar {
+    width: 14px;
+}
+
+.artist-scroll-container::-webkit-scrollbar-track {
+    background: #282626;
+}
+
+.artist-scroll-container::-webkit-scrollbar-thumb {
+    background-color: #383838;
+    border-radius: 6px;
+    border: 3px solid #282626;
+}
+    
+    .artist-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding-bottom: 20px;
+        justify-content: space-between;
+        border-top: 4px solid #282626;
+    }
+
+    .artist {
+        flex-direction: row;
+        align-items: flex-start;
+        width: 100%;
+      position: relative;
+    }
+
+    .artist a {
+      margin-top: 0;
+    }
+    
+    .artist img {
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
+      border-radius: 0 7px 0 0;
+      z-index: 2;
+    }
+
+    .artist .info-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: calc(100% - 110px);
+    } 
+
+    a.track-artist-name,
+    .listeners-element,
+    .genres-container {
+        text-align: left;
+        margin-top: 0;
+        font-size: 16px;
+    }
+
+    
+    .listeners-element i,
+    .listeners-element span,
+    .listeners-element a {
+        display: flex;
+        align-items: center;
+        line-height: normal;
+    }
+    
+    .listeners-element .fa-instagram {
+        margin-top: 0 !important;
+      font-size: 12px;
+    }
+    
+    .listeners-element a .fa-instagram {
+        margin-top: 0 !important;
+    }
+    
+    .genres-container {
+    margin-bottom: 0 !important;
+      justify-content: left;
+      line-height: 0.8;
+    }
+    
+    .date-added-mobile {
+        color: #f3f3f3;
+        font-size: 12px;
+      line-height: 2;
+    }
+    
+    .date-added {
+      display: none;
+    }
+    
+    .track-artist-name {
+        max-width: calc(100% - 5px);
+      width: 100%;
+    }
+    
+    .listeners-element span {
+    font-size: 12px;
+}
+    
+    .genre-link {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+      margin: 0 5px 0 0;
+      color: #d5da8d;
+      line-height: 1.2;
+      height: 15px;
+}
+    
+    .russian-tag {
+        white-space: pre-line;
+        font-size: 10px;
+      max-width: 90px;
+      left: 0;
+      border-radius: 0 7px 0 0;
+      line-height: 1.2;
+      z-index: 3;
+    }
+    
+    .listeners-element .fa-users {
+        font-size: 11px;
+        top: 0;
+    }
+    
+    .listeners-element .fa-instagram {
+        font-size: 18px;
+    }
+    
+    .genres-container {
+        display: block;
+    }
+
+    .listeners-element {
+        display: flex;
+        align-items: center;
+    }
+
+    .related-artists-button {
+        position: static;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+        height: 30px;
+        font-size: 12px;
+        font-weight: normal;
+        margin: 0;
+        border-radius: 0 0 7px 0;
+        background-color: #383838;
+        color: #f3f3f3;
+        border: none;
+        text-align: center;
+        opacity: 1;
+        transition: none;
+    }
+
+    .related-artists-button:hover {
+    background-color: #383838;
+        color: #f3f3f3;
+}
+    
+    .artist .play-icon {
+        font-size: 32px;
+      top: 30px;
+      left: 30px;
+      right: 0;
+      bottom: 0;
+      width: 42px;
+      height: 42px;
+      transform: none;
+    }
+    
+    .artist .play-icon:hover {
+      z-index: 30;
+    } 
+
+    i.fas.fa-circle-play {
+      font-size: 32px;
+      right: 20px;
+    }
+    
+    .artist img.playing {
+    outline: 2px solid #d5da8d;
+    outline-offset: -4px;
+      box-shadow: none;
+  }
+    
+    .related-artists-container {
+        position: absolute;
+        top: 0;
+        left: auto;
+        right: 5px !important;
+    width: calc(100% - 11px);
+        height: 120px;
+        background-color: #383838;
+        color: #f3f3f3;
+        padding: 5px;
+        border-radius: 0 7px 7px 0;
+        overflow-y: auto;
+        font-size: 12px;
+        display: flex;
+    justify-content: flex-end;
+    padding-left: 40px;
+    } 
+
+    .info-container {
+        position: relative;
+    }
+
+    .info-container .related-artists-container {
+        display: none;
+        z-index: 0;
+    }
+
+    .related-artists-container a.related-artist-link {
+        color: #f3f3f3 !important;
+        text-decoration: none !important;
+        font-weight: normal !important;
+        display: inline !important;
+        font-size: inherit;
+      right: 25px !important;  
+    }
+
+    .artist-counter-wrapper {
+    flex-shrink: 0;
+    width: 113px;
+    text-align: left;
+    position: absolute;
+    right: 20px;
+      font-size: 10px;
+      top: 4px;
+}
+
+.artist-counter {
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+    #filter-section {
+    display: flex;
+        background-color: #282626;
+    justify-content: space-between;
+    flex-direction: column;
+        align-items: flex-start;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    user-select: none !important;
+}
+    
+    .filter-tags {
+    display: none;
+}
+    
+    #player-wrapper {
+        margin-left: 0;
+    }
+
+    #player-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    #volume-slider {
+        right: 10px;
+    }
+    #main-container {
+    flex-direction: column;
   }
 
-  #main-container {
-    display: none;
-  }
-}
+  #buttons-wrapper { order: 1; }
+  #search-container { order: 2; }
+  .line { order: 3; }
+  .checkbox-container { order: 4; }
+  #artist-counter-wrapper { order: 4; }
+  .line4 { order: 5; }
+  #range-container { order: 6; }
+  .line2 { order: 7; }
+  #artist-section { order: 8; }
+  .line3 { order: 9; }
+  #player-wrapper { order: 10; }
+      }
       
     </style>
 </head>
@@ -1362,7 +1910,7 @@ background: #282626;
 </div>
   
   <div id="loading-screen">
-  <img src="https://static.wixstatic.com/media/c77f36_7030e7e0893e445ba22f3daaad23d602~mv2.png" alt="Loading"> 
+  <img src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Loading"> 
   <div class="load-wrapp">
     <div class="load-10">
       <div class="bar"></div>
@@ -1378,21 +1926,31 @@ background: #282626;
 
 <div id="main-container">
     <section id="controls-section">
+      <img id="logo" src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Логотип">
+    <div id="buttons-wrapper"> 
     <button id="genre-button" aria-expanded="false" aria-controls="genres-section">Вибір жанру</button>
     <button id="sort-button" aria-expanded="false" aria-controls="sort-section">Сортування</button>
-    <div class="checkbox-container">
-    <div class="toggle-button-cover">
-        <div class="button-cover">
-            <div class="button r" id="button-3">
-                <input type="checkbox" id="hide-russian" class="checkbox" />
-                <div class="knobs">
-                    <span></span>
-                </div>
-                <div class="layer"></div>
-            </div>
-        </div>
+</div>
+
+<div class="checkbox-container">
+  <div class="toggle-button-cover">
+    <div class="button-cover">
+      <div class="button r" id="button-3">
+        <input type="checkbox" id="hide-russian" class="checkbox" checked />
+        <div class="knobs"><span></span></div>
+        <div class="layer"></div>
+      </div>
     </div>
-    <label for="hide-russian">співають російською у 2024</label>
+  </div>
+  <section> 
+    <div class="squaredFour">
+      <input type="checkbox" value="None" id="squaredFour" name="check" checked />
+      <label for="squaredFour"></label>
+    </div>
+  </section>
+  <label for="hide-russian" onclick="document.getElementById('squaredFour').click()">
+          <span class="desktop-label">без артистів із піснями<br/>російською у 2024 році</span>
+          <span class="mobile-label">не співають російською</span></label>
 </div>
 
     <div id="player-wrapper">
@@ -1462,7 +2020,7 @@ background: #282626;
         <div class="artist-counter">Показано артистів: <span id="artist-count">0</span></div>
     </div>
 </section>
-
+<div class="line4"></div>
   <div id="range-container">
         <span id="range-label">Слухачів на місяць: <span id="range-value"></span></span>
         <div id="listeners-range"></div>
@@ -1736,11 +2294,30 @@ function updateToggleButton() {
 
     toggleButton.disabled = false;
     toggleButton.style.pointerEvents = 'auto';
+
+    toggleButton.onclick = () => {
+        const isHidden = Array.from(hiddenButtons).some(button => button.style.display === 'none');
+        hiddenButtons.forEach(button => {
+            button.style.display = isHidden ? 'flex' : 'none';
+        });
+        toggleButton.innerHTML = isHidden ? `<span class="genre-name">Показати менше</span>` : `<span class="genre-name">Показати ще...</span>`;
+        toggleButton.style.backgroundColor = isHidden ? '#f3f3f3' : '#f3f3f3';
+        if (isHidden) {
+            toggleButton.classList.add('expanded');
+            toggleButton.classList.remove('active');
+        } else {
+            toggleButton.classList.remove('expanded');
+            updateToggleButton();
+        }
+        requestAnimationFrame(() => {
+            const genresSection = document.getElementById('genres-section');
+            genresSection.style.maxHeight = genresSection.scrollHeight + 'px';
+        });
+    };
 }
 
 function updateGenreCounts(reset = false) {
     const genreButtons = document.querySelectorAll('.genre-button');
-    const hideRussian = document.getElementById('hide-russian').checked;
     genreButtons.forEach(button => {
         const genre = button.dataset.genre;
         if (genre) {
@@ -1763,31 +2340,12 @@ function updateGenreCounts(reset = false) {
                 if (newCount === 0 && !removedGenres.includes(genre)) {
                     button.classList.add('gray-out');
                     button.classList.remove('removed');
-
-                    const removeButton = button.querySelector('.remove-genre');
-                    if (removeButton) {
-                        removeButton.remove();
-                    }
                 } else if (removedGenres.includes(genre)) {
                     button.classList.add('removed');
                     button.classList.remove('gray-out');
                 } else {
                     button.classList.remove('gray-out');
                     button.classList.remove('removed');
-
-                    if (!button.querySelector('.remove-genre')) {
-                        const removeButton = document.createElement('button');
-                        removeButton.className = 'remove-genre';
-                        removeButton.textContent = '×';
-                        removeButton.onclick = (event) => {
-                            event.stopPropagation();
-                            removeGenre(genre);
-                            updateFilterTags();
-                            updateArtistsDisplay();
-                            updateGenreCounts();
-                        };
-                        button.appendChild(removeButton);
-                    }
                 }
             }
         }
@@ -1799,6 +2357,8 @@ function updateGenreCounts(reset = false) {
             removeButton.remove();
         }
     });
+
+    updateToggleButton();
 }
 
 function toggleGenreSelection(genre, artistName = null) {
@@ -1838,6 +2398,8 @@ function toggleGenreSelection(genre, artistName = null) {
     }
 
     displayArtists(currentDisplayList, true);
+
+    updateToggleButton();
 }
 
 function removeGenre(genre) {
@@ -2050,7 +2612,7 @@ function updateArtistsDisplay() {
     displayArtists(currentDisplayList, true);
     updateArtistCounter(currentDisplayList.length);
 
-    artistScrollContainer.scrollTop = scrollPosition; // Восстановление позиции прокрутки
+    artistScrollContainer.scrollTop = scrollPosition;
 
     const container = document.getElementById('artist-scroll-container');
     if (container) {
@@ -2191,7 +2753,6 @@ function displayArtists(artists, reset = false) {
         relatedArtistsContainer.className = 'related-artists-container';
 
         imgContainer.appendChild(relatedArtistsContainer);
-        artistElement.appendChild(imgContainer);
 
         if (artist['Дата додавання']) {
             const dateElement = document.createElement('div');
@@ -2207,71 +2768,154 @@ function displayArtists(artists, reset = false) {
             artistElement.appendChild(tagElement);
         }
 
-        const nameElement = document.createElement('a');
-        nameElement.href = artist['URL1'] || '#';
-        nameElement.textContent = artist['Артист'];
-        nameElement.target = "_blank";
-        nameElement.className = 'track-artist-name';
-        artistElement.appendChild(nameElement);
+        if (window.innerWidth <= 768) {
+            const infoContainer = document.createElement('div');
+            infoContainer.className = 'info-container';
 
-        const listenersElement = document.createElement('div');
-        listenersElement.className = 'listeners-element';
+            const nameElement = document.createElement('a');
+            nameElement.href = artist['URL1'] || '#';
+            nameElement.textContent = artist['Артист'];
+            nameElement.target = "_blank";
+            nameElement.className = 'track-artist-name';
+            infoContainer.appendChild(nameElement);
 
-        const listenersIcon = document.createElement('i');
-        listenersIcon.className = 'fa fa-users';
-        listenersElement.appendChild(listenersIcon);
+            const listenersElement = document.createElement('div');
+            listenersElement.className = 'listeners-element';
 
-        const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
-        const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
+            const listenersIcon = document.createElement('i');
+            listenersIcon.className = 'fa fa-users';
+            listenersElement.appendChild(listenersIcon);
 
-        const currentListenersSpan = document.createElement('span');
-        currentListenersSpan.textContent = formatNumber(currentListeners);
-        currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
-        listenersElement.appendChild(currentListenersSpan);
+            const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+            const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
 
-        let differenceHTML = '';
-        if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
-            const difference = currentListeners - previousListeners;
-            if (difference !== 0) {
-                const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
-                const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
-                const differenceSpan = document.createElement('span');
-                differenceSpan.className = 'difference';
-                differenceSpan.style.color = differenceColor;
-                differenceSpan.textContent = `(${differenceText})`;
-                differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
-                listenersElement.appendChild(differenceSpan);
+            const currentListenersSpan = document.createElement('span');
+            currentListenersSpan.textContent = formatNumber(currentListeners);
+            currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
+            listenersElement.appendChild(currentListenersSpan);
+
+            if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
+                const difference = currentListeners - previousListeners;
+                if (difference !== 0) {
+                    const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
+                    const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
+                    const differenceSpan = document.createElement('span');
+                    differenceSpan.className = 'difference';
+                    differenceSpan.style.color = differenceColor;
+                    differenceSpan.textContent = `(${differenceText})`;
+                    differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
+                    listenersElement.appendChild(differenceSpan);
+                }
             }
+
+            if (artist['Instagram']) {
+                listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+            }
+
+            infoContainer.appendChild(listenersElement);
+
+            const genresElement = document.createElement('div');
+            genresElement.className = 'genres-container';
+            artist['Жанр'].split(', ').forEach(genre => {
+                const genreSpan = document.createElement('span');
+                genreSpan.textContent = genre;
+                genreSpan.className = 'genre-link';
+                genreSpan.onclick = () => {
+                    selectedGenres = [];
+                    removedGenres = [];
+                    document.getElementById('artist-search').value = '';
+                    updateSelectedGenresUI();
+                    updateRemovedGenresUI();
+                    updateFilterTags();
+                    updateArtistsDisplay();
+                    toggleGenreSelection(genre, artist['Артист']);
+                    updateGenreCounts();
+                    updateToggleButton();
+                };
+                genresElement.appendChild(genreSpan);
+                genresElement.appendChild(document.createTextNode(' '));
+            });
+            infoContainer.appendChild(genresElement);
+
+            if (artist['Дата додавання']) {
+                const dateElementMobile = document.createElement('div');
+                dateElementMobile.className = 'date-added-mobile';
+                dateElementMobile.textContent = `Дата додавання: ${artist['Дата додавання']}`;
+                infoContainer.appendChild(dateElementMobile);
+            }
+
+          infoContainer.appendChild(relatedArtistsContainer);
+          
+            artistElement.appendChild(imgContainer);
+            artistElement.appendChild(infoContainer);
+        } else {
+            artistElement.appendChild(imgContainer);
+
+            const nameElement = document.createElement('a');
+            nameElement.href = artist['URL1'] || '#';
+            nameElement.textContent = artist['Артист'];
+            nameElement.target = "_blank";
+            nameElement.className = 'track-artist-name';
+            artistElement.appendChild(nameElement);
+
+            const listenersElement = document.createElement('div');
+            listenersElement.className = 'listeners-element';
+
+            const listenersIcon = document.createElement('i');
+            listenersIcon.className = 'fa fa-users';
+            listenersElement.appendChild(listenersIcon);
+
+            const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+            const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
+
+            const currentListenersSpan = document.createElement('span');
+            currentListenersSpan.textContent = formatNumber(currentListeners);
+            currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
+            listenersElement.appendChild(currentListenersSpan);
+
+            if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
+                const difference = currentListeners - previousListeners;
+                if (difference !== 0) {
+                    const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
+                    const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
+                    const differenceSpan = document.createElement('span');
+                    differenceSpan.className = 'difference';
+                    differenceSpan.style.color = differenceColor;
+                    differenceSpan.textContent = `(${differenceText})`;
+                    differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
+                    listenersElement.appendChild(differenceSpan);
+                }
+            }
+
+            if (artist['Instagram']) {
+                listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+            }
+
+            artistElement.appendChild(listenersElement);
+
+            const genresElement = document.createElement('div');
+            genresElement.className = 'genres-container';
+            artist['Жанр'].split(', ').forEach(genre => {
+                const genreSpan = document.createElement('span');
+                genreSpan.textContent = genre;
+                genreSpan.className = 'genre-link';
+                genreSpan.onclick = () => {
+                    selectedGenres = [];
+                    removedGenres = [];
+                    document.getElementById('artist-search').value = '';
+                    updateSelectedGenresUI();
+                    updateRemovedGenresUI();
+                    updateFilterTags();
+                    updateArtistsDisplay();
+                    toggleGenreSelection(genre, artist['Артист']);
+                    updateGenreCounts();
+                    updateToggleButton();
+                };
+                genresElement.appendChild(genreSpan);
+                genresElement.appendChild(document.createTextNode(' '));
+            });
+            artistElement.appendChild(genresElement);
         }
-
-        if (artist['Instagram']) {
-            listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-        }
-
-        artistElement.appendChild(listenersElement);
-
-        const genresElement = document.createElement('div');
-        genresElement.className = 'genres-container';
-        artist['Жанр'].split(', ').forEach(genre => {
-            const genreSpan = document.createElement('span');
-            genreSpan.textContent = genre;
-            genreSpan.className = 'genre-link';
-            genreSpan.onclick = () => {
-                selectedGenres = [];
-                removedGenres = [];
-                document.getElementById('artist-search').value = '';
-                updateSelectedGenresUI();
-                updateRemovedGenresUI();
-                updateFilterTags();
-                updateArtistsDisplay();
-                toggleGenreSelection(genre, artist['Артист']);
-                updateGenreCounts();
-                updateToggleButton();
-            };
-            genresElement.appendChild(genreSpan);
-            genresElement.appendChild(document.createTextNode(' '));
-        });
-        artistElement.appendChild(genresElement);
 
         container.appendChild(artistElement);
     });
@@ -2285,11 +2929,6 @@ function displayArtists(artists, reset = false) {
         if (container) {
             container.removeEventListener('scroll', scrollHandler);
             container.addEventListener('scroll', scrollHandler);
-        }
-    } else {
-        const container = document.getElementById('artist-scroll-container');
-        if (container) {
-            container.removeEventListener('scroll', scrollHandler);
         }
     }
 }
@@ -2358,7 +2997,7 @@ function resetProgressBars() {
         bar.style.width = '0%';
     });
 }
-
+  
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.controls').addEventListener('click', event => {
         const target = event.target.closest('button');
@@ -2445,105 +3084,129 @@ document.getElementById('close-player').addEventListener('click', () => {
 });
 
 async function playTrackPreview(artistId, change = 0) {
-    const volumeSlider = document.getElementById('volume-slider');
-    volumeSlider.style.display = 'none';
+  console.log(`Начинаем воспроизведение трека для артиста ${artistId} (change=${change})`);
 
-    if (isPlaying) return;
-    isPlaying = true;
+  const volumeSlider = document.getElementById('volume-slider');
+  volumeSlider.style.display = 'none';
 
-    let trackIndex = trackIndices.get(artistId) || 0;
-    trackIndex += change;
+  if (isPlaying) {
+    console.log("Воспроизведение уже идет, игнорируем запрос");
+    return;
+  }
+  isPlaying = true;
 
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.src = "";
-        currentAudio.load();
-        currentAudio = null;
-    }
+  let trackIndex = trackIndices.get(artistId) || 0;
+  trackIndex += change;
 
-    if (change === 0 && currentPlayingId === artistId) {
-        currentPlayingId = null;
-        hidePlayerContainer();
-        updatePlayIcon(null);
-        isPlaying = false;
-        return;
-    }
+  if (currentAudio) {
+    console.log("Останавливаем текущее воспроизведение");
+    currentAudio.pause();
+    currentAudio.src = "";
+    currentAudio.load();
+    currentAudio = null;
+  }
 
-    currentPlayingId = artistId;
-    trackIndices.set(artistId, trackIndex);
+  if (change === 0 && currentPlayingId === artistId) {
+    console.log("Останавливаем воспроизведение того же артиста");
+    currentPlayingId = null;
+    hidePlayerContainer();
+    updatePlayIcon(null);
+    isPlaying = false;
+    return;
+  }
 
-    const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-    });
-    const data = await response.json();
+  currentPlayingId = artistId;
+  trackIndices.set(artistId, trackIndex);
 
-    if (!data.tracks || data.tracks.length === 0) {
-        updatePlayIcon(null);
-        isPlaying = false;
-        
-        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-        if (artistElement) {
-            const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-            if (noTracksMessage) {
-                noTracksMessage.style.display = 'block';
-            }
-        }
-        
-        hidePlayerContainer();
-        return;
-    }
+  console.log(`Запрашиваем top-tracks для артиста ${artistId}`);
+  const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  });
+
+  if (!response.ok) {
+    console.error(`Ошибка при запросе top-tracks: ${response.status} ${response.statusText}`);
+    isPlaying = false;
+    return;
+  }
+
+  const data = await response.json();
+
+  if (!data.tracks || data.tracks.length === 0) {
+    console.warn(`Нет доступных треков для артиста ${artistId}`);
+    updatePlayIcon(null);
+    isPlaying = false;
 
     const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
     if (artistElement) {
-        const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-        if (noTracksMessage) {
-            noTracksMessage.style.display = 'none';
-        }
+      const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+      if (noTracksMessage) {
+        noTracksMessage.style.display = 'block';
+      }
     }
 
-    trackIndex = (trackIndex % data.tracks.length + data.tracks.length) % data.tracks.length;
-    const track = data.tracks[trackIndex];
+    hidePlayerContainer();
+    return;
+  }
 
-    if (change === 0) {
-        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-        if (artistElement) {
-            const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
-            const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
-            updatePlayerArtistName(artistName, artistUrl);
-        }
-        showPlayerContainer();
+  const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+  if (artistElement) {
+    const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+    if (noTracksMessage) {
+      noTracksMessage.style.display = 'none';
     }
+  }
 
-    updateTrackButtons(trackIndex, data.tracks.length);
-    updatePlayIcon(artistId);
+  trackIndex = (trackIndex % data.tracks.length + data.tracks.length) % data.tracks.length;
+  const track = data.tracks[trackIndex];
 
-    if (track.preview_url) {
-        currentAudio = new Audio(track.preview_url);
-        currentAudio.play();
+  console.log(`Выбран трек: ${track.name}`);
 
-        currentAudio.addEventListener('timeupdate', () => {
-            if (currentAudio) {
-                updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
-            }
-        });
-
-        currentAudio.addEventListener('ended', () => {
-            isPlaying = false;
-            updatePlayIcon(null);
-            playTrackPreview(currentPlayingId, 1);
-        });
-
-        currentAudio.oncanplaythrough = () => {
-            isPlaying = false;
-        };
-    } else {
-        updatePlayIcon(null);
-        isPlaying = false;
-        playTrackPreview(artistId, 1);
+  if (change === 0) {
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    if (artistElement) {
+      const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
+      const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
+      updatePlayerArtistName(artistName, artistUrl);
     }
+    showPlayerContainer();
+  }
+
+  updateTrackButtons(trackIndex, data.tracks.length);
+  updatePlayIcon(artistId);
+
+  if (track.preview_url) {
+    currentAudio = new Audio(track.preview_url);
+    try {
+      await currentAudio.play();
+    } catch (error) {
+      console.error(`Ошибка воспроизведения трека ${track.name}:`, error);
+      isPlaying = false;
+      playTrackPreview(artistId, 1); 
+      return; 
+    } 
+
+    currentAudio.addEventListener('timeupdate', () => {
+      if (currentAudio) {
+        updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
+      }
+    });
+
+    currentAudio.addEventListener('ended', () => {
+      isPlaying = false;
+      updatePlayIcon(null);
+      playTrackPreview(currentPlayingId, 1);
+    });
+ 
+    currentAudio.oncanplaythrough = () => {
+      isPlaying = false;
+    };
+  } else {
+    console.warn(`Отсутствует preview_url для трека ${track.name}. Переходим к следующему`);
+    isPlaying = false;
+    playTrackPreview(artistId, 1);
+  }
 }
 
-  
 function updateUI(artistId, reset, trackIndex = 0, trackLength = 0) {
     const controls = document.querySelector('.controls');
     const progressBarContainer = controls.querySelector('.progress-bar-container');
@@ -2569,8 +3232,6 @@ function updateProgress(artistId, progress) {
         progressBar.style.width = `${progress * 100}%`;
     }
 }
-
-
 
 let currentSortCriteria = null;
 let currentSortOrder = 'asc';
@@ -2828,6 +3489,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (artistContainer) {
                 observer.observe(artistContainer, { childList: true, subtree: true });
             }
+
+            const hideRussianCheckbox = document.getElementById('hide-russian');
+            const squaredFourCheckbox = document.getElementById('squaredFour');
+
+            if (hideRussianCheckbox) {
+                hideRussian = hideRussianCheckbox.checked;
+            }
+
+            if (squaredFourCheckbox) {
+                hideRussian = squaredFourCheckbox.checked;
+            }
+
+            updateArtistsDisplay();
+            updateFilterTags();
         });
     });
 
@@ -2840,29 +3515,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const searchInput = document.getElementById('artist-search');
-const clearSearchBtn = document.getElementById('clear-search');
-const hideRussianCheckbox = document.getElementById('hide-russian');
-let searchTimeout;
+    const clearSearchBtn = document.getElementById('clear-search');
+    const hideRussianCheckbox = document.getElementById('hide-russian');
+    const squaredFourCheckbox = document.getElementById('squaredFour');
+  
+    if (hideRussianCheckbox) {
+        hideRussianCheckbox.addEventListener('change', function() {
+            hideRussian = this.checked;
+            updateArtistsDisplay();
+            updateFilterTags();
+        });
+    }
 
-if (searchInput && clearSearchBtn && hideRussianCheckbox) {
-    searchInput.addEventListener('input', function() {
-        const searchQuery = this.value.trim();
+    if (squaredFourCheckbox) {
+        squaredFourCheckbox.addEventListener('change', function() {
+            hideRussian = this.checked;
+            updateArtistsDisplay();
+            updateFilterTags();
+        });
+    }
 
-        if (searchQuery.length >= 3) {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
+    let searchTimeout;
+
+    if (searchInput && clearSearchBtn && hideRussianCheckbox) {
+        searchInput.addEventListener('input', function() {
+            const searchQuery = this.value.trim();
+
+            if (searchQuery.length >= 3) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        filterArtistsByName(searchQuery);
+                        clearSearchBtn.style.display = 'block';
+                        selectedGenres = [];
+                        removedGenres = [];
+                        updateSelectedGenresUI();
+                        updateRemovedGenresUI();
+                        updateFilterTags();
+                    });
+                }, 300);
+            } else if (searchQuery.length === 0) {
+                clearTimeout(searchTimeout);
+                clearSearchBtn.style.display = 'none';
+                selectedGenres = [];
+                removedGenres = [];
+                updateSelectedGenresUI();
+                updateRemovedGenresUI();
                 requestAnimationFrame(() => {
-                    filterArtistsByName(searchQuery);
-                    clearSearchBtn.style.display = 'block';
-                    selectedGenres = [];
-                    removedGenres = [];
-                    updateSelectedGenresUI();
-                    updateRemovedGenresUI();
+                    currentDisplayList = applyFilters(originalArtistsOrder);
+                    displayArtists(currentDisplayList, true);
+                    updateArtistCounter(artistsData.length);
                     updateFilterTags();
                 });
-            }, 300);
-        } else if (searchQuery.length === 0) {
-            clearTimeout(searchTimeout);
+            } else {
+                clearTimeout(searchTimeout);
+                clearSearchBtn.style.display = 'none';
+            }
+        }); 
+
+        clearSearchBtn.addEventListener('click', function() {
+            searchInput.value = '';
             clearSearchBtn.style.display = 'none';
             selectedGenres = [];
             removedGenres = [];
@@ -2874,39 +3586,20 @@ if (searchInput && clearSearchBtn && hideRussianCheckbox) {
                 updateArtistCounter(artistsData.length);
                 updateFilterTags();
             });
-        } else {
-            clearTimeout(searchTimeout);
+        });
+
+        hideRussianCheckbox.addEventListener('change', function() {
+            hideRussian = this.checked;
+            searchInput.value = '';
             clearSearchBtn.style.display = 'none';
-        }
-    });
-
-    clearSearchBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        clearSearchBtn.style.display = 'none';
-        selectedGenres = [];
-        removedGenres = [];
-        updateSelectedGenresUI();
-        updateRemovedGenresUI();
-        requestAnimationFrame(() => {
-            currentDisplayList = applyFilters(originalArtistsOrder);
-            displayArtists(currentDisplayList, true);
-            updateArtistCounter(artistsData.length);
-            updateFilterTags();
+            updateSelectedGenresUI();
+            updateRemovedGenresUI();
+            requestAnimationFrame(() => {
+                updateArtistsDisplay();
+                updateFilterTags();
+            });
         });
-    });
-
-    hideRussianCheckbox.addEventListener('change', function() {
-        hideRussian = this.checked;
-        searchInput.value = '';
-        clearSearchBtn.style.display = 'none';
-        updateSelectedGenresUI();
-        updateRemovedGenresUI();
-        requestAnimationFrame(() => {
-            updateArtistsDisplay();
-            updateFilterTags();
-        });
-    });
-}
+    } 
 
     document.querySelector('.controls').addEventListener('click', event => {
         const target = event.target.closest('button');
@@ -2935,14 +3628,12 @@ if (searchInput && clearSearchBtn && hideRussianCheckbox) {
     function collapseSections() {
         if (genresSection.style.maxHeight !== '0px') {
             genresSection.style.maxHeight = '0px';
-            genresSection.style.padding = '0 20px';
             genresSection.classList.remove('expanded');
             genreButton.setAttribute('aria-expanded', 'false');
             genreButton.classList.remove('active');
         }
         if (sortSection.style.maxHeight !== '0px') {
             sortSection.style.maxHeight = '0px';
-            sortSection.style.padding = '0 20px';
             sortSection.classList.remove('expanded');
             sortButton.setAttribute('aria-expanded', 'false');
             sortButton.classList.remove('active');
@@ -2963,14 +3654,14 @@ if (searchInput && clearSearchBtn && hideRussianCheckbox) {
             section.classList.add('expanding');
             requestAnimationFrame(() => {
                 section.style.maxHeight = '0';
-                section.style.padding = '0 20px';
+                
                 section.classList.remove('expanded');
             });
         } else {
             section.classList.add('expanding');
             requestAnimationFrame(() => {
                 section.style.maxHeight = section.scrollHeight + 'px';
-                section.style.padding = '20px';
+                
                 section.classList.add('expanded');
             });
         }
@@ -2991,7 +3682,7 @@ if (searchInput && clearSearchBtn && hideRussianCheckbox) {
             toggleSection(genreButton, genresSection);
             sortSection.classList.remove('expanded');
             sortSection.style.maxHeight = '0';
-            sortSection.style.padding = '0 20px';
+            
             sortButton.setAttribute('aria-expanded', 'false');
             sortSection.setAttribute('aria-hidden', 'true');
             sortButton.classList.remove('active');
@@ -3003,7 +3694,7 @@ if (searchInput && clearSearchBtn && hideRussianCheckbox) {
             toggleSection(sortButton, sortSection);
             genresSection.classList.remove('expanded');
             genresSection.style.maxHeight = '0';
-            genresSection.style.padding = '0 20px';
+            
             genreButton.setAttribute('aria-expanded', 'false');
             genresSection.setAttribute('aria-hidden', 'true');
             genreButton.classList.remove('active');
@@ -3085,8 +3776,6 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(playerWrapper, { attributes: true, attributeFilter: ['class'] });
 });
 
-  
-  
 </script>
 </body>
 </html>
