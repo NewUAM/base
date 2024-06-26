@@ -1761,8 +1761,8 @@ background: #282626;
         align-items: center;
         width: 100px;
         height: 30px;
-        font-size: 12px;
-        font-weight: normal;
+        font-size: 10px;
+        font-weight: bold;
         margin: 0;
         border-radius: 0 0 7px 0;
         background-color: #383838;
@@ -3084,13 +3084,11 @@ document.getElementById('close-player').addEventListener('click', () => {
 });
 
 async function playTrackPreview(artistId, change = 0) {
-  console.log(`Начинаем воспроизведение трека для артиста ${artistId} (change=${change})`);
 
   const volumeSlider = document.getElementById('volume-slider');
   volumeSlider.style.display = 'none';
 
   if (isPlaying) {
-    console.log("Воспроизведение уже идет, игнорируем запрос");
     return;
   }
   isPlaying = true;
@@ -3099,7 +3097,6 @@ async function playTrackPreview(artistId, change = 0) {
   trackIndex += change;
 
   if (currentAudio) {
-    console.log("Останавливаем текущее воспроизведение");
     currentAudio.pause();
     currentAudio.src = "";
     currentAudio.load();
@@ -3107,7 +3104,6 @@ async function playTrackPreview(artistId, change = 0) {
   }
 
   if (change === 0 && currentPlayingId === artistId) {
-    console.log("Останавливаем воспроизведение того же артиста");
     currentPlayingId = null;
     hidePlayerContainer();
     updatePlayIcon(null);
@@ -3118,13 +3114,11 @@ async function playTrackPreview(artistId, change = 0) {
   currentPlayingId = artistId;
   trackIndices.set(artistId, trackIndex);
 
-  console.log(`Запрашиваем top-tracks для артиста ${artistId}`);
   const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
     headers: { 'Authorization': `Bearer ${accessToken}` }
   });
 
   if (!response.ok) {
-    console.error(`Ошибка при запросе top-tracks: ${response.status} ${response.statusText}`);
     isPlaying = false;
     return;
   }
@@ -3132,7 +3126,6 @@ async function playTrackPreview(artistId, change = 0) {
   const data = await response.json();
 
   if (!data.tracks || data.tracks.length === 0) {
-    console.warn(`Нет доступных треков для артиста ${artistId}`);
     updatePlayIcon(null);
     isPlaying = false;
 
@@ -3159,8 +3152,6 @@ async function playTrackPreview(artistId, change = 0) {
   trackIndex = (trackIndex % data.tracks.length + data.tracks.length) % data.tracks.length;
   const track = data.tracks[trackIndex];
 
-  console.log(`Выбран трек: ${track.name}`);
-
   if (change === 0) {
     const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
     if (artistElement) {
@@ -3179,7 +3170,6 @@ async function playTrackPreview(artistId, change = 0) {
     try {
       await currentAudio.play();
     } catch (error) {
-      console.error(`Ошибка воспроизведения трека ${track.name}:`, error);
       isPlaying = false;
       playTrackPreview(artistId, 1); 
       return; 
@@ -3201,7 +3191,6 @@ async function playTrackPreview(artistId, change = 0) {
       isPlaying = false;
     };
   } else {
-    console.warn(`Отсутствует preview_url для трека ${track.name}. Переходим к следующему`);
     isPlaying = false;
     playTrackPreview(artistId, 1);
   }
