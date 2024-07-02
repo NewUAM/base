@@ -3557,11 +3557,11 @@ rangeSlider.noUiSlider.on('update', function(values, handle) {
 }
 
   function scrollHandler() {
-            const container = document.getElementById('artist-scroll-container');
-            if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
-                displayArtists(currentDisplayList);
-            }
-        }
+    const container = document.getElementById('artist-scroll-container');
+    if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
+        displayArtists(currentDisplayList);
+    }
+}
 
 function allImagesLoaded() {
     const images = document.querySelectorAll('.artist img');
