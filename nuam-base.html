@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUAM Base</title>
-  
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clusterize.js/0.18.0/clusterize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.7.31/dist/flexsearch.bundle.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
     <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
- 
+  
 
     <style>
       @font-face {
@@ -809,7 +809,7 @@ z-index: 3;
     color: #f3f3f3;
     cursor: pointer;
     font-size: 24px;
-    margin-left: 10px; /* добавим отступ для иконки справа */
+    margin-left: 10px;
 }
 
       
@@ -985,7 +985,6 @@ display: block;
     font-size: 16px;
     margin-left: -13px;
     color: #f3f3f3;
-    
 }
 
 #sort-menu div {
@@ -1540,8 +1539,91 @@ background: #282626;
     width: 150px;
     }
     
-    #genres-section.expanded, #sort-section.expanded {
-    padding: 5px;
+    .genre-button .remove-genre {
+        opacity: 1;
+        visibility: visible;
+        position: static;
+        margin-left: 5px;
+        transform: none;
+    }
+    
+    #genres-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        transition: none !important;
+    }
+    
+    #genres-section {
+      max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    #genres-section::-webkit-scrollbar {
+        width: 8px;
+    }
+    #genres-section::-webkit-scrollbar-track {
+        background: #282626;
+    }
+    #genres-section::-webkit-scrollbar-thumb {
+        background-color: #383838;
+        border-radius: 7px;
+        border: 2px solid #282626;
+    }
+    
+    .genre-button {
+        width: calc(50% - 5px);
+      padding: 0 0 0 5px;
+    }
+    
+    .genre-name {
+    font-weight: normal;
+}
+    
+    .genre-button.selected .remove-genre {
+    display: none;
+}
+    
+    .genre-button.removed .remove-genre {
+    display: none;
+}
+    
+    .genre-button.selected .genre-count {
+    margin-right: 5px;
+}
+    
+    .genre-button:hover:not(.selected) {
+      box-shadow: none;
+    transform: none;
+    }
+    
+    .genre-button.red-shadow {
+    box-shadow: none !important;
+}
+    
+    #sort-menu {
+    font-size: 12px;
+    margin-left: -10px;
+}
+
+#sort-menu button {
+font-size: 12px;
+    width: 25px;
+    height: 25px;
+}
+
+#sort-menu span {
+    margin-left: 5px;
+}
+
+#sort-menu button.clear-sort {
+font-size: 14px;
+    width: 25px;
+    height: 25px;
+}
+
+#genres-section.expanded, #sort-section.expanded {
+    padding: 10px;
 }
     
     #artist-search {
@@ -1795,9 +1877,18 @@ background: #282626;
     }
     
     .genres-container {
-    margin-bottom: 0 !important;
-      justify-content: left;
-      line-height: 0.8;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .genres-section {
+        width: calc(50% - 10px);
+        margin-bottom: 20px;
+    }
+
+    .genres-container {
+        transition: none !important;
     }
     
     .date-added-mobile {
@@ -1876,7 +1967,7 @@ background: #282626;
     }
 
     .related-artists-button {
-        position: static;
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1892,6 +1983,7 @@ background: #282626;
         text-align: center;
         opacity: 1;
         transition: none;
+      z-index: 5;
     }
 
     .related-artists-button:hover {
@@ -1978,10 +2070,10 @@ background: #282626;
 
     #filter-section {
     display: flex;
-        background-color: #282626;
+    background-color: #282626;
     justify-content: space-between;
     flex-direction: column;
-        align-items: flex-start;
+    align-items: flex-start;
     padding: 0;
     position: relative;
     z-index: 1;
@@ -1993,17 +2085,53 @@ background: #282626;
 }
     
     #player-wrapper {
-        margin-left: 0;
-    }
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #282626;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    margin-left: 0px;
+}
 
-    #player-container {
-        width: 100%;
-        padding: 10px;
-    }
+#player-wrapper.show {
+    display: flex;
+}
 
-    #volume-slider {
-        right: 10px;
-    }
+#player-container {
+    background-color: #383838;
+    border-radius: 0;
+    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #d5da8d;
+    border-radius: 0 7px 0 0;
+}
+
+    #player-wrapper a.track-artist-name {
+    text-align: center;
+    flex-grow: 1;
+}
+
+    
+#close-player {
+    position: static;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#volume-icon {
+    display: none;
+}
+
+    #help-icon {
+    display: none;
+}
+    
     #main-container {
     flex-direction: column;
   }
@@ -2232,85 +2360,39 @@ function collectAllArtistURLs(artists) {
     });
 }
   
-let genreCombinations = {};
-
-function initializeGenreCombinations(artists) {
-    let genreCounts = {};
-    artists.forEach(artist => {
-        const artistGenres = artist['Жанр'].split(', ');
-        artistGenres.forEach(genre => {
-            if (!genreCounts[genre]) {
-                genreCounts[genre] = 0;
-            }
-            genreCounts[genre]++;
-        });
-
-        const genreCount = artistGenres.length;
-        for (let i = 1; i < (1 << genreCount); i++) {
-            let combination = [];
-            for (let j = 0; j < genreCount; j++) {
-                if (i & (1 << j)) {
-                    combination.push(artistGenres[j]);
-                }
-            }
-            const key = combination.sort().join(',');
-            if (!genreCombinations[key]) {
-                genreCombinations[key] = 0;
-            }
-            genreCombinations[key]++;
-        }
-    });
-
-    for (let genre in genreCounts) {
-        if (genreCounts.hasOwnProperty(genre)) {
-            genreCombinations[genre] = genreCounts[genre];
-        }
-    }
-}
-
-
 async function fetchArtists() {
-    getTempToken().then(tempToken => {
-        fetch('https://nuam-base-4979094c8808.herokuapp.com/artists-data', {
-            headers: {
-                'Authorization': `Bearer ${tempToken}`
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch artists data');
-            }
-            return response.text();
-        }).then(csvData => {
-            Papa.parse(csvData, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    listenerColumns = findListenerColumns(results.meta.fields);
-                    artistsData = results.data.slice(1).filter(artist => !artist['URL NA']);
-                    shuffleArray(artistsData);
-                    shuffledArtistsData = [...artistsData];
-                    originalArtistsOrder = [...shuffledArtistsData];
+    const tempToken = await getTempToken();
+    const response = await fetch('https://nuam-base-4979094c8808.herokuapp.com/artists-data', {
+        headers: {
+            'Authorization': `Bearer ${tempToken}`
+        }
+    });
 
-                    const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
+    if (!response.ok) {
+        throw new Error('Failed to fetch artists data');
+    }
 
-                    setupRangeSlider(maxListeners);
-                    collectAllArtistURLs(artistsData);
-                    extractAndDisplayGenres(artistsData);
-                    initializeSearchIndex(artistsData);
-                    updateArtistsDisplay();
+    const csvData = await response.text();
+    Papa.parse(csvData, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            listenerColumns = findListenerColumns(results.meta.fields);
+            artistsData = results.data.slice(1).filter(artist => !artist['URL NA']);
+            shuffleArray(artistsData);
+            shuffledArtistsData = [...artistsData];
+            originalArtistsOrder = [...shuffledArtistsData];
 
-                    initializeGenreCombinations(artistsData);
-                    updateGenreCounts(true);
-                }
-            });
-        }).catch(error => {
-            console.error('Error fetching artists data:', error);
-        });
-    }).catch(error => {
-        console.error('Error fetching temp token:', error);
+            const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
+
+            setupRangeSlider(maxListeners);
+            collectAllArtistURLs(artistsData);
+            extractAndDisplayGenres(artistsData);
+            initializeSearchIndex(artistsData);
+            updateArtistsDisplay();
+        }
     });
 }
-
 
 
 function findListenerColumns(header) {
@@ -2373,6 +2455,19 @@ function extractAndDisplayGenres(artists) {
         genreButton.dataset.originalCount = count;
         genreButton.dataset.genre = genre;
         genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${count})</span>`;
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-genre';
+        removeButton.textContent = '×';
+        removeButton.onclick = (event) => {
+            event.stopPropagation();
+            removeGenre(genre);
+            updateFilterTags();
+            updateArtistsDisplay();
+            updateGenreCounts();
+        };
+        genreButton.appendChild(removeButton);
+
         genreButton.onclick = () => {
             if (removedGenres.includes(genre)) {
                 restoreGenre(genre);
@@ -2385,31 +2480,6 @@ function extractAndDisplayGenres(artists) {
             updateArtistsDisplay();
             updateToggleButton();
             updateGenreCounts();
-            removeRemoveGenreButton(genreButton);
-        };
-
-        genreButton.onmouseenter = () => {
-            if (!selectedGenres.includes(genre) && !removedGenres.includes(genre) && !genreButton.disabled) {
-                if (!genreButton.querySelector('.remove-genre')) {
-                    const removeButton = document.createElement('button');
-                    removeButton.className = 'remove-genre';
-                    removeButton.textContent = '×';
-                    removeButton.onclick = (event) => {
-                        event.stopPropagation();
-                        removeGenre(genre);
-                        updateFilterTags();
-                        updateArtistsDisplay();
-                        updateGenreCounts();
-                    };
-                    genreButton.appendChild(removeButton);
-                }
-            } else {
-                removeRemoveGenreButton(genreButton);
-            }
-        };
-
-        genreButton.onmouseleave = () => {
-            removeRemoveGenreButton(genreButton);
         };
 
         genresContainer.appendChild(genreButton);
@@ -2448,6 +2518,7 @@ function extractAndDisplayGenres(artists) {
     updateToggleButton();
     updateGenreCounts();
 }
+
 
 function removeRemoveGenreButton(genreButton) {
     const removeButton = genreButton.querySelector('.remove-genre');
@@ -2511,16 +2582,30 @@ function updateGenreCounts(reset = false) {
             const originalCount = parseInt(button.dataset.originalCount, 10);
             if (reset) {
                 button.innerHTML = `<span class="genre-name">${genre}</span> <span class="genre-count">(${originalCount})</span>`;
-                button.classList.remove('gray-out', 'removed');
             } else {
-                const activeGenres = selectedGenres.slice();
-                if (!activeGenres.includes(genre)) {
-                    activeGenres.push(genre);
-                }
-                const key = activeGenres.sort().join(',');
-                const newCount = genreCombinations[key] || 0;
-
+                const newCount = artistsData.filter(artist => {
+                    const artistGenres = artist['Жанр'].split(', ');
+                    if (hideRussian && artist['URL RL']) {
+                        return false;
+                    }
+                    if (removedGenres.includes(genre)) {
+                        return false;
+                    }
+                    return artistGenres.includes(genre) && selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre)) && !removedGenres.some(removedGenre => artistGenres.includes(removedGenre));
+                }).length;
                 button.innerHTML = `<span class="genre-name">${genre}</span> <span class="genre-count">(${newCount})</span>`;
+                
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove-genre';
+                removeButton.textContent = '×';
+                removeButton.onclick = (event) => {
+                    event.stopPropagation();
+                    removeGenre(genre);
+                    updateFilterTags();
+                    updateArtistsDisplay();
+                    updateGenreCounts();
+                };
+                button.appendChild(removeButton);
 
                 if (newCount === 0 && !removedGenres.includes(genre)) {
                     button.classList.add('gray-out');
@@ -3967,6 +4052,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startIntro(showDontShowAgain) {
+      
+      if (window.innerWidth <= 768) {
+        return;
+    }
+      
         const intro = introJs();
 
         const options = {
@@ -4094,7 +4184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startIntro(false);
     });
 });
-
+  
 </script>
 </body>
 </html>
