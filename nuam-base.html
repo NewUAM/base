@@ -30,6 +30,70 @@
        min-width: 1220px;
         }
       
+      /* Скрываем стандартный чекбокс */
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+/* Стили для кастомного чекбокса */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'CustomFont', Arial, sans-serif;
+    color: #f3f3f3;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.custom-checkbox .checkbox-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #f3f3f3;
+    border-radius: 7px;
+    background-color: #282626;
+    transition: background-color 0.3s, border-color 0.3s;
+    margin-right: 10px; /* Отступ между чекбоксом и текстом */
+}
+      
+   .custom-checkbox .checkbox-icon:hover {
+    border: 1px solid #84AAFB;
+}   
+      
+      
+
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-icon {
+    background-color: #282626;
+    border-color: #84AAFB;
+}
+
+.custom-checkbox .checkbox-icon::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    color: #f3f3f3;
+    font-size: 16px;
+    text-align: center;
+    line-height: 23px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-icon::after {
+    opacity: 1;
+}
+
+.custom-checkbox .checkbox-text {
+    margin-top: 2px; /* Опускание только текста */
+}
+
+
+      
        #main-container {
             height: 100%;
             display: flex;
@@ -122,7 +186,7 @@
     border-bottom: 1px solid #444;
 }
 
-#genre-button, #sort-button {
+#genre-button, #sort-button, #filters-button {
     position: relative;
     background-color: #f3f3f3;
     color: #282626;
@@ -136,17 +200,22 @@
     z-index: 200;
 }
 
-#genre-button:hover, #sort-button:hover {
+#genre-button:hover, #sort-button:hover, #filters-button:hover {
       border: 2px solid #84AAFB;
       } 
 
-#genre-button.active, #sort-button.active {
+#genre-button.active, #sort-button.active, #filters-button.active {
     background-color: #f3f3f3;
     border-radius: 7px 7px 0 0;
     border: 2px solid #84AAFB;
 }
 
-#genres-section, #sort-section {
+      #genre-button i, #sort-button i, #filters-button i {
+    margin-right: 8px;
+    color: #282626;
+}
+      
+#genres-section, #sort-section, #filters-section {
     display: block;
     position: relative;
     flex-direction: column;
@@ -159,7 +228,7 @@
     user-select: none !important;
 }
 
-#genres-section.expanded, #sort-section.expanded {
+#genres-section.expanded, #sort-section.expanded, #filters-section.expanded {
   display: block;
     max-height: 1000px;
     padding: 20px;
@@ -261,6 +330,11 @@
     transform: none !important;
 }
 
+      .genre-button.selected .remove-genre,
+    .genre-button.removed .remove-genre {
+        display: none;
+    }
+      
 .remove-genre:hover {
     background-color: #c0392b;
 }
@@ -375,11 +449,12 @@
     z-index: 1;
     position: relative;
 }
- 
+      
+      
 .related-artists-container {
     position: absolute;
     top: 0;
-    left: 0;
+  
     width: 204px;
     height: 154px;
     display: none;
@@ -390,7 +465,7 @@
     overflow-y: auto;
     font-size: 14px;
     word-wrap: break-word;
-  z-index: 4;
+  z-index: 1000;
 }
 
 .related-artists-container a.related-artist-link {
@@ -610,116 +685,8 @@ white-space: normal;
     margin-right: 5px;
 }
       
-      #hide-russian {
-    margin-right: 10px;
-}
       
-      * {
-    -webkit-tap-highlight-color: transparent;
-}
-      
-*:focus {
-    outline: none;
-}
-      
-.toggle-button-cover {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.button-cover {
-    background-color: #f3f3f3;
-    border-radius: 100px;
-    position: relative;
-}
-
-.button-cover,
-.knobs,
-.layer {
-    position: relative;
-}
-
-.button {
-    position: relative;
-    width: 40px;
-    height: 20px;
-    overflow: hidden;
-    border-radius: 100px;
-}
-
-.button.r,
-.button.r .layer {
-    border-radius: 100px;
-}
-
-.checkbox {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 3;
-}
-
-.knobs {
-    z-index: 2;
-}
-
-.layer {
-    width: 100%;
-    background-color: #ebf7fc;
-    transition: 0.3s ease all;
-    z-index: 1;
-    border-radius: 100px;
-}
-
-#button-3 .knobs:before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    background-color: #fb8484;
-    border-radius: 50%;
-    transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
-}
-
-#button-3 .checkbox:active + .knobs:before {
-    width: 32px;
-    border-radius: 100px;
-}
-
-#button-3 .checkbox:checked:active + .knobs:before {
-    margin-left: -16px;
-}
-
-#button-3 .checkbox:checked + .knobs:before {
-    content: "";
-    left: 22px;
-    background-color: #84AAFB;
-}
-
-#button-3 .checkbox:checked ~ .layer {
-    background-color: #fcebeb;
-}
-
-.checkbox-container {
-    display: flex;
-    align-items: center;
-  margin-left: 5px;
-}
-
-.checkbox-container label {
-    margin-left: 10px;
-    line-height: 1.2;
-  font-size: 12px;
-  user-select: none !important;
-}
-   
+        
 .line {
     width: 100%;
     height: 1px;
@@ -752,18 +719,31 @@ z-index: 3;
 }
       
       #player-wrapper {
-    display: flex;
+    display: none;
     align-items: center;
-    width: 269px;
-    margin-left: 10px;
-    position: relative;
+    justify-content: flex-end;
+    width: 550px;
+    height: 40px;
+    margin-left: 0;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #282626;
+    border-radius: 7px 7px 0 0;
+    z-index: 1002;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+}
+
+#player-wrapper.show {
+    display: flex;
 }
 
 #player-container {
     background-color: #383838;
-    border-radius: 7px 7px 0 0;
+    border-radius: 7px 0 0 0;
     padding: 5px;
-    width: 269px; 
+    width: 500px; /* Установим ширину 500px */
     height: 40px;
     white-space: nowrap;
     overflow: hidden;
@@ -772,7 +752,7 @@ z-index: 3;
     box-sizing: border-box;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
-    flex-grow: 1;
+    flex-grow: 0; /* Убираем flex-grow */
 }
 
 #player-container.show {
@@ -782,19 +762,87 @@ z-index: 3;
 #close-player {
     background: none;
     border: none;
-    font-size: 12px;
+    font-size: 18px; /* Установим размер кнопки 20px */
     cursor: pointer;
     color: #f3f3f3;
-    position: absolute;
-    margin-bottom: 20px !important;
-    right: -20px;
-    display: none;
     transition: color 0.2s ease-in-out;
+    display: flex;
+    align-items: center; /* Центрируем иконку по вертикали */
+    justify-content: center; /* Центрируем иконку по горизонтали */
+    width: 24px;
+    height: 24px; /* Установим ширину и высоту для лучшего центрирования */
+    position: static;
+    right: 10px; /* Расположим кнопку справа */
+    top: 50%; /* Центрируем по вертикали */
+    margin-left: 10px;
+    margin-right: 5px;
 }
 
-#player-wrapper.show #close-player {
-    display: block;
+.volume-icon {
+    background: none;
+    border: none;
+    font-size: 18px; /* Установим размер кнопки 20px */
+    cursor: pointer;
+    color: #f3f3f3;
+    transition: color 0.2s ease-in-out;
+    display: flex;
+    align-items: center; /* Центрируем иконку по вертикали */
+    justify-content: center; /* Центрируем иконку по горизонтали */
+    width: 24px;
+    height: 24px; /* Установим ширину и высоту для лучшего центрирования */
+    position: static;
+    right: 50px; /* Расположим кнопку слева от кнопки закрытия */
+    top: 50%; /* Центрируем по вертикали */
+    padding-top: 2px;
+    margin-left: 10px;
+    z-index: 10;
 }
+
+#close-player:hover,
+.volume-icon:hover {
+    color: #84AAFB;
+}
+
+.volume-slider {
+    display: none;
+    position: absolute;
+    bottom: 50px; /* Положение регулятора для открытия вверх */
+    right: 35px;
+    width: 20px;
+    height: 150px;
+    background-color: #383838;
+    border-radius: 7px;
+    border: 1px solid #282626;
+    padding: 10px 5px 10px 5px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.volume-slider .noUi-target {
+    width: 100%;
+    height: 100%;
+}
+
+#volume-control .noUi-handle {
+    background-color: #84AAFB;
+    border: 1px solid #f3f3f3;
+    border-radius: 50%;
+    width: 20px !important;
+    height: 20px !important;
+    right: -2px;
+    position: absolute;
+    bottom: 0;
+    transform: translateY(50%);
+}
+
+#volume-control .noUi-connect {
+    background: #84AAFB;
+}
+
+
+
       
 #search-container {
     position: relative;
@@ -924,19 +972,7 @@ display: block;
   z-index: 1;
 }
       
-.russian-tag {
-    position: absolute;
-    top: 0;
-    left: 2px;
-    background-color: rgba(251, 132, 132, 0.8);
-    color: #282626;
-    padding: 2px 5px;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 7px 0 7px 0;
-  user-select: none !important;
-  z-index: 2;
-}
+
 
 .artist-counter-wrapper {
     flex-shrink: 0;
@@ -953,6 +989,7 @@ display: block;
 
 .filter-tags {
     font-weight: bold;
+  max-width: 920px;
 }
 
 .filter-tag {
@@ -963,6 +1000,7 @@ display: block;
     background-color: #90EE90;
     padding: 2px 5px;
     margin-right: 5px;
+    margin-bottom: 5px;
     color: #282626;
     line-height: 1.1;
     box-sizing: border-box;
@@ -972,6 +1010,11 @@ display: block;
     background-color: #fb8484;
     color: #282626;
 }
+      
+      .filter-tag.check {
+        background-color: #d5da8d;
+    color: #282626;
+      }
 
 .filter-tag .remove-tag {
     margin-left: 5px;
@@ -1163,64 +1206,6 @@ background: #282626;
 .genre-button.gray-out .genre-count {
     color: #575757;
 }
-
-      .close-player {
-    display: block;
-}
-
-.volume-icon {
-    position: absolute;
-    top: 20px;
-    right: -20px;
-    cursor: pointer;
-    color: #f3f3f3;
-    font-size: 12px;
-  transition: color 0.2s ease-in-out;
-    z-index: 10;
-}
-      
-#close-player:hover,
-.volume-icon:hover {
-    color: #84AAFB;
-}
-      
-.volume-slider {
-    display: none;
-    position: absolute;
-    top: 45px;
-    right: -32px;
-    width: 20px;
-    height: 150px;
-    background-color: #383838;
-    border-radius: 7px;
-    border: 1px solid #282626;
-    padding: 10px 5px 10px 5px;
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.volume-slider .noUi-target {
-    width: 100%;
-    height: 100%;
-}
-
-#volume-control .noUi-handle {
-    background-color: #84AAFB;
-    border: 1px solid #f3f3f3;
-    border-radius: 50%;
-    width: 20px !important;
-    height: 20px !important;
-    right: -2px;
-    position: absolute;
-    bottom: 0;
-    transform: translateY(50%);
-}
-
-#volume-control .noUi-connect {
-    background: #84AAFB;
-}
    
       #loading-screen {
     position: fixed;
@@ -1375,26 +1360,28 @@ background: #282626;
     transform: translateX(-38.75px);
   }
 }
-      
+       
       [data-tooltip] {
   position: relative;
 }
 
 [data-tooltip]::after {
+  font-family: 'CustomFont', Arial, sans-serif;
   content: attr(data-tooltip);
   visibility: hidden;
   background-color: #383838;
   color: #f3f3f3;
   font-size: 12px;
+  font-weight: normal;
   text-align: center;
   padding: 5px;
   border-radius: 7px;
   border: 1px solid #282626;
   width: 130px;
+  max-width: 90vw;
   position: absolute;
   z-index: 999;
-  top: -50px;
-  left: 50%;
+  right: -137px;
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 0.3s;
@@ -1405,20 +1392,78 @@ background: #282626;
   visibility: visible;
   opacity: 1;
 } 
-      }
-
-.date-added span::after {
-  top: -130px; 
+      
+.listeners-tooltip[data-tooltip]::after {
+    right: -110px;
+}
+      
+      .difference-tooltip[data-tooltip]::after {
+        right: -90px;
+}
+      
+      .date-added span::after {
+  top: -60px; 
 }
 
 .listeners-element > span::after {
-  top: -32px; 
+  top: -30px; 
+  right: -108px;
+  
 }
 
 .listeners-element .difference::after {
   top: -45px; 
+  right: -85px;
+}
+      
+      
+      .icon-container {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 7px;
+  padding: 3px 5px 1px 5px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000; /* высокий z-index */
+}
+      
+      .year-rel-icon i[data-tooltip]:hover::after,
+.multi-rel-icon i[data-tooltip]:hover::after,
+.russian-tag i[data-tooltip]:hover::after {
+  visibility: visible;
+  opacity: 1;
+}
+      
+.year-rel-icon i[data-tooltip]::after {
+  top: 30px;
+  left: -25px;
+  width: 80px;
+  height: 24px;
 }
 
+.multi-rel-icon i[data-tooltip]::after {
+    top: 30px;
+    width: 100px;
+    left: -35px;
+    height: 24px;
+}
+
+.russian-tag i[data-tooltip]::after {
+  top: 30px;
+    width: 120px;
+    left: -45px;
+    height: 24px;
+}
+      
+      .debut-icon i[data-tooltip]::after {
+  top: 30px;
+    width: 120px;
+    left: -47px;
+    height: 24px;
+}  
+      
       #mobile-overlay {
   display: none;
   position: fixed;
@@ -1444,9 +1489,6 @@ background: #282626;
   font-size: 16px;
 }
 
-      .squaredFour {
-        display: none;
-      }
       .mobile-label {
   display: none;
 }
@@ -1555,7 +1597,7 @@ background: #282626;
     }
     
     #genres-section {
-      max-height: 400px;
+      max-height: 320px;
         overflow-y: auto;
     }
     
@@ -1622,7 +1664,7 @@ font-size: 14px;
     height: 25px;
 }
 
-#genres-section.expanded, #sort-section.expanded {
+#genres-section.expanded, #sort-section.expanded, #filters-section.expanded {
     padding: 10px;
 }
     
@@ -1652,73 +1694,6 @@ font-size: 14px;
     
     #clear-search {
     right: 10px;
-    }
-    
-    .toggle-button-cover {
-  display: none;
-}
-
-    .checkbox-container {
-      position: relative;
-    top: 5px;
-    }
-    
-.squaredFour {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.squaredFour label {
-  width: 13px;
-  height: 13px;
-  margin: 0;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  background: #f3f3f3;
-  border-radius: 4px;
-  box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
-}
-
-.squaredFour label:after {
-  content: '';
-  width: 6px;
-  height: 3.3px;
-  position: absolute;
-  top: 2.7px;
-  left: 2.7px;
-  border: 2px solid #383838;
-  border-top: none;
-  border-right: none;
-  background: transparent;
-  opacity: 0;
-  transform: rotate(-45deg);
-}
-
-.squaredFour label:hover::after {
-  opacity: 0.5;
-}
-
-.squaredFour input[type=checkbox] {
-  visibility: hidden;
-}
-
-.squaredFour input[type=checkbox]:checked + label:after {
-  opacity: 1;
-}
-
-.checkbox-container label {
-  font-size: 10px;
-  margin: 0;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-    .checkbox-container label[for="hide-russian"] {
-        pointer-events: none;
     }
     
     .line4 {
@@ -1858,7 +1833,6 @@ background: #282626;
         font-size: 16px;
     }
 
-    
     .listeners-element i,
     .listeners-element span,
     .listeners-element a {
@@ -2087,19 +2061,23 @@ background: #282626;
     #player-wrapper {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 50%; /* Сдвигаем элемент на 50% от левого края */
+    transform: translateX(-50%);
+    width: 90%;
     background-color: #282626;
     z-index: 1000;
     display: none;
     align-items: center;
     margin-left: 0px;
+    bottom: 40px;
+    border-radius: 7px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 #player-wrapper.show {
     display: flex;
 }
-
+    
 #player-container {
     background-color: #383838;
     border-radius: 0;
@@ -2109,7 +2087,7 @@ background: #282626;
     align-items: center;
     justify-content: space-between;
     border: 1px solid #d5da8d;
-    border-radius: 0 7px 0 0;
+    border-radius: 7px 0 0 7px;
 }
 
     #player-wrapper a.track-artist-name {
@@ -2125,7 +2103,11 @@ background: #282626;
 }
 
 #volume-icon {
-    display: none;
+    display: none !important;
+}
+    
+    .volume-icon {
+    display: none !important;
 }
 
     #help-icon {
@@ -2147,8 +2129,7 @@ background: #282626;
   #artist-section { order: 8; }
   .line3 { order: 9; }
   #player-wrapper { order: 10; }
-      }
-      
+      }     
     </style>
 </head>
 <body>
@@ -2175,33 +2156,19 @@ background: #282626;
 
 <div id="main-container">
     <section id="controls-section">
-      <img id="logo" src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Логотип">
-    <div id="buttons-wrapper"> 
-    <button id="genre-button" aria-expanded="false" aria-controls="genres-section">Вибір жанру</button>
-    <button id="sort-button" aria-expanded="false" aria-controls="sort-section">Сортування</button>
-</div>
-
-<div class="checkbox-container">
-  <div class="toggle-button-cover">
-    <div class="button-cover">
-      <div class="button r" id="button-3">
-        <input type="checkbox" id="hide-russian" class="checkbox" checked />
-        <div class="knobs"><span></span></div>
-        <div class="layer"></div>
-      </div>
-    </div>
-  </div>
-  <section> 
-    <div class="squaredFour">
-      <input type="checkbox" value="None" id="squaredFour" name="check" checked />
-      <label for="squaredFour"></label>
-    </div>
-  </section>
-  <label for="hide-russian" onclick="document.getElementById('squaredFour').click()">
-          <span class="desktop-label">без артистів із піснями<br/>російською у 2024 році</span>
-          <span class="mobile-label">не співають російською</span></label>
-</div>
-
+        <img id="logo" src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Логотип">
+        <div id="buttons-wrapper">
+            <button id="genre-button" aria-expanded="false" aria-controls="genres-section">
+                <i class="fas fa-music"></i> Вибір жанру
+            </button>
+            <button id="sort-button" aria-expanded="false" aria-controls="sort-section">
+                <i class="fas fa-sort"></i> Сортування
+            </button>
+            <button id="filters-button" aria-expanded="false" aria-controls="filters-section">
+                <i class="fas fa-filter"></i> Фільтри
+            </button>
+        </div>
+      
     <div id="player-wrapper">
     <div id="player-container" class="player-container">
         <div class="controls">
@@ -2215,11 +2182,11 @@ background: #282626;
             </div>
         </div>
     </div>
-    <button id="close-player" class="close-player">✖</button>
     <div id="volume-icon" class="volume-icon"><i class="fa fa-volume-up"></i></div>
+    <button id="close-player" class="close-player">✖</button>
     <div id="volume-slider" class="volume-slider">
-    <div id="volume-control"></div>
-</div>
+        <div id="volume-control"></div>
+    </div>
 </div>
 
     <div id="search-container">
@@ -2232,6 +2199,11 @@ background: #282626;
 </section>
 
 <section id="genres-section" class="tab-content" aria-hidden="true">
+  <label class="custom-checkbox">
+    <input type="checkbox" id="match-all-genres-checkbox" checked>
+    <span class="checkbox-icon"></span>
+    <span class="checkbox-text">Відповідність усім обраним жанрам</span>
+</label>
     <div id="genres-container"></div>
 </section>
 
@@ -2264,8 +2236,32 @@ background: #282626;
 </div>
 </section>
 
+  <section id="filters-section" aria-hidden="true">
+    <label class="custom-checkbox" for="hide-russian">
+        <input type="checkbox" id="hide-russian" class="checkbox" checked />
+        <div class="checkbox-icon"></div>
+        <span class="desktop-label">Прибрати артистів із російськомовними піснями у 2024 році</span>
+        <span class="mobile-label">не співають російською</span>
+    </label>
+    <label class="custom-checkbox" for="yearRel-checkbox">
+        <input type="checkbox" id="yearRel-checkbox" class="checkbox" />
+        <div class="checkbox-icon"></div>
+        Прибрати артистів без релізів за останній рік
+    </label>
+    <label class="custom-checkbox" for="multiRel-checkbox">
+        <input type="checkbox" id="multiRel-checkbox" class="checkbox" />
+        <div class="checkbox-icon"></div>
+        Прибрати артистів, у яких лише один реліз
+    </label>
+    <label class="custom-checkbox" for="debut-checkbox">
+        <input type="checkbox" id="debut-checkbox" class="checkbox" />
+        <div class="checkbox-icon"></div>
+        Показати тільки артистів, які дебютували у 2024 році
+    </label>
+</section>
+
 <section id="filter-section">
-    <div class="filter-tags">Фільтр: <span id="filter-list"></span></div>
+    <div class="filter-tags">Фільтри: <span id="filter-list"></span></div>
     <div class="artist-counter-wrapper">
         <div class="artist-counter">Показано артистів: <span id="artist-count">0</span></div>
     </div>
@@ -2360,40 +2356,82 @@ function collectAllArtistURLs(artists) {
     });
 }
   
-async function fetchArtists() {
-    const tempToken = await getTempToken();
-    const response = await fetch('https://nuam-base-4979094c8808.herokuapp.com/artists-data', {
-        headers: {
-            'Authorization': `Bearer ${tempToken}`
+let genreCombinations = {};
+
+function initializeGenreCombinations(artists) {
+    let genreCounts = {};
+    artists.forEach(artist => {
+        const artistGenres = artist['Жанр'].split(', ');
+        artistGenres.forEach(genre => {
+            if (!genreCounts[genre]) {
+                genreCounts[genre] = 0;
+            }
+            genreCounts[genre]++;
+        });
+
+        const genreCount = artistGenres.length;
+        for (let i = 1; i < (1 << genreCount); i++) {
+            let combination = [];
+            for (let j = 0; j < genreCount; j++) {
+                if (i & (1 << j)) {
+                    combination.push(artistGenres[j]);
+                }
+            }
+            const key = combination.sort().join(',');
+            if (!genreCombinations[key]) {
+                genreCombinations[key] = 0;
+            }
+            genreCombinations[key]++;
         }
     });
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch artists data');
+    for (let genre in genreCounts) {
+        if (genreCounts.hasOwnProperty(genre)) {
+            genreCombinations[genre] = genreCounts[genre];
+        }
     }
-
-    const csvData = await response.text();
-    Papa.parse(csvData, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            listenerColumns = findListenerColumns(results.meta.fields);
-            artistsData = results.data.slice(1).filter(artist => !artist['URL NA']);
-            shuffleArray(artistsData);
-            shuffledArtistsData = [...artistsData];
-            originalArtistsOrder = [...shuffledArtistsData];
-
-            const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
-
-            setupRangeSlider(maxListeners);
-            collectAllArtistURLs(artistsData);
-            extractAndDisplayGenres(artistsData);
-            initializeSearchIndex(artistsData);
-            updateArtistsDisplay();
-        }
-    });
 }
 
+async function fetchArtists() {
+    getTempToken().then(tempToken => {
+        fetch('https://nuam-base-4979094c8808.herokuapp.com/artists-data', {
+            headers: {
+                'Authorization': `Bearer ${tempToken}`
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch artists data');
+            }
+            return response.text();
+        }).then(csvData => {
+            Papa.parse(csvData, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    listenerColumns = findListenerColumns(results.meta.fields);
+                    artistsData = results.data.slice(1).filter(artist => !artist['URL NA']);
+                    shuffleArray(artistsData);
+                    shuffledArtistsData = [...artistsData];
+                    originalArtistsOrder = [...shuffledArtistsData];
+
+                    const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
+
+                    setupRangeSlider(maxListeners);
+                    collectAllArtistURLs(artistsData);
+                    extractAndDisplayGenres(artistsData);
+                    initializeSearchIndex(artistsData);
+                    updateArtistsDisplay();
+
+                    initializeGenreCombinations(artistsData);
+                }
+            });
+        }).catch(error => {
+            console.error('Error fetching artists data:', error);
+        });
+    }).catch(error => {
+        console.error('Error fetching temp token:', error);
+    });
+}
 
 function findListenerColumns(header) {
     let listenerColumns = [];
@@ -2434,6 +2472,8 @@ function extractAndDisplayGenres(artists) {
     allGenresButton.className = 'genre-button selected';
     allGenresButton.innerHTML = '<span class="genre-name">всі жанри</span>';
     allGenresButton.onclick = () => {
+        selectedGenres = [];
+        removedGenres = [];
         toggleGenreSelection('всі жанри');
         document.getElementById('artist-search').value = '';
         document.getElementById('clear-search').style.display = 'none';
@@ -2519,7 +2559,93 @@ function extractAndDisplayGenres(artists) {
     updateGenreCounts();
 }
 
+let filterYearRel = false;
+let filterMultiRel = false;
+let filterDebut = false;
+let matchAllGenres = true;
+let invalidGenres = [];
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('yearRel-checkbox').addEventListener('change', function() {
+    filterYearRel = this.checked;
+    document.getElementById('artist-search').value = '';
+    document.getElementById('clear-search').style.display = 'none';
+    updateArtistsDisplay();
+    updateFilterTags();
+    updateGenreCounts();
+});
+
+document.getElementById('multiRel-checkbox').addEventListener('change', function() {
+    filterMultiRel = this.checked;
+    document.getElementById('artist-search').value = '';
+    document.getElementById('clear-search').style.display = 'none';
+    updateArtistsDisplay();
+    updateFilterTags();
+    updateGenreCounts();
+});
+
+    document.getElementById('hide-russian').addEventListener('change', function() {
+        hideRussian = this.checked;
+        updateArtistsDisplay();
+        updateFilterTags();
+        updateGenreCounts();
+    });
+  
+  document.getElementById('debut-checkbox').addEventListener('change', function() {
+        filterDebut = this.checked;
+        document.getElementById('artist-search').value = '';
+        document.getElementById('clear-search').style.display = 'none';
+        updateArtistsDisplay();
+        updateFilterTags();
+        updateGenreCounts();
+    });
+
+    document.getElementById('match-all-genres-checkbox').addEventListener('change', function() {
+    matchAllGenres = this.checked;
+
+    if (matchAllGenres) {
+        selectedGenres = selectedGenres.filter(genre => {
+            return artistsData.some(artist => {
+                const artistGenres = artist['Жанр'].split(', ');
+                return selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre));
+            });
+        });
+    }
+
+    updateArtistsDisplay();
+    updateFilterTags();
+    updateGenreCounts();
+
+    // Обновление состояния кнопок жанров
+    const genreButtons = document.querySelectorAll('.genre-button');
+    genreButtons.forEach(button => {
+        const genre = button.dataset.genre;
+        const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
+        if (count === 0) {
+            button.classList.add('gray-out');
+            button.style.pointerEvents = 'none';
+        } else {
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+        }
+    });
+
+    updateSelectedGenresUI();
+
+    const allGenresButton = document.querySelector('.genre-button:first-child');
+    if (allGenresButton) {
+        allGenresButton.disabled = false;
+        allGenresButton.classList.remove('gray-out');
+        allGenresButton.style.pointerEvents = 'auto';
+        if (selectedGenres.length === 0) {
+            allGenresButton.classList.add('selected');
+        } else {
+            allGenresButton.classList.remove('selected');
+        }
+    }
+});
+  });
+  
 function removeRemoveGenreButton(genreButton) {
     const removeButton = genreButton.querySelector('.remove-genre');
     if (removeButton) {
@@ -2583,16 +2709,24 @@ function updateGenreCounts(reset = false) {
             if (reset) {
                 button.innerHTML = `<span class="genre-name">${genre}</span> <span class="genre-count">(${originalCount})</span>`;
             } else {
-                const newCount = artistsData.filter(artist => {
+                let newCount = artistsData.filter(artist => {
                     const artistGenres = artist['Жанр'].split(', ');
-                    if (hideRussian && artist['URL RL']) {
+                    const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
+                    const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
+                    const matchesHideRussian = !hideRussian || !artist['URL RL'];
+                    const matchesDebut = !filterDebut || artist['Debut'] === '+';
+
+                    if (!matchesYearRel || !matchesMultiRel || !matchesHideRussian || !matchesDebut) {
                         return false;
                     }
-                    if (removedGenres.includes(genre)) {
-                        return false;
-                    }
-                    return artistGenres.includes(genre) && selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre)) && !removedGenres.some(removedGenre => artistGenres.includes(removedGenre));
+
+                    return artistGenres.includes(genre) && (
+                        matchAllGenres
+                            ? selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre))
+                            : true
+                    );
                 }).length;
+
                 button.innerHTML = `<span class="genre-name">${genre}</span> <span class="genre-count">(${newCount})</span>`;
                 
                 const removeButton = document.createElement('button');
@@ -2670,9 +2804,21 @@ function toggleGenreSelection(genre, artistName = null) {
     displayArtists(currentDisplayList, true);
 
     updateToggleButton();
+
+    const allGenresButton = document.querySelector('.genre-button:first-child');
+    if (allGenresButton) {
+        allGenresButton.disabled = false;
+        allGenresButton.classList.remove('gray-out');
+        allGenresButton.style.pointerEvents = 'auto';
+        if (selectedGenres.length === 0) {
+            allGenresButton.classList.add('selected');
+        } else {
+            allGenresButton.classList.remove('selected');
+        }
+    }
 }
 
-function removeGenre(genre) {
+  function removeGenre(genre) {
     const searchInput = document.getElementById('artist-search');
     const clearSearchBtn = document.getElementById('clear-search');
     
@@ -2695,7 +2841,7 @@ function removeGenre(genre) {
         }
     });
 }
-
+  
 function restoreGenre(genre) {
     const genreIndex = removedGenres.indexOf(genre);
     if (genreIndex > -1) {
@@ -2713,10 +2859,14 @@ function updateSelectedGenresUI() {
     const activeGenres = selectedGenres.length > 0 ? selectedGenres : ['всі жанри'];
 
     genreButtons.forEach(button => {
-        const genre = button.textContent.split(' (')[0];
+        const genre = button.dataset.genre;
         if (genre === 'всі жанри') {
             button.disabled = false;
-            button.classList.remove('gray-out', 'selected');
+            if (matchAllGenres || selectedGenres.length === 0) {
+                button.classList.add('selected');
+            } else {
+                button.classList.remove('selected');
+            }
         } else if (selectedGenres.includes(genre)) {
             button.classList.add('selected');
             button.disabled = false;
@@ -2728,7 +2878,9 @@ function updateSelectedGenresUI() {
         } else {
             const hasArtists = artistsData.some(artist => {
                 const artistGenres = artist['Жанр'].split(', ');
-                return activeGenres.every(activeGenre => artistGenres.includes(activeGenre)) && artistGenres.includes(genre);
+                return matchAllGenres 
+                    ? activeGenres.every(activeGenre => artistGenres.includes(activeGenre)) && artistGenres.includes(genre)
+                    : activeGenres.some(activeGenre => artistGenres.includes(activeGenre)) || artistGenres.includes(genre);
             });
             if (hasArtists || selectedGenres.length === 0) {
                 button.disabled = false;
@@ -2754,7 +2906,7 @@ function updateSelectedGenresUI() {
 
     const allGenresButton = document.querySelector('.genre-button:first-child');
     const searchQuery = document.getElementById('artist-search').value.trim();
-    if (selectedGenres.length === 0 && !searchQuery) {
+    if ((selectedGenres.length === 0 && !searchQuery) || matchAllGenres) {
         if (allGenresButton) {
             allGenresButton.classList.add('selected');
         }
@@ -2789,81 +2941,133 @@ function updateFilterTags() {
 
     const searchQuery = document.getElementById('artist-search').value.trim();
 
-    if (selectedGenres.length === 0 && removedGenres.length === 0 && !searchQuery && !hideRussian) {
+    if (searchQuery) {
         const filterTag = document.createElement('span');
         filterTag.className = 'filter-tag';
-        filterTag.textContent = 'всі жанри';
+        filterTag.textContent = 'пошуковий запит';
         filterList.appendChild(filterTag);
     } else {
-        if (searchQuery) {
-            const filterTag = document.createElement('span');
-            filterTag.className = 'filter-tag';
-            filterTag.textContent = 'пошуковий запит';
-            filterList.appendChild(filterTag);
-        }
-
-        selectedGenres.forEach(genre => {
-            const filterTag = document.createElement('span');
-            filterTag.className = 'filter-tag';
-            filterTag.textContent = genre;
-            const removeTag = document.createElement('span');
-            removeTag.className = 'remove-tag';
-            removeTag.textContent = '×';
-            removeTag.onclick = () => {
-                toggleGenreSelection(genre);
-                updateGenreCounts();
-            };
-            filterTag.appendChild(removeTag);
-            filterList.appendChild(filterTag);
-        });
-
-        removedGenres.forEach(genre => {
-            const filterTag = document.createElement('span');
-            filterTag.className = 'filter-tag removed';
-            filterTag.textContent = genre;
-            const removeTag = document.createElement('span');
-            removeTag.className = 'remove-tag';
-            removeTag.textContent = '×';
-            removeTag.onclick = () => {
-                restoreGenre(genre);
-                updateGenreCounts();
-            };
-            filterTag.appendChild(removeTag);
-            filterList.appendChild(filterTag);
-        });
-
-        if (selectedGenres.length === 0 && removedGenres.length > 0 && !searchQuery) {
+        if (selectedGenres.length === 0 && removedGenres.length === 0) {
             const filterTag = document.createElement('span');
             filterTag.className = 'filter-tag';
             filterTag.textContent = 'всі жанри';
-            filterList.insertBefore(filterTag, filterList.firstChild);
-        }
-
-        if (hideRussian && !searchQuery) {
-            const filterTag = document.createElement('span');
-            filterTag.className = 'filter-tag removed';
-            filterTag.textContent = 'без російськомовних артистів';
-            const removeTag = document.createElement('span');
-            removeTag.className = 'remove-tag';
-            removeTag.textContent = '×';
-            removeTag.onclick = () => {
-                document.getElementById('hide-russian').checked = false;
-                hideRussian = false;
-                updateArtistsDisplay();
-                updateFilterTags();
-                updateGenreCounts();
-            };
-            filterTag.appendChild(removeTag);
             filterList.appendChild(filterTag);
-        }
+        } else {
+            selectedGenres.forEach(genre => {
+                const filterTag = document.createElement('span');
+                filterTag.className = 'filter-tag';
+                filterTag.textContent = genre;
+                const removeTag = document.createElement('span');
+                removeTag.className = 'remove-tag';
+                removeTag.textContent = '×';
+                removeTag.onclick = () => {
+                    toggleGenreSelection(genre);
+                    updateGenreCounts();
+                    updateFilterTags();
+                };
+                filterTag.appendChild(removeTag);
+                filterList.appendChild(filterTag);
+            });
 
-        if (selectedGenres.length === 0 && removedGenres.length === 0 && hideRussian && !searchQuery) {
-            const filterTag = document.createElement('span');
-            filterTag.className = 'filter-tag';
-            filterTag.textContent = 'всі жанри';
-            filterList.insertBefore(filterTag, filterList.firstChild);
+            removedGenres.forEach(genre => {
+                const filterTag = document.createElement('span');
+                filterTag.className = 'filter-tag removed';
+                filterTag.textContent = genre;
+                const removeTag = document.createElement('span');
+                removeTag.className = 'remove-tag';
+                removeTag.textContent = '×';
+                removeTag.onclick = () => {
+                    restoreGenre(genre);
+                    updateGenreCounts();
+                    updateFilterTags();
+                };
+                filterTag.appendChild(removeTag);
+                filterList.appendChild(filterTag);
+            });
         }
     }
+
+    if (hideRussian) {
+        const filterTag = document.createElement('span');
+        filterTag.className = 'filter-tag check';
+        filterTag.textContent = 'без російськомовних артистів';
+        const removeTag = document.createElement('span');
+        removeTag.className = 'remove-tag';
+        removeTag.textContent = '×';
+        removeTag.onclick = () => {
+            document.getElementById('hide-russian').checked = false;
+            hideRussian = false;
+            updateArtistsDisplay();
+            updateFilterTags();
+            updateGenreCounts();
+        };
+        filterTag.appendChild(removeTag);
+        filterList.appendChild(filterTag);
+    }
+
+    if (filterYearRel) {
+        const filterTag = document.createElement('span');
+        filterTag.className = 'filter-tag check';
+        filterTag.textContent = 'релізи за останній рік';
+        const removeTag = document.createElement('span');
+        removeTag.className = 'remove-tag';
+        removeTag.textContent = '×';
+        removeTag.onclick = () => {
+            document.getElementById('yearRel-checkbox').checked = false;
+            filterYearRel = false;
+            updateArtistsDisplay();
+            updateFilterTags();
+            updateGenreCounts();
+        };
+        filterTag.appendChild(removeTag);
+        filterList.appendChild(filterTag);
+    }
+
+    if (filterMultiRel) {
+        const filterTag = document.createElement('span');
+        filterTag.className = 'filter-tag check';
+        filterTag.textContent = 'більше одного релізу';
+        const removeTag = document.createElement('span');
+        removeTag.className = 'remove-tag';
+        removeTag.textContent = '×';
+        removeTag.onclick = () => {
+            document.getElementById('multiRel-checkbox').checked = false;
+            filterMultiRel = false;
+            updateArtistsDisplay();
+            updateFilterTags();
+            updateGenreCounts();
+        };
+        filterTag.appendChild(removeTag);
+        filterList.appendChild(filterTag);
+    }
+
+    if (filterDebut) {
+        const filterTag = document.createElement('span');
+        filterTag.className = 'filter-tag check';
+        filterTag.textContent = 'дебют 2024 року';
+        const removeTag = document.createElement('span');
+        removeTag.className = 'remove-tag';
+        removeTag.textContent = '×';
+        removeTag.onclick = () => {
+            document.getElementById('debut-checkbox').checked = false;
+            filterDebut = false;
+            updateArtistsDisplay();
+            updateFilterTags();
+            updateGenreCounts();
+        };
+        filterTag.appendChild(removeTag);
+        filterList.appendChild(filterTag);
+    }
+  
+    if (searchQuery) {
+        const filterTags = filterList.querySelectorAll('.filter-tag');
+        filterTags.forEach(tag => {
+            if (tag.textContent !== 'пошуковий запит') {
+                tag.style.display = 'none';
+            }
+        });
+    }
+
     updateGenreCounts();
 }
 
@@ -2891,23 +3095,24 @@ function updateArtistsDisplay() {
     }
 }
 
-document.getElementById('hide-russian').addEventListener('change', function() {
-    hideRussian = this.checked;
-    updateArtistsDisplay();
-    updateFilterTags();
-});
-
 function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
     return artists.filter(artist => {
         const artistGenres = artist['Жанр'].split(', ');
         const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
 
-        const matchesSelectedGenres = selectedGenres.length === 0 || selectedGenres.every(genre => artistGenres.includes(genre));
+        const matchesSelectedGenres = selectedGenres.length === 0 || (
+            matchAllGenres 
+                ? selectedGenres.every(genre => artistGenres.includes(genre)) 
+                : selectedGenres.some(genre => artistGenres.includes(genre))
+        );
         const matchesRemovedGenres = removedGenres.length === 0 || !removedGenres.some(genre => artistGenres.includes(genre));
         const matchesHideRussian = !hideRussian || !artist['URL RL'];
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
+        const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
+        const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
+        const matchesDebut = !filterDebut || artist['Debut'] === '+';
 
-        return matchesSelectedGenres && matchesRemovedGenres && matchesHideRussian && matchesListenersRange;
+        return matchesSelectedGenres && matchesRemovedGenres && matchesHideRussian && matchesListenersRange && matchesYearRel && matchesMultiRel && matchesDebut;
     });
 }
 
@@ -2986,7 +3191,7 @@ function displayArtists(artists, reset = false) {
         imgContainer.style.position = 'relative';
 
         const imgElement = document.createElement('img');
-        imgElement.src = artist['IMG'] || 'https://static.wixstatic.com/media/c77f36_5b2e80819dee4ad5b57983676c09a20e~mv2.png';
+        imgElement.src = artist['IMG'] || 'https://static.wixstatic.com/media/c77f36_18ba153c351744bc9cb5eecb39ca6d90~mv2.png';
         imgElement.setAttribute('data-spotify-id', artist['URL1'].split('/').pop().split('?')[0]);
         imgElement.addEventListener('click', function() {
             playTrackPreview(this.getAttribute('data-spotify-id'));
@@ -3021,21 +3226,52 @@ function displayArtists(artists, reset = false) {
 
         const relatedArtistsContainer = document.createElement('div');
         relatedArtistsContainer.className = 'related-artists-container';
-
         imgContainer.appendChild(relatedArtistsContainer);
 
-        if (artist['Дата додавання']) {
-            const dateElement = document.createElement('div');
-            dateElement.className = 'date-added';
-            dateElement.innerHTML = `<i class="fa fa-calendar-alt"></i> <span data-tooltip="Дата додавання артиста до бази">${artist['Дата додавання']}</span>`;
-            imgContainer.appendChild(dateElement);
-        }
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'icon-container';
+
+        const yearRelIcon = document.createElement('div');
+        yearRelIcon.className = 'year-rel-icon';
+        yearRelIcon.innerHTML = artist['YearRel'] === '+' ? '<i class="fa fa-calendar-check" data-tooltip="Є релізи за останній рік"></i>' : '<i class="fa fa-calendar-minus" data-tooltip="Більше року без релізів"></i>';
+        yearRelIcon.style.color = artist['YearRel'] === '+' ? '#84fb8f' : '#fb8484';
+        yearRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+        iconContainer.appendChild(yearRelIcon);
+
+        const multiRelIcon = document.createElement('div');
+multiRelIcon.className = 'multi-rel-icon';
+if (artist['MultiRel'] !== '+') {
+    multiRelIcon.innerHTML = '<i class="fa fa-solid fa-leaf" data-tooltip="У артиста лише один реліз"></i>';
+    multiRelIcon.style.color = '#fb8484';
+    multiRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+    iconContainer.appendChild(multiRelIcon);
+}
 
         if (artist['URL RL']) {
             const tagElement = document.createElement('div');
             tagElement.className = 'russian-tag';
-            tagElement.textContent = 'пісні російською у 2024 році';
-            artistElement.appendChild(tagElement);
+            tagElement.innerHTML = '<i class="fa fa-thumbs-down" data-tooltip="Є пісні російською з 2024 року"></i>';
+            tagElement.style.color = '#fb8484';
+            tagElement.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(tagElement);
+        }
+
+      if (artist['Debut'] === '+') {
+            const debutIcon = document.createElement('div');
+            debutIcon.className = 'debut-icon';
+            debutIcon.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував у 2024 році"></i>';
+            debutIcon.style.color = '#d5da8d';
+            debutIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(debutIcon);
+        }
+      
+        imgContainer.appendChild(iconContainer);
+
+        if (artist['Дата додавання']) {
+            const dateElement = document.createElement('div');
+            dateElement.className = 'date-added';
+            dateElement.innerHTML = `<i class="fa fa-calendar-alt"></i> <span data-tooltip="Дата додавання артиста до бази" style="font-family: CustomFont, Arial, sans-serif;">${artist['Дата додавання']}</span>`;
+            imgContainer.appendChild(dateElement);
         }
 
         if (window.innerWidth <= 768) {
@@ -3058,25 +3294,6 @@ function displayArtists(artists, reset = false) {
 
             const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
             const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
-
-            const currentListenersSpan = document.createElement('span');
-            currentListenersSpan.textContent = formatNumber(currentListeners);
-            currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
-            listenersElement.appendChild(currentListenersSpan);
-
-            if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
-                const difference = currentListeners - previousListeners;
-                if (difference !== 0) {
-                    const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
-                    const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
-                    const differenceSpan = document.createElement('span');
-                    differenceSpan.className = 'difference';
-                    differenceSpan.style.color = differenceColor;
-                    differenceSpan.textContent = `(${differenceText})`;
-                    differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
-                    listenersElement.appendChild(differenceSpan);
-                }
-            }
 
             if (artist['Instagram']) {
                 listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
@@ -3114,7 +3331,7 @@ function displayArtists(artists, reset = false) {
                 infoContainer.appendChild(dateElementMobile);
             }
 
-          infoContainer.appendChild(relatedArtistsContainer);
+            infoContainer.appendChild(relatedArtistsContainer);
           
             artistElement.appendChild(imgContainer);
             artistElement.appendChild(infoContainer);
@@ -3157,10 +3374,6 @@ function displayArtists(artists, reset = false) {
                 }
             }
 
-            if (artist['Instagram']) {
-                listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-            }
-
             artistElement.appendChild(listenersElement);
 
             const genresElement = document.createElement('div');
@@ -3185,22 +3398,12 @@ function displayArtists(artists, reset = false) {
                 genresElement.appendChild(document.createTextNode(' '));
             });
             artistElement.appendChild(genresElement);
+
+            artistElement.appendChild(relatedArtistsContainer);
         }
 
         container.appendChild(artistElement);
     });
-
-    if (currentPlayingId) {
-        updatePlayIcon(currentPlayingId);
-    }
-
-    if (toDisplay.length) {
-        const container = document.getElementById('artist-scroll-container');
-        if (container) {
-            container.removeEventListener('scroll', scrollHandler);
-            container.addEventListener('scroll', scrollHandler);
-        }
-    }
 }
   
 document.getElementById('artist-search').addEventListener('input', () => {
@@ -3354,7 +3557,6 @@ document.getElementById('close-player').addEventListener('click', () => {
 });
 
 async function playTrackPreview(artistId, change = 0) {
-
   const volumeSlider = document.getElementById('volume-slider');
   volumeSlider.style.display = 'none';
 
@@ -3383,6 +3585,20 @@ async function playTrackPreview(artistId, change = 0) {
 
   currentPlayingId = artistId;
   trackIndices.set(artistId, trackIndex);
+
+  if (artistId === '1PHe8IXl0ZGmMzaKaj5YHm') {
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    if (artistElement) {
+      const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+      if (noTracksMessage) {
+        noTracksMessage.style.display = 'block';
+      }
+    }
+    hidePlayerContainer();
+    updatePlayIcon(null);
+    isPlaying = false;
+    return;
+  }
 
   const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
     headers: { 'Authorization': `Bearer ${accessToken}` }
@@ -3645,7 +3861,6 @@ function logToLinear(value) {
     return Math.pow((Math.log10(value + 1) - minLog) / (maxLog - minLog), 1 / scaleFactor) * 100;
 }
 
-
     noUiSlider.create(rangeSlider, {
     start: [0, 100],
     connect: true,
@@ -3750,14 +3965,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const hideRussianCheckbox = document.getElementById('hide-russian');
-            const squaredFourCheckbox = document.getElementById('squaredFour');
 
             if (hideRussianCheckbox) {
                 hideRussian = hideRussianCheckbox.checked;
-            }
-
-            if (squaredFourCheckbox) {
-                hideRussian = squaredFourCheckbox.checked;
             }
 
             updateArtistsDisplay();
@@ -3776,18 +3986,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('artist-search');
     const clearSearchBtn = document.getElementById('clear-search');
     const hideRussianCheckbox = document.getElementById('hide-russian');
-    const squaredFourCheckbox = document.getElementById('squaredFour');
-  
+
     if (hideRussianCheckbox) {
         hideRussianCheckbox.addEventListener('change', function() {
-            hideRussian = this.checked;
-            updateArtistsDisplay();
-            updateFilterTags();
-        });
-    }
-
-    if (squaredFourCheckbox) {
-        squaredFourCheckbox.addEventListener('change', function() {
             hideRussian = this.checked;
             updateArtistsDisplay();
             updateFilterTags();
@@ -3823,14 +4024,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(() => {
                     currentDisplayList = applyFilters(originalArtistsOrder);
                     displayArtists(currentDisplayList, true);
-                    updateArtistCounter(artistsData.length);
+                    updateArtistCounter(currentDisplayList.length);
                     updateFilterTags();
                 });
             } else {
                 clearTimeout(searchTimeout);
                 clearSearchBtn.style.display = 'none';
             }
-        }); 
+        });
 
         clearSearchBtn.addEventListener('click', function() {
             searchInput.value = '';
@@ -3842,7 +4043,7 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(() => {
                 currentDisplayList = applyFilters(originalArtistsOrder);
                 displayArtists(currentDisplayList, true);
-                updateArtistCounter(artistsData.length);
+                updateArtistCounter(currentDisplayList.length);
                 updateFilterTags();
             });
         });
@@ -3858,7 +4059,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateFilterTags();
             });
         });
-    } 
+    }
 
     document.querySelector('.controls').addEventListener('click', event => {
         const target = event.target.closest('button');
@@ -3881,21 +4082,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const artistScrollContainer = document.getElementById('artist-scroll-container');
     const genresSection = document.getElementById('genres-section');
     const sortSection = document.getElementById('sort-section');
+    const filtersSection = document.getElementById('filters-section');
     const genreButton = document.getElementById('genre-button');
     const sortButton = document.getElementById('sort-button');
+    const filtersButton = document.getElementById('filters-button');
 
-    function collapseSections() {
-        if (genresSection.style.maxHeight !== '0px') {
+    function collapseSections(exceptSection) {
+        if (exceptSection !== genresSection && genresSection.classList.contains('expanded')) {
             genresSection.style.maxHeight = '0px';
             genresSection.classList.remove('expanded');
             genreButton.setAttribute('aria-expanded', 'false');
             genreButton.classList.remove('active');
         }
-        if (sortSection.style.maxHeight !== '0px') {
+        if (exceptSection !== sortSection && sortSection.classList.contains('expanded')) {
             sortSection.style.maxHeight = '0px';
             sortSection.classList.remove('expanded');
             sortButton.setAttribute('aria-expanded', 'false');
             sortButton.classList.remove('active');
+        }
+        if (exceptSection !== filtersSection && filtersSection.classList.contains('expanded')) {
+            filtersSection.style.maxHeight = '0px';
+            filtersSection.classList.remove('expanded');
+            filtersButton.setAttribute('aria-expanded', 'false');
+            filtersButton.classList.remove('active');
         }
     }
 
@@ -3904,65 +4113,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function toggleSection(button, section) {
-        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        const isExpanded = section.classList.contains('expanded');
 
         button.setAttribute('aria-expanded', !isExpanded);
         section.setAttribute('aria-hidden', isExpanded);
 
         if (isExpanded) {
-            section.classList.add('expanding');
-            requestAnimationFrame(() => {
-                section.style.maxHeight = '0';
-                
-                section.classList.remove('expanded');
-            });
+            section.style.maxHeight = '0';
+            section.classList.remove('expanded');
         } else {
-            section.classList.add('expanding');
-            requestAnimationFrame(() => {
-                section.style.maxHeight = section.scrollHeight + 'px';
-                
-                section.classList.add('expanded');
-            });
+            section.style.maxHeight = section.scrollHeight + 'px';
+            section.classList.add('expanded');
         }
-
-        section.addEventListener('transitionend', () => {
-            section.classList.remove('expanding');
-        }, { once: true });
 
         if (!isExpanded) {
             button.classList.add('active');
+            collapseSections(section);
         } else {
             button.classList.remove('active');
         }
     }
- 
+
     if (genreButton) {
         genreButton.addEventListener('click', () => {
             toggleSection(genreButton, genresSection);
-            sortSection.classList.remove('expanded');
-            sortSection.style.maxHeight = '0';
-            
-            sortButton.setAttribute('aria-expanded', 'false');
-            sortSection.setAttribute('aria-hidden', 'true');
-            sortButton.classList.remove('active');
         });
     }
 
     if (sortButton) {
         sortButton.addEventListener('click', () => {
             toggleSection(sortButton, sortSection);
-            genresSection.classList.remove('expanded');
-            genresSection.style.maxHeight = '0';
-            
-            genreButton.setAttribute('aria-expanded', 'false');
-            genresSection.setAttribute('aria-hidden', 'true');
-            genreButton.classList.remove('active');
         });
     }
- 
+
+    if (filtersButton) {
+        filtersButton.addEventListener('click', () => {
+            toggleSection(filtersButton, filtersSection);
+        });
+    }
+
     genresSection.style.maxHeight = '0';
     sortSection.style.maxHeight = '0';
-}); 
+    filtersSection.style.maxHeight = '0';
+});
  
 document.addEventListener('DOMContentLoaded', () => {
     const volumeControl = document.getElementById('volume-control');
@@ -4035,7 +4228,6 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(playerWrapper, { attributes: true, attributeFilter: ['class'] });
 });
 
-
   document.addEventListener('DOMContentLoaded', function() {
     function disableScroll() {
         const artistScrollContainer = document.getElementById('artist-scroll-container');
@@ -4062,11 +4254,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const options = {
             steps: [
                 {
-                    intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша база українських артистів. Шукайте музикантів за жанрами та кількістю слухачів, відстежуйте їхню популярність та слухайте уривки треків для оперативного ознайомлення з понад 10 000 українських творців.</p>'
+                    intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів з більш ніж 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі інструменти з пошуку. </p>'
                 },
                 {
                     element: document.querySelector('#buttons-wrapper'),
-                    intro: 'Це дві основні вкладки. Звертайтеся до них частіше, щоб не блукати бездумно безкрайньою українською музичною сценою.'
+                    intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не заблукати серед тисяч артистів.'
                 },
                 {
                     element: document.querySelector('#genres-section'),
@@ -4088,7 +4280,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 {
                     element: document.querySelector('.artist-container .artist:first-child'),
-                    intro: 'Це картка артиста. Ви можете слухати уривки треків артистів для швидкого ознайомлення.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим артистом. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані оновлюються раз на місяць кожного першого числа.<br/><br/>У артистів, які були додані в базу, починаючи з кінця 2023 року, вказана дата додавання. При додаванні артиста в базу дані про кількість слухачів актуальні на момент додавання.',
+                    intro: 'Це картка артиста. Ви можете слухати уривки треків артистів для швидкого ознайомлення.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим артистом. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані беруться зі Spotify і оновлюються раз на місяць кожного першого числа.<br/><br/>У артистів, які були додані в базу починаючи з кінця 2023 року, вказана дата додавання. При додаванні артиста в базу дані про кількість слухачів актуальні на момент додавання.',
                     position: 'right'
                 },
                 {
@@ -4115,6 +4307,11 @@ document.addEventListener('DOMContentLoaded', () => {
         intro.onbeforechange(function(targetElement) {
             const stepIndex = intro._currentStep;
             if (stepIndex === 5) {
+                const artistScrollContainer = document.getElementById('artist-scroll-container');
+                if (artistScrollContainer) {
+                    artistScrollContainer.scrollTop = 0; // Прокручиваем контейнер вверх
+                }
+                
                 const firstArtist = document.querySelector('.artist-container .artist:first-child');
                 if (firstArtist) {
                     intro._introItems[stepIndex].element = firstArtist;
@@ -4184,7 +4381,6 @@ document.addEventListener('DOMContentLoaded', () => {
         startIntro(false);
     });
 });
-  
 </script>
 </body>
 </html>
