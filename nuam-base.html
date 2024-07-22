@@ -2422,7 +2422,7 @@ async function fetchArtists() {
                 skipEmptyLines: true,
                 complete: function(results) {
                     listenerColumns = findListenerColumns(results.meta.fields);
-                    artistsData = results.data.slice(1).filter(artist => !artist['URL NA']);
+                    artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
                     shuffleArray(artistsData);
                     shuffledArtistsData = [...artistsData];
                     originalArtistsOrder = [...shuffledArtistsData];
@@ -2677,7 +2677,7 @@ function updateToggleButton() {
         const genre = button.dataset.genre;
         const hasArtists = artistsData.some(artist => {
             const artistGenres = artist['Жанр'].split(', ');
-            return activeGenres.every(activeGenre => artistGenres.includes(activeGenre)) && artistGenres.includes(genre) && (!hideRussian || !artist['URL RL']);
+            return activeGenres.every(activeGenre => artistGenres.includes(activeGenre)) && artistGenres.includes(genre) && (!hideRussian || !artist['RuLang']);
         });
         return hasArtists;
     });
@@ -2725,7 +2725,7 @@ function updateGenreCounts(reset = false) {
                     const artistGenres = artist['Жанр'].split(', ');
                     const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
                     const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
-                    const matchesHideRussian = !hideRussian || !artist['URL RL'];
+                    const matchesHideRussian = !hideRussian || !artist['RuLang'];
                     const matchesDebut = !filterDebut || artist['Debut'] === '+';
 
                     if (!matchesYearRel || !matchesMultiRel || !matchesHideRussian || !matchesDebut) {
@@ -3125,7 +3125,7 @@ function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
                 : selectedGenres.some(genre => artistGenres.includes(genre))
         );
         const matchesRemovedGenres = removedGenres.length === 0 || !removedGenres.some(genre => artistGenres.includes(genre));
-        const matchesHideRussian = !hideRussian || !artist['URL RL'];
+        const matchesHideRussian = !hideRussian || !artist['RuLang'];
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
         const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
         const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
@@ -3270,7 +3270,7 @@ function displayArtists(artists, reset = false) {
             iconContainer.appendChild(multiRelIcon);
         }
 
-        if (artist['URL RL']) {
+        if (artist['RuLang']) {
             const tagElement = document.createElement('div');
             tagElement.className = 'russian-tag';
             tagElement.innerHTML = '<i class="fa fa-thumbs-down" data-tooltip="Є пісні російською з 2024 року"></i>';
