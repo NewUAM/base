@@ -30,12 +30,10 @@
        min-width: 1220px;
         }
       
-      /* Скрываем стандартный чекбокс */
 .custom-checkbox input[type="checkbox"] {
     display: none;
 }
 
-/* Стили для кастомного чекбокса */
 .custom-checkbox {
     display: flex;
     align-items: center;
@@ -44,6 +42,7 @@
     color: #f3f3f3;
     margin-bottom: 10px;
     font-size: 16px;
+    width: fit-content;
 }
 
 .custom-checkbox .checkbox-icon {
@@ -54,15 +53,13 @@
     border-radius: 7px;
     background-color: #282626;
     transition: background-color 0.3s, border-color 0.3s;
-    margin-right: 10px; /* Отступ между чекбоксом и текстом */
+    margin-right: 10px;
 }
       
    .custom-checkbox .checkbox-icon:hover {
     border: 1px solid #84AAFB;
 }   
       
-      
-
 .custom-checkbox input[type="checkbox"]:checked + .checkbox-icon {
     background-color: #282626;
     border-color: #84AAFB;
@@ -89,10 +86,8 @@
 }
 
 .custom-checkbox .checkbox-text {
-    margin-top: 2px; /* Опускание только текста */
+    margin-top: 2px;
 }
-
-
       
        #main-container {
             height: 100%;
@@ -566,7 +561,6 @@ white-space: normal;
       
   .track-artist-name {
     display: inline-block;
-    max-width: calc(100% - 60px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -576,6 +570,7 @@ white-space: normal;
     font-weight: bold;
     text-align: center;
     text-decoration: none;
+    width: fit-content;
 }
 
 .track-artist-name:hover {
@@ -743,7 +738,7 @@ z-index: 3;
     background-color: #383838;
     border-radius: 7px 0 0 0;
     padding: 5px;
-    width: 500px; /* Установим ширину 500px */
+    width: 500px;
     height: 40px;
     white-space: nowrap;
     overflow: hidden;
@@ -752,7 +747,7 @@ z-index: 3;
     box-sizing: border-box;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
-    flex-grow: 0; /* Убираем flex-grow */
+    flex-grow: 0;
 }
 
 #player-container.show {
@@ -762,18 +757,18 @@ z-index: 3;
 #close-player {
     background: none;
     border: none;
-    font-size: 18px; /* Установим размер кнопки 20px */
+    font-size: 18px;
     cursor: pointer;
     color: #f3f3f3;
     transition: color 0.2s ease-in-out;
     display: flex;
-    align-items: center; /* Центрируем иконку по вертикали */
-    justify-content: center; /* Центрируем иконку по горизонтали */
+    align-items: center;
+    justify-content: center;
     width: 24px;
-    height: 24px; /* Установим ширину и высоту для лучшего центрирования */
+    height: 24px;
     position: static;
-    right: 10px; /* Расположим кнопку справа */
-    top: 50%; /* Центрируем по вертикали */
+    right: 10px;
+    top: 50%;
     margin-left: 10px;
     margin-right: 5px;
 }
@@ -781,18 +776,18 @@ z-index: 3;
 .volume-icon {
     background: none;
     border: none;
-    font-size: 18px; /* Установим размер кнопки 20px */
+    font-size: 18px;
     cursor: pointer;
     color: #f3f3f3;
     transition: color 0.2s ease-in-out;
     display: flex;
-    align-items: center; /* Центрируем иконку по вертикали */
-    justify-content: center; /* Центрируем иконку по горизонтали */
+    align-items: center;
+    justify-content: center;
     width: 24px;
-    height: 24px; /* Установим ширину и высоту для лучшего центрирования */
+    height: 24px;
     position: static;
-    right: 50px; /* Расположим кнопку слева от кнопки закрытия */
-    top: 50%; /* Центрируем по вертикали */
+    right: 50px;
+    top: 50%;
     padding-top: 2px;
     margin-left: 10px;
     z-index: 10;
@@ -806,7 +801,7 @@ z-index: 3;
 .volume-slider {
     display: none;
     position: absolute;
-    bottom: 50px; /* Положение регулятора для открытия вверх */
+    bottom: 50px;
     right: 35px;
     width: 20px;
     height: 150px;
@@ -840,9 +835,6 @@ z-index: 3;
 #volume-control .noUi-connect {
     background: #84AAFB;
 }
-
-
-
       
 #search-container {
     position: relative;
@@ -1345,6 +1337,16 @@ background: #282626;
     color: #282626;
       }
       
+      #no-artists-message {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background-color: #282626;
+    color: #f3f3f3;
+    font-size: 16px;
+}
+
+      
 @keyframes loadingJ {
   0% {
     transform: translateX(-38.75px);
@@ -1401,6 +1403,14 @@ background: #282626;
         right: -90px;
 }
       
+      .match-all-genres-tooltip[data-tooltip]::after {
+    white-space: pre-line;
+        width: 250px;
+    top: 30px;
+    left: 175px;
+}
+
+      
       .date-added span::after {
   top: -60px; 
 }
@@ -1426,7 +1436,7 @@ background: #282626;
   padding: 3px 5px 1px 5px;
   display: flex;
   gap: 10px;
-  z-index: 1000; /* высокий z-index */
+  z-index: 1000;
 }
       
       .year-rel-icon i[data-tooltip]:hover::after,
@@ -2061,7 +2071,7 @@ background: #282626;
     #player-wrapper {
     position: fixed;
     bottom: 0;
-    left: 50%; /* Сдвигаем элемент на 50% от левого края */
+    left: 50%;
     transform: translateX(-50%);
     width: 90%;
     background-color: #282626;
@@ -2199,7 +2209,7 @@ background: #282626;
 </section>
 
 <section id="genres-section" class="tab-content" aria-hidden="true">
-  <label class="custom-checkbox">
+  <label class="custom-checkbox match-all-genres-tooltip" data-tooltip="При активному режимі будуть показані артисти, у яких зустрічаються всі обрані жанри одночасно. &#10;&#10; Якщо зняти відмітку, показуються артисти, у яких є хоча б один з обраних жанрів.">
     <input type="checkbox" id="match-all-genres-checkbox" checked>
     <span class="checkbox-icon"></span>
     <span class="checkbox-text">Відповідність усім обраним жанрам</span>
@@ -2274,6 +2284,9 @@ background: #282626;
  <div class="line2"></div>
   
     <section id="artist-section">
+    <div id="no-artists-message">
+        Артистів із такими параметрами не знайдено.<br/><br/>Спробуйте інший набір жанрів, виключіть фільтри або збільште діапазон слухачів на місяць.
+    </div>
     <div id="artist-scroll-container" class="artist-scroll-container">
     <div class="artist-container"></div>
 </div>
@@ -2616,7 +2629,6 @@ document.getElementById('multiRel-checkbox').addEventListener('change', function
     updateFilterTags();
     updateGenreCounts();
 
-    // Обновление состояния кнопок жанров
     const genreButtons = document.querySelectorAll('.genre-button');
     genreButtons.forEach(button => {
         const genre = button.dataset.genre;
@@ -3083,6 +3095,13 @@ function updateArtistsDisplay() {
         currentDisplayList = applyFilters(shuffledArtistsData, minListeners, maxListeners);
     }
 
+    const noArtistsMessage = document.getElementById('no-artists-message');
+    if (!currentDisplayList.length) {
+        noArtistsMessage.style.display = 'block';
+    } else {
+        noArtistsMessage.style.display = 'none';
+    }
+
     displayArtists(currentDisplayList, true);
     updateArtistCounter(currentDisplayList.length);
 
@@ -3184,6 +3203,8 @@ function displayArtists(artists, reset = false) {
     displayOffset += displayBatchSize;
 
     toDisplay.forEach(artist => {
+        if (!artist) return;
+
         const artistElement = document.createElement('div');
         artistElement.className = 'artist';
 
@@ -3192,10 +3213,12 @@ function displayArtists(artists, reset = false) {
 
         const imgElement = document.createElement('img');
         imgElement.src = artist['IMG'] || 'https://static.wixstatic.com/media/c77f36_18ba153c351744bc9cb5eecb39ca6d90~mv2.png';
-        imgElement.setAttribute('data-spotify-id', artist['URL1'].split('/').pop().split('?')[0]);
-        imgElement.addEventListener('click', function() {
-            playTrackPreview(this.getAttribute('data-spotify-id'));
-        });
+        if (artist['URL1']) {
+            imgElement.setAttribute('data-spotify-id', artist['URL1'].split('/').pop().split('?')[0]);
+            imgElement.addEventListener('click', function() {
+                playTrackPreview(this.getAttribute('data-spotify-id'));
+            });
+        }
 
         imgContainer.appendChild(imgElement);
 
@@ -3239,13 +3262,13 @@ function displayArtists(artists, reset = false) {
         iconContainer.appendChild(yearRelIcon);
 
         const multiRelIcon = document.createElement('div');
-multiRelIcon.className = 'multi-rel-icon';
-if (artist['MultiRel'] !== '+') {
-    multiRelIcon.innerHTML = '<i class="fa fa-solid fa-leaf" data-tooltip="У артиста лише один реліз"></i>';
-    multiRelIcon.style.color = '#fb8484';
-    multiRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
-    iconContainer.appendChild(multiRelIcon);
-}
+        multiRelIcon.className = 'multi-rel-icon';
+        if (artist['MultiRel'] !== '+') {
+            multiRelIcon.innerHTML = '<i class="fa fa-solid fa-leaf" data-tooltip="У артиста лише один реліз"></i>';
+            multiRelIcon.style.color = '#fb8484';
+            multiRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(multiRelIcon);
+        }
 
         if (artist['URL RL']) {
             const tagElement = document.createElement('div');
@@ -3256,7 +3279,7 @@ if (artist['MultiRel'] !== '+') {
             iconContainer.appendChild(tagElement);
         }
 
-      if (artist['Debut'] === '+') {
+        if (artist['Debut'] === '+') {
             const debutIcon = document.createElement('div');
             debutIcon.className = 'debut-icon';
             debutIcon.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував у 2024 році"></i>';
@@ -3264,7 +3287,7 @@ if (artist['MultiRel'] !== '+') {
             debutIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(debutIcon);
         }
-      
+
         imgContainer.appendChild(iconContainer);
 
         if (artist['Дата додавання']) {
@@ -3303,25 +3326,27 @@ if (artist['MultiRel'] !== '+') {
 
             const genresElement = document.createElement('div');
             genresElement.className = 'genres-container';
-            artist['Жанр'].split(', ').forEach(genre => {
-                const genreSpan = document.createElement('span');
-                genreSpan.textContent = genre;
-                genreSpan.className = 'genre-link';
-                genreSpan.onclick = () => {
-                    selectedGenres = [];
-                    removedGenres = [];
-                    document.getElementById('artist-search').value = '';
-                    updateSelectedGenresUI();
-                    updateRemovedGenresUI();
-                    updateFilterTags();
-                    updateArtistsDisplay();
-                    toggleGenreSelection(genre, artist['Артист']);
-                    updateGenreCounts();
-                    updateToggleButton();
-                };
-                genresElement.appendChild(genreSpan);
-                genresElement.appendChild(document.createTextNode(' '));
-            });
+            if (artist['Жанр']) {
+                artist['Жанр'].split(', ').forEach(genre => {
+                    const genreSpan = document.createElement('span');
+                    genreSpan.textContent = genre;
+                    genreSpan.className = 'genre-link';
+                    genreSpan.onclick = () => {
+                        selectedGenres = [];
+                        removedGenres = [];
+                        document.getElementById('artist-search').value = '';
+                        updateSelectedGenresUI();
+                        updateRemovedGenresUI();
+                        updateFilterTags();
+                        updateArtistsDisplay();
+                        toggleGenreSelection(genre, artist['Артист']);
+                        updateGenreCounts();
+                        updateToggleButton();
+                    };
+                    genresElement.appendChild(genreSpan);
+                    genresElement.appendChild(document.createTextNode(' '));
+                });
+            }
             infoContainer.appendChild(genresElement);
 
             if (artist['Дата додавання']) {
@@ -3332,7 +3357,7 @@ if (artist['MultiRel'] !== '+') {
             }
 
             infoContainer.appendChild(relatedArtistsContainer);
-          
+
             artistElement.appendChild(imgContainer);
             artistElement.appendChild(infoContainer);
         } else {
@@ -3378,25 +3403,27 @@ if (artist['MultiRel'] !== '+') {
 
             const genresElement = document.createElement('div');
             genresElement.className = 'genres-container';
-            artist['Жанр'].split(', ').forEach(genre => {
-                const genreSpan = document.createElement('span');
-                genreSpan.textContent = genre;
-                genreSpan.className = 'genre-link';
-                genreSpan.onclick = () => {
-                    selectedGenres = [];
-                    removedGenres = [];
-                    document.getElementById('artist-search').value = '';
-                    updateSelectedGenresUI();
-                    updateRemovedGenresUI();
-                    updateFilterTags();
-                    updateArtistsDisplay();
-                    toggleGenreSelection(genre, artist['Артист']);
-                    updateGenreCounts();
-                    updateToggleButton();
-                };
-                genresElement.appendChild(genreSpan);
-                genresElement.appendChild(document.createTextNode(' '));
-            });
+            if (artist['Жанр']) {
+                artist['Жанр'].split(', ').forEach(genre => {
+                    const genreSpan = document.createElement('span');
+                    genreSpan.textContent = genre;
+                    genreSpan.className = 'genre-link';
+                    genreSpan.onclick = () => {
+                        selectedGenres = [];
+                        removedGenres = [];
+                        document.getElementById('artist-search').value = '';
+                        updateSelectedGenresUI();
+                        updateRemovedGenresUI();
+                        updateFilterTags();
+                        updateArtistsDisplay();
+                        toggleGenreSelection(genre, artist['Артист']);
+                        updateGenreCounts();
+                        updateToggleButton();
+                    };
+                    genresElement.appendChild(genreSpan);
+                    genresElement.appendChild(document.createTextNode(' '));
+                });
+            }
             artistElement.appendChild(genresElement);
 
             artistElement.appendChild(relatedArtistsContainer);
@@ -3405,23 +3432,15 @@ if (artist['MultiRel'] !== '+') {
         container.appendChild(artistElement);
     });
 }
-  
-document.getElementById('artist-search').addEventListener('input', () => {
-    updateGenreCounts(true);
-    updateToggleButton();
-});
-
-document.getElementById('clear-search').addEventListener('click', () => {
-    updateGenreCounts(true);
-    updateToggleButton();
-}); 
 
 let flexSearchIndex;
+let flexSearchUrlIndex;
+const artists = [];
 
-function initializeSearchIndex(artists) {
+function initializeSearchIndex(artistsData) {
     flexSearchIndex = new FlexSearch.Document({
         document: {
-            id: 'Артист',
+            id: 'id',
             index: ['Артист'],
             store: ['Артист']
         },
@@ -3431,30 +3450,71 @@ function initializeSearchIndex(artists) {
         depth: 3
     });
 
-    artists.forEach(artist => {
-        flexSearchIndex.add({
-            'Артист': artist['Артист']
-        });
+    flexSearchUrlIndex = new FlexSearch.Document({
+        document: {
+            id: 'id',
+            index: ['URL1', 'URL2', 'URL3', 'URL4', 'URL5', 'URL6'],
+            store: ['Артист']
+        },
+        tokenize: 'forward',
+        resolution: 3,
+        threshold: 1,
+        depth: 3
+    });
+
+    artistsData.forEach((artist, id) => {
+        if (artist['Артист']) {
+            flexSearchIndex.add({
+                id: id,
+                Артист: artist['Артист']
+            });
+
+            const urls = {};
+            ['URL1', 'URL2', 'URL3', 'URL4', 'URL5', 'URL6'].forEach(urlKey => {
+                if (artist[urlKey]) {
+                    urls[urlKey] = normalizeUrl(artist[urlKey]);
+                }
+            });
+
+            if (Object.keys(urls).length > 0) {
+                flexSearchUrlIndex.add({
+                    id: id,
+                    ...urls
+                });
+            }
+
+            artists[id] = artist;
+        }
     });
 }
- 
+
+function normalizeUrl(url) {
+    const urlParts = url.match(/(?:https?:\/\/)?(?:open.spotify.com\/artist\/)?([^?]+)/);
+    return urlParts ? urlParts[1] : url;
+}
+
 function filterArtistsByName(query) {
     requestAnimationFrame(() => {
-        const transliteratedQuery = transliterate(query);
-        const fixedKeyboardQuery = fixKeyboardLayout(query);
-
         let searchResults = [];
-        searchResults.push(...flexSearchIndex.search(query));
-        if (transliteratedQuery !== query) {
-            searchResults.push(...flexSearchIndex.search(transliteratedQuery));
-        }
-        if (fixedKeyboardQuery !== query) {
-            searchResults.push(...flexSearchIndex.search(fixedKeyboardQuery));
+        if (query.includes("spotify.com")) {
+            searchResults.push(...flexSearchUrlIndex.search(normalizeUrl(query), 10));
+        } else {
+            const transliteratedQuery = transliterate(query);
+            const fixedKeyboardQuery = fixKeyboardLayout(query);
+
+            searchResults.push(...flexSearchIndex.search(query, 10));
+            if (transliteratedQuery !== query) {
+                searchResults.push(...flexSearchIndex.search(transliteratedQuery, 10));
+            }
+            if (fixedKeyboardQuery !== query) {
+                searchResults.push(...flexSearchIndex.search(fixedKeyboardQuery, 10));
+            }
         }
 
         const uniqueResults = Array.from(new Set(searchResults.flat().map(result => result.result).flat()));
 
-        const filteredArtists = uniqueResults.map(id => artistsData.find(artist => artist['Артист'] === id));
+        const filteredArtists = uniqueResults.map(id => artists[id]);
+
         displayArtists(filteredArtists, true);
         updateArtistCounter(filteredArtists.length);
         updateFilterTags();
@@ -4244,130 +4304,131 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startIntro(showDontShowAgain) {
-      
-      if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 768) {
         return;
     }
-      
-        const intro = introJs();
 
-        const options = {
-            steps: [
-                {
-                    intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів з більш ніж 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі інструменти з пошуку. </p>'
-                },
-                {
-                    element: document.querySelector('#buttons-wrapper'),
-                    intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не заблукати серед тисяч артистів.'
-                },
-                {
-                    element: document.querySelector('#genres-section'),
-                    intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним жанрам. Число поруч із жанром показує кількість артистів, які мають цей жанр.<br/><br/>Під час вибору жанру інші жанри будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними жанрами.<br/><br/>За кнопкою «Показати ще» приховані жанри, в яких менше 10 артистів. Для кожного артиста жанри вказуються вручну, тому в рамках окремих напрямків можуть бути вказані не всі артисти. <a href="https://t.me/livefimenko" target="_blank">Напишіть нам</a>, якщо помітили невідповідності або не знайшли артиста в якомусь жанрі.',
-                    position: 'bottom',
-                    tooltipClass: 'customTooltip rangeTooltip'
-                },
-                {
-                    element: document.querySelector('#sort-section'),
-                    intro: 'Тут можна вибрати режим сортування списку артистів. Ви можете підняти вгору найпрослуховуваніших артистів або впорядкувати їх за темпом зростання нових слухачів.<br/><br/>Також тут можна легко відстежувати нових доданих артистів у базу — просто застосуйте сортування «За датою додавання в базу».',
-                    position: 'bottom',
-                    tooltipClass: 'customTooltip rangeTooltip'
-                },
-                {
-                    element: document.querySelector('#range-container'),
-                    intro: 'Ще один важливий параметр для дослідження. Ви можете відфільтрувати артистів за діапазоном слухачів на місяць. Станьте одним із перших, хто послухає трек артиста — просто встановіть повзунок на 0-10 слухачів. Цікавить середня сцена? Ставте, наприклад, від 5000 до 20 000 слухачів. Або ж виведіть у список найпопулярніших артистів, вибравши високі значення.<br/><br/>Ви можете застосовувати цей фільтр у межах зазначених жанрів.',
-                    position: 'bottom',
-                    tooltipClass: 'customTooltip rangeTooltip'
-                },
-                {
-                    element: document.querySelector('.artist-container .artist:first-child'),
-                    intro: 'Це картка артиста. Ви можете слухати уривки треків артистів для швидкого ознайомлення.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим артистом. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані беруться зі Spotify і оновлюються раз на місяць кожного першого числа.<br/><br/>У артистів, які були додані в базу починаючи з кінця 2023 року, вказана дата додавання. При додаванні артиста в базу дані про кількість слухачів актуальні на момент додавання.',
-                    position: 'right'
-                },
-                {
-                    element: document.querySelector('#help-icon'),
-                    intro: 'Ви в будь-який момент можете повернутися до цієї довідки, натиснувши на цю кнопку.',
-                    disableInteraction: true
-                }
-            ],
-            showBullets: true,
-            showButtons: true,
-            exitOnOverlayClick: false,
-            exitOnEsc: true,
-            tooltipClass: 'customTooltip',
-            dontShowAgainCookie: 'nuam-base-dontShowAgain'
-        };
+    const intro = introJs();
 
-        if (showDontShowAgain) {
-            options.dontShowAgain = true;
-            options.dontShowAgainLabel = 'Більше не показувати цей тур';
-        }
-
-        intro.setOptions(options);
-
-        intro.onbeforechange(function(targetElement) {
-            const stepIndex = intro._currentStep;
-            if (stepIndex === 5) {
-                const artistScrollContainer = document.getElementById('artist-scroll-container');
-                if (artistScrollContainer) {
-                    artistScrollContainer.scrollTop = 0; // Прокручиваем контейнер вверх
-                }
-                
-                const firstArtist = document.querySelector('.artist-container .artist:first-child');
-                if (firstArtist) {
-                    intro._introItems[stepIndex].element = firstArtist;
-                    intro._introItems[stepIndex].position = 'right';
-                    intro.refresh();
-                    disableScroll();
-                }
-            } else {
-                enableScroll();
+    const options = {
+        steps: [
+            {
+                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів з більш ніж 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі інструменти з пошуку. </p>'
+            },
+            {
+                element: document.querySelector('#buttons-wrapper'),
+                intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не заблукати серед тисяч артистів.'
+            },
+            {
+                element: document.querySelector('#genres-section'),
+                intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним жанрам. Число поруч із жанром показує кількість артистів, які мають цей жанр.<br/><br/>Під час вибору жанру інші жанри будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними жанрами.<br/><br/>За кнопкою «Показати ще» приховані жанри, в яких менше 10 артистів. Для кожного артиста жанри вказуються вручну, тому в рамках окремих напрямків можуть бути вказані не всі артисти. <a href="https://t.me/livefimenko" target="_blank">Напишіть нам</a>, якщо помітили невідповідності або не знайшли артиста в якомусь жанрі.',
+                position: 'bottom',
+                tooltipClass: 'customTooltip rangeTooltip'
+            },
+            {
+                element: document.querySelector('#sort-section'),
+                intro: 'Тут можна вибрати режим сортування списку артистів. Ви можете підняти вгору найпрослуховуваніших артистів або впорядкувати їх за темпом зростання нових слухачів.<br/><br/>Також тут можна легко відстежувати нових доданих артистів у базу — просто застосуйте сортування «За датою додавання в базу».',
+                position: 'bottom',
+                tooltipClass: 'customTooltip rangeTooltip'
+            },
+            {
+                element: document.querySelector('#range-container'),
+                intro: 'Ще один важливий параметр для дослідження. Ви можете відфільтрувати артистів за діапазоном слухачів на місяць. Станьте одним із перших, хто послухає трек артиста — просто встановіть повзунок на 0-10 слухачів. Цікавить середня сцена? Ставте, наприклад, від 5000 до 20 000 слухачів. Або ж виведіть у список найпопулярніших артистів, вибравши високі значення.<br/><br/>Ви можете застосовувати цей фільтр у межах зазначених жанрів.',
+                position: 'bottom',
+                tooltipClass: 'customTooltip rangeTooltip'
+            },
+            {
+                element: document.querySelector('.artist-container .artist:first-child'),
+                intro: 'Це картка артиста. Ви можете слухати уривки треків артистів для швидкого ознайомлення.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим артистом. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані беруться зі Spotify і оновлюються раз на місяць кожного першого числа.<br/><br/>У артистів, які були додані в базу починаючи з кінця 2023 року, вказана дата додавання. При додаванні артиста в базу дані про кількість слухачів актуальні на момент додавання.',
+                position: 'right'
+            },
+            {
+                element: document.querySelector('#help-icon'),
+                intro: 'Ви в будь-який момент можете повернутися до цієї довідки, натиснувши на цю кнопку.',
+                disableInteraction: true
             }
-        });
+        ],
+        showBullets: true,
+        showButtons: true,
+        exitOnOverlayClick: false,
+        exitOnEsc: true,
+        tooltipClass: 'customTooltip',
+        dontShowAgainCookie: 'nuam-base-dontShowAgain'
+    };
 
-        intro.onchange(function(targetElement) {
-            const stepIndex = intro._currentStep;
-            if (stepIndex === 2) {
-                const genreButton = document.querySelector('#genre-button');
-                if (genreButton && genreButton.getAttribute('aria-expanded') === 'false') {
-                    genreButton.click();
-                    const checkGenresLoaded = setInterval(() => {
-                        const genresSection = document.querySelector('#genres-section');
-                        if (genresSection && genresSection.children.length > 0) {
-                            clearInterval(checkGenresLoaded);
-                            intro.refresh();
-                        }
-                    }, 600);
-                }
-            } else if (stepIndex === 3) {
-                const sortButton = document.querySelector('#sort-button');
-                if (sortButton && sortButton.getAttribute('aria-expanded') === 'false') {
-                    sortButton.click();
-                    const checkSortSectionLoaded = setInterval(() => {
-                        const sortSection = document.querySelector('#sort-section');
-                        if (sortSection && sortSection.children.length > 0) {
-                            clearInterval(checkSortSectionLoaded);
-                            intro.refresh();
-                        }
-                    }, 600);
-                }
-            } else if (stepIndex === 4) {
-                const sortButton = document.querySelector('#sort-button');
-                const sortSection = document.querySelector('#sort-section');
-                if (sortButton && sortSection && sortSection.getAttribute('aria-hidden') === 'false') {
-                    sortButton.click();
-                }
+    if (showDontShowAgain) {
+        options.dontShowAgain = true;
+        options.dontShowAgainLabel = 'Більше не показувати цей тур';
+    }
+
+    intro.setOptions(options);
+
+    intro.onbeforechange(function(targetElement) {
+        const stepIndex = intro._currentStep;
+        if (stepIndex === 5) {
+            const artistScrollContainer = document.getElementById('artist-scroll-container');
+            if (artistScrollContainer) {
+                artistScrollContainer.scrollTop = 0;
+            }
+
+            const firstArtist = document.querySelector('.artist-container .artist:first-child');
+            if (firstArtist) {
                 setTimeout(() => {
+                    intro._options.steps[stepIndex].element = firstArtist;
+                    intro._options.steps[stepIndex].position = 'right';
                     intro.refresh();
+                }, 100);
+                disableScroll();
+            }
+        } else {
+            enableScroll();
+        }
+    });
+
+    intro.onchange(function(targetElement) {
+        const stepIndex = intro._currentStep;
+        if (stepIndex === 2) {
+            const genreButton = document.querySelector('#genre-button');
+            if (genreButton && genreButton.getAttribute('aria-expanded') === 'false') {
+                genreButton.click();
+                const checkGenresLoaded = setInterval(() => {
+                    const genresSection = document.querySelector('#genres-section');
+                    if (genresSection && genresSection.children.length > 0) {
+                        clearInterval(checkGenresLoaded);
+                        intro.refresh();
+                    }
                 }, 600);
             }
-        });
+        } else if (stepIndex === 3) {
+            const sortButton = document.querySelector('#sort-button');
+            if (sortButton && sortButton.getAttribute('aria-expanded') === 'false') {
+                sortButton.click();
+                const checkSortSectionLoaded = setInterval(() => {
+                    const sortSection = document.querySelector('#sort-section');
+                    if (sortSection && sortSection.children.length > 0) {
+                        clearInterval(checkSortSectionLoaded);
+                        intro.refresh();
+                    }
+                }, 600);
+            }
+        } else if (stepIndex === 4) {
+            const sortButton = document.querySelector('#sort-button');
+            const sortSection = document.querySelector('#sort-section');
+            if (sortButton && sortSection && sortSection.getAttribute('aria-hidden') === 'false') {
+                sortButton.click();
+            }
+            setTimeout(() => {
+                intro.refresh();
+            }, 600);
+        }
+    });
 
-        intro.onexit(function() {
-            enableScroll();
-        });
+    intro.onexit(function() {
+        enableScroll();
+    });
 
-        intro.start();
-    }
+    intro.start();
+}
 
     const loadingScreen = document.getElementById('loading-screen');
     loadingScreen.addEventListener('transitionend', (event) => {
