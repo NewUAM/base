@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
     <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
   
-
     <style>
       @font-face {
          font-family: 'CustomFont';
@@ -373,7 +372,7 @@
 }
 
     .date-added,
-    .related-artists-button {
+    .related-artists-button, .date-release {
         position: absolute;
         bottom: 0;
         background-color: #383838;
@@ -389,18 +388,32 @@
       user-select: none !important;
     }
 
-    .date-added {
+    .date-added, .date-release {
+        height: 20px;
+        width: 70px;
+        bottom: 20px;
         left: 0;
         border-top: 1px solid #282626;
         border-right: 1px solid #282626;
         border-left: none;
         border-bottom: none;
-        border-radius: 0 7px 0 7px;
+        border-radius: 0 7px 0 0;
         padding: 0 10px;
-        font-size: 12px;
+        font-size: 10px;
         background-color: rgba(56, 56, 56, 0.8);
-      cursor: auto;
+        cursor: auto;
         font-weight: normal;
+    }
+      
+      .date-added span, .date-release span {
+    top: 1px;
+}
+      
+      .date-release {
+        bottom: 0;
+        border-left: none;
+        border-top: none;
+        border-radius: 0 0 0 7px;
     }
 
     .related-artists-button {
@@ -419,15 +432,19 @@
     }
 
     .date-added i,
-    .related-artists-button i {
+    .related-artists-button i, .date-release i {
         margin-right: 5px;
     }
       
-      .date-added i {
+      .date-added i, .date-release i {
     position: relative;
-    top: -1px;
+    top: 0; /* Убираем смещение */
+    display: flex;
+    align-items: center; /* Выравниваем по центру */
 }
 
+      
+      
 .related-artists-button:hover {
     background-color: #84AAFB;
     color: #282626;
@@ -1410,6 +1427,19 @@ background: #282626;
     left: 175px;
 }
 
+      .date-release [data-tooltip]::after {
+    top: -75px;
+    left: 42px;
+    line-height: 1.2;
+    width: 110px;
+}
+      
+      .date-added [data-tooltip]::after {
+    top: -55px;
+    left: 42px;
+    line-height: 1.2;
+    width: 110px;
+}
       
       .date-added span::after {
   top: -60px; 
@@ -2219,7 +2249,15 @@ background: #282626;
 
 <section id="sort-section" class="tab-content" aria-hidden="true">
     <div id="sort-menu">
-  <div class="sort-option">
+      
+      <div class="sort-option">
+    <button class="clear-sort" onclick="clearSort()">×</button>
+    <button onclick="sortArtistsHandler('lastReleaseDate', 'asc')"><i class="fas fa-arrow-up-wide-short"></i></button>
+    <button onclick="sortArtistsHandler('lastReleaseDate', 'desc')"><i class="fas fa-arrow-down-wide-short"></i></button>
+    <span>За датою крайнього релізу</span>
+  </div>
+      
+      <div class="sort-option">
     <button class="clear-sort" onclick="clearSort()">×</button>
     <button onclick="sortArtistsHandler('listeners', 'asc')"><i class="fas fa-arrow-up-wide-short"></i></button>
     <button onclick="sortArtistsHandler('listeners', 'desc')"><i class="fas fa-arrow-down-wide-short"></i></button>
@@ -3254,12 +3292,7 @@ function displayArtists(artists, reset = false) {
         const iconContainer = document.createElement('div');
         iconContainer.className = 'icon-container';
 
-        const yearRelIcon = document.createElement('div');
-        yearRelIcon.className = 'year-rel-icon';
-        yearRelIcon.innerHTML = artist['YearRel'] === '+' ? '<i class="fa fa-calendar-check" data-tooltip="Є релізи за останній рік"></i>' : '<i class="fa fa-calendar-minus" data-tooltip="Більше року без релізів"></i>';
-        yearRelIcon.style.color = artist['YearRel'] === '+' ? '#84fb8f' : '#fb8484';
-        yearRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
-        iconContainer.appendChild(yearRelIcon);
+        
 
         const multiRelIcon = document.createElement('div');
         multiRelIcon.className = 'multi-rel-icon';
@@ -3293,8 +3326,22 @@ function displayArtists(artists, reset = false) {
         if (artist['Дата додавання']) {
             const dateElement = document.createElement('div');
             dateElement.className = 'date-added';
-            dateElement.innerHTML = `<i class="fa fa-calendar-alt"></i> <span data-tooltip="Дата додавання артиста до бази" style="font-family: CustomFont, Arial, sans-serif;">${artist['Дата додавання']}</span>`;
+            dateElement.innerHTML = `<i class="fa fa-database"></i> <span data-tooltip="Дата додавання артиста до бази" style="font-family: CustomFont, Arial, sans-serif;">${artist['Дата додавання']}</span>`;
             imgContainer.appendChild(dateElement);
+        }
+      
+      if (artist['LastRelDate']) {
+            const datereleaseElement = document.createElement('div');
+            datereleaseElement.className = 'date-release';
+            datereleaseElement.innerHTML = `<i class="fa fa-calendar-plus"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
+            imgContainer.appendChild(datereleaseElement);
+        }
+      
+      if (!artist['Дата додавання'] && artist['LastRelDate']) {
+            const dateReleaseElement = imgContainer.querySelector('.date-release');
+            if (dateReleaseElement) {
+                dateReleaseElement.style.borderRadius = '0 7px 0 7px';
+            }
         }
 
         if (window.innerWidth <= 768) {
@@ -3802,6 +3849,10 @@ function sortArtists(artists, criteria, order) {
                 valueA = a['Дата додавання'] ? parseDate(a['Дата додавання']) : new Date(0);
                 valueB = b['Дата додавання'] ? parseDate(b['Дата додавання']) : new Date(0);
                 break;
+            case 'lastReleaseDate':
+                valueA = a['LastRelDate'] ? parseDate(a['LastRelDate']) : new Date(0);
+                valueB = b['LastRelDate'] ? parseDate(b['LastRelDate']) : new Date(0);
+                break;
             case 'name':
                 valueA = a['Артист'].toLowerCase();
                 valueB = b['Артист'].toLowerCase();
@@ -3817,8 +3868,8 @@ function sortArtists(artists, criteria, order) {
         }
     });
 
-    if (criteria === 'date') {
-        artists = artists.filter(artist => artist['Дата додавання']).concat(artists.filter(artist => !artist['Дата додавання']));
+    if (criteria === 'date' || criteria === 'lastReleaseDate') {
+        artists = artists.filter(artist => artist['Дата додавання'] || artist['LastRelDate']).concat(artists.filter(artist => !artist['Дата додавання'] && !artist['LastRelDate']));
     }
 
     return artists;
@@ -3845,6 +3896,7 @@ function updateSortMenu(selectedCriteria, selectedOrder) {
         if ((span.textContent.includes('За кількістю слухачів на місяць') && selectedCriteria === 'listeners') ||
             (span.textContent.includes('За приростом слухачів') && selectedCriteria === 'growth') ||
             (span.textContent.includes('За датою додавання в базу') && selectedCriteria === 'date') ||
+            (span.textContent.includes('За датою крайнього релізу') && selectedCriteria === 'lastReleaseDate') ||
             (span.textContent.includes('За іменем артиста') && selectedCriteria === 'name')) {
             option.classList.add('active-sort');
             if (selectedOrder === 'asc') {
@@ -4032,6 +4084,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateArtistsDisplay();
             updateFilterTags();
+            sortArtistsHandler('lastReleaseDate', 'asc');
         });
     });
 
@@ -4313,34 +4366,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const options = {
         steps: [
             {
-                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів з більш ніж 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі інструменти з пошуку. </p>'
+                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів з більш ніж 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі інструменти з пошуку. </p>',
+                disableInteraction: true
             },
             {
                 element: document.querySelector('#buttons-wrapper'),
-                intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не заблукати серед тисяч артистів.'
+                intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не заблукати серед тисяч артистів.',
+                disableInteraction: true
             },
             {
                 element: document.querySelector('#genres-section'),
-                intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним жанрам. Число поруч із жанром показує кількість артистів, які мають цей жанр.<br/><br/>Під час вибору жанру інші жанри будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними жанрами.<br/><br/>За кнопкою «Показати ще» приховані жанри, в яких менше 10 артистів. Для кожного артиста жанри вказуються вручну, тому в рамках окремих напрямків можуть бути вказані не всі артисти. <a href="https://t.me/livefimenko" target="_blank">Напишіть нам</a>, якщо помітили невідповідності або не знайшли артиста в якомусь жанрі.',
+                intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним жанрам. Число поруч із жанром показує кількість артистів, які мають цей жанр.<br/><br/>Під час вибору жанру інші жанри будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними жанрами.<br/><br/>Зніміть галочку з «Відповідність усім обраним жанрам», щоб побачити всіх артистів, у яких є хоча б один з обраних стилів.',
                 position: 'bottom',
-                tooltipClass: 'customTooltip rangeTooltip'
+                tooltipClass: 'customTooltip rangeTooltip',
+                disableInteraction: true
             },
             {
                 element: document.querySelector('#sort-section'),
-                intro: 'Тут можна вибрати режим сортування списку артистів. Ви можете підняти вгору найпрослуховуваніших артистів або впорядкувати їх за темпом зростання нових слухачів.<br/><br/>Також тут можна легко відстежувати нових доданих артистів у базу — просто застосуйте сортування «За датою додавання в базу».',
+                intro: 'Тут можна вибрати режим сортування списку артистів. Ви можете підняти вгору найпрослуховуваніших артистів або впорядкувати їх за темпом зростання нових слухачів.<br/><br/>За замовчуванням активне сортування за датою крайнього релізу — вгорі ви побачите артистів, у яких сьогодні або вчора вийшли нові треки.<br/><br/>Також тут можна легко відстежувати нових доданих артистів у базу — просто застосуйте сортування «За датою додавання в базу».',
                 position: 'bottom',
-                tooltipClass: 'customTooltip rangeTooltip'
+                tooltipClass: 'customTooltip rangeTooltip',
+                disableInteraction: true
+            },
+            {
+                element: document.querySelector('#filters-section'),
+                intro: 'Тут ви можете виключити зі списку неактивних артистів, у яких понад рік не було релізів, або тих, хто має лише один реліз. Або ж можете залишити у списку лише дебютантів поточного року. Артисти з російськомовними піснями, реліз яких відбувся з початку 2024 року, виключені зі списку за замовчуванням.',
+                position: 'bottom',
+                tooltipClass: 'customTooltip rangeTooltip',
+                disableInteraction: true
             },
             {
                 element: document.querySelector('#range-container'),
                 intro: 'Ще один важливий параметр для дослідження. Ви можете відфільтрувати артистів за діапазоном слухачів на місяць. Станьте одним із перших, хто послухає трек артиста — просто встановіть повзунок на 0-10 слухачів. Цікавить середня сцена? Ставте, наприклад, від 5000 до 20 000 слухачів. Або ж виведіть у список найпопулярніших артистів, вибравши високі значення.<br/><br/>Ви можете застосовувати цей фільтр у межах зазначених жанрів.',
                 position: 'bottom',
-                tooltipClass: 'customTooltip rangeTooltip'
+                tooltipClass: 'customTooltip rangeTooltip',
+                disableInteraction: true
             },
             {
                 element: document.querySelector('.artist-container .artist:first-child'),
                 intro: 'Це картка артиста. Ви можете слухати уривки треків артистів для швидкого ознайомлення.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим артистом. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані беруться зі Spotify і оновлюються раз на місяць кожного першого числа.<br/><br/>У артистів, які були додані в базу починаючи з кінця 2023 року, вказана дата додавання. При додаванні артиста в базу дані про кількість слухачів актуальні на момент додавання.',
-                position: 'right'
+                position: 'right',
+                disableInteraction: true
             },
             {
                 element: document.querySelector('#help-icon'),
@@ -4366,28 +4432,32 @@ document.addEventListener('DOMContentLoaded', () => {
     intro.onbeforechange(function(targetElement) {
         const stepIndex = intro._currentStep;
         if (stepIndex === 5) {
-            const artistScrollContainer = document.getElementById('artist-scroll-container');
-            if (artistScrollContainer) {
-                artistScrollContainer.scrollTop = 0;
+            const sortButton = document.querySelector('#sort-button');
+            const sortSection = document.querySelector('#sort-section');
+            if (sortButton && sortSection && sortSection.getAttribute('aria-hidden') === 'false') {
+                sortButton.click();
             }
-
-            const firstArtist = document.querySelector('.artist-container .artist:first-child');
-            if (firstArtist) {
-                setTimeout(() => {
-                    intro._options.steps[stepIndex].element = firstArtist;
-                    intro._options.steps[stepIndex].position = 'right';
-                    intro.refresh();
-                }, 100);
-                disableScroll();
+        }
+        if (stepIndex === 6) {
+            const filtersButton = document.querySelector('#filters-button');
+            const filtersSection = document.querySelector('#filters-section');
+            if (filtersButton && filtersSection && filtersSection.getAttribute('aria-hidden') === 'false') {
+                filtersButton.click();
             }
-        } else {
-            enableScroll();
         }
     });
 
     intro.onchange(function(targetElement) {
         const stepIndex = intro._currentStep;
-        if (stepIndex === 2) {
+        if (stepIndex === 6) {
+            setTimeout(() => {
+                const firstArtist = document.querySelector('.artist-container .artist:first-child');
+                if (firstArtist) {
+                    intro._options.steps[stepIndex].element = firstArtist;
+                    intro.refresh();
+                }
+            }, 100);
+        } else if (stepIndex === 2) {
             const genreButton = document.querySelector('#genre-button');
             if (genreButton && genreButton.getAttribute('aria-expanded') === 'false') {
                 genreButton.click();
@@ -4412,6 +4482,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 600);
             }
         } else if (stepIndex === 4) {
+            const filtersButton = document.querySelector('#filters-button');
+            if (filtersButton && filtersButton.getAttribute('aria-expanded') === 'false') {
+                filtersButton.click();
+                const checkFiltersSectionLoaded = setInterval(() => {
+                    const filtersSection = document.querySelector('#filters-section');
+                    if (filtersSection && filtersSection.children.length > 0) {
+                        clearInterval(checkFiltersSectionLoaded);
+                        intro.refresh();
+                    }
+                }, 600);
+            }
+        } else if (stepIndex === 5) {
             const sortButton = document.querySelector('#sort-button');
             const sortSection = document.querySelector('#sort-section');
             if (sortButton && sortSection && sortSection.getAttribute('aria-hidden') === 'false') {
