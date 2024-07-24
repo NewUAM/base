@@ -3823,14 +3823,15 @@ async function playTrackPreview(artistId, change = 0) {
         tracksToPlay = tracksData.filter(track => track.artist === artistId).sort((a, b) => parseDate(b.date) - parseDate(a.date));
     }
 
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+    const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
+
     if (tracksToPlay.length === 0) {
-        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-        if (artistElement) {
-            const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+        if (document.getElementById('play-latest').checked) {
             if (noTracksMessage) {
                 noTracksMessage.style.display = 'none';
             }
-            const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
             if (noRecentTracksMessage) {
                 noRecentTracksMessage.style.display = 'block';
             }
@@ -3851,16 +3852,11 @@ async function playTrackPreview(artistId, change = 0) {
             updatePlayIcon(null);
             isPlaying = false;
 
-            const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-            if (artistElement) {
-                const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-                if (noTracksMessage) {
-                    noTracksMessage.style.display = 'block';
-                }
-                const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
-                if (noRecentTracksMessage) {
-                    noRecentTracksMessage.style.display = 'none';
-                }
+            if (noTracksMessage) {
+                noTracksMessage.style.display = 'block';
+            }
+            if (noRecentTracksMessage) {
+                noRecentTracksMessage.style.display = 'none';
             }
 
             hidePlayerContainer();
@@ -3868,15 +3864,16 @@ async function playTrackPreview(artistId, change = 0) {
         }
 
         tracksToPlay = data.tracks;
+    } else {
+        if (noRecentTracksMessage) {
+            noRecentTracksMessage.style.display = 'none';
+        }
     }
-
-    console.log("Playing latest tracks:", tracksToPlay);
 
     trackIndex = (trackIndex % tracksToPlay.length + tracksToPlay.length) % tracksToPlay.length;
     const track = tracksToPlay[trackIndex];
 
     if (change === 0) {
-        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
         if (artistElement) {
             const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
             const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
@@ -3961,7 +3958,6 @@ async function playTrackPreview(artistId, change = 0) {
         }
     }
 }
-
 
 function updateUI(artistId, reset, trackIndex = 0, trackLength = 0) {
     const controls = document.querySelector('.controls');
