@@ -519,19 +519,23 @@
     word-wrap: break-word;
 }
       
-      .no-tracks-message {
+      .no-tracks-message, .no-recent-tracks-message {
     color: #fb8484;
     text-align: center;
-    margin-top: -200px;
-    font-size: 16px;
+    margin-top: -188px;
+    font-size: 14px;
     position: absolute;
     top: 100%;
         background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 5px;
+    border-radius: 7px;
     width: 204px;
     left: 50%;
     transform: translateX(-50%);
     user-select: none !important;
+    line-height: 1.2;
+    padding-top: 5px;
+    padding-bottom: 5px;
+        z-index: 2;
 }
       
 .artist-container {
@@ -862,6 +866,67 @@ z-index: 3;
     user-select: none !important;
 }
 
+      #gear-icon {
+    margin: 0 10px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease; /* Анимация поворота */
+}
+
+#gear-icon:hover {
+    transform: rotate(180deg); /* Поворот на 180 градусов */
+}
+      
+#settings-popup {
+    display: block; /* Элемент всегда присутствует */
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: #383838;
+    border: 1px solid #f3f3f3;
+    border-radius: 7px;
+    padding: 10px;
+    z-index: 10000;
+    width: 420px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#settings-popup.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+#settings-popup label {
+    display: flex;
+    align-items: flex-start; /* Выровнять элементы по началу по вертикали */
+    width: 100%;
+}
+      
+      #settings-popup::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    z-index: -1;
+}
+      
+      #settings-popup .custom-checkbox span {
+    display: flex;
+    flex-direction: column;
+        flex: 1; /* Чтобы текст занимал оставшееся пространство */
+    word-wrap: break-word; /* Перенос длинного текста */
+        font-size: 14px;
+}
+      
+      #settings-popup .custom-checkbox span .sub-text {
+    font-size: 12px; /* Шрифт для дополнительного текста */
+    color: #ccc; /* Цвет для дополнительного текста */
+}
+      
       #help-icon {
     color: #f3f3f3;
     cursor: pointer;
@@ -1103,7 +1168,7 @@ display: block;
 
       #clear-search {
     position: absolute;
-    right: 60px;
+    right: 90px;
     color: #f3f3f3;
     cursor: pointer;
     font-size: 16px;
@@ -2232,8 +2297,29 @@ background: #282626;
     <div id="search-container">
   <input type="text" id="artist-search" placeholder="Пошук за артистами...">
   <span id="clear-search" aria-label="Clear search">&times;</span>
+  <i id="gear-icon" class="fas fa-cog"></i>
   <i id="help-icon" class="fas fa-question-circle"></i>
 </div>
+
+<div id="settings-popup">
+  <label class="custom-checkbox" for="open-in-spotify">
+    <input type="checkbox" id="open-in-spotify" class="checkbox">
+    <div class="checkbox-icon"></div>
+    <span>
+      <span class="main-text">Відкривати профілі артистів одразу в додатку Spotify</span>
+      <span class="sub-text">інакше відкривається в браузері</span>
+    </span>
+  </label>
+  <label class="custom-checkbox" for="play-latest">
+    <input type="checkbox" id="play-latest" class="checkbox">
+    <div class="checkbox-icon"></div>
+    <span>
+      <span class="main-text">Грати в плеєрі останні релізи артиста</span>
+      <span class="sub-text">інакше грають найпопулярніші</span>
+    </span>
+  </label>
+</div>
+
 
     <div class="line"></div>
 </section>
@@ -2484,6 +2570,24 @@ async function fetchArtists() {
     });
 }
 
+  let tracksData = [];
+
+async function fetchTracksData() {
+    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=1080612412&single=true&output=csv');
+    const csvData = await response.text();
+    const parsedData = Papa.parse(csvData, { header: true, skipEmptyLines: true }).data;
+    tracksData = parsedData.map(row => ({
+        track: row.track,
+        artist: row.artist.split('/').pop(),
+        album: row.album,
+        type: row.type,
+        date: row.date
+    }));
+}
+
+
+fetchTracksData();
+  
 function findListenerColumns(header) {
     let listenerColumns = [];
 
@@ -3274,6 +3378,12 @@ function displayArtists(artists, reset = false) {
         noTracksMessage.textContent = 'Відсутні треки для відтворення';
         noTracksMessage.style.display = 'none';
         imgContainer.appendChild(noTracksMessage);
+      
+        const noRecentTracksMessage = document.createElement('div');
+        noRecentTracksMessage.className = 'no-recent-tracks-message';
+        noRecentTracksMessage.textContent = 'У артиста немає треків у поточному році. Грають найпопулярніші.';
+        noRecentTracksMessage.style.display = 'none';
+        imgContainer.appendChild(noRecentTracksMessage);
 
         const relatedArtistsButton = document.createElement('button');
         relatedArtistsButton.className = 'related-artists-button';
@@ -3292,7 +3402,14 @@ function displayArtists(artists, reset = false) {
         const iconContainer = document.createElement('div');
         iconContainer.className = 'icon-container';
 
-        
+        if (artist['YearRel'] !== '+') {
+            const yearRelIcon = document.createElement('div');
+            yearRelIcon.className = 'year-rel-icon';
+            yearRelIcon.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Більше року без релізів"></i>';
+            yearRelIcon.style.color = '#fb8484';
+            yearRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(yearRelIcon);
+        }
 
         const multiRelIcon = document.createElement('div');
         multiRelIcon.className = 'multi-rel-icon';
@@ -3321,23 +3438,29 @@ function displayArtists(artists, reset = false) {
             iconContainer.appendChild(debutIcon);
         }
 
-        imgContainer.appendChild(iconContainer);
+        if (iconContainer.children.length > 0) {
+            imgContainer.appendChild(iconContainer);
+        }
 
         if (artist['Дата додавання']) {
             const dateElement = document.createElement('div');
             dateElement.className = 'date-added';
             dateElement.innerHTML = `<i class="fa fa-database"></i> <span data-tooltip="Дата додавання артиста до бази" style="font-family: CustomFont, Arial, sans-serif;">${artist['Дата додавання']}</span>`;
             imgContainer.appendChild(dateElement);
+
+            if (!artist['LastRelDate']) {
+                dateElement.style.borderRadius = '0 7px 7px 0';
+            }
         }
       
-      if (artist['LastRelDate']) {
+        if (artist['LastRelDate']) {
             const datereleaseElement = document.createElement('div');
             datereleaseElement.className = 'date-release';
             datereleaseElement.innerHTML = `<i class="fa fa-calendar-plus"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
             imgContainer.appendChild(datereleaseElement);
         }
       
-      if (!artist['Дата додавання'] && artist['LastRelDate']) {
+        if (!artist['Дата додавання'] && artist['LastRelDate']) {
             const dateReleaseElement = imgContainer.querySelector('.date-release');
             if (dateReleaseElement) {
                 dateReleaseElement.style.borderRadius = '0 7px 0 7px';
@@ -3479,6 +3602,7 @@ function displayArtists(artists, reset = false) {
         container.appendChild(artistElement);
     });
 }
+
 
 let flexSearchIndex;
 let flexSearchUrlIndex;
@@ -3664,130 +3788,180 @@ document.getElementById('close-player').addEventListener('click', () => {
 });
 
 async function playTrackPreview(artistId, change = 0) {
-  const volumeSlider = document.getElementById('volume-slider');
-  volumeSlider.style.display = 'none';
+    const volumeSlider = document.getElementById('volume-slider');
+    volumeSlider.style.display = 'none';
 
-  if (isPlaying) {
-    return;
-  }
-  isPlaying = true;
-
-  let trackIndex = trackIndices.get(artistId) || 0;
-  trackIndex += change;
-
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.src = "";
-    currentAudio.load();
-    currentAudio = null;
-  }
-
-  if (change === 0 && currentPlayingId === artistId) {
-    currentPlayingId = null;
-    hidePlayerContainer();
-    updatePlayIcon(null);
-    isPlaying = false;
-    return;
-  }
-
-  currentPlayingId = artistId;
-  trackIndices.set(artistId, trackIndex);
-
-  if (artistId === '1PHe8IXl0ZGmMzaKaj5YHm') {
-    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-    if (artistElement) {
-      const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-      if (noTracksMessage) {
-        noTracksMessage.style.display = 'block';
-      }
+    if (isPlaying) {
+        return;
     }
-    hidePlayerContainer();
-    updatePlayIcon(null);
-    isPlaying = false;
-    return;
-  }
+    isPlaying = true;
 
-  const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
-    headers: { 'Authorization': `Bearer ${accessToken}` }
-  });
+    let trackIndex = trackIndices.get(artistId) || 0;
+    trackIndex += change;
 
-  if (!response.ok) {
-    isPlaying = false;
-    return;
-  }
-
-  const data = await response.json();
-
-  if (!data.tracks || data.tracks.length === 0) {
-    updatePlayIcon(null);
-    isPlaying = false;
-
-    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-    if (artistElement) {
-      const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-      if (noTracksMessage) {
-        noTracksMessage.style.display = 'block';
-      }
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.src = "";
+        currentAudio.load();
+        currentAudio = null;
     }
 
-    hidePlayerContainer();
-    return;
-  }
-
-  const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-  if (artistElement) {
-    const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-    if (noTracksMessage) {
-      noTracksMessage.style.display = 'none';
+    if (change === 0 && currentPlayingId === artistId) {
+        currentPlayingId = null;
+        hidePlayerContainer();
+        updatePlayIcon(null);
+        isPlaying = false;
+        return;
     }
-  }
 
-  trackIndex = (trackIndex % data.tracks.length + data.tracks.length) % data.tracks.length;
-  const track = data.tracks[trackIndex];
+    currentPlayingId = artistId;
+    trackIndices.set(artistId, trackIndex);
 
-  if (change === 0) {
-    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-    if (artistElement) {
-      const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
-      const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
-      updatePlayerArtistName(artistName, artistUrl);
+    let tracksToPlay = [];
+
+    if (document.getElementById('play-latest').checked) {
+        tracksToPlay = tracksData.filter(track => track.artist === artistId).sort((a, b) => parseDate(b.date) - parseDate(a.date));
     }
-    showPlayerContainer();
-  }
 
-  updateTrackButtons(trackIndex, data.tracks.length);
-  updatePlayIcon(artistId);
+    if (tracksToPlay.length === 0) {
+        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+        if (artistElement) {
+            const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+            if (noTracksMessage) {
+                noTracksMessage.style.display = 'none';
+            }
+            const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
+            if (noRecentTracksMessage) {
+                noRecentTracksMessage.style.display = 'block';
+            }
+        }
+        
+        const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        });
 
-  if (track.preview_url) {
-    currentAudio = new Audio(track.preview_url);
-    try {
-      await currentAudio.play();
-    } catch (error) {
-      isPlaying = false;
-      playTrackPreview(artistId, 1); 
-      return; 
-    } 
+        if (!response.ok) {
+            isPlaying = false;
+            return;
+        }
 
-    currentAudio.addEventListener('timeupdate', () => {
-      if (currentAudio) {
-        updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
-      }
-    });
+        const data = await response.json();
 
-    currentAudio.addEventListener('ended', () => {
-      isPlaying = false;
-      updatePlayIcon(null);
-      playTrackPreview(currentPlayingId, 1);
-    });
- 
-    currentAudio.oncanplaythrough = () => {
-      isPlaying = false;
-    };
-  } else {
-    isPlaying = false;
-    playTrackPreview(artistId, 1);
-  }
+        if (!data.tracks || data.tracks.length === 0) {
+            updatePlayIcon(null);
+            isPlaying = false;
+
+            const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+            if (artistElement) {
+                const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+                if (noTracksMessage) {
+                    noTracksMessage.style.display = 'block';
+                }
+                const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
+                if (noRecentTracksMessage) {
+                    noRecentTracksMessage.style.display = 'none';
+                }
+            }
+
+            hidePlayerContainer();
+            return;
+        }
+
+        tracksToPlay = data.tracks;
+    }
+
+    console.log("Playing latest tracks:", tracksToPlay);
+
+    trackIndex = (trackIndex % tracksToPlay.length + tracksToPlay.length) % tracksToPlay.length;
+    const track = tracksToPlay[trackIndex];
+
+    if (change === 0) {
+        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+        if (artistElement) {
+            const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
+            const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
+            updatePlayerArtistName(artistName, artistUrl);
+        }
+        showPlayerContainer();
+    }
+
+    updateTrackButtons(trackIndex, tracksToPlay.length);
+    updatePlayIcon(artistId);
+
+    if (document.getElementById('play-latest').checked && !track.preview_url) {
+        try {
+            const trackId = track.track.split('/').pop();
+            const trackResponse = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            });
+
+            if (!trackResponse.ok) {
+                throw new Error('Failed to fetch track details');
+            }
+
+            const trackData = await trackResponse.json();
+            track.preview_url = trackData.preview_url;
+
+            if (track.preview_url) {
+                currentAudio = new Audio(track.preview_url);
+                await currentAudio.play();
+
+                currentAudio.addEventListener('timeupdate', () => {
+                    if (currentAudio) {
+                        updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
+                    }
+                });
+
+                currentAudio.addEventListener('ended', () => {
+                    isPlaying = false;
+                    updatePlayIcon(null);
+                    playTrackPreview(currentPlayingId, 1);
+                });
+
+                currentAudio.oncanplaythrough = () => {
+                    isPlaying = false;
+                };
+            } else {
+                isPlaying = false;
+                playTrackPreview(artistId, 1);
+            }
+        } catch (error) {
+            isPlaying = false;
+            playTrackPreview(artistId, 1);
+        }
+    } else {
+        if (track.preview_url) {
+            currentAudio = new Audio(track.preview_url);
+            try {
+                await currentAudio.play();
+            } catch (error) {
+                isPlaying = false;
+                playTrackPreview(artistId, 1);
+                return;
+            }
+
+            currentAudio.addEventListener('timeupdate', () => {
+                if (currentAudio) {
+                    updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
+                }
+            });
+
+            currentAudio.addEventListener('ended', () => {
+                isPlaying = false;
+                updatePlayIcon(null);
+                playTrackPreview(currentPlayingId, 1);
+            });
+
+            currentAudio.oncanplaythrough = () => {
+                isPlaying = false;
+            };
+        } else {
+            isPlaying = false;
+            playTrackPreview(artistId, 1);
+        }
+    }
 }
+
 
 function updateUI(artistId, reset, trackIndex = 0, trackLength = 0) {
     const controls = document.querySelector('.controls');
@@ -3822,10 +3996,19 @@ function sortArtistsHandler(criteria, order) {
     currentSortCriteria = criteria;
     currentSortOrder = order;
     isSortActive = true;
+    
+    const searchQuery = document.getElementById('artist-search').value.trim();
+    if (searchQuery) {
+        document.getElementById('artist-search').value = '';
+        document.getElementById('clear-search').style.display = 'none';
+        updateFilterTags();
+    }
+
     updateArtistsDisplay();
     updateSortMenu(criteria, order);
     updateArtistCounter(currentDisplayList.length);
 }
+
 
 function sortArtists(artists, criteria, order) {
     if (!Array.isArray(artists)) {
@@ -3951,7 +4134,6 @@ let minListeners = 0;
 let maxListeners = Infinity;
 
 function setupRangeSlider(maxListenersValue) {
-
     const rangeSlider = document.getElementById('listeners-range');
     const rangeLabel = document.getElementById('range-value');
 
@@ -3960,54 +4142,61 @@ function setupRangeSlider(maxListenersValue) {
     }
 
     function linearToLog(value) {
-    const minLog = 0;
-    const maxLog = Math.log10(maxListenersValue + 1);
-    const scaleFactor = 0.7;
-    return Math.pow(10, minLog + (maxLog - minLog) * Math.pow(value / 100, scaleFactor)) - 1;
-}
+        const minLog = 0;
+        const maxLog = Math.log10(maxListenersValue + 1);
+        const scaleFactor = 0.7;
+        return Math.pow(10, minLog + (maxLog - minLog) * Math.pow(value / 100, scaleFactor)) - 1;
+    }
 
-function logToLinear(value) {
-    const minLog = 0;
-    const maxLog = Math.log10(maxListenersValue + 1);
-    const scaleFactor = 0.7;
-    return Math.pow((Math.log10(value + 1) - minLog) / (maxLog - minLog), 1 / scaleFactor) * 100;
-}
+    function logToLinear(value) {
+        const minLog = 0;
+        const maxLog = Math.log10(maxListenersValue + 1);
+        const scaleFactor = 0.7;
+        return Math.pow((Math.log10(value + 1) - minLog) / (maxLog - minLog), 1 / scaleFactor) * 100;
+    }
 
     noUiSlider.create(rangeSlider, {
-    start: [0, 100],
-    connect: true,
-    range: {
-        'min': 0,
-        'max': 100
-    },
-    step: 0.1
-});
+        start: [0, 100],
+        connect: true,
+        range: {
+            'min': 0,
+            'max': 100
+        },
+        step: 0.1
+    });
 
-rangeSlider.noUiSlider.on('update', function(values, handle) {
-    let newMinListeners = Math.round(linearToLog(values[0]));
-    let newMaxListeners = Math.round(linearToLog(values[1]));
+    rangeSlider.noUiSlider.on('update', function(values, handle) {
+        let newMinListeners = Math.round(linearToLog(values[0]));
+        let newMaxListeners = Math.round(linearToLog(values[1]));
 
-    if (newMinListeners < 0) {
-        newMinListeners = 0;
-    }
- 
-    if (newMinListeners > newMaxListeners) {
-        if (handle === 0) {
-            rangeSlider.noUiSlider.set([values[0], values[0]]);
-            newMaxListeners = newMinListeners;
-        } else {
-            rangeSlider.noUiSlider.set([values[1], values[1]]);
-            newMinListeners = newMaxListeners;
+        if (newMinListeners < 0) {
+            newMinListeners = 0;
         }
-    }
 
-    minListeners = newMinListeners;
-    maxListeners = newMaxListeners;
+        if (newMinListeners > newMaxListeners) {
+            if (handle === 0) {
+                rangeSlider.noUiSlider.set([values[0], values[0]]);
+                newMaxListeners = newMinListeners;
+            } else {
+                rangeSlider.noUiSlider.set([values[1], values[1]]);
+                newMinListeners = newMaxListeners;
+            }
+        }
 
-    rangeLabel.innerHTML = `${formatNumber(minListeners)} - ${formatNumber(maxListeners)}`;
+        minListeners = newMinListeners;
+        maxListeners = newMaxListeners;
 
-    updateArtistsDisplay(minListeners, maxListeners);
-});
+        rangeLabel.innerHTML = `${formatNumber(minListeners)} - ${formatNumber(maxListeners)}`;
+
+        const searchQuery = document.getElementById('artist-search').value.trim();
+        if (searchQuery) {
+            document.getElementById('artist-search').value = '';
+            document.getElementById('clear-search').style.display = 'none';
+            updateFilterTags();
+        }
+
+        updateArtistsDisplay(minListeners, maxListeners);
+    });
 
     rangeSlider.noUiSlider.set([0, 100]);
 }
@@ -4147,18 +4336,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         clearSearchBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            clearSearchBtn.style.display = 'none';
-            selectedGenres = [];
-            removedGenres = [];
-            updateSelectedGenresUI();
-            updateRemovedGenresUI();
-            requestAnimationFrame(() => {
-                currentDisplayList = applyFilters(originalArtistsOrder);
-                displayArtists(currentDisplayList, true);
-                updateArtistCounter(currentDisplayList.length);
-                updateFilterTags();
-            });
+    searchInput.value = '';
+    clearSearchBtn.style.display = 'none';
+    selectedGenres = [];
+    removedGenres = [];
+    hideRussian = document.getElementById('hide-russian').checked;
+    updateSelectedGenresUI();
+    updateRemovedGenresUI();
+    requestAnimationFrame(() => {
+        currentDisplayList = applyFilters(originalArtistsOrder);
+        displayArtists(currentDisplayList, true);
+        updateArtistCounter(currentDisplayList.length);
+        updateFilterTags();
+        sortArtistsHandler('lastReleaseDate', 'asc');
+    });
         });
 
         hideRussianCheckbox.addEventListener('change', function() {
@@ -4524,6 +4715,68 @@ document.addEventListener('DOMContentLoaded', () => {
         startIntro(false);
     });
 });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const gearIcon = document.getElementById('gear-icon');
+    const settingsPopup = document.getElementById('settings-popup');
+    const openInSpotifyCheckbox = document.getElementById('open-in-spotify');
+    const playLatestCheckbox = document.getElementById('play-latest');
+
+    const showPopup = () => {
+        settingsPopup.classList.add('show');
+    };
+
+    const hidePopup = () => {
+        if (!gearIcon.matches(':hover') && !settingsPopup.matches(':hover')) {
+            settingsPopup.classList.remove('show');
+        }
+    };
+
+    gearIcon.addEventListener('mouseenter', showPopup);
+    gearIcon.addEventListener('mouseleave', () => {
+        setTimeout(hidePopup, 200);
+    });
+
+    settingsPopup.addEventListener('mouseenter', showPopup);
+    settingsPopup.addEventListener('mouseleave', () => {
+        setTimeout(hidePopup, 200);
+    });
+
+    const updateLinks = () => {
+        const links = document.querySelectorAll('.artist a');
+        links.forEach(link => {
+            if (openInSpotifyCheckbox.checked) {
+                if (!link.href.includes('si=nuam')) {
+                    link.href += (link.href.includes('?') ? '&' : '?') + 'si=nuam';
+                }
+            } else {
+                link.href = link.href.replace(/(\?|&)si=nuam/, '');
+            }
+        });
+    };
+
+    const savedOpenInSpotify = localStorage.getItem('openInSpotify');
+    if (savedOpenInSpotify !== null) {
+        openInSpotifyCheckbox.checked = JSON.parse(savedOpenInSpotify);
+    }
+
+    const savedPlayLatest = localStorage.getItem('playLatest');
+    if (savedPlayLatest !== null) {
+        playLatestCheckbox.checked = JSON.parse(savedPlayLatest);
+    }
+
+    updateLinks();
+
+    openInSpotifyCheckbox.addEventListener('change', () => {
+        localStorage.setItem('openInSpotify', openInSpotifyCheckbox.checked);
+        updateLinks();
+    });
+
+    playLatestCheckbox.addEventListener('change', () => {
+        localStorage.setItem('playLatest', playLatestCheckbox.checked);
+    });
+});
+
 </script>
 </body>
 </html>
