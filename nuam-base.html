@@ -438,12 +438,10 @@
       
       .date-added i, .date-release i {
     position: relative;
-    top: 0; /* Убираем смещение */
+    top: 0;
     display: flex;
-    align-items: center; /* Выравниваем по центру */
+    align-items: center;
 }
-
-      
       
 .related-artists-button:hover {
     background-color: #84AAFB;
@@ -870,15 +868,15 @@ z-index: 3;
     margin: 0 10px;
     cursor: pointer;
     position: relative;
-    transition: transform 0.3s ease; /* Анимация поворота */
+    transition: transform 0.3s ease;
 }
 
 #gear-icon:hover {
-    transform: rotate(180deg); /* Поворот на 180 градусов */
+    transform: rotate(180deg);
 }
       
 #settings-popup {
-    display: block; /* Элемент всегда присутствует */
+    display: block;
     position: absolute;
     top: 70px;
     right: 20px;
@@ -900,7 +898,7 @@ z-index: 3;
 
 #settings-popup label {
     display: flex;
-    align-items: flex-start; /* Выровнять элементы по началу по вертикали */
+    align-items: flex-start;
     width: 100%;
 }
       
@@ -917,14 +915,14 @@ z-index: 3;
       #settings-popup .custom-checkbox span {
     display: flex;
     flex-direction: column;
-        flex: 1; /* Чтобы текст занимал оставшееся пространство */
-    word-wrap: break-word; /* Перенос длинного текста */
+        flex: 1;
+    word-wrap: break-word;
         font-size: 14px;
 }
       
       #settings-popup .custom-checkbox span .sub-text {
-    font-size: 12px; /* Шрифт для дополнительного текста */
-    color: #ccc; /* Цвет для дополнительного текста */
+    font-size: 12px;
+    color: #ccc;
 }
       
       #help-icon {
@@ -933,8 +931,7 @@ z-index: 3;
     font-size: 24px;
     margin-left: 10px;
 }
-
-      
+ 
 .controls {
     display: flex;
     flex-direction: column;
@@ -1490,6 +1487,7 @@ background: #282626;
         width: 250px;
     top: 30px;
     left: 175px;
+        transition: opacity 0.3s 0.3s, visibility 0s 0.3s;
 }
 
       .date-release [data-tooltip]::after {
@@ -1512,7 +1510,7 @@ background: #282626;
 
 .listeners-element > span::after {
   top: -30px; 
-  right: -108px;
+  right: -128px;
   
 }
 
@@ -1598,7 +1596,16 @@ background: #282626;
   display: none;
 }
       
+      #search-icon {
+    display: none;
+}
       
+      .info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
       
       @media (min-width: 769px) {
     .date-added-mobile {
@@ -1633,12 +1640,7 @@ background: #282626;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.desktop-label {
-    display: none;
-  }
-  .mobile-label {
-    display: inline;
-  }
+
     #controls-section {
     display: flex;
     align-items: center;
@@ -1655,7 +1657,15 @@ background: #282626;
     flex-direction: row;
   }
 
-  #genre-button, #sort-button {
+    #genre-button::after {
+        content: "Жанри";
+    }
+
+    #genre-button span {
+        display: none;
+    }
+    
+  #genre-button, #sort-button, #filters-button {
     width: auto;
     margin-right: 5px;
     position: relative;
@@ -1664,13 +1674,21 @@ background: #282626;
     font-size: 10px;
     font-weight: bold;
     border: 1px solid #f3f3f3;
-    padding: 10px;
+    padding: 10px 7px 10px 7px;
     cursor: pointer;
     border-radius: 7px 7px 0 0;
     z-index: 200;
   }
     
-    #genre-button:hover, #sort-button:hover {
+    .custom-checkbox {
+    font-size: 12px;
+    }
+    
+    .custom-checkbox .checkbox-text {
+        width: 270px;
+    }
+    
+    #genre-button:hover, #sort-button:hover, #filters-button:hover {
       border: 1px solid #84AAFB;
       } 
     
@@ -1678,7 +1696,15 @@ background: #282626;
       margin-left: 5px;
     }
     
-    #genre-button.active, #sort-button.active {
+    #genre-button i, #sort-button i {
+    margin-right: 5px;
+}
+    
+    #filters-button i {
+    margin-right: 3px;
+}
+    
+    #genre-button.active, #sort-button.active, #filters-button.active {
     border: 1px solid #84AAFB;
 }
     
@@ -1716,6 +1742,22 @@ background: #282626;
         background-color: #383838;
         border-radius: 7px;
         border: 2px solid #282626;
+    }
+    
+    #settings-popup {
+    top: 50px;
+    right: 10px;
+    width: 280px;
+}
+    
+    .date-release {
+    bottom: 30px;
+    border-radius: 0 !important;
+}
+    
+    .date-added, .date-release {
+    width: 90px;
+    padding: 0 5px;
     }
     
     .genre-button {
@@ -1771,34 +1813,71 @@ font-size: 14px;
 
 #genres-section.expanded, #sort-section.expanded, #filters-section.expanded {
     padding: 10px;
+  max-height: 300px !important;
 }
     
-    #artist-search {
-  width: 134px;  
-  height: 33px;
-    border-radius: 7px 7px 0 0;
-    border: 1px solid #383838;
-    background-color: #282626;
-    color: #f3f3f3;
-    padding: 10px;
-    margin-right: 5px;
-    box-sizing: border-box;
-      font-size: 10px;
-  }
-    
     #search-container {
-        width: 134px;
-        margin-left: 0;
-        order: 1;
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin-right: 0px;
+    }
+
+    #artist-search {
+        display: none;
+        position: absolute;
+        left: -280px;
+        z-index: 1000;
+        width: 240px;
+        height: 33px;
+        border-radius: 7px 7px 0 0;
+        border: 1px solid #383838;
+        background-color: #282626;
+        color: #f3f3f3;
+        padding: 5px;
+        box-sizing: border-box;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s ease, left 0.3s ease;
+    }
+
+    #artist-search:hover {
+        border: 1px solid #84AAFB;
+    }
+    
+    #artist-search:focus {
+        border-color: #84AAFB;
+        outline: none;
+    }
+    
+    #search-icon {
+      display: inline;
+      cursor: pointer;
+        z-index: 1001;
         margin-right: 5px;
     }
 
-#artist-search:hover {
-    border: 1px solid #84AAFB;
-    }
-    
     #clear-search {
-    right: 10px;
+        display: none;
+        position: absolute;
+        right: 55px;
+        top: -5px;
+        cursor: pointer;
+        z-index: 1002;
+        font-size: 24px;
+    }
+
+    #search-container.active #artist-search {
+        display: block;
+        opacity: 1;
+    }
+
+    #search-container.active #clear-search {
+        display: inline;
+    }
+
+    #search-container.active #search-icon {
+        display: none;
     }
     
     .line4 {
@@ -2200,7 +2279,6 @@ background: #282626;
     flex-grow: 1;
 }
 
-    
 #close-player {
     position: static;
     margin-left: 10px;
@@ -2218,14 +2296,14 @@ background: #282626;
     #help-icon {
     display: none;
 }
-    
+     
     #main-container {
     flex-direction: column;
   }
 
   #buttons-wrapper { order: 1; }
   #search-container { order: 2; }
-  .line { order: 3; }
+  .line { display: none; }
   .checkbox-container { order: 4; }
   #artist-counter-wrapper { order: 4; }
   .line4 { order: 5; }
@@ -2260,19 +2338,27 @@ background: #282626;
 </div>
 
 <div id="main-container">
-    <section id="controls-section">
-        <img id="logo" src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Логотип">
-        <div id="buttons-wrapper">
-            <button id="genre-button" aria-expanded="false" aria-controls="genres-section">
-                <i class="fas fa-music"></i> Вибір жанру
-            </button>
-            <button id="sort-button" aria-expanded="false" aria-controls="sort-section">
-                <i class="fas fa-sort"></i> Сортування
-            </button>
-            <button id="filters-button" aria-expanded="false" aria-controls="filters-section">
-                <i class="fas fa-filter"></i> Фільтри
-            </button>
-        </div>
+        <section id="controls-section">
+    <img id="logo" src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Логотип">
+    <div id="buttons-wrapper">
+        <button id="genre-button" aria-expanded="false" aria-controls="genres-section">
+            <i class="fas fa-music"></i> <span>Вибір жанру</span>
+        </button>
+        <button id="sort-button" aria-expanded="false" aria-controls="sort-section">
+            <i class="fas fa-sort"></i> <span>Сортування</span>
+        </button>
+        <button id="filters-button" aria-expanded="false" aria-controls="filters-section">
+            <i class="fas fa-filter"></i> <span>Фільтри</span>
+        </button>
+    </div>
+    <div id="search-container">
+        <i id="search-icon" class="fas fa-magnifying-glass"></i>
+        <input type="text" id="artist-search" placeholder="Пошук за артистами...">
+        <span id="clear-search" aria-label="Clear search">&times;</span>
+        <i id="gear-icon" class="fas fa-cog"></i>
+        <i id="help-icon" class="fas fa-question-circle"></i>
+    </div>
+
       
     <div id="player-wrapper">
     <div id="player-container" class="player-container">
@@ -2294,13 +2380,6 @@ background: #282626;
     </div>
 </div>
 
-    <div id="search-container">
-  <input type="text" id="artist-search" placeholder="Пошук за артистами...">
-  <span id="clear-search" aria-label="Clear search">&times;</span>
-  <i id="gear-icon" class="fas fa-cog"></i>
-  <i id="help-icon" class="fas fa-question-circle"></i>
-</div>
-
 <div id="settings-popup">
   <label class="custom-checkbox" for="open-in-spotify">
     <input type="checkbox" id="open-in-spotify" class="checkbox">
@@ -2314,12 +2393,11 @@ background: #282626;
     <input type="checkbox" id="play-latest" class="checkbox">
     <div class="checkbox-icon"></div>
     <span>
-      <span class="main-text">Грати в плеєрі останні релізи артиста</span>
+      <span class="main-text">Грати в плеєрі останні релізи артиста за 2024 рік</span>
       <span class="sub-text">інакше грають найпопулярніші</span>
     </span>
   </label>
 </div>
-
 
     <div class="line"></div>
 </section>
@@ -2374,23 +2452,22 @@ background: #282626;
     <label class="custom-checkbox" for="hide-russian">
         <input type="checkbox" id="hide-russian" class="checkbox" checked />
         <div class="checkbox-icon"></div>
-        <span class="desktop-label">Прибрати артистів із російськомовними піснями у 2024 році</span>
-        <span class="mobile-label">не співають російською</span>
+        <span class="checkbox-text">Прибрати артистів із російськомовними піснями у 2024 році</span>
     </label>
     <label class="custom-checkbox" for="yearRel-checkbox">
         <input type="checkbox" id="yearRel-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        Прибрати артистів без релізів за останній рік
+        <span class="checkbox-text">Прибрати артистів без релізів за останній рік</span>
     </label>
     <label class="custom-checkbox" for="multiRel-checkbox">
         <input type="checkbox" id="multiRel-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        Прибрати артистів, у яких лише один реліз
+        <span class="checkbox-text">Прибрати артистів, у яких лише один реліз</span>
     </label>
     <label class="custom-checkbox" for="debut-checkbox">
         <input type="checkbox" id="debut-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        Показати тільки артистів, які дебютували у 2024 році
+        <span class="checkbox-text">Показати тільки артистів, які дебютували у 2024 році</span>
     </label>
 </section>
 
@@ -2581,7 +2658,8 @@ async function fetchTracksData() {
         artist: row.artist.split('/').pop(),
         album: row.album,
         type: row.type,
-        date: row.date
+        date: row.date,
+        preview: row.preview
     }));
 }
 
@@ -2636,7 +2714,6 @@ function extractAndDisplayGenres(artists) {
         updateArtistsDisplay();
         updateToggleButton();
         updateGenreCounts(true);
-        clearSort();
     };
     genresContainer.appendChild(allGenresButton);
 
@@ -2770,6 +2847,7 @@ document.getElementById('multiRel-checkbox').addEventListener('change', function
     updateArtistsDisplay();
     updateFilterTags();
     updateGenreCounts();
+    updateSelectedGenresUI();
 
     const genreButtons = document.querySelectorAll('.genre-button');
     genreButtons.forEach(button => {
@@ -3016,7 +3094,9 @@ function updateSelectedGenresUI() {
         const genre = button.dataset.genre;
         if (genre === 'всі жанри') {
             button.disabled = false;
-            if (matchAllGenres || selectedGenres.length === 0) {
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+            if (selectedGenres.length === 0) {
                 button.classList.add('selected');
             } else {
                 button.classList.remove('selected');
@@ -3066,6 +3146,18 @@ function updateSelectedGenresUI() {
         }
     } else {
         if (allGenresButton) {
+            allGenresButton.classList.remove('selected');
+        }
+    }
+
+    if (allGenresButton) {
+        allGenresButton.classList.remove('gray-out');
+        allGenresButton.style.pointerEvents = 'auto';
+        allGenresButton.disabled = false;
+        
+        if (selectedGenres.length === 0) {
+            allGenresButton.classList.add('selected');
+        } else {
             allGenresButton.classList.remove('selected');
         }
     }
@@ -3450,16 +3542,22 @@ function displayArtists(artists, reset = false) {
 
             if (!artist['LastRelDate']) {
                 dateElement.style.borderRadius = '0 7px 7px 0';
+                dateElement.style.borderBottom = '1px solid #282626';
             }
         }
-      
+
         if (artist['LastRelDate']) {
             const datereleaseElement = document.createElement('div');
             datereleaseElement.className = 'date-release';
             datereleaseElement.innerHTML = `<i class="fa fa-calendar-plus"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
             imgContainer.appendChild(datereleaseElement);
+
+            if (!artist['Дата додавання']) {
+                datereleaseElement.style.borderRadius = '0 7px 0 7px';
+                datereleaseElement.style.borderTop = '1px solid #282626';
+            }
         }
-      
+
         if (!artist['Дата додавання'] && artist['LastRelDate']) {
             const dateReleaseElement = imgContainer.querySelector('.date-release');
             if (dateReleaseElement) {
@@ -3467,142 +3565,91 @@ function displayArtists(artists, reset = false) {
             }
         }
 
-        if (window.innerWidth <= 768) {
-            const infoContainer = document.createElement('div');
-            infoContainer.className = 'info-container';
+        const infoContainer = document.createElement('div');
+        infoContainer.className = 'info-container';
 
-            const nameElement = document.createElement('a');
-            nameElement.href = artist['URL1'] || '#';
-            nameElement.textContent = artist['Артист'];
-            nameElement.target = "_blank";
-            nameElement.className = 'track-artist-name';
-            infoContainer.appendChild(nameElement);
+        const nameElement = document.createElement('a');
+        nameElement.href = artist['URL1'] || '#';
+        nameElement.textContent = artist['Артист'];
+        nameElement.target = "_blank";
+        nameElement.className = 'track-artist-name';
+        infoContainer.appendChild(nameElement);
 
-            const listenersElement = document.createElement('div');
-            listenersElement.className = 'listeners-element';
+        const listenersElement = document.createElement('div');
+        listenersElement.className = 'listeners-element';
 
-            const listenersIcon = document.createElement('i');
-            listenersIcon.className = 'fa fa-users';
-            listenersElement.appendChild(listenersIcon);
+        const listenersIcon = document.createElement('i');
+        listenersIcon.className = 'fa fa-users';
+        listenersElement.appendChild(listenersIcon);
 
-            const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
-            const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
+        const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+        const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
 
-            if (artist['Instagram']) {
-                listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+        const currentListenersSpan = document.createElement('span');
+        currentListenersSpan.textContent = formatNumber(currentListeners);
+        currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
+        listenersElement.appendChild(currentListenersSpan);
+
+        if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
+            const difference = currentListeners - previousListeners;
+            if (difference !== 0) {
+                const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
+                const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
+                const differenceSpan = document.createElement('span');
+                differenceSpan.className = 'difference';
+                differenceSpan.style.color = differenceColor;
+                differenceSpan.textContent = `(${differenceText})`;
+                differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
+                listenersElement.appendChild(differenceSpan);
             }
-
-            infoContainer.appendChild(listenersElement);
-
-            const genresElement = document.createElement('div');
-            genresElement.className = 'genres-container';
-            if (artist['Жанр']) {
-                artist['Жанр'].split(', ').forEach(genre => {
-                    const genreSpan = document.createElement('span');
-                    genreSpan.textContent = genre;
-                    genreSpan.className = 'genre-link';
-                    genreSpan.onclick = () => {
-                        selectedGenres = [];
-                        removedGenres = [];
-                        document.getElementById('artist-search').value = '';
-                        updateSelectedGenresUI();
-                        updateRemovedGenresUI();
-                        updateFilterTags();
-                        updateArtistsDisplay();
-                        toggleGenreSelection(genre, artist['Артист']);
-                        updateGenreCounts();
-                        updateToggleButton();
-                    };
-                    genresElement.appendChild(genreSpan);
-                    genresElement.appendChild(document.createTextNode(' '));
-                });
-            }
-            infoContainer.appendChild(genresElement);
-
-            if (artist['Дата додавання']) {
-                const dateElementMobile = document.createElement('div');
-                dateElementMobile.className = 'date-added-mobile';
-                dateElementMobile.textContent = `Дата додавання: ${artist['Дата додавання']}`;
-                infoContainer.appendChild(dateElementMobile);
-            }
-
-            infoContainer.appendChild(relatedArtistsContainer);
-
-            artistElement.appendChild(imgContainer);
-            artistElement.appendChild(infoContainer);
-        } else {
-            artistElement.appendChild(imgContainer);
-
-            const nameElement = document.createElement('a');
-            nameElement.href = artist['URL1'] || '#';
-            nameElement.textContent = artist['Артист'];
-            nameElement.target = "_blank";
-            nameElement.className = 'track-artist-name';
-            artistElement.appendChild(nameElement);
-
-            const listenersElement = document.createElement('div');
-            listenersElement.className = 'listeners-element';
-
-            const listenersIcon = document.createElement('i');
-            listenersIcon.className = 'fa fa-users';
-            listenersElement.appendChild(listenersIcon);
-
-            const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
-            const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
-
-            const currentListenersSpan = document.createElement('span');
-            currentListenersSpan.textContent = formatNumber(currentListeners);
-            currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
-            listenersElement.appendChild(currentListenersSpan);
-
-            if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
-                const difference = currentListeners - previousListeners;
-                if (difference !== 0) {
-                    const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
-                    const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
-                    const differenceSpan = document.createElement('span');
-                    differenceSpan.className = 'difference';
-                    differenceSpan.style.color = differenceColor;
-                    differenceSpan.textContent = `(${differenceText})`;
-                    differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
-                    listenersElement.appendChild(differenceSpan);
-                }
-            }
-
-            artistElement.appendChild(listenersElement);
-
-            const genresElement = document.createElement('div');
-            genresElement.className = 'genres-container';
-            if (artist['Жанр']) {
-                artist['Жанр'].split(', ').forEach(genre => {
-                    const genreSpan = document.createElement('span');
-                    genreSpan.textContent = genre;
-                    genreSpan.className = 'genre-link';
-                    genreSpan.onclick = () => {
-                        selectedGenres = [];
-                        removedGenres = [];
-                        document.getElementById('artist-search').value = '';
-                        updateSelectedGenresUI();
-                        updateRemovedGenresUI();
-                        updateFilterTags();
-                        updateArtistsDisplay();
-                        toggleGenreSelection(genre, artist['Артист']);
-                        updateGenreCounts();
-                        updateToggleButton();
-                    };
-                    genresElement.appendChild(genreSpan);
-                    genresElement.appendChild(document.createTextNode(' '));
-                });
-            }
-            artistElement.appendChild(genresElement);
-
-            artistElement.appendChild(relatedArtistsContainer);
         }
+
+        if (artist['Instagram']) {
+            listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+        }
+
+        infoContainer.appendChild(listenersElement);
+
+        const genresElement = document.createElement('div');
+        genresElement.className = 'genres-container';
+        if (artist['Жанр']) {
+            artist['Жанр'].split(', ').forEach(genre => {
+                const genreSpan = document.createElement('span');
+                genreSpan.textContent = genre;
+                genreSpan.className = 'genre-link';
+                genreSpan.onclick = () => {
+                    selectedGenres = [];
+                    removedGenres = [];
+                    document.getElementById('artist-search').value = '';
+                    updateSelectedGenresUI();
+                    updateRemovedGenresUI();
+                    updateFilterTags();
+                    updateArtistsDisplay();
+                    toggleGenreSelection(genre, artist['Артист']);
+                    updateGenreCounts();
+                    updateToggleButton();
+                };
+                genresElement.appendChild(genreSpan);
+                genresElement.appendChild(document.createTextNode(' '));
+            });
+        }
+        infoContainer.appendChild(genresElement);
+
+        if (artist['Дата додавання']) {
+            const dateElementMobile = document.createElement('div');
+            dateElementMobile.className = 'date-added-mobile';
+            dateElementMobile.textContent = `Додано до бази: ${artist['Дата додавання']}`;
+            infoContainer.appendChild(dateElementMobile);
+        }
+
+        infoContainer.appendChild(relatedArtistsContainer);
+
+        artistElement.appendChild(imgContainer);
+        artistElement.appendChild(infoContainer);
 
         container.appendChild(artistElement);
     });
 }
-
 
 let flexSearchIndex;
 let flexSearchUrlIndex;
@@ -3668,17 +3715,17 @@ function filterArtistsByName(query) {
     requestAnimationFrame(() => {
         let searchResults = [];
         if (query.includes("spotify.com")) {
-            searchResults.push(...flexSearchUrlIndex.search(normalizeUrl(query), 10));
+            searchResults.push(...flexSearchUrlIndex.search(normalizeUrl(query)));
         } else {
             const transliteratedQuery = transliterate(query);
             const fixedKeyboardQuery = fixKeyboardLayout(query);
 
-            searchResults.push(...flexSearchIndex.search(query, 10));
+            searchResults.push(...flexSearchIndex.search(query));
             if (transliteratedQuery !== query) {
-                searchResults.push(...flexSearchIndex.search(transliteratedQuery, 10));
+                searchResults.push(...flexSearchIndex.search(transliteratedQuery));
             }
             if (fixedKeyboardQuery !== query) {
-                searchResults.push(...flexSearchIndex.search(fixedKeyboardQuery, 10));
+                searchResults.push(...flexSearchIndex.search(fixedKeyboardQuery));
             }
         }
 
@@ -3691,6 +3738,7 @@ function filterArtistsByName(query) {
         updateFilterTags();
     });
 }
+
 
 function updateArtistCounter(count) {
     document.getElementById('artist-count').textContent = formatNumber(count);
@@ -3791,9 +3839,8 @@ async function playTrackPreview(artistId, change = 0) {
     const volumeSlider = document.getElementById('volume-slider');
     volumeSlider.style.display = 'none';
 
-    if (isPlaying) {
-        return;
-    }
+    if (isPlaying) return;
+
     isPlaying = true;
 
     let trackIndex = trackIndices.get(artistId) || 0;
@@ -3807,157 +3854,144 @@ async function playTrackPreview(artistId, change = 0) {
     }
 
     if (change === 0 && currentPlayingId === artistId) {
-        currentPlayingId = null;
-        hidePlayerContainer();
-        updatePlayIcon(null);
-        isPlaying = false;
+        resetPlayer();
         return;
     }
 
     currentPlayingId = artistId;
     trackIndices.set(artistId, trackIndex);
 
-    let tracksToPlay = [];
+    clearMessages(artistId);
 
-    if (document.getElementById('play-latest').checked) {
-        tracksToPlay = tracksData.filter(track => track.artist === artistId).sort((a, b) => parseDate(b.date) - parseDate(a.date));
+    let tracksToPlay = getTracksToPlay(artistId);
+
+    if (tracksToPlay.length === 0 && document.getElementById('play-latest').checked) {
+        showNoRecentTracksMessage(artistId);
+        tracksToPlay = await fetchTopTracks(artistId);
     }
 
-    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-    const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
-    const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
-
     if (tracksToPlay.length === 0) {
-        if (document.getElementById('play-latest').checked) {
-            if (noTracksMessage) {
-                noTracksMessage.style.display = 'none';
-            }
-            if (noRecentTracksMessage) {
-                noRecentTracksMessage.style.display = 'block';
-            }
+        if (!document.getElementById('play-latest').checked) {
+            tracksToPlay = await fetchTopTracks(artistId);
         }
-        
-        const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
-            headers: { 'Authorization': `Bearer ${accessToken}` }
-        });
-
-        if (!response.ok) {
+        if (tracksToPlay.length === 0) {
+            showNoTracksMessage(artistId);
             isPlaying = false;
             return;
-        }
-
-        const data = await response.json();
-
-        if (!data.tracks || data.tracks.length === 0) {
-            updatePlayIcon(null);
-            isPlaying = false;
-
-            if (noTracksMessage) {
-                noTracksMessage.style.display = 'block';
-            }
-            if (noRecentTracksMessage) {
-                noRecentTracksMessage.style.display = 'none';
-            }
-
-            hidePlayerContainer();
-            return;
-        }
-
-        tracksToPlay = data.tracks;
-    } else {
-        if (noRecentTracksMessage) {
-            noRecentTracksMessage.style.display = 'none';
         }
     }
 
     trackIndex = (trackIndex % tracksToPlay.length + tracksToPlay.length) % tracksToPlay.length;
     const track = tracksToPlay[trackIndex];
 
-    if (change === 0) {
-        if (artistElement) {
-            const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
-            const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
-            updatePlayerArtistName(artistName, artistUrl);
-        }
+    updateUIForNewTrack(trackIndex, tracksToPlay.length, artistId);
+
+    try {
+        await playAudio(track, artistId);
+    } catch (error) {
+        handlePlaybackError(error, artistId, change);
+    } finally {
+        isPlaying = false;
+    }
+}
+
+function resetPlayer() {
+    currentPlayingId = null;
+    hidePlayerContainer();
+    updatePlayIcon(null);
+    isPlaying = false;
+}
+
+function clearMessages(artistId) {
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+    const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
+
+    if (noTracksMessage) noTracksMessage.style.display = 'none';
+    if (noRecentTracksMessage) noRecentTracksMessage.style.display = 'none';
+}
+
+function getTracksToPlay(artistId) {
+    if (document.getElementById('play-latest').checked) {
+        const filteredTracks = tracksData.filter(track => track.artist === artistId).sort((a, b) => parseDate(b.date) - parseDate(a.date));
+        console.log(`Filtered tracks for artist ${artistId} in play-latest mode:`, filteredTracks);
+        return filteredTracks;
+    }
+    return [];
+}
+
+async function fetchTopTracks(artistId) {
+    const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    console.log(`Fetched top tracks for artist ${artistId}:`, data.tracks);
+    return data.tracks || [];
+}
+
+function showNoTracksMessage(artistId) {
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    const noTracksMessage = artistElement.closest('.artist').querySelector('.no-tracks-message');
+    if (noTracksMessage) noTracksMessage.style.display = 'block';
+}
+
+function showNoRecentTracksMessage(artistId) {
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    const noRecentTracksMessage = artistElement.closest('.artist').querySelector('.no-recent-tracks-message');
+    if (noRecentTracksMessage) noRecentTracksMessage.style.display = 'block';
+}
+
+function updateUIForNewTrack(trackIndex, trackLength, artistId) {
+    if (trackIndex === 0) {
+        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+        const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
+        const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
+        updatePlayerArtistName(artistName, artistUrl);
         showPlayerContainer();
     }
 
-    updateTrackButtons(trackIndex, tracksToPlay.length);
+    updateTrackButtons(trackIndex, trackLength);
     updatePlayIcon(artistId);
+}
 
-    if (document.getElementById('play-latest').checked && !track.preview_url) {
-        try {
-            const trackId = track.track.split('/').pop();
-            const trackResponse = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
-                headers: { 'Authorization': `Bearer ${accessToken}` }
-            });
+async function playAudio(track, artistId) {
+    const previewUrl = track.preview || track.preview_url;
+    if (previewUrl) {
+        console.log(`Playing preview URL: ${previewUrl}`);
+        currentAudio = new Audio(previewUrl);
+        await currentAudio.play();
 
-            if (!trackResponse.ok) {
-                throw new Error('Failed to fetch track details');
+        currentAudio.addEventListener('timeupdate', () => {
+            if (currentAudio) {
+                updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
             }
+        });
 
-            const trackData = await trackResponse.json();
-            track.preview_url = trackData.preview_url;
-
-            if (track.preview_url) {
-                currentAudio = new Audio(track.preview_url);
-                await currentAudio.play();
-
-                currentAudio.addEventListener('timeupdate', () => {
-                    if (currentAudio) {
-                        updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
-                    }
-                });
-
-                currentAudio.addEventListener('ended', () => {
-                    isPlaying = false;
-                    updatePlayIcon(null);
-                    playTrackPreview(currentPlayingId, 1);
-                });
-
-                currentAudio.oncanplaythrough = () => {
-                    isPlaying = false;
-                };
-            } else {
-                isPlaying = false;
-                playTrackPreview(artistId, 1);
-            }
-        } catch (error) {
+        currentAudio.addEventListener('ended', () => {
             isPlaying = false;
-            playTrackPreview(artistId, 1);
-        }
+            updatePlayIcon(null);
+            playTrackPreview(currentPlayingId, 1);
+        });
+
+        currentAudio.oncanplaythrough = () => {
+            isPlaying = false;
+        };
     } else {
-        if (track.preview_url) {
-            currentAudio = new Audio(track.preview_url);
-            try {
-                await currentAudio.play();
-            } catch (error) {
-                isPlaying = false;
-                playTrackPreview(artistId, 1);
-                return;
-            }
-
-            currentAudio.addEventListener('timeupdate', () => {
-                if (currentAudio) {
-                    updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
-                }
-            });
-
-            currentAudio.addEventListener('ended', () => {
-                isPlaying = false;
-                updatePlayIcon(null);
-                playTrackPreview(currentPlayingId, 1);
-            });
-
-            currentAudio.oncanplaythrough = () => {
-                isPlaying = false;
-            };
-        } else {
-            isPlaying = false;
-            playTrackPreview(artistId, 1);
-        }
+        throw new Error('No preview URL');
     }
 }
+
+function handlePlaybackError(error, artistId, change) {
+    console.error('Playback error:', error);
+    showNoTracksMessage(artistId);
+    isPlaying = false;
+    playTrackPreview(artistId, change);
+}
+
+
 
 function updateUI(artistId, reset, trackIndex = 0, trackLength = 0) {
     const controls = document.querySelector('.controls');
@@ -4770,6 +4804,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     playLatestCheckbox.addEventListener('change', () => {
         localStorage.setItem('playLatest', playLatestCheckbox.checked);
+    });
+});
+
+  function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchIcon = document.getElementById('search-icon');
+    const searchContainer = document.getElementById('search-container');
+    const artistSearch = document.getElementById('artist-search');
+    const clearSearch = document.getElementById('clear-search');
+
+    searchIcon.addEventListener('click', function() {
+        searchContainer.classList.toggle('active');
+        if (searchContainer.classList.contains('active')) {
+            artistSearch.style.display = 'block';
+            setTimeout(() => {
+                artistSearch.style.opacity = '1';
+            }, 10);
+            artistSearch.focus();
+            clearSearch.style.display = 'inline';
+        } else {
+            artistSearch.style.opacity = '0';
+            setTimeout(() => {
+                artistSearch.style.display = 'none';
+                searchContainer.classList.remove('active');
+                clearSearch.style.display = 'none';
+            }, 300);
+        }
+    });
+
+    artistSearch.addEventListener('input', function() {
+        if (artistSearch.value.length > 0) {
+            clearSearch.style.display = 'inline';
+        } else {
+            clearSearch.style.display = 'none';
+        }
+    });
+
+    clearSearch.addEventListener('click', function() {
+        artistSearch.value = '';
+        clearSearch.style.display = 'none';
+
+        if (isMobile()) {
+            artistSearch.style.opacity = '0';
+            setTimeout(() => {
+                artistSearch.style.display = 'none';
+                searchContainer.classList.remove('active');
+            }, 300);
+        }
     });
 });
 
