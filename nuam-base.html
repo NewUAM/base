@@ -1541,8 +1541,8 @@ background: #282626;
       
 .year-rel-icon i[data-tooltip]::after {
   top: 30px;
-  left: -25px;
-  width: 80px;
+  left: -32px;
+  width: 90px;
   height: 24px;
 }
 
@@ -2457,12 +2457,12 @@ background: #282626;
     <label class="custom-checkbox" for="yearRel-checkbox">
         <input type="checkbox" id="yearRel-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        <span class="checkbox-text">Прибрати артистів без релізів за останній рік</span>
+        <span class="checkbox-text">Прибрати артистів без релізів у поточному році</span>
     </label>
     <label class="custom-checkbox" for="multiRel-checkbox">
         <input type="checkbox" id="multiRel-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        <span class="checkbox-text">Прибрати артистів, у яких лише один реліз</span>
+        <span class="checkbox-text">Прибрати артистів, у яких лише один реліз за весь час</span>
     </label>
     <label class="custom-checkbox" for="debut-checkbox">
         <input type="checkbox" id="debut-checkbox" class="checkbox" />
@@ -3254,7 +3254,7 @@ function updateFilterTags() {
     if (filterYearRel) {
         const filterTag = document.createElement('span');
         filterTag.className = 'filter-tag check';
-        filterTag.textContent = 'релізи за останній рік';
+        filterTag.textContent = 'артисти з релізами цьогоріч';
         const removeTag = document.createElement('span');
         removeTag.className = 'remove-tag';
         removeTag.textContent = '×';
@@ -3272,7 +3272,7 @@ function updateFilterTags() {
     if (filterMultiRel) {
         const filterTag = document.createElement('span');
         filterTag.className = 'filter-tag check';
-        filterTag.textContent = 'більше одного релізу';
+        filterTag.textContent = 'є більше одного релізу';
         const removeTag = document.createElement('span');
         removeTag.className = 'remove-tag';
         removeTag.textContent = '×';
@@ -3497,7 +3497,7 @@ function displayArtists(artists, reset = false) {
         if (artist['YearRel'] !== '+') {
             const yearRelIcon = document.createElement('div');
             yearRelIcon.className = 'year-rel-icon';
-            yearRelIcon.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Більше року без релізів"></i>';
+            yearRelIcon.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Немає релізів цього року"></i>';
             yearRelIcon.style.color = '#fb8484';
             yearRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(yearRelIcon);
@@ -3882,17 +3882,29 @@ async function playTrackPreview(artistId, change = 0) {
     }
 
     trackIndex = (trackIndex % tracksToPlay.length + tracksToPlay.length) % tracksToPlay.length;
-    const track = tracksToPlay[trackIndex];
 
-    updateUIForNewTrack(trackIndex, tracksToPlay.length, artistId);
+    let trackPlayed = false;
+    const initialTrackIndex = trackIndex;
 
-    try {
-        await playAudio(track, artistId);
-    } catch (error) {
-        handlePlaybackError(error, artistId, change);
-    } finally {
-        isPlaying = false;
+    while (!trackPlayed && tracksToPlay.length > 0) {
+        const track = tracksToPlay[trackIndex];
+
+        try {
+            await playAudio(track);
+            updateUIForNewTrack(trackIndex, tracksToPlay.length, artistId);
+            trackPlayed = true;
+        } catch (error) {
+            trackIndex = (trackIndex + 1) % tracksToPlay.length;
+
+            if (trackIndex === initialTrackIndex) {
+                showNoTracksMessage(artistId);
+                isPlaying = false;
+                return;
+            }
+        }
     }
+
+    isPlaying = false;
 }
 
 function resetPlayer() {
@@ -3914,7 +3926,6 @@ function clearMessages(artistId) {
 function getTracksToPlay(artistId) {
     if (document.getElementById('play-latest').checked) {
         const filteredTracks = tracksData.filter(track => track.artist === artistId).sort((a, b) => parseDate(b.date) - parseDate(a.date));
-        console.log(`Filtered tracks for artist ${artistId} in play-latest mode:`, filteredTracks);
         return filteredTracks;
     }
     return [];
@@ -3928,7 +3939,6 @@ async function fetchTopTracks(artistId) {
     if (!response.ok) return [];
 
     const data = await response.json();
-    console.log(`Fetched top tracks for artist ${artistId}:`, data.tracks);
     return data.tracks || [];
 }
 
@@ -3945,22 +3955,18 @@ function showNoRecentTracksMessage(artistId) {
 }
 
 function updateUIForNewTrack(trackIndex, trackLength, artistId) {
-    if (trackIndex === 0) {
-        const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
-        const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
-        const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
-        updatePlayerArtistName(artistName, artistUrl);
-        showPlayerContainer();
-    }
-
+    const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
+    const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
+    updatePlayerArtistName(artistName, artistUrl);
+    showPlayerContainer();
     updateTrackButtons(trackIndex, trackLength);
     updatePlayIcon(artistId);
 }
 
-async function playAudio(track, artistId) {
+async function playAudio(track) {
     const previewUrl = track.preview || track.preview_url;
-    if (previewUrl) {
-        console.log(`Playing preview URL: ${previewUrl}`);
+    if (previewUrl && previewUrl !== "Preview not found") {
         currentAudio = new Audio(previewUrl);
         await currentAudio.play();
 
@@ -3984,12 +3990,6 @@ async function playAudio(track, artistId) {
     }
 }
 
-function handlePlaybackError(error, artistId, change) {
-    console.error('Playback error:', error);
-    showNoTracksMessage(artistId);
-    isPlaying = false;
-    playTrackPreview(artistId, change);
-}
 
 
 
