@@ -946,11 +946,69 @@ z-index: 3;
     text-decoration: underline;
 }
       
-     #settings-popup .data-source-notice {
+     .data-source-notice {
   font-size: 12px;
   text-align: center;
   color: #888;
   margin-top: 5px;
+}
+      
+      .popup {
+  display: none;
+  position: fixed;
+  z-index: 10001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.popup-content {
+  background-color: #383838;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #f3f3f3;
+  border-radius: 7px;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+.close-btn {
+  color: #f3f3f3;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  user-select: none !important;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.support-links .new-links {
+  margin-top: 10px;
+  display: block;
+}
+      
+      #project-popup a {
+  color: #84AAFB;
+  text-decoration: none;
+}
+      
+      #project-popup a:hover {
+    text-decoration: underline;
+}
+      
+      #project-popup hr {
+    border: none;
+    border-top: 1px solid #f3f3f3;
+    margin: 10px 0;
 }
       
       #help-icon {
@@ -1398,7 +1456,7 @@ background: #282626;
 }
       
       .artistTooltip .introjs-tooltip {
-    width: 400px; /* Настройка ширины для шага с .artist-container .artist:first-child */
+    width: 400px;
 }
 
       .introjs-button {
@@ -1636,6 +1694,10 @@ background: #282626;
       min-width: 320px;
 }
 
+    #project-popup .popup-content {
+    font-size: 14px;
+  }
+    
     .date-release [data-tooltip]::after {
     top: -45px;
     left: 52px;
@@ -1671,6 +1733,10 @@ background: #282626;
     
     #no-artists-message, #no-artists-name-message {
     font-size: 14px;
+}
+    
+    #gear-icon:hover {
+    transform: none;
 }
     
 #main-container {
@@ -1874,7 +1940,7 @@ font-size: 14px;
         left: -276px;
         z-index: 1000;
         width: 240px;
-        height: 33px;
+        height: 35px;
         border-radius: 7px 7px 0 0;
         border: 1px solid #383838;
         background-color: #282626;
@@ -2295,7 +2361,7 @@ background: #282626;
     transform: translateX(-50%);
     width: 90%;
     background-color: #282626;
-    z-index: 1000;
+    z-index: 1001;
     display: none;
     align-items: center;
     margin-left: 0px;
@@ -2442,9 +2508,22 @@ background: #282626;
   <div class="support-links">
     <a href="https://nuam.club" target="_blank">Перейти до сайту</a> | 
     <a href="https://nuam.club/donate" target="_blank">Підтримати проєкт</a>
+    <div class="new-links">
+      <a href="https://nuam.club/echo" target="_blank">Спробуйте NUAM Echo</a> | 
+      <a href="#" id="about-project">Про проєкт</a>
+    </div>
   </div>
-  <div class="data-source-notice">
-    Усі дані, що використовуються в цьому веб-додатку, отримані з відкритих джерел Spotify. NUAM не пов'язаний зі Spotify і не представляє його інтереси. А хотілося б.
+</div>
+
+<div id="project-popup" class="popup">
+  <div class="popup-content">
+    <span class="close-btn">&times;</span>
+    <p><strong>NUAM Base</strong> — веб-додаток від агрегатора української музики <a href="https://nuam.club" target="_blank">NUAM</a>. Місія NUAM Base — познайомити українського слухача з локальною музичною сценою, показати її масштаби та різноманітність. Це комплексне рішення з безліччю інструментів для глибокого дослідження української музики.</p>
+    <p>Ми щодня перебуваємо в пошуку нових музикантів України, використовуючи безліч власних внутрішніх технологічних рішень. Це база, яка постійно масштабується і розвивається. Бла-бла-бла, скільки ще потрібно нагнати пафосу, щоб ви пішли й почали знайомитися з українською музикою та відкрили її для себе по-новому?</p>
+    <hr>
+    <div class="data-source-notice">
+      Усі дані, що використовуються в цьому веб-додатку, отримані з відкритих джерел Spotify. NUAM не пов'язаний зі Spotify і не представляє його інтереси. А хотілося б.
+    </div>
   </div>
 </div>
 
@@ -4859,6 +4938,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsPopup = document.getElementById('settings-popup');
     const openInSpotifyCheckbox = document.getElementById('open-in-spotify');
     const playLatestCheckbox = document.getElementById('play-latest');
+    const aboutProjectLink = document.getElementById('about-project');
+    const projectPopup = document.getElementById('project-popup');
+    const closeBtn = document.querySelector('.close-btn');
 
     const showPopup = () => {
         if (window.innerWidth > 768) {
@@ -4938,6 +5020,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     playLatestCheckbox.addEventListener('change', () => {
         localStorage.setItem('playLatest', playLatestCheckbox.checked);
+    });
+
+    aboutProjectLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        projectPopup.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        projectPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === projectPopup) {
+            projectPopup.style.display = 'none';
+        }
     });
 });
 
