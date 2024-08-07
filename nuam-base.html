@@ -946,6 +946,13 @@ z-index: 3;
     text-decoration: underline;
 }
       
+     #settings-popup .data-source-notice {
+  font-size: 12px;
+  text-align: center;
+  color: #888;
+  margin-top: 5px;
+}
+      
       #help-icon {
     color: #f3f3f3;
     cursor: pointer;
@@ -1365,7 +1372,7 @@ background: #282626;
 }
       
       .introjs-tooltip {
-    min-width: 300px;
+    min-width: 500px;
     max-width: 550px;
       }
       
@@ -1388,6 +1395,10 @@ background: #282626;
       .introjs-tooltip.customTooltip.rangeTooltip {
     transform: translateX(50%);
     left: 50%;
+}
+      
+      .artistTooltip .introjs-tooltip {
+    width: 400px; /* Настройка ширины для шага с .artist-container .artist:first-child */
 }
 
       .introjs-button {
@@ -1437,7 +1448,7 @@ background: #282626;
     color: #282626;
       }
       
-      #no-artists-message {
+      #no-artists-message, #no-artists-name-message {
     display: none;
     text-align: center;
     padding: 20px;
@@ -1482,7 +1493,7 @@ background: #282626;
   width: 130px;
   max-width: 90vw;
   position: absolute;
-  z-index: 999;
+  z-index: 1000;
   right: -137px;
   transform: translateX(-50%);
   opacity: 0;
@@ -1587,31 +1598,6 @@ background: #282626;
     left: -47px;
     height: 24px;
 }  
-      
-      #mobile-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #282626;
-  color: #f3f3f3;
-  z-index: 10000;
-  text-align: center;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-#mobile-overlay img {
-  max-width: 80%;
-  height: auto;
-
-}
-
-#mobile-overlay p {
-  font-size: 16px;
-}
 
       .mobile-label {
   display: none;
@@ -1650,6 +1636,43 @@ background: #282626;
       min-width: 320px;
 }
 
+    .date-release [data-tooltip]::after {
+    top: -45px;
+    left: 52px;
+    line-height: 1.2;
+    width: 110px;
+}
+    
+    .debut-icon i[data-tooltip]::after {
+    top: 30px;
+    left: -5px;
+}
+    
+    .year-rel-icon i[data-tooltip]::after {
+    top: 30px;
+    left: 5px;
+   }
+    
+    .multi-rel-icon i[data-tooltip]::after {
+    top: 30px;
+    left: 10px;
+}
+    
+    .russian-tag i[data-tooltip]::after {
+    top: 30px;
+    left: 10px;
+}
+    
+    .icon-container {
+  position: absolute;
+  top: 2px;
+  right: 12px;
+    }
+    
+    #no-artists-message, #no-artists-name-message {
+    font-size: 14px;
+}
+    
 #main-container {
     height: 100%;
     display: flex;
@@ -1774,6 +1797,7 @@ background: #282626;
     .date-release {
     bottom: 30px;
     border-radius: 0 !important;
+    border: none !important;
 }
     
     .date-added, .date-release {
@@ -1847,7 +1871,7 @@ font-size: 14px;
     #artist-search {
         display: none;
         position: absolute;
-        left: -280px;
+        left: -276px;
         z-index: 1000;
         width: 240px;
         height: 33px;
@@ -2101,7 +2125,8 @@ background: #282626;
     
     .russian-tag {
         white-space: pre-line;
-        font-size: 10px;
+        font-size: 14px;
+      margin-top: 4px !important;
       max-width: 90px;
       left: 0;
       border-radius: 0 7px 0 0;
@@ -2244,7 +2269,7 @@ background: #282626;
 .artist-counter {
     font-weight: normal;
     white-space: nowrap;
-  padding-top: 3px;
+  padding-top: 5px;
 }
 
     #filter-section {
@@ -2338,11 +2363,6 @@ background: #282626;
 </head>
 <body>
   
-  <div id="mobile-overlay">
-  <img src="https://static.wixstatic.com/media/c77f36_7030e7e0893e445ba22f3daaad23d602~mv2.png" alt="Логотип">
-  <p>Додаток поки що недоступний зі смартфонів. Відкрийте його, будь ласка, у браузері з комп'ютера.</p>
-</div>
-  
   <div id="loading-screen">
   <img src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Loading"> 
   <div class="load-wrapp">
@@ -2423,8 +2443,10 @@ background: #282626;
     <a href="https://nuam.club" target="_blank">Перейти до сайту</a> | 
     <a href="https://nuam.club/donate" target="_blank">Підтримати проєкт</a>
   </div>
+  <div class="data-source-notice">
+    Усі дані, що використовуються в цьому веб-додатку, отримані з відкритих джерел Spotify. NUAM не пов'язаний зі Spotify і не представляє його інтереси. А хотілося б.
+  </div>
 </div>
-
 
     <div class="line"></div>
 </section>
@@ -2464,7 +2486,7 @@ background: #282626;
     <button class="clear-sort" onclick="clearSort()">×</button>
     <button onclick="sortArtistsHandler('date', 'asc')"><i class="fas fa-arrow-up-wide-short"></i></button>
     <button onclick="sortArtistsHandler('date', 'desc')"><i class="fas fa-arrow-down-wide-short"></i></button>
-    <span>За датою додавання в базу</span>
+    <span>За датою додавання до бази</span>
   </div>
   <div class="sort-option">
     <button class="clear-sort" onclick="clearSort()">×</button>
@@ -2515,11 +2537,15 @@ background: #282626;
     <div id="no-artists-message">
         Артистів із такими параметрами не знайдено.<br/><br/>Спробуйте інший набір жанрів, виключіть фільтри або збільште діапазон слухачів на місяць.
     </div>
+    <div id="no-artists-name-message">
+        Артистів із таким ім'ям не знайдено.<br/><br/>Спробуйте використати для пошуку посилання на профіль артиста в Spotify.
+    </div>
     <div id="artist-scroll-container" class="artist-scroll-container">
-    <div class="artist-container"></div>
-</div>
-      <div class="line3"></div>
+        <div class="artist-container"></div>
+    </div>
+    <div class="line3"></div>
 </section>
+
   </div>
 <script>
 let displayOffset = 0;
@@ -3393,6 +3419,9 @@ function updateArtistsDisplay() {
     }
 
     const noArtistsMessage = document.getElementById('no-artists-message');
+    const noArtistsNameMessage = document.getElementById('no-artists-name-message');
+    noArtistsNameMessage.style.display = 'none';
+
     if (!currentDisplayList.length) {
         noArtistsMessage.style.display = 'block';
     } else {
@@ -3799,12 +3828,22 @@ function filterArtistsByName(query) {
 
         const filteredArtists = uniqueResults.map(id => artists[id]);
 
+        const noArtistsNameMessage = document.getElementById('no-artists-name-message');
+        noArtistsNameMessage.style.display = 'none';
+
+        if (filteredArtists.length === 0) {
+            document.getElementById('no-artists-message').style.display = 'none';
+            noArtistsNameMessage.style.display = 'block';
+        } else {
+            document.getElementById('no-artists-message').style.display = 'none';
+            noArtistsNameMessage.style.display = 'none';
+        }
+
         displayArtists(filteredArtists, true);
         updateArtistCounter(filteredArtists.length);
         updateFilterTags();
     });
 }
-
 
 function updateArtistCounter(count) {
     document.getElementById('artist-count').textContent = formatNumber(count);
@@ -4174,7 +4213,7 @@ function updateSortMenu(selectedCriteria, selectedOrder) {
 
         if ((span.textContent.includes('За кількістю слухачів на місяць') && selectedCriteria === 'listeners') ||
             (span.textContent.includes('За приростом слухачів') && selectedCriteria === 'growth') ||
-            (span.textContent.includes('За датою додавання в базу') && selectedCriteria === 'date') ||
+            (span.textContent.includes('За датою додавання до бази') && selectedCriteria === 'date') ||
             (span.textContent.includes('За датою крайнього релізу') && selectedCriteria === 'lastReleaseDate') ||
             (span.textContent.includes('За іменем артиста') && selectedCriteria === 'name')) {
             option.classList.add('active-sort');
@@ -4653,45 +4692,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const options = {
         steps: [
             {
-                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів з більш ніж 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі інструменти з пошуку. </p>',
+                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
                 disableInteraction: true
             },
             {
                 element: document.querySelector('#buttons-wrapper'),
-                intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не заблукати серед тисяч артистів.',
+                intro: 'Це основні вкладки для детального пошуку. Використовуйте їх, щоб не загубитися серед тисяч артистів.',
                 disableInteraction: true
             },
             {
                 element: document.querySelector('#genres-section'),
-                intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним жанрам. Число поруч із жанром показує кількість артистів, які мають цей жанр.<br/><br/>Під час вибору жанру інші жанри будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними жанрами.<br/><br/>Зніміть галочку з «Відповідність усім обраним жанрам», щоб побачити всіх артистів, у яких є хоча б один з обраних стилів.',
+                intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним категоріям. Число поруч із кожною категорією показує кількість артистів у ній.<br/><br/>При виборі жанру інші категорії будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними стилями.<br/><br/>Зніміть галочку з «Відповідність усім обраним жанрам», щоб побачити всіх артистів, які мають хоча б один з обраних стилів.',
                 position: 'bottom',
                 tooltipClass: 'customTooltip rangeTooltip',
                 disableInteraction: true
             },
             {
                 element: document.querySelector('#sort-section'),
-                intro: 'Тут можна вибрати режим сортування списку артистів. Ви можете підняти вгору найпрослуховуваніших артистів або впорядкувати їх за темпом зростання нових слухачів.<br/><br/>За замовчуванням активне сортування за датою крайнього релізу — вгорі ви побачите артистів, у яких сьогодні або вчора вийшли нові треки.<br/><br/>Також тут можна легко відстежувати нових доданих артистів у базу — просто застосуйте сортування «За датою додавання в базу».',
+                intro: 'Тут можна вибрати режим сортування списку артистів. Ви можете підняти вгору тих, кого найчастіше слухають, або впорядкувати їх за темпом зростання кількості нових слухачів.<br/><br/>За замовчуванням активне сортування за датою останнього релізу — вгорі ви побачите артистів, у яких сьогодні або вчора вийшли нові треки.<br/><br/>Також тут можна легко відстежувати нових доданих артистів до бази — просто застосуйте сортування «За датою додавання до бази».',
                 position: 'bottom',
                 tooltipClass: 'customTooltip rangeTooltip',
                 disableInteraction: true
             },
             {
                 element: document.querySelector('#filters-section'),
-                intro: 'Тут ви можете виключити зі списку неактивних артистів, у яких понад рік не було релізів, або тих, хто має лише один реліз. Або ж можете залишити у списку лише дебютантів поточного року. Артисти з російськомовними піснями, реліз яких відбувся з початку 2024 року, виключені зі списку за замовчуванням.',
+                intro: 'Тут ви можете виключити зі списку неактивних артистів, які не мали релізів у поточному році, або тих, хто має лише один реліз за весь час. Ви також можете залишити у списку лише дебютантів поточного року. Артисти з російськомовними піснями, реліз яких відбувся з початку 2024 року, виключені зі списку за замовчуванням.',
                 position: 'bottom',
                 tooltipClass: 'customTooltip rangeTooltip',
                 disableInteraction: true
             },
             {
                 element: document.querySelector('#range-container'),
-                intro: 'Ще один важливий параметр для дослідження. Ви можете відфільтрувати артистів за діапазоном слухачів на місяць. Станьте одним із перших, хто послухає трек артиста — просто встановіть повзунок на 0-10 слухачів. Цікавить середня сцена? Ставте, наприклад, від 5000 до 20 000 слухачів. Або ж виведіть у список найпопулярніших артистів, вибравши високі значення.<br/><br/>Ви можете застосовувати цей фільтр у межах зазначених жанрів.',
+                intro: 'Ще один важливий параметр для дослідження — можливість відфільтрувати артистів за діапазоном слухачів на місяць. Станьте одним із перших, хто послухає трек артиста, встановивши повзунок на 0-10 слухачів. Цікавить середня сцена? Оберіть, наприклад, від 5000 до 20 000 слухачів. Або ж виведіть у список найпопулярніших артистів, вибравши високі значення.<br/><br/>Цей повзунок працює спільно з обраними жанрами і фільтрами.',
                 position: 'bottom',
                 tooltipClass: 'customTooltip rangeTooltip',
                 disableInteraction: true
             },
             {
                 element: document.querySelector('.artist-container .artist:first-child'),
-                intro: 'Це картка артиста. Ви можете слухати уривки треків артистів для швидкого ознайомлення.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим артистом. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані беруться зі Spotify і оновлюються раз на місяць кожного першого числа.<br/><br/>У артистів, які були додані в базу починаючи з кінця 2023 року, вказана дата додавання. При додаванні артиста в базу дані про кількість слухачів актуальні на момент додавання.',
+                intro: 'Це картка артиста. Ви можете слухати уривки треків для швидкого ознайомлення. За замовчуванням грають найновіші треки артиста — ви можете зняти в налаштуваннях відповідну галочку, щоб слухати найпопулярніші треки.<br/><br/>Наведіть на картку і натисніть «Схожі артисти», щоб побачити тих, кого часто слухають разом із цим виконавцем. У цьому списку будуть виключно українські музиканти.<br/><br/>Під іменем артиста ви можете бачити кількість слухачів на місяць і порівняння цих даних з попереднім місяцем. Ці дані беруться зі Spotify і оновлюються кожного першого числа місяця.<br/><br/>Для артистів, доданих до бази з кінця 2023 року, вказується дата їх додавання. Якщо артист був доданий після першого числа місяця, вказуються дані про кількість слухачів, актуальні на момент додавання.',
                 position: 'right',
                 disableInteraction: true
             },
@@ -4706,7 +4745,10 @@ document.addEventListener('DOMContentLoaded', () => {
         exitOnOverlayClick: false,
         exitOnEsc: true,
         tooltipClass: 'customTooltip',
-        dontShowAgainCookie: 'nuam-base-dontShowAgain'
+        dontShowAgainCookie: 'nuam-base-dontShowAgain',
+        nextLabel: 'Далі',
+        prevLabel: 'Назад',
+        doneLabel: 'Готово'
     };
 
     if (showDontShowAgain) {
@@ -4819,12 +4861,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const playLatestCheckbox = document.getElementById('play-latest');
 
     const showPopup = () => {
-        settingsPopup.classList.add('show');
+        if (window.innerWidth > 768) {
+            settingsPopup.classList.add('show');
+        }
     };
 
     const hidePopup = () => {
-        if (!gearIcon.matches(':hover') && !settingsPopup.matches(':hover')) {
-            settingsPopup.classList.remove('show');
+        if (window.innerWidth > 768) {
+            if (!gearIcon.matches(':hover') && !settingsPopup.matches(':hover')) {
+                settingsPopup.classList.remove('show');
+            }
         }
     };
 
@@ -4834,14 +4880,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gearIcon.addEventListener('mouseenter', showPopup);
     gearIcon.addEventListener('mouseleave', () => {
-        setTimeout(hidePopup, 200);
+        if (window.innerWidth > 768) {
+            setTimeout(hidePopup, 200);
+        }
     });
 
-    gearIcon.addEventListener('click', togglePopup);
+    gearIcon.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            togglePopup();
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (window.innerWidth <= 768) {
+            if (!settingsPopup.contains(event.target) && !gearIcon.contains(event.target)) {
+                settingsPopup.classList.remove('show');
+            }
+        }
+    });
 
     settingsPopup.addEventListener('mouseenter', showPopup);
     settingsPopup.addEventListener('mouseleave', () => {
-        setTimeout(hidePopup, 200);
+        if (window.innerWidth > 768) {
+            setTimeout(hidePopup, 200);
+        }
     });
 
     const updateLinks = () => {
@@ -4884,7 +4946,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return window.innerWidth <= 768;
 }
 
-  
   document.addEventListener('DOMContentLoaded', function() {
     const searchIcon = document.getElementById('search-icon');
     const searchContainer = document.getElementById('search-container');
