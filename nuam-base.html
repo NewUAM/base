@@ -866,6 +866,7 @@ z-index: 3;
 
       #gear-icon {
     margin: 0 10px;
+    font-size: 20px;
     cursor: pointer;
     position: relative;
     transition: transform 0.3s ease;
@@ -925,10 +926,30 @@ z-index: 3;
     color: #ccc;
 }
       
+      #settings-popup hr {
+    border: none;
+    border-top: 1px solid #f3f3f3;
+    margin: 10px 0;
+}
+
+#settings-popup .support-links {
+    text-align: center;
+    font-size: 14px;
+}
+
+#settings-popup .support-links a {
+    color: #84AAFB;
+    text-decoration: none;
+}
+
+#settings-popup .support-links a:hover {
+    text-decoration: underline;
+}
+      
       #help-icon {
     color: #f3f3f3;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 20px;
     margin-left: 10px;
 }
  
@@ -2397,7 +2418,13 @@ background: #282626;
       <span class="sub-text">інакше грають найпопулярніші</span>
     </span>
   </label>
+  <hr>
+  <div class="support-links">
+    <a href="https://nuam.club" target="_blank">Перейти до сайту</a> | 
+    <a href="https://nuam.club/donate" target="_blank">Підтримати проєкт</a>
+  </div>
 </div>
+
 
     <div class="line"></div>
 </section>
@@ -2574,37 +2601,58 @@ let genreCombinations = {};
 
 function initializeGenreCombinations(artists) {
     let genreCounts = {};
+    let filteredGenreCounts = {};
+
     artists.forEach(artist => {
         const artistGenres = artist['Жанр'].split(', ');
-        artistGenres.forEach(genre => {
-            if (!genreCounts[genre]) {
-                genreCounts[genre] = 0;
-            }
-            genreCounts[genre]++;
-        });
 
-        const genreCount = artistGenres.length;
-        for (let i = 1; i < (1 << genreCount); i++) {
-            let combination = [];
-            for (let j = 0; j < genreCount; j++) {
-                if (i & (1 << j)) {
-                    combination.push(artistGenres[j]);
+        const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
+        const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
+        const matchesDebut = !filterDebut || artist['Debut'] === '+';
+        const matchesHideRussian = !hideRussian || !artist['RuLang'];
+
+        if (matchesYearRel && matchesMultiRel && matchesDebut && matchesHideRussian) {
+            artistGenres.forEach(genre => {
+                if (!genreCounts[genre]) {
+                    genreCounts[genre] = 0;
                 }
+                genreCounts[genre]++;
+            });
+
+            const genreCount = artistGenres.length;
+            for (let i = 1; i < (1 << genreCount); i++) {
+                let combination = [];
+                for (let j = 0; j < genreCount; j++) {
+                    if (i & (1 << j)) {
+                        combination.push(artistGenres[j]);
+                    }
+                }
+                const key = combination.sort().join(',');
+                if (!filteredGenreCounts[key]) {
+                    filteredGenreCounts[key] = 0;
+                }
+                filteredGenreCounts[key]++;
             }
-            const key = combination.sort().join(',');
-            if (!genreCombinations[key]) {
-                genreCombinations[key] = 0;
-            }
-            genreCombinations[key]++;
         }
     });
 
     for (let genre in genreCounts) {
         if (genreCounts.hasOwnProperty(genre)) {
-            genreCombinations[genre] = genreCounts[genre];
+            genreCombinations[genre] = { count: genreCounts[genre], filterCount: genreCounts[genre] };
+        }
+    }
+
+    for (let combination in filteredGenreCounts) {
+        if (filteredGenreCounts.hasOwnProperty(combination)) {
+            if (!genreCombinations[combination]) {
+                genreCombinations[combination] = { count: 0, filterCount: filteredGenreCounts[combination] };
+            } else {
+                genreCombinations[combination].filterCount = filteredGenreCounts[combination];
+            }
         }
     }
 }
+
 
 async function fetchArtists() {
     getTempToken().then(tempToken => {
@@ -2634,9 +2682,10 @@ async function fetchArtists() {
                     collectAllArtistURLs(artistsData);
                     extractAndDisplayGenres(artistsData);
                     initializeSearchIndex(artistsData);
-                    updateArtistsDisplay();
-
                     initializeGenreCombinations(artistsData);
+                    updateGenreCounts(true);
+                    updateArtistsDisplay();
+                    updateSelectedGenresUI();
                 }
             });
         }).catch(error => {
@@ -2714,10 +2763,15 @@ function extractAndDisplayGenres(artists) {
         updateArtistsDisplay();
         updateToggleButton();
         updateGenreCounts(true);
+        updateSelectedGenresUI();
     };
     genresContainer.appendChild(allGenresButton);
 
     sortedGenres.forEach(([genre, count], index) => {
+        if (count < 5) {
+            return;
+        }
+
         const genreButton = document.createElement('button');
         genreButton.className = 'genre-button';
         if (count < 10) {
@@ -2737,6 +2791,7 @@ function extractAndDisplayGenres(artists) {
             updateFilterTags();
             updateArtistsDisplay();
             updateGenreCounts();
+            updateSelectedGenresUI();
         };
         genreButton.appendChild(removeButton);
 
@@ -2752,6 +2807,7 @@ function extractAndDisplayGenres(artists) {
             updateArtistsDisplay();
             updateToggleButton();
             updateGenreCounts();
+            updateSelectedGenresUI();
         };
 
         genresContainer.appendChild(genreButton);
@@ -2788,7 +2844,8 @@ function extractAndDisplayGenres(artists) {
         genresContainer.appendChild(toggleButton);
     }
     updateToggleButton();
-    updateGenreCounts();
+    updateGenreCounts(true);
+    updateSelectedGenresUI();
 }
 
 let filterYearRel = false;
@@ -2799,22 +2856,22 @@ let invalidGenres = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('yearRel-checkbox').addEventListener('change', function() {
-    filterYearRel = this.checked;
-    document.getElementById('artist-search').value = '';
-    document.getElementById('clear-search').style.display = 'none';
-    updateArtistsDisplay();
-    updateFilterTags();
-    updateGenreCounts();
-});
+        filterYearRel = this.checked;
+        document.getElementById('artist-search').value = '';
+        document.getElementById('clear-search').style.display = 'none';
+        updateArtistsDisplay();
+        updateFilterTags();
+        updateGenreCounts();
+    });
 
-document.getElementById('multiRel-checkbox').addEventListener('change', function() {
-    filterMultiRel = this.checked;
-    document.getElementById('artist-search').value = '';
-    document.getElementById('clear-search').style.display = 'none';
-    updateArtistsDisplay();
-    updateFilterTags();
-    updateGenreCounts();
-});
+    document.getElementById('multiRel-checkbox').addEventListener('change', function() {
+        filterMultiRel = this.checked;
+        document.getElementById('artist-search').value = '';
+        document.getElementById('clear-search').style.display = 'none';
+        updateArtistsDisplay();
+        updateFilterTags();
+        updateGenreCounts();
+    });
 
     document.getElementById('hide-russian').addEventListener('change', function() {
         hideRussian = this.checked;
@@ -2822,8 +2879,8 @@ document.getElementById('multiRel-checkbox').addEventListener('change', function
         updateFilterTags();
         updateGenreCounts();
     });
-  
-  document.getElementById('debut-checkbox').addEventListener('change', function() {
+
+    document.getElementById('debut-checkbox').addEventListener('change', function() {
         filterDebut = this.checked;
         document.getElementById('artist-search').value = '';
         document.getElementById('clear-search').style.display = 'none';
@@ -2833,51 +2890,51 @@ document.getElementById('multiRel-checkbox').addEventListener('change', function
     });
 
     document.getElementById('match-all-genres-checkbox').addEventListener('change', function() {
-    matchAllGenres = this.checked;
+        matchAllGenres = this.checked;
 
-    if (matchAllGenres) {
-        selectedGenres = selectedGenres.filter(genre => {
-            return artistsData.some(artist => {
-                const artistGenres = artist['Жанр'].split(', ');
-                return selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre));
+        if (matchAllGenres) {
+            selectedGenres = selectedGenres.filter(genre => {
+                return artistsData.some(artist => {
+                    const artistGenres = artist['Жанр'].split(', ');
+                    return selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre));
+                });
             });
+        }
+
+        updateArtistsDisplay();
+        updateFilterTags();
+        updateGenreCounts();
+        updateSelectedGenresUI();
+
+        const genreButtons = document.querySelectorAll('.genre-button');
+        genreButtons.forEach(button => {
+            const genre = button.dataset.genre;
+            const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
+            if (count === 0) {
+                button.classList.add('gray-out');
+                button.style.pointerEvents = 'none';
+            } else {
+                button.classList.remove('gray-out');
+                button.style.pointerEvents = 'auto';
+            }
         });
-    }
 
-    updateArtistsDisplay();
-    updateFilterTags();
-    updateGenreCounts();
-    updateSelectedGenresUI();
+        updateSelectedGenresUI();
 
-    const genreButtons = document.querySelectorAll('.genre-button');
-    genreButtons.forEach(button => {
-        const genre = button.dataset.genre;
-        const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
-        if (count === 0) {
-            button.classList.add('gray-out');
-            button.style.pointerEvents = 'none';
-        } else {
-            button.classList.remove('gray-out');
-            button.style.pointerEvents = 'auto';
+        const allGenresButton = document.querySelector('.genre-button:first-child');
+        if (allGenresButton) {
+            allGenresButton.disabled = false;
+            allGenresButton.classList.remove('gray-out');
+            allGenresButton.style.pointerEvents = 'auto';
+            if (selectedGenres.length === 0) {
+                allGenresButton.classList.add('selected');
+            } else {
+                allGenresButton.classList.remove('selected');
+            }
         }
     });
-
-    updateSelectedGenresUI();
-
-    const allGenresButton = document.querySelector('.genre-button:first-child');
-    if (allGenresButton) {
-        allGenresButton.disabled = false;
-        allGenresButton.classList.remove('gray-out');
-        allGenresButton.style.pointerEvents = 'auto';
-        if (selectedGenres.length === 0) {
-            allGenresButton.classList.add('selected');
-        } else {
-            allGenresButton.classList.remove('selected');
-        }
-    }
 });
-  });
-  
+
 function removeRemoveGenreButton(genreButton) {
     const removeButton = genreButton.querySelector('.remove-genre');
     if (removeButton) {
@@ -2941,26 +2998,22 @@ function updateGenreCounts(reset = false) {
             if (reset) {
                 button.innerHTML = `<span class="genre-name">${genre}</span> <span class="genre-count">(${originalCount})</span>`;
             } else {
-                let newCount = artistsData.filter(artist => {
-                    const artistGenres = artist['Жанр'].split(', ');
-                    const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
-                    const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
-                    const matchesHideRussian = !hideRussian || !artist['RuLang'];
-                    const matchesDebut = !filterDebut || artist['Debut'] === '+';
-
-                    if (!matchesYearRel || !matchesMultiRel || !matchesHideRussian || !matchesDebut) {
-                        return false;
+                let newCount = 0;
+                if (!matchAllGenres) {
+                    newCount = genreCombinations[genre] ? genreCombinations[genre].filterCount : 0;
+                } else {
+                    if (selectedGenres.length === 0) {
+                        newCount = genreCombinations[genre] ? genreCombinations[genre].filterCount : 0;
+                    } else if (selectedGenres.includes(genre)) {
+                        newCount = parseInt(document.getElementById('artist-count').textContent, 10);
+                    } else {
+                        const combinationKey = [...selectedGenres, genre].sort().join(',');
+                        newCount = genreCombinations[combinationKey] ? genreCombinations[combinationKey].filterCount : 0;
                     }
-
-                    return artistGenres.includes(genre) && (
-                        matchAllGenres
-                            ? selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre))
-                            : true
-                    );
-                }).length;
+                }
 
                 button.innerHTML = `<span class="genre-name">${genre}</span> <span class="genre-count">(${newCount})</span>`;
-                
+
                 const removeButton = document.createElement('button');
                 removeButton.className = 'remove-genre';
                 removeButton.textContent = '×';
@@ -2970,18 +3023,23 @@ function updateGenreCounts(reset = false) {
                     updateFilterTags();
                     updateArtistsDisplay();
                     updateGenreCounts();
+                    updateSelectedGenresUI();
                 };
                 button.appendChild(removeButton);
 
                 if (newCount === 0 && !removedGenres.includes(genre)) {
                     button.classList.add('gray-out');
-                    button.classList.remove('removed');
+                    button.classList.remove('selected');
                 } else if (removedGenres.includes(genre)) {
                     button.classList.add('removed');
                     button.classList.remove('gray-out');
                 } else {
                     button.classList.remove('gray-out');
-                    button.classList.remove('removed');
+                    if (selectedGenres.includes(genre)) {
+                        button.classList.add('selected');
+                    } else {
+                        button.classList.remove('selected');
+                    }
                 }
             }
         }
@@ -3088,8 +3146,6 @@ function restoreGenre(genre) {
 
 function updateSelectedGenresUI() {
     const genreButtons = document.querySelectorAll('.genre-button');
-    const activeGenres = selectedGenres.length > 0 ? selectedGenres : ['всі жанри'];
-
     genreButtons.forEach(button => {
         const genre = button.dataset.genre;
         if (genre === 'всі жанри') {
@@ -3103,18 +3159,19 @@ function updateSelectedGenresUI() {
             }
         } else if (selectedGenres.includes(genre)) {
             button.classList.add('selected');
+            button.classList.remove('gray-out');
             button.disabled = false;
 
             const removeButton = button.querySelector('.remove-genre');
             if (removeButton) {
-                removeButton.remove();
+                removeButton.style.display = 'none';
             }
         } else {
             const hasArtists = artistsData.some(artist => {
                 const artistGenres = artist['Жанр'].split(', ');
                 return matchAllGenres 
-                    ? activeGenres.every(activeGenre => artistGenres.includes(activeGenre)) && artistGenres.includes(genre)
-                    : activeGenres.some(activeGenre => artistGenres.includes(activeGenre)) || artistGenres.includes(genre);
+                    ? selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre)) && artistGenres.includes(genre)
+                    : selectedGenres.some(selectedGenre => artistGenres.includes(selectedGenre)) || artistGenres.includes(genre);
             });
             if (hasArtists || selectedGenres.length === 0) {
                 button.disabled = false;
@@ -3154,7 +3211,7 @@ function updateSelectedGenresUI() {
         allGenresButton.classList.remove('gray-out');
         allGenresButton.style.pointerEvents = 'auto';
         allGenresButton.disabled = false;
-        
+
         if (selectedGenres.length === 0) {
             allGenresButton.classList.add('selected');
         } else {
@@ -3208,6 +3265,7 @@ function updateFilterTags() {
                 removeTag.textContent = '×';
                 removeTag.onclick = () => {
                     toggleGenreSelection(genre);
+                    initializeGenreCombinations(artistsData);
                     updateGenreCounts();
                     updateFilterTags();
                 };
@@ -3224,6 +3282,7 @@ function updateFilterTags() {
                 removeTag.textContent = '×';
                 removeTag.onclick = () => {
                     restoreGenre(genre);
+                    initializeGenreCombinations(artistsData);
                     updateGenreCounts();
                     updateFilterTags();
                 };
@@ -3243,6 +3302,7 @@ function updateFilterTags() {
         removeTag.onclick = () => {
             document.getElementById('hide-russian').checked = false;
             hideRussian = false;
+            initializeGenreCombinations(artistsData);
             updateArtistsDisplay();
             updateFilterTags();
             updateGenreCounts();
@@ -3261,6 +3321,7 @@ function updateFilterTags() {
         removeTag.onclick = () => {
             document.getElementById('yearRel-checkbox').checked = false;
             filterYearRel = false;
+            initializeGenreCombinations(artistsData);
             updateArtistsDisplay();
             updateFilterTags();
             updateGenreCounts();
@@ -3279,6 +3340,7 @@ function updateFilterTags() {
         removeTag.onclick = () => {
             document.getElementById('multiRel-checkbox').checked = false;
             filterMultiRel = false;
+            initializeGenreCombinations(artistsData);
             updateArtistsDisplay();
             updateFilterTags();
             updateGenreCounts();
@@ -3297,6 +3359,7 @@ function updateFilterTags() {
         removeTag.onclick = () => {
             document.getElementById('debut-checkbox').checked = false;
             filterDebut = false;
+            initializeGenreCombinations(artistsData);
             updateArtistsDisplay();
             updateFilterTags();
             updateGenreCounts();
@@ -3338,6 +3401,7 @@ function updateArtistsDisplay() {
 
     displayArtists(currentDisplayList, true);
     updateArtistCounter(currentDisplayList.length);
+    updateFilterTags();
 
     artistScrollContainer.scrollTop = scrollPosition;
 
@@ -3346,6 +3410,8 @@ function updateArtistsDisplay() {
         container.removeEventListener('scroll', scrollHandler);
         container.addEventListener('scroll', scrollHandler);
     }
+
+    updateGenreCounts();
 }
 
 function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
@@ -4069,7 +4135,7 @@ function sortArtists(artists, criteria, order) {
             case 'name':
                 valueA = a['Артист'].toLowerCase();
                 valueB = b['Артист'].toLowerCase();
-                break;
+                return valueA.localeCompare(valueB, 'uk', { sensitivity: 'base' }) * (order === 'asc' ? 1 : -1);
             default:
                 return 0;
         }
@@ -4762,10 +4828,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const togglePopup = () => {
+        settingsPopup.classList.toggle('show');
+    };
+
     gearIcon.addEventListener('mouseenter', showPopup);
     gearIcon.addEventListener('mouseleave', () => {
         setTimeout(hidePopup, 200);
     });
+
+    gearIcon.addEventListener('click', togglePopup);
 
     settingsPopup.addEventListener('mouseenter', showPopup);
     settingsPopup.addEventListener('mouseleave', () => {
@@ -4806,6 +4878,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('playLatest', playLatestCheckbox.checked);
     });
 });
+
 
   function isMobile() {
     return window.innerWidth <= 768;
