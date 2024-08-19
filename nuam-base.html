@@ -403,6 +403,7 @@
         background-color: rgba(56, 56, 56, 0.8);
         cursor: auto;
         font-weight: normal;
+        z-index: 1001;
     }
       
       .date-added span, .date-release span {
@@ -1543,7 +1544,7 @@ background: #282626;
   width: 130px;
   max-width: 90vw;
   position: absolute;
-  z-index: 1000;
+  z-index: 1001;
   right: -137px;
   transform: translateX(-50%);
   opacity: 0;
@@ -1819,6 +1820,7 @@ background: #282626;
         position: static;
         margin-left: 5px;
         transform: none;
+        background-color: #e74c3c8c;
     }
     
     #genres-container {
@@ -2191,7 +2193,7 @@ background: #282626;
       z-index: 3;
     } 
     
-    .no-tracks-message {
+    .no-tracks-message, .no-recent-tracks-message {
     color: #fb8484;
     text-align: center;
     margin-top: -100px;
@@ -2206,7 +2208,7 @@ background: #282626;
     left: 0;
     transform: translateX(0%);
     user-select: none !important;
-      z-index: 4;
+      z-index: 1001;
 }
     
     .listeners-element .fa-users {
@@ -2497,10 +2499,12 @@ background: #282626;
   <hr>
   <div class="support-links">
     <a href="https://nuam.club" target="_blank">Перейти до сайту</a> | 
-    <a href="https://nuam.club/donate" target="_blank">Підтримати проєкт</a>
+    <a href="https://nuam.club/donate" target="_blank">Підтримати проєкт</a> | 
+      <a href="#" id="about-project">Про проєкт</a><br/>
+      <a href="https://nuam.club/add" target="_blank">Додати артиста</a> | <a href="https://nuam.club/echo" target="_blank">Спробуйте NUAM Echo</a>
     <div class="new-links">
-      <a href="https://nuam.club/echo" target="_blank">Спробуйте NUAM Echo</a> | 
-      <a href="#" id="about-project">Про проєкт</a>
+      Стежити за NUAM: <a href="https://t.me/NewUAM" target="_blank">Telegram</a> | <a href="https://instagram.com/newuam/" target="_blank">Instagram</a><br/>
+      Зв'язатися з нами: <a href="https://t.me/livefimenko" target="_blank">t.me/livefimenko</a> | <a href="mailto:hi@nuam.club" target="_blank">hi@nuam.club</a>
     </div>
   </div>
 </div>
@@ -2630,15 +2634,6 @@ let shuffledArtistsData = [];
 let originalArtistsOrder = [];
 let isSortActive = false;
 
-async function getTempToken() {
-    const response = await fetch('https://nuam-base-4979094c8808.herokuapp.com/get-temp-token');
-    if (!response.ok) {
-        throw new Error('Failed to fetch temporary token');
-    }
-    const data = await response.json();
-    return data.tempToken;
-}
-
 async function getAccessToken() {
     const clientId = '8dad28588ede4d88bdc85766b179755a';
     const clientSecret = '46f158cbafcd44f88a3277218e1b0fa9';
@@ -2757,46 +2752,34 @@ function initializeGenreCombinations(artists) {
 }
 
 async function fetchArtists() {
-    getTempToken().then(tempToken => {
-        fetch('https://nuam-base-4979094c8808.herokuapp.com/artists-data', {
-            headers: {
-                'Authorization': `Bearer ${tempToken}`
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch artists data');
-            }
-            return response.text();
-        }).then(csvData => {
-            Papa.parse(csvData, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    listenerColumns = findListenerColumns(results.meta.fields);
-                    artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
-                    shuffleArray(artistsData);
-                    shuffledArtistsData = [...artistsData];
-                    originalArtistsOrder = [...shuffledArtistsData];
+    const response = await fetch('https://docs.google.com/spreadsheets/d/1_PavIrMhHpUHXG7uDrT83yznb2nrJfSd-9G8Hnm9ywM/pub?gid=0&single=true&output=csv');
+    if (!response.ok) {
+        throw new Error('Failed to fetch artists data');
+    }
+    const csvData = await response.text();
+    Papa.parse(csvData, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            listenerColumns = findListenerColumns(results.meta.fields);
+            artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
+            shuffleArray(artistsData);
+            shuffledArtistsData = [...artistsData];
+            originalArtistsOrder = [...shuffledArtistsData];
 
-                    const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
+            const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
 
-                    setupRangeSlider(maxListeners);
-                    collectAllArtistURLs(artistsData);
-                    extractAndDisplayGenres(artistsData);
-                    initializeSearchIndex(artistsData);
-                    initializeGenreCombinations(artistsData);
-                    updateGenreCounts(true);
-                    updateArtistsDisplay();
-                
-                }
-            });
-        }).catch(error => {
-            console.error('Error fetching artists data:', error);
-        });
-    }).catch(error => {
-        console.error('Error fetching temp token:', error);
+            setupRangeSlider(maxListeners);
+            collectAllArtistURLs(artistsData);
+            extractAndDisplayGenres(artistsData);
+            initializeSearchIndex(artistsData);
+            initializeGenreCombinations(artistsData);
+            updateGenreCounts(true);
+            updateArtistsDisplay();
+        }
     });
 }
+
 
   let tracksData = [];
 
@@ -3005,13 +2988,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('hide-russian').addEventListener('change', function() {
-        hideRussian = this.checked;
-        updateArtistsDisplay();
-        updateFilterTags();
-        initializeGenreCombinations(artistsData);
-        updateGenreCounts();
-      updateGenreUIState();
-    });
+    hideRussian = this.checked;
+    updateArtistsDisplay();
+    updateFilterTags();
+    initializeGenreCombinations(artistsData);
+    updateGenreCounts();
+    updateGenreUIState();
+});
 
     document.getElementById('debut-checkbox').addEventListener('change', function() {
         filterDebut = this.checked;
@@ -3304,7 +3287,7 @@ function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
                 : selectedGenres.some(genre => artistGenres.includes(genre))
         );
         const matchesRemovedGenres = removedGenres.length === 0 || !removedGenres.some(genre => artistGenres.includes(genre));
-        const matchesHideRussian = !hideRussian || !artist['RuLang'];
+        const matchesHideRussian = !hideRussian || artist['RuLang'] === '';
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
         const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
         const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
@@ -3329,23 +3312,22 @@ function toggleRelatedArtists(artistElement, artistId) {
     const relatedArtistsContainer = artistElement.querySelector('.related-artists-container');
     const relatedArtistsButton = artistElement.querySelector('.related-artists-button');
 
+    document.querySelectorAll('.related-artists-container').forEach(container => {
+        container.style.display = 'none';
+    });
+    document.querySelectorAll('.related-artists-button').forEach(button => {
+        button.textContent = 'Схожі артисти';
+    });
+
     const volumeSlider = document.getElementById('volume-slider');
     volumeSlider.style.display = 'none';
 
-    if (relatedArtistsContainer.style.display === 'none' || relatedArtistsContainer.style.display === '') {
-        if (currentlyOpenContainer && currentlyOpenContainer !== relatedArtistsContainer) {
-            currentlyOpenContainer.style.display = 'none';
-            const previousButton = currentlyOpenContainer.parentElement.querySelector('.related-artists-button');
-            if (previousButton) {
-                previousButton.textContent = 'Схожі артисти';
-            }
-        }
+    if (relatedArtistsContainer !== currentlyOpenContainer) {
         fetchRelatedArtists(artistId, relatedArtistsContainer);
         relatedArtistsButton.textContent = 'Закрити';
+        relatedArtistsContainer.style.display = 'block';
         currentlyOpenContainer = relatedArtistsContainer;
     } else {
-        relatedArtistsContainer.style.display = 'none';
-        relatedArtistsButton.textContent = 'Схожі артисти';
         currentlyOpenContainer = null;
     }
 }
@@ -4339,12 +4321,6 @@ document.addEventListener('DOMContentLoaded', () => {
             hideRussian = this.checked;
             searchInput.value = '';
             clearSearchBtn.style.display = 'none';
-       
-        
-            requestAnimationFrame(() => {
-                updateArtistsDisplay();
-                updateFilterTags();
-            });
         });
     }
 
@@ -4776,9 +4752,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const savedPlayLatest = localStorage.getItem('playLatest');
-    if (savedPlayLatest !== null) {
-        playLatestCheckbox.checked = JSON.parse(savedPlayLatest);
-    }
+if (savedPlayLatest !== null) {
+    playLatestCheckbox.checked = JSON.parse(savedPlayLatest);
+} else {
+    playLatestCheckbox.checked = true;
+    localStorage.setItem('playLatest', true);
+}
 
     updateLinks();
 
