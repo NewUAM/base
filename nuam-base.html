@@ -2635,8 +2635,8 @@ let originalArtistsOrder = [];
 let isSortActive = false;
 
 async function getAccessToken() {
-    const clientId = '8dad28588ede4d88bdc85766b179755a';
-    const clientSecret = '46f158cbafcd44f88a3277218e1b0fa9';
+    const clientId = 'b5ff50f2075e4a15a6820f06a8269c80';
+    const clientSecret = 'aca376357ef645fe95f103c8e363e8f9';
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -2790,6 +2790,29 @@ async function fetchTracksData() {
     tracksData = parsedData.map(row => ({
         track: row.track,
         artist: row.artist.split('/').pop(),
+        artist2: row.artist2 ? row.artist2.split('/').pop() : '',
+        artist3: row.artist3 ? row.artist3.split('/').pop() : '',
+        artist4: row.artist4 ? row.artist4.split('/').pop() : '',
+        artist5: row.artist5 ? row.artist5.split('/').pop() : '',
+        artist6: row.artist6 ? row.artist6.split('/').pop() : '',
+        artist7: row.artist7 ? row.artist7.split('/').pop() : '',
+        artist8: row.artist8 ? row.artist8.split('/').pop() : '',
+        artist9: row.artist9 ? row.artist9.split('/').pop() : '',
+        artist10: row.artist10 ? row.artist10.split('/').pop() : '',
+        artist11: row.artist11 ? row.artist11.split('/').pop() : '',
+        artist12: row.artist12 ? row.artist12.split('/').pop() : '',
+        artist13: row.artist13 ? row.artist13.split('/').pop() : '',
+        artist14: row.artist14 ? row.artist14.split('/').pop() : '',
+        artist15: row.artist15 ? row.artist15.split('/').pop() : '',
+        artist16: row.artist16 ? row.artist16.split('/').pop() : '',
+        artist17: row.artist17 ? row.artist17.split('/').pop() : '',
+        artist18: row.artist18 ? row.artist18.split('/').pop() : '',
+        artist19: row.artist19 ? row.artist19.split('/').pop() : '',
+        artist20: row.artist20 ? row.artist20.split('/').pop() : '',
+        artist21: row.artist21 ? row.artist21.split('/').pop() : '',
+        artist22: row.artist22 ? row.artist22.split('/').pop() : '',
+        artist23: row.artist23 ? row.artist23.split('/').pop() : '',
+        artist24: row.artist24 ? row.artist24.split('/').pop() : '',
         album: row.album,
         type: row.type,
         date: row.date,
@@ -3865,11 +3888,40 @@ function clearMessages(artistId) {
 
 function getTracksToPlay(artistId) {
     if (document.getElementById('play-latest').checked) {
-        const filteredTracks = tracksData.filter(track => track.artist === artistId).sort((a, b) => parseDate(b.date) - parseDate(a.date));
+        const filteredTracks = tracksData.filter(track => {
+            const artistUrls = [
+                track.artist,
+                track.artist2,
+                track.artist3,
+                track.artist4,
+                track.artist5,
+                track.artist6,
+                track.artist7,
+                track.artist8,
+                track.artist9,
+                track.artist10,
+                track.artist11,
+                track.artist12,
+                track.artist13,
+                track.artist14,
+                track.artist15,
+                track.artist16,
+                track.artist17,
+                track.artist18,
+                track.artist19,
+                track.artist20,
+                track.artist21,
+                track.artist22,
+                track.artist23,
+                track.artist24,
+            ];
+            return artistUrls.includes(artistId);
+        }).sort((a, b) => parseDate(b.date) - parseDate(a.date));
         return filteredTracks;
     }
     return [];
 }
+
 
 async function fetchTopTracks(artistId) {
     const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
