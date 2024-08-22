@@ -1365,7 +1365,7 @@ background: #282626;
     width: 100%;
     height: 100%;
     background-color: #282626;
-    z-index: 9999;
+    z-index: 20000;
     display: flex;
     align-items: center;
     opacity: 1;
@@ -1598,6 +1598,7 @@ background: #282626;
 }
 
 .listeners-element .difference::after {
+  display: none;
   top: -45px; 
   right: -85px;
 }
@@ -1664,6 +1665,10 @@ background: #282626;
     text-align: center;
 }
       
+      .mobile-only {
+    display: none;
+}
+      
       @media (min-width: 769px) {
     .date-added-mobile {
         display: none;
@@ -1685,7 +1690,7 @@ background: #282626;
       background: #282626;
       min-width: 320px;
 }
-
+    
     #project-popup .popup-content {
     font-size: 14px;
   }
@@ -1727,6 +1732,10 @@ background: #282626;
     font-size: 14px;
 }
     
+    #gear-icon {
+    z-index: 10001;
+}
+    
     #gear-icon:hover {
     transform: none;
 }
@@ -1757,6 +1766,7 @@ background: #282626;
   #buttons-wrapper {
     display: flex;
     flex-direction: row;
+          z-index: 10002;
   }
 
     #genre-button::after {
@@ -1931,7 +1941,7 @@ font-size: 14px;
         display: none;
         position: absolute;
         left: -276px;
-        z-index: 1000;
+        z-index: 10003;
         width: 240px;
         height: 35px;
         border-radius: 7px 7px 0 0;
@@ -2119,6 +2129,7 @@ background: #282626;
         text-align: left;
         margin-top: 0;
         font-size: 16px;
+        display: inline-block;
     }
 
     .listeners-element i,
@@ -2280,23 +2291,35 @@ background: #282626;
       box-shadow: none;
   }
     
+    @keyframes slideInFromLeft {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: -45px;
+    }
+}
+
+    
     .related-artists-container {
-        position: absolute;
-        top: 0;
-        left: auto;
-        right: 5px !important;
+    position: absolute;
+    top: 0;
+    left: -100%; /* Начальная позиция за границей экрана */
+    right: auto;
     width: calc(100% - 11px);
-        height: 120px;
-        background-color: #383838;
-        color: #f3f3f3;
-        padding: 5px;
-        border-radius: 0 7px 7px 0;
-        overflow-y: auto;
-        font-size: 12px;
-        display: flex;
+    height: 120px;
+    background-color: #383838;
+    color: #f3f3f3;
+    padding: 5px;
+    border-radius: 0 7px 7px 0;
+    overflow-y: auto;
+    font-size: 12px;
+    display: flex;
     justify-content: flex-end;
     padding-left: 40px;
-    } 
+    animation: slideInFromLeft 0.2s ease-in-out forwards; /* Применение анимации */
+}
+
 
     .info-container {
         position: relative;
@@ -2354,7 +2377,7 @@ background: #282626;
     transform: translateX(-50%);
     width: 90%;
     background-color: #282626;
-    z-index: 1001;
+    z-index: 1002;
     display: none;
     align-items: center;
     margin-left: 0px;
@@ -2398,6 +2421,26 @@ background: #282626;
     display: none !important;
 }
 
+    .genre-button.gray-out .remove-genre {
+    display: none;
+}
+    
+    .mobile-hide {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+    
+    .no-related-artists {
+    font-size: 12px;
+}
+    
+    .match-all-genres-tooltip[data-tooltip]::after {
+    display: none;
+}
+    
     #help-icon {
     display: none;
 }
@@ -2500,11 +2543,11 @@ background: #282626;
   <div class="support-links">
     <a href="https://nuam.club" target="_blank">Перейти до сайту</a> | 
     <a href="https://nuam.club/donate" target="_blank">Підтримати проєкт</a> | 
-      <a href="#" id="about-project">Про проєкт</a><br/>
+      <a href="#" id="about-project">Про проєкт</a><br class="mobile-hide"/><span class="mobile-only"> | </span>
       <a href="https://nuam.club/add" target="_blank">Додати артиста</a> | <a href="https://nuam.club/echo" target="_blank">Спробуйте NUAM Echo</a>
     <div class="new-links">
       Стежити за NUAM: <a href="https://t.me/NewUAM" target="_blank">Telegram</a> | <a href="https://instagram.com/newuam/" target="_blank">Instagram</a><br/>
-      Зв'язатися з нами: <a href="https://t.me/livefimenko" target="_blank">t.me/livefimenko</a> | <a href="mailto:hi@nuam.club" target="_blank">hi@nuam.club</a>
+      Зв'язок: <a href="https://t.me/livefimenko" target="_blank">t.me/livefimenko</a> | <a href="mailto:hi@nuam.club" target="_blank">hi@nuam.club</a>
     </div>
   </div>
 </div>
