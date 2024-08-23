@@ -5204,39 +5204,45 @@ if (genreContainer) {
         }
     }
 
-    function getGenreFromURL() {
+    function getGenresFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('genre');
+        const genres = urlParams.get('genres');
+        return genres ? genres.split(',').map(genre => genre.trim()) : [];
     }
 
-    function selectGenre(genre) {
-        if (!genre) {
+    function selectGenres(genres) {
+        if (!genres || genres.length === 0) {
             return;
         }
 
         const genreButtons = document.querySelectorAll('.genre-button');
-        genreButtons.forEach(button => {
-            const buttonGenre = button.dataset.genre;
-            if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
-                selectedGenres = [genre];
-                removedGenres = [];
-                initializeGenreCombinations(artistsData);
-                updateArtistsDisplay();
-                updateGenreCounts();
-                updateGenreUIState();
-            }
+        genres.forEach(genre => {
+            genreButtons.forEach(button => {
+                const buttonGenre = button.dataset.genre;
+                if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
+                    if (!selectedGenres.includes(genre)) {
+                        selectedGenres.push(genre);
+                    }
+                    removedGenres = [];
+                }
+            });
         });
+
+        initializeGenreCombinations(artistsData);
+        updateArtistsDisplay();
+        updateGenreCounts();
+        updateGenreUIState();
     }
 
-    async function initializeAppWithGenre() {
+    async function initializeAppWithGenres() {
         await waitForArtistsData();
-        const genreFromURL = getGenreFromURL();
-        if (genreFromURL) {
-            selectGenre(genreFromURL);
+        const genresFromURL = getGenresFromURL();
+        if (genresFromURL.length > 0) {
+            selectGenres(genresFromURL);
         }
     }
 
-    initializeAppWithGenre();
+    initializeAppWithGenres();
 });
 
 </script>
