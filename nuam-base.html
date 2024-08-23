@@ -2300,11 +2300,10 @@ background: #282626;
     }
 }
 
-    
     .related-artists-container {
     position: absolute;
     top: 0;
-    left: -100%; /* Начальная позиция за границей экрана */
+    left: -100%;
     right: auto;
     width: calc(100% - 11px);
     height: 120px;
@@ -2317,9 +2316,8 @@ background: #282626;
     display: flex;
     justify-content: flex-end;
     padding-left: 40px;
-    animation: slideInFromLeft 0.2s ease-in-out forwards; /* Применение анимации */
+    animation: slideInFromLeft 0.2s ease-in-out forwards;
 }
-
 
     .info-container {
         position: relative;
@@ -5199,6 +5197,34 @@ if (genreContainer) {
     observer.observe(genreContainer, { childList: true, subtree: true });
 }
  
+  document.addEventListener('DOMContentLoaded', function() {
+    function getGenreFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('genre');
+    }
+
+    function selectGenre(genre) {
+        const genreButtons = document.querySelectorAll('.genre-button');
+        genreButtons.forEach(button => {
+            if (button.dataset.genre.toLowerCase() === genre.toLowerCase()) {
+
+                selectedGenres = [genre];
+                removedGenres = [];
+                initializeGenreCombinations(artistsData);
+                updateArtistsDisplay();
+                updateGenreCounts();
+                updateGenreUIState();
+            }
+        });
+    }
+
+    const genreFromURL = getGenreFromURL();
+    if (genreFromURL) {
+        selectGenre(genreFromURL);
+    }
+});
+
+  
 </script>
 </body>
 </html>
