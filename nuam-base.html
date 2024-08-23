@@ -5204,50 +5204,40 @@ if (genreContainer) {
         }
     }
 
-    function getGenresFromURL() {
+    function getGenreFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const genres = urlParams.get('genres');
-        return genres ? genres.split(',').map(genre => genre.trim()) : [];
+        return urlParams.get('genre');
     }
 
-    function selectGenres(genres) {
-        if (!genres || genres.length === 0) {
+    function selectGenre(genre) {
+        if (!genre) {
             return;
         }
 
         const genreButtons = document.querySelectorAll('.genre-button');
-        const selectedGenresList = [];
-
-        genres.forEach(genre => {
-            genreButtons.forEach(button => {
-                const buttonGenre = button.dataset.genre;
-                if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
-                    selectedGenresList.push(genre);
-                }
-            });
+        genreButtons.forEach(button => {
+            const buttonGenre = button.dataset.genre;
+            if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
+                selectedGenres = [genre];
+                removedGenres = [];
+                initializeGenreCombinations(artistsData);
+                updateArtistsDisplay();
+                updateGenreCounts();
+                updateGenreUIState();
+            }
         });
-
-        if (selectedGenresList.length > 0) {
-            selectedGenres = selectedGenresList;
-            removedGenres = [];
-            initializeGenreCombinations(artistsData);
-            updateArtistsDisplay();
-            updateGenreCounts();
-            updateGenreUIState();
-        }
     }
 
-    async function initializeAppWithGenres() {
+    async function initializeAppWithGenre() {
         await waitForArtistsData();
-        const genresFromURL = getGenresFromURL();
-        if (genresFromURL.length > 0) {
-            selectGenres(genresFromURL);
+        const genreFromURL = getGenreFromURL();
+        if (genreFromURL) {
+            selectGenre(genreFromURL);
         }
     }
 
-    initializeAppWithGenres();
+    initializeAppWithGenre();
 });
-
 
 </script>
 </body>
