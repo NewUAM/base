@@ -5220,14 +5220,14 @@ if (genreContainer) {
             genreButtons.forEach(button => {
                 const buttonGenre = button.dataset.genre;
                 if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
-                    if (!selectedGenres.includes(genre)) {
-                        selectedGenres.push(genre);
+                    if (!selectedGenres.includes(buttonGenre)) {
+                        selectedGenres.push(buttonGenre);
                     }
-                    removedGenres = [];
                 }
             });
         });
 
+        removedGenres = [];
         initializeGenreCombinations(artistsData);
         updateArtistsDisplay();
         updateGenreCounts();
