@@ -5208,9 +5208,14 @@ if (genreContainer) {
 
     function getGenresFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const genres = urlParams.get('genres');
-        console.log('URL параметры:', window.location.search);
-        return genres ? genres.split(',').map(genre => genre.trim()) : []; 
+        console.log("Параметры URL:", window.location.search); // Логируем параметры URL
+        const genres = urlParams.get('genres'); // Получаем значение параметра 'genres'
+        if (genres) {
+            console.log(`Найден жанр(ы): ${genres}`);
+        } else {
+            console.log("Параметр 'genres' в URL не найден.");
+        }
+        return genres ? genres.split(',').map(genre => genre.trim()) : []; // Разделяем по запятой и убираем пробелы
     }
 
     function selectGenres(genres) {
