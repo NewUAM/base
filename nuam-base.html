@@ -5200,61 +5200,42 @@ if (genreContainer) {
   document.addEventListener('DOMContentLoaded', function() {
     async function waitForArtistsData() {
         while (!artistsData || artistsData.length === 0) {
-            console.log("Ожидание загрузки данных артистов...");
             await new Promise(resolve => setTimeout(resolve, 100));
         }
-        console.log("Данные артистов загружены.");
     }
 
     function getGenresFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        console.log("Параметры URL:", window.location.search); // Логируем параметры URL
-        const genres = urlParams.get('genres'); // Получаем значение параметра 'genres'
-        if (genres) {
-            console.log(`Найден жанр(ы): ${genres}`);
-        } else {
-            console.log("Параметр 'genres' в URL не найден.");
-        }
-        return genres ? genres.split(',').map(genre => genre.trim()) : []; // Разделяем по запятой и убираем пробелы
+        const genres = urlParams.get('genre');
+        return genres ? genres.split(',').map(genre => genre.trim()) : [];
     }
 
     function selectGenres(genres) {
         if (!genres || genres.length === 0) {
-            console.log("Жанры не указаны.");
             return;
         }
 
         const genreButtons = document.querySelectorAll('.genre-button');
-        const selectedGenresList = [];
-
         genres.forEach(genre => {
-            let genreFound = false;
             genreButtons.forEach(button => {
                 const buttonGenre = button.dataset.genre;
                 if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
-                    console.log(`Жанр "${genre}" найден, имитация нажатия кнопки.`);
-                    selectedGenresList.push(genre);
-                    genreFound = true;
+                    if (!selectedGenres.includes(genre)) {
+                        selectedGenres.push(genre);
+                    }
+                    removedGenres = [];
                 }
             });
-
-            if (!genreFound) {
-                console.log(`Кнопка с жанром "${genre}" не найдена.`);
-            }
         });
 
-        if (selectedGenresList.length > 0) {
-            selectedGenres = selectedGenresList;
-            removedGenres = [];
-            initializeGenreCombinations(artistsData);
-            updateArtistsDisplay();
-            updateGenreCounts();
-            updateGenreUIState();
-        }
+        initializeGenreCombinations(artistsData);
+        updateArtistsDisplay();
+        updateGenreCounts();
+        updateGenreUIState();
     }
 
     async function initializeAppWithGenres() {
-        await waitForArtistsData(); 
+        await waitForArtistsData();
         const genresFromURL = getGenresFromURL();
         if (genresFromURL.length > 0) {
             selectGenres(genresFromURL);
@@ -5263,7 +5244,6 @@ if (genreContainer) {
 
     initializeAppWithGenres();
 });
-
 
 </script>
 </body>
