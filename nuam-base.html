@@ -5198,15 +5198,33 @@ if (genreContainer) {
 }
  
   document.addEventListener('DOMContentLoaded', function() {
+    async function waitForArtistsData() {
+        while (!artistsData || artistsData.length === 0) {
+            console.log("Ожидание загрузки данных артистов...");
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        console.log("Данные артистов загружены.");
+    }
+
     function getGenreFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('genre');
+        const genre = urlParams.get('genre');
+        if (genre) {
+            console.log(`Найден жанр в URL: ${genre}`);
+        } else {
+            console.log("Параметр 'genre' в URL не найден.");
+        }
+        return genre;
     }
 
     function selectGenre(genre) {
         const genreButtons = document.querySelectorAll('.genre-button');
+        let genreFound = false;
+
         genreButtons.forEach(button => {
             if (button.dataset.genre.toLowerCase() === genre.toLowerCase()) {
+                console.log(`Жанр "${genre}" найден, имитация нажатия кнопки.`);
+                genreFound = true;
 
                 selectedGenres = [genre];
                 removedGenres = [];
@@ -5216,13 +5234,23 @@ if (genreContainer) {
                 updateGenreUIState();
             }
         });
+
+        if (!genreFound) {
+            console.log(`Кнопка с жанром "${genre}" не найдена.`);
+        }
     }
 
-    const genreFromURL = getGenreFromURL();
-    if (genreFromURL) {
-        selectGenre(genreFromURL);
+    async function initializeAppWithGenre() {
+        await waitForArtistsData();
+        const genreFromURL = getGenreFromURL();
+        if (genreFromURL) {
+            selectGenre(genreFromURL);
+        }
     }
+
+    initializeAppWithGenre();
 });
+
 
   
 </script>
