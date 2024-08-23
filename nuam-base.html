@@ -5216,22 +5216,25 @@ if (genreContainer) {
         }
 
         const genreButtons = document.querySelectorAll('.genre-button');
+        const selectedGenresList = [];
+
         genres.forEach(genre => {
             genreButtons.forEach(button => {
                 const buttonGenre = button.dataset.genre;
                 if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
-                    if (!selectedGenres.includes(buttonGenre)) {
-                        selectedGenres.push(buttonGenre);
-                    }
+                    selectedGenresList.push(genre);
                 }
             });
         });
 
-        removedGenres = [];
-        initializeGenreCombinations(artistsData);
-        updateArtistsDisplay();
-        updateGenreCounts();
-        updateGenreUIState();
+        if (selectedGenresList.length > 0) {
+            selectedGenres = selectedGenresList;
+            removedGenres = [];
+            initializeGenreCombinations(artistsData);
+            updateArtistsDisplay();
+            updateGenreCounts();
+            updateGenreUIState();
+        }
     }
 
     async function initializeAppWithGenres() {
