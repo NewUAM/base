@@ -5218,11 +5218,17 @@ if (genreContainer) {
     }
 
     function selectGenre(genre) {
+        if (!genre) {
+            console.log("Жанр не указан.");
+            return;
+        }
+
         const genreButtons = document.querySelectorAll('.genre-button');
         let genreFound = false;
 
         genreButtons.forEach(button => {
-            if (button.dataset.genre.toLowerCase() === genre.toLowerCase()) {
+            const buttonGenre = button.dataset.genre;
+            if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
                 console.log(`Жанр "${genre}" найден, имитация нажатия кнопки.`);
                 genreFound = true;
 
@@ -5250,6 +5256,7 @@ if (genreContainer) {
 
     initializeAppWithGenre();
 });
+
 
 
 
