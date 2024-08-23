@@ -5209,12 +5209,8 @@ if (genreContainer) {
     function getGenresFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
         const genres = urlParams.get('genres');
-        if (genres) {
-            console.log(`Найдены жанры в URL: ${genres}`);
-        } else {
-            console.log("Параметр 'genres' в URL не найден.");
-        }
-        return genres ? genres.split(',').map(genre => genre.trim()) : [];
+        console.log('URL параметры:', window.location.search);
+        return genres ? genres.split(',').map(genre => genre.trim()) : []; 
     }
 
     function selectGenres(genres) {
@@ -5253,7 +5249,7 @@ if (genreContainer) {
     }
 
     async function initializeAppWithGenres() {
-        await waitForArtistsData();
+        await waitForArtistsData(); 
         const genresFromURL = getGenresFromURL();
         if (genresFromURL.length > 0) {
             selectGenres(genresFromURL);
@@ -5262,6 +5258,7 @@ if (genreContainer) {
 
     initializeAppWithGenres();
 });
+
 
 </script>
 </body>
