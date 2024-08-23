@@ -5206,7 +5206,7 @@ if (genreContainer) {
 
     function getGenresFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const genres = urlParams.get('genre');
+        const genres = urlParams.get('genre'); // Получаем значение параметра 'genre'
         return genres ? genres.split(',').map(genre => genre.trim()) : [];
     }
 
@@ -5216,16 +5216,30 @@ if (genreContainer) {
         }
 
         const genreButtons = document.querySelectorAll('.genre-button');
+
         genres.forEach(genre => {
-            genreButtons.forEach(button => {
-                const buttonGenre = button.dataset.genre;
-                if (buttonGenre && buttonGenre.toLowerCase() === genre.toLowerCase()) {
-                    if (!selectedGenres.includes(genre)) {
-                        selectedGenres.push(genre);
+            if (genre.startsWith('-')) {
+                const genreToRemove = genre.substring(1).toLowerCase();
+                genreButtons.forEach(button => {
+                    const buttonGenre = button.dataset.genre;
+                    if (buttonGenre && buttonGenre.toLowerCase() === genreToRemove) {
+                        // Удаляем жанр из интерфейса
+                        removedGenres.push(genreToRemove);
                     }
-                    removedGenres = [];
-                }
-            });
+                });
+            } else {
+                const genreToAdd = genre.toLowerCase();
+                genreButtons.forEach(button => {
+                    const buttonGenre = button.dataset.genre;
+                    if (buttonGenre && buttonGenre.toLowerCase() === genreToAdd) {
+                        // Добавляем жанр в выбранные
+                        if (!selectedGenres.includes(genreToAdd)) {
+                            selectedGenres.push(genreToAdd);
+                        }
+                        removedGenres = removedGenres.filter(g => g !== genreToAdd);
+                    }
+                });
+            }
         });
 
         initializeGenreCombinations(artistsData);
@@ -5235,7 +5249,7 @@ if (genreContainer) {
     }
 
     async function initializeAppWithGenres() {
-        await waitForArtistsData();
+        await waitForArtistsData(); // Ждем загрузки данных
         const genresFromURL = getGenresFromURL();
         if (genresFromURL.length > 0) {
             selectGenres(genresFromURL);
@@ -5244,6 +5258,9 @@ if (genreContainer) {
 
     initializeAppWithGenres();
 });
+
+
+
 
 </script>
 </body>
