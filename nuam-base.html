@@ -5206,8 +5206,27 @@ if (genreContainer) {
 
     function getGenresFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const genres = urlParams.get('genre'); // Получаем значение параметра 'genre'
+        const genres = urlParams.get('g'); // Получаем значение параметра 'g'
         return genres ? genres.split(',').map(genre => genre.trim()) : [];
+    }
+
+    function getSortFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sortParam = urlParams.get('s'); // Получаем значение параметра 's'
+        if (!sortParam || sortParam.length !== 2) return null;
+
+        const sortOptions = {
+            '1': 'lastReleaseDate',
+            '2': 'listeners',
+            '3': 'growth',
+            '4': 'date',
+            '5': 'name'
+        };
+
+        const sortField = sortOptions[sortParam[0]];
+        const sortOrder = sortParam[1] === '1' ? 'asc' : 'desc';
+
+        return { sortField, sortOrder };
     }
 
     function selectGenres(genres) {
@@ -5248,16 +5267,49 @@ if (genreContainer) {
         updateGenreUIState();
     }
 
-    async function initializeAppWithGenres() {
+    function applySort(sortConfig) {
+        if (!sortConfig) return;
+
+        const { sortField, sortOrder } = sortConfig;
+
+        switch (sortField) {
+            case 'lastReleaseDate':
+                sortArtistsHandler('lastReleaseDate', sortOrder);
+                break;
+            case 'listeners':
+                sortArtistsHandler('listeners', sortOrder);
+                break;
+            case 'growth':
+                sortArtistsHandler('growth', sortOrder);
+                break;
+            case 'date':
+                sortArtistsHandler('date', sortOrder);
+                break;
+            case 'name':
+                sortArtistsHandler('name', sortOrder);
+                break;
+            default:
+                break;
+        }
+    }
+
+    async function initializeApp() {
         await waitForArtistsData(); // Ждем загрузки данных
+
         const genresFromURL = getGenresFromURL();
         if (genresFromURL.length > 0) {
             selectGenres(genresFromURL);
         }
+
+        const sortConfig = getSortFromURL();
+        if (sortConfig) {
+            applySort(sortConfig);
+        }
     }
 
-    initializeAppWithGenres();
+    initializeApp();
 });
+
 
 
 
