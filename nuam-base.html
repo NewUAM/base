@@ -1593,12 +1593,10 @@ background: #282626;
 
 .listeners-element > span::after {
   top: -30px; 
-  right: -128px;
-  
+  right: -128px; 
 }
 
 .listeners-element .difference::after {
-  display: none;
   top: -45px; 
   right: -85px;
 }
@@ -1720,6 +1718,11 @@ background: #282626;
     .russian-tag i[data-tooltip]::after {
     top: 30px;
     left: 10px;
+}
+    
+    .listeners-element .difference::after {
+  top: 20px; 
+  right: -125px;
 }
     
     .icon-container {
@@ -5206,9 +5209,9 @@ if (genreContainer) {
 
     function getParamsFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const genres = urlParams.get('g'); // Параметр жанра
-        const sortParam = urlParams.get('s'); // Параметр сортировки
-        const filters = urlParams.get('f'); // Параметры фильтров
+        const genres = urlParams.get('g');
+        const sortParam = urlParams.get('s');
+        const filters = urlParams.get('f');
         return { genres, sortParam, filters };
     }
 
@@ -5242,10 +5245,9 @@ if (genreContainer) {
                 }
             });
 
-            // Обновляем состояние интерфейса после изменения `match-all-genres-checkbox`
             document.getElementById('match-all-genres-checkbox').dispatchEvent(new Event('change'));
 
-            resolve(); // После завершения фильтрации продолжаем выполнение
+            resolve();
         });
     }
 
@@ -5280,7 +5282,7 @@ if (genreContainer) {
             updateGenreCounts();
             updateGenreUIState();
 
-            resolve(); // После завершения выбора жанров продолжаем выполнение
+            resolve();
         });
     }
 
@@ -5301,7 +5303,7 @@ if (genreContainer) {
 
             sortArtistsHandler(sortField, sortOrder);
 
-            resolve(); // После завершения сортировки продолжаем выполнение
+            resolve();
         });
     }
 
@@ -5310,22 +5312,13 @@ if (genreContainer) {
 
         const { genres, sortParam, filters } = getParamsFromURL();
 
-        await applyFiltersFromURL(filters); // Сначала применяем фильтры
-        await selectGenres(genres);         // Затем выбираем жанры
-        await applySort(sortParam);         // И, наконец, применяем сортировку
+        await applyFiltersFromURL(filters);
+        await selectGenres(genres);
+        await applySort(sortParam);
     }
 
     initializeApp();
 });
-
-
-
-
-
-
-
-
-
 
 </script>
 </body>
