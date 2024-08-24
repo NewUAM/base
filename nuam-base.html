@@ -5213,20 +5213,21 @@ if (genreContainer) {
     }
 
     function selectGenres(genres) {
-        const genreButtons = document.querySelectorAll('.genre-button');
+        if (!genres) return;
 
+        const genreButtons = document.querySelectorAll('.genre-button');
         genres.split(',').forEach(genre => {
             if (genre.startsWith('-')) {
                 const genreToRemove = genre.substring(1).toLowerCase();
                 genreButtons.forEach(button => {
-                    if (button.dataset.genre.toLowerCase() === genreToRemove) {
+                    if (button.dataset.genre && button.dataset.genre.toLowerCase() === genreToRemove) {
                         removedGenres.push(genreToRemove);
                     }
                 });
             } else {
                 const genreToAdd = genre.toLowerCase();
                 genreButtons.forEach(button => {
-                    if (button.dataset.genre.toLowerCase() === genreToAdd) {
+                    if (button.dataset.genre && button.dataset.genre.toLowerCase() === genreToAdd) {
                         if (!selectedGenres.includes(genreToAdd)) {
                             selectedGenres.push(genreToAdd);
                         }
@@ -5303,6 +5304,7 @@ if (genreContainer) {
 
     initializeApp();
 });
+
 
 
 
