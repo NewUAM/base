@@ -5204,54 +5204,29 @@ if (genreContainer) {
         }
     }
 
-    function getGenresFromURL() {
+    function getParamsFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const genres = urlParams.get('g'); // Получаем значение параметра 'g'
-        return genres ? genres.split(',').map(genre => genre.trim()) : [];
-    }
-
-    function getSortFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const sortParam = urlParams.get('s'); // Получаем значение параметра 's'
-        if (!sortParam || sortParam.length !== 2) return null;
-
-        const sortOptions = {
-            '1': 'lastReleaseDate',
-            '2': 'listeners',
-            '3': 'growth',
-            '4': 'date',
-            '5': 'name'
-        };
-
-        const sortField = sortOptions[sortParam[0]];
-        const sortOrder = sortParam[1] === '1' ? 'asc' : 'desc';
-
-        return { sortField, sortOrder };
+        const genres = urlParams.get('g'); // Параметр жанра
+        const sortParam = urlParams.get('s'); // Параметр сортировки
+        const filters = urlParams.get('f'); // Параметры фильтров
+        return { genres, sortParam, filters };
     }
 
     function selectGenres(genres) {
-        if (!genres || genres.length === 0) {
-            return;
-        }
-
         const genreButtons = document.querySelectorAll('.genre-button');
 
-        genres.forEach(genre => {
+        genres.split(',').forEach(genre => {
             if (genre.startsWith('-')) {
                 const genreToRemove = genre.substring(1).toLowerCase();
                 genreButtons.forEach(button => {
-                    const buttonGenre = button.dataset.genre;
-                    if (buttonGenre && buttonGenre.toLowerCase() === genreToRemove) {
-                        // Удаляем жанр из интерфейса
+                    if (button.dataset.genre.toLowerCase() === genreToRemove) {
                         removedGenres.push(genreToRemove);
                     }
                 });
             } else {
                 const genreToAdd = genre.toLowerCase();
                 genreButtons.forEach(button => {
-                    const buttonGenre = button.dataset.genre;
-                    if (buttonGenre && buttonGenre.toLowerCase() === genreToAdd) {
-                        // Добавляем жанр в выбранные
+                    if (button.dataset.genre.toLowerCase() === genreToAdd) {
                         if (!selectedGenres.includes(genreToAdd)) {
                             selectedGenres.push(genreToAdd);
                         }
@@ -5267,48 +5242,68 @@ if (genreContainer) {
         updateGenreUIState();
     }
 
-    function applySort(sortConfig) {
-        if (!sortConfig) return;
+    function applySort(sortParam) {
+        if (!sortParam || sortParam.length !== 2) return;
 
-        const { sortField, sortOrder } = sortConfig;
+        const sortOptions = {
+            '1': 'lastReleaseDate',
+            '2': 'listeners',
+            '3': 'growth',
+            '4': 'date',
+            '5': 'name'
+        };
 
-        switch (sortField) {
-            case 'lastReleaseDate':
-                sortArtistsHandler('lastReleaseDate', sortOrder);
-                break;
-            case 'listeners':
-                sortArtistsHandler('listeners', sortOrder);
-                break;
-            case 'growth':
-                sortArtistsHandler('growth', sortOrder);
-                break;
-            case 'date':
-                sortArtistsHandler('date', sortOrder);
-                break;
-            case 'name':
-                sortArtistsHandler('name', sortOrder);
-                break;
-            default:
-                break;
-        }
+        const sortField = sortOptions[sortParam[0]];
+        const sortOrder = sortParam[1] === '1' ? 'asc' : 'desc';
+
+        sortArtistsHandler(sortField, sortOrder);
+    }
+
+    function applyFiltersFromURL(filters) {
+        if (!filters) return;
+
+        filters.split(',').forEach(filter => {
+            switch (filter) {
+                case '1':
+                    document.getElementById('yearRel-checkbox').checked = true;
+                    break;
+                case '2':
+                    document.getElementById('multiRel-checkbox').checked = true;
+                    break;
+                case '3':
+                    document.getElementById('debut-checkbox').checked = true;
+                    break;
+            }
+        });
+
+        document.querySelectorAll('#yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
+            if (checkbox.checked) {
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
     }
 
     async function initializeApp() {
-        await waitForArtistsData(); // Ждем загрузки данных
+        await waitForArtistsData();
 
-        const genresFromURL = getGenresFromURL();
-        if (genresFromURL.length > 0) {
-            selectGenres(genresFromURL);
+        const { genres, sortParam, filters } = getParamsFromURL();
+
+        if (genres) {
+            selectGenres(genres);
         }
 
-        const sortConfig = getSortFromURL();
-        if (sortConfig) {
-            applySort(sortConfig);
+        if (sortParam) {
+            applySort(sortParam);
+        }
+
+        if (filters) {
+            applyFiltersFromURL(filters);
         }
     }
 
     initializeApp();
 });
+
 
 
 
