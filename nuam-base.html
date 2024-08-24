@@ -5216,10 +5216,12 @@ if (genreContainer) {
         return new Promise((resolve) => {
             if (!filters) return resolve();
 
+            let matchAllGenresChecked = true;
+
             filters.split(',').forEach(filter => {
                 switch (filter) {
                     case '0':
-                        document.getElementById('match-all-genres-checkbox').checked = false;
+                        matchAllGenresChecked = false;
                         break;
                     case '1':
                         document.getElementById('yearRel-checkbox').checked = true;
@@ -5233,11 +5235,15 @@ if (genreContainer) {
                 }
             });
 
-            document.querySelectorAll('#match-all-genres-checkbox, #yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
+            document.getElementById('match-all-genres-checkbox').checked = matchAllGenresChecked;
+            document.querySelectorAll('#yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
                 if (checkbox.checked) {
                     checkbox.dispatchEvent(new Event('change'));
                 }
             });
+
+            // Обновляем состояние интерфейса после изменения `match-all-genres-checkbox`
+            document.getElementById('match-all-genres-checkbox').dispatchEvent(new Event('change'));
 
             resolve(); // После завершения фильтрации продолжаем выполнение
         });
@@ -5311,6 +5317,7 @@ if (genreContainer) {
 
     initializeApp();
 });
+
 
 
 
