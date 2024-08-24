@@ -5213,74 +5213,86 @@ if (genreContainer) {
     }
 
     function selectGenres(genres) {
-        if (!genres) return;
+        return new Promise((resolve) => {
+            if (!genres) return resolve();
 
-        const genreButtons = document.querySelectorAll('.genre-button');
-        genres.split(',').forEach(genre => {
-            if (genre.startsWith('-')) {
-                const genreToRemove = genre.substring(1).toLowerCase();
-                genreButtons.forEach(button => {
-                    if (button.dataset.genre && button.dataset.genre.toLowerCase() === genreToRemove) {
-                        removedGenres.push(genreToRemove);
-                    }
-                });
-            } else {
-                const genreToAdd = genre.toLowerCase();
-                genreButtons.forEach(button => {
-                    if (button.dataset.genre && button.dataset.genre.toLowerCase() === genreToAdd) {
-                        if (!selectedGenres.includes(genreToAdd)) {
-                            selectedGenres.push(genreToAdd);
+            const genreButtons = document.querySelectorAll('.genre-button');
+            genres.split(',').forEach(genre => {
+                if (genre.startsWith('-')) {
+                    const genreToRemove = genre.substring(1).toLowerCase();
+                    genreButtons.forEach(button => {
+                        if (button.dataset.genre && button.dataset.genre.toLowerCase() === genreToRemove) {
+                            removedGenres.push(genreToRemove);
                         }
-                        removedGenres = removedGenres.filter(g => g !== genreToAdd);
-                    }
-                });
-            }
-        });
+                    });
+                } else {
+                    const genreToAdd = genre.toLowerCase();
+                    genreButtons.forEach(button => {
+                        if (button.dataset.genre && button.dataset.genre.toLowerCase() === genreToAdd) {
+                            if (!selectedGenres.includes(genreToAdd)) {
+                                selectedGenres.push(genreToAdd);
+                            }
+                            removedGenres = removedGenres.filter(g => g !== genreToAdd);
+                        }
+                    });
+                }
+            });
 
-        initializeGenreCombinations(artistsData);
-        updateArtistsDisplay();
-        updateGenreCounts();
-        updateGenreUIState();
+            initializeGenreCombinations(artistsData);
+            updateArtistsDisplay();
+            updateGenreCounts();
+            updateGenreUIState();
+
+            resolve(); // После завершения выбора жанров продолжаем выполнение
+        });
     }
 
     function applySort(sortParam) {
-        if (!sortParam || sortParam.length !== 2) return;
+        return new Promise((resolve) => {
+            if (!sortParam || sortParam.length !== 2) return resolve();
 
-        const sortOptions = {
-            '1': 'lastReleaseDate',
-            '2': 'listeners',
-            '3': 'growth',
-            '4': 'date',
-            '5': 'name'
-        };
+            const sortOptions = {
+                '1': 'lastReleaseDate',
+                '2': 'listeners',
+                '3': 'growth',
+                '4': 'date',
+                '5': 'name'
+            };
 
-        const sortField = sortOptions[sortParam[0]];
-        const sortOrder = sortParam[1] === '1' ? 'asc' : 'desc';
+            const sortField = sortOptions[sortParam[0]];
+            const sortOrder = sortParam[1] === '1' ? 'asc' : 'desc';
 
-        sortArtistsHandler(sortField, sortOrder);
+            sortArtistsHandler(sortField, sortOrder);
+
+            resolve(); // После завершения сортировки продолжаем выполнение
+        });
     }
 
     function applyFiltersFromURL(filters) {
-        if (!filters) return;
+        return new Promise((resolve) => {
+            if (!filters) return resolve();
 
-        filters.split(',').forEach(filter => {
-            switch (filter) {
-                case '1':
-                    document.getElementById('yearRel-checkbox').checked = true;
-                    break;
-                case '2':
-                    document.getElementById('multiRel-checkbox').checked = true;
-                    break;
-                case '3':
-                    document.getElementById('debut-checkbox').checked = true;
-                    break;
-            }
-        });
+            filters.split(',').forEach(filter => {
+                switch (filter) {
+                    case '1':
+                        document.getElementById('yearRel-checkbox').checked = true;
+                        break;
+                    case '2':
+                        document.getElementById('multiRel-checkbox').checked = true;
+                        break;
+                    case '3':
+                        document.getElementById('debut-checkbox').checked = true;
+                        break;
+                }
+            });
 
-        document.querySelectorAll('#yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
-            if (checkbox.checked) {
-                checkbox.dispatchEvent(new Event('change'));
-            }
+            document.querySelectorAll('#yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
+                if (checkbox.checked) {
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+
+            resolve(); // После завершения фильтрации продолжаем выполнение
         });
     }
 
@@ -5289,21 +5301,14 @@ if (genreContainer) {
 
         const { genres, sortParam, filters } = getParamsFromURL();
 
-        if (genres) {
-            selectGenres(genres);
-        }
-
-        if (sortParam) {
-            applySort(sortParam);
-        }
-
-        if (filters) {
-            applyFiltersFromURL(filters);
-        }
+        await selectGenres(genres);     // Сначала выбираем жанры
+        await applySort(sortParam);     // Затем применяем сортировку
+        await applyFiltersFromURL(filters); // И, наконец, применяем фильтры
     }
 
     initializeApp();
 });
+
 
 
 
