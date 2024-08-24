@@ -5212,6 +5212,37 @@ if (genreContainer) {
         return { genres, sortParam, filters };
     }
 
+    function applyFiltersFromURL(filters) {
+        return new Promise((resolve) => {
+            if (!filters) return resolve();
+
+            filters.split(',').forEach(filter => {
+                switch (filter) {
+                    case '0':
+                        document.getElementById('match-all-genres-checkbox').checked = false;
+                        break;
+                    case '1':
+                        document.getElementById('yearRel-checkbox').checked = true;
+                        break;
+                    case '2':
+                        document.getElementById('multiRel-checkbox').checked = true;
+                        break;
+                    case '3':
+                        document.getElementById('debut-checkbox').checked = true;
+                        break;
+                }
+            });
+
+            document.querySelectorAll('#match-all-genres-checkbox, #yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
+                if (checkbox.checked) {
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+
+            resolve(); // После завершения фильтрации продолжаем выполнение
+        });
+    }
+
     function selectGenres(genres) {
         return new Promise((resolve) => {
             if (!genres) return resolve();
@@ -5268,46 +5299,19 @@ if (genreContainer) {
         });
     }
 
-    function applyFiltersFromURL(filters) {
-        return new Promise((resolve) => {
-            if (!filters) return resolve();
-
-            filters.split(',').forEach(filter => {
-                switch (filter) {
-                    case '1':
-                        document.getElementById('yearRel-checkbox').checked = true;
-                        break;
-                    case '2':
-                        document.getElementById('multiRel-checkbox').checked = true;
-                        break;
-                    case '3':
-                        document.getElementById('debut-checkbox').checked = true;
-                        break;
-                }
-            });
-
-            document.querySelectorAll('#yearRel-checkbox, #multiRel-checkbox, #debut-checkbox').forEach(checkbox => {
-                if (checkbox.checked) {
-                    checkbox.dispatchEvent(new Event('change'));
-                }
-            });
-
-            resolve(); // После завершения фильтрации продолжаем выполнение
-        });
-    }
-
     async function initializeApp() {
         await waitForArtistsData();
 
         const { genres, sortParam, filters } = getParamsFromURL();
 
-        await selectGenres(genres);     // Сначала выбираем жанры
-        await applySort(sortParam);     // Затем применяем сортировку
-        await applyFiltersFromURL(filters); // И, наконец, применяем фильтры
+        await applyFiltersFromURL(filters); // Сначала применяем фильтры
+        await selectGenres(genres);         // Затем выбираем жанры
+        await applySort(sortParam);         // И, наконец, применяем сортировку
     }
 
     initializeApp();
 });
+
 
 
 
