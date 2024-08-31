@@ -952,7 +952,7 @@ z-index: 3;
       .popup {
   display: none;
   position: fixed;
-  z-index: 10001;
+  z-index: 10003;
   left: 0;
   top: 0;
   width: 100%;
@@ -4079,8 +4079,23 @@ function sortArtists(artists, criteria, order) {
         return artists;
     }
 
+    const genrePriority = {
+        'indie': 1, 'hyperpop': 4, 'electronic': 3, 'rap': 3, 'rock': 1, 'pop': 2, 'trap': 5, 'synthwave': 4, 
+        'lo-fi': 5, 'post-punk': 1, 'beats': 5, 'instrumental': 4, 'jazz': 4, 'punk': 3, 'neosoul': 1, 'trip-hop': 1, 
+        'grunge': 2, 'folk': 2, 'experimental': 5, 'ambient': 5, 'industrial': 4, 'cinematic': 5, 'drill': 3, 
+        'phonk': 5, 'metal': 3, 'violin': 5, 'ai': 5, 'pop punk': 1, 'dark': 2, 'ethno': 4, 'opera': 5, 'chanson': 5, 
+        'blues': 3, 'country': 2, 'classical': 5, 'poems': 5, 'spoken word': 5, 'traditional': 5, 'theater': 2, 
+        'choir': 5, 'reggae': 3, 'ska': 2, 'remixes': 5, 'neo-chanson': 1, 'wedding': 5, 'retro': 5, 'soundproducer': 5, 
+        'conductor': 5, 'a cappella': 5, 'asmr': 5, 'background': 5, 'bandura': 5, 'bard': 5, 'bass': 3, 'bedroom': 1, 
+        'black': 4, 'breakcore': 3, 'breaks': 3, 'death': 3, 'doom': 3, 'drone': 5, 'drummer': 4, 'electropop': 1, 
+        'emo': 3, 'estrade': 5, 'flute': 5, 'for children': 5, 'gabba': 4, 'glitch': 3, 'grindcore': 4, 'guitar': 4, 
+        'gypsy punk': 1, 'hang': 5, 'humor': 3, 'kid': 4, 'lgbt': 3, 'new age': 3, 'noise': 5, 'percussion': 5, 
+        'piano': 5, 'session': 5, 'songwriter': 5, 'trumpet': 5, 'violoncello': 5, 'worship': 3, 'woof!': 5
+    };
+
     artists.sort((a, b) => {
         let valueA, valueB;
+
         switch (criteria) {
             case 'listeners':
                 valueA = parseInt(a[Object.keys(a)[listenerColumns.currentMonthIndex]]) || 0;
@@ -4099,6 +4114,15 @@ function sortArtists(artists, criteria, order) {
             case 'lastReleaseDate':
                 valueA = a['LastRelDate'] ? parseDate(a['LastRelDate']) : new Date(0);
                 valueB = b['LastRelDate'] ? parseDate(b['LastRelDate']) : new Date(0);
+
+                if (valueA.getTime() === valueB.getTime()) {
+                    const genresA = a['Жанр'].split(', ').map(genre => genrePriority[genre] || Infinity).reduce((min, priority) => Math.min(min, priority), Infinity);
+                    const genresB = b['Жанр'].split(', ').map(genre => genrePriority[genre] || Infinity).reduce((min, priority) => Math.min(min, priority), Infinity);
+
+                    if (genresA !== genresB) {
+                        return genresA - genresB;
+                    }
+                }
                 break;
             case 'name':
                 valueA = a['Артист'].toLowerCase();
