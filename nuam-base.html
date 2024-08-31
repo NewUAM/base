@@ -2467,7 +2467,7 @@ background: #282626;
 <body>
   
   <div id="loading-screen">
-  <img src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Loading"> 
+  <img src="https://static.wixstatic.com/media/c77f36_34e5f784a1cb4a28bd8d00aeb95a320d~mv2.png" alt="Loading"> 
   <div class="load-wrapp">
     <div class="load-10">
       <div class="bar"></div>
@@ -2483,7 +2483,7 @@ background: #282626;
 
 <div id="main-container">
         <section id="controls-section">
-    <img id="logo" src="https://static.wixstatic.com/media/c77f36_8aa2c93d844a42f5b0799cd7bfb63e22~mv2.png" alt="Логотип">
+    <img id="logo" src="https://static.wixstatic.com/media/c77f36_34e5f784a1cb4a28bd8d00aeb95a320d~mv2.png" alt="Логотип">
     <div id="buttons-wrapper">
         <button id="genre-button" aria-expanded="false" aria-controls="genres-section">
             <i class="fas fa-music"></i> <span>Вибір жанру</span>
@@ -3992,6 +3992,12 @@ function showNoRecentTracksMessage(artistId) {
 
 function updateUIForNewTrack(trackIndex, trackLength, artistId) {
     const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
+    
+    if (!artistElement) {
+        console.log(`Artist element with ID ${artistId} not found in DOM. Skipping UI update.`);
+        return;
+    }
+
     const artistName = artistElement.closest('.artist').querySelector('a.track-artist-name').textContent;
     const artistUrl = artistElement.closest('.artist').querySelector('a.track-artist-name').href;
     updatePlayerArtistName(artistName, artistUrl);
