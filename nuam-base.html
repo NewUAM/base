@@ -1663,6 +1663,23 @@ background: #282626;
     text-align: center;
 }
       
+      .add-artist-button {
+    background-color: transparent;
+    border: 2px solid #f3f3f3;
+    border-radius: 7px;
+    padding: 10px 20px;
+    color: #f3f3f3;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    transition: border-color 0.3s ease;
+}
+
+.add-artist-button:hover {
+    border-color: #84AAFB;
+}
+  
       .mobile-only {
     display: none;
 }
@@ -1687,6 +1704,10 @@ background: #282626;
     width: 100%;
       background: #282626;
       min-width: 320px;
+}
+    
+    .add-artist-button {
+    font-size: 14px;
 }
     
     #project-popup .popup-content {
@@ -2657,8 +2678,12 @@ background: #282626;
         Артистів із такими параметрами не знайдено.<br/><br/>Спробуйте інший набір жанрів, виключіть фільтри або збільште діапазон слухачів на місяць.
     </div>
     <div id="no-artists-name-message">
-        Артистів із таким ім'ям не знайдено.<br/><br/>Спробуйте використати для пошуку посилання на профіль артиста в Spotify.
-    </div>
+    Артистів із таким ім'ям не знайдено.<br/><br/>Спробуйте використати для пошуку посилання на профіль артиста в Spotify.
+    <br/><br/><br/>
+    <a href="https://nuam.club/add" target="_blank" class="add-artist-button">
+        Додати артиста до бази
+    </a>
+</div>
     <div id="artist-scroll-container" class="artist-scroll-container">
         <div class="artist-container"></div>
     </div>
