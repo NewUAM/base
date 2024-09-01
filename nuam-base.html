@@ -2677,6 +2677,7 @@ let accessToken = '';
 let shuffledArtistsData = [];
 let originalArtistsOrder = [];
 let isSortActive = false;
+let tokenExpiryTime = 0;
 
 async function getAccessToken() {
     const clientId = 'b5ff50f2075e4a15a6820f06a8269c80';
@@ -2693,6 +2694,13 @@ async function getAccessToken() {
 
     const data = await response.json();
     accessToken = data.access_token;
+    tokenExpiryTime = Date.now() + (data.expires_in * 1000);
+}
+  
+async function ensureValidAccessToken() {
+    if (!accessToken || Date.now() >= tokenExpiryTime) {
+        await getAccessToken();
+    }
 }
 
   function transliterate(input) {
@@ -3400,9 +3408,17 @@ function toggleRelatedArtists(artistElement, artistId) {
 }
 
 async function fetchRelatedArtists(artistId, container) {
+    await ensureValidAccessToken();
+
     const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
         headers: { 'Authorization': `Bearer ${accessToken}` }
     });
+
+    if (!response.ok) {
+        container.innerHTML = '<div class="no-related-artists">Не удалось получить схожих артистов</div>';
+        return;
+    }
+
     const data = await response.json();
 
     container.innerHTML = '';
@@ -3415,10 +3431,10 @@ async function fetchRelatedArtists(artistId, container) {
                 .join(', ');
             container.innerHTML = relatedArtistsLinks;
         } else {
-            container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
+            container.innerHTML = '<div class="no-related-artists">Схожих артистов не найдено</div>';
         }
     } else {
-        container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
+        container.innerHTML = '<div class="no-related-artists">Схожих артистов не найдено</div>';
     }
     container.style.display = 'block';
 }
@@ -3842,6 +3858,8 @@ document.getElementById('close-player').addEventListener('click', () => {
     updatePlayIcon(null);
 });
 
+let currentTrackQueue = [];
+
 async function playTrackPreview(artistId, change = 0) {
     const volumeSlider = document.getElementById('volume-slider');
     volumeSlider.style.display = 'none';
@@ -3868,40 +3886,40 @@ async function playTrackPreview(artistId, change = 0) {
     currentPlayingId = artistId;
     trackIndices.set(artistId, trackIndex);
 
-    clearMessages(artistId);
-
-    let tracksToPlay = getTracksToPlay(artistId);
-
-    if (tracksToPlay.length === 0 && document.getElementById('play-latest').checked) {
-        showNoRecentTracksMessage(artistId);
-        tracksToPlay = await fetchTopTracks(artistId);
+    if (change === 0 || currentTrackQueue.length === 0) {
+        currentTrackQueue = getTracksToPlay(artistId);
     }
 
-    if (tracksToPlay.length === 0) {
+    if (currentTrackQueue.length === 0 && document.getElementById('play-latest').checked) {
+        showNoRecentTracksMessage(artistId);
+        currentTrackQueue = await fetchTopTracks(artistId);
+    }
+
+    if (currentTrackQueue.length === 0) {
         if (!document.getElementById('play-latest').checked) {
-            tracksToPlay = await fetchTopTracks(artistId);
+            currentTrackQueue = await fetchTopTracks(artistId);
         }
-        if (tracksToPlay.length === 0) {
+        if (currentTrackQueue.length === 0) {
             showNoTracksMessage(artistId);
             isPlaying = false;
             return;
         }
     }
 
-    trackIndex = (trackIndex % tracksToPlay.length + tracksToPlay.length) % tracksToPlay.length;
+    trackIndex = (trackIndex % currentTrackQueue.length + currentTrackQueue.length) % currentTrackQueue.length;
 
     let trackPlayed = false;
     const initialTrackIndex = trackIndex;
 
-    while (!trackPlayed && tracksToPlay.length > 0) {
-        const track = tracksToPlay[trackIndex];
+    while (!trackPlayed && currentTrackQueue.length > 0) {
+        const track = currentTrackQueue[trackIndex];
 
         try {
             await playAudio(track);
-            updateUIForNewTrack(trackIndex, tracksToPlay.length, artistId);
+            updateUIForNewTrack(trackIndex, currentTrackQueue.length, artistId);
             trackPlayed = true;
         } catch (error) {
-            trackIndex = (trackIndex + 1) % tracksToPlay.length;
+            trackIndex = (trackIndex + 1) % currentTrackQueue.length;
 
             if (trackIndex === initialTrackIndex) {
                 showNoTracksMessage(artistId);
@@ -3968,6 +3986,8 @@ function getTracksToPlay(artistId) {
 
 
 async function fetchTopTracks(artistId) {
+    await ensureValidAccessToken();
+
     const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=UA`, {
         headers: { 'Authorization': `Bearer ${accessToken}` }
     });
@@ -3994,7 +4014,6 @@ function updateUIForNewTrack(trackIndex, trackLength, artistId) {
     const artistElement = document.querySelector(`[data-spotify-id="${artistId}"]`);
     
     if (!artistElement) {
-        console.log(`Artist element with ID ${artistId} not found in DOM. Skipping UI update.`);
         return;
     }
 
@@ -4010,23 +4029,31 @@ async function playAudio(track) {
     const previewUrl = track.preview || track.preview_url;
     if (previewUrl && previewUrl !== "Preview not found") {
         currentAudio = new Audio(previewUrl);
-        await currentAudio.play();
+        
+        return new Promise((resolve, reject) => {
+            currentAudio.addEventListener('ended', async () => {
+                playTrackPreview(currentPlayingId, 1);
+                resolve();
+            });
 
-        currentAudio.addEventListener('timeupdate', () => {
-            if (currentAudio) {
-                updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
-            }
+            currentAudio.addEventListener('timeupdate', () => {
+                if (currentAudio) {
+                    updateProgress(currentPlayingId, currentAudio.currentTime / currentAudio.duration);
+                }
+            });
+
+            currentAudio.addEventListener('canplaythrough', () => {
+                resolve();
+            });
+
+            currentAudio.addEventListener('error', (e) => {
+                reject(e);
+            });
+
+            currentAudio.play().catch((error) => {
+                reject(error);
+            });
         });
-
-        currentAudio.addEventListener('ended', () => {
-            isPlaying = false;
-            updatePlayIcon(null);
-            playTrackPreview(currentPlayingId, 1);
-        });
-
-        currentAudio.oncanplaythrough = () => {
-            isPlaying = false;
-        };
     } else {
         throw new Error('No preview URL');
     }
