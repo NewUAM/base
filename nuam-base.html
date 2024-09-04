@@ -2504,7 +2504,7 @@ background: #282626;
 
 <div id="main-container">
         <section id="controls-section">
-    <a href="https://nuam.club/base">
+    <a href="https://nuam.club">
     <img id="logo" src="https://static.wixstatic.com/media/c77f36_34e5f784a1cb4a28bd8d00aeb95a320d~mv2.png" alt="Логотип">
 </a>
     <div id="buttons-wrapper">
@@ -3442,7 +3442,7 @@ async function fetchRelatedArtists(artistId, container) {
     });
 
     if (!response.ok) {
-        container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
+        container.innerHTML = '<div class="no-related-artists">Не удалось получить схожих артистов</div>';
         return;
     }
 
@@ -3458,10 +3458,10 @@ async function fetchRelatedArtists(artistId, container) {
                 .join(', ');
             container.innerHTML = relatedArtistsLinks;
         } else {
-            container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
+            container.innerHTML = '<div class="no-related-artists">Схожих артистов не найдено</div>';
         }
     } else {
-        container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
+        container.innerHTML = '<div class="no-related-artists">Схожих артистов не найдено</div>';
     }
     container.style.display = 'block';
 }
@@ -4696,7 +4696,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const options = {
         steps: [
             {
-                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 11 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
+                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 10 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
                 disableInteraction: true
             },
             {
