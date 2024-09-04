@@ -504,7 +504,8 @@
     border-radius: 0 7px 0 0;
     border: 3px solid #282626;
 }
-      
+
+        
       .no-related-artists {
     display: flex;
     justify-content: center;
@@ -3442,7 +3443,7 @@ async function fetchRelatedArtists(artistId, container) {
     });
 
     if (!response.ok) {
-        container.innerHTML = '<div class="no-related-artists">Не удалось получить схожих артистов</div>';
+        container.innerHTML = '<div class="no-related-artists">Не вдалося отримати схожих артистів</div>';
         return;
     }
 
@@ -3458,10 +3459,10 @@ async function fetchRelatedArtists(artistId, container) {
                 .join(', ');
             container.innerHTML = relatedArtistsLinks;
         } else {
-            container.innerHTML = '<div class="no-related-artists">Схожих артистов не найдено</div>';
+            container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
         }
     } else {
-        container.innerHTML = '<div class="no-related-artists">Схожих артистов не найдено</div>';
+        container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
     }
     container.style.display = 'block';
 }
