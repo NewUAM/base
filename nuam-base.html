@@ -2693,6 +2693,11 @@ background: #282626;
 
   </div>
 <script>
+function isIOS() {
+    const iOSDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    return iOSDetected;
+}
+  
 let displayOffset = 0;
 const displayBatchSize = 50;
 let currentDisplayList = [];
@@ -2971,7 +2976,11 @@ function extractAndDisplayGenres(artists) {
         genreButton.className = 'genre-button';
         genreButton.dataset.originalCount = count;
         genreButton.dataset.genre = genre;
-        genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${count})</span>`;
+        if (isIOS()) {
+    genreButton.innerHTML = `<span class="genre-name">${genre}</span>`;
+} else {
+    genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${count})</span>`;
+}
 
         const removeButton = document.createElement('button');
         removeButton.className = 'remove-genre';
