@@ -24,6 +24,32 @@
       color: #f3f3f3;
     }
 
+    ::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #282626;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #383838;
+}
+    
+    .checkbox-container::-webkit-scrollbar {
+    width: 14px;
+}
+
+.checkbox-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+    
+    .checkbox-container::-webkit-scrollbar-thumb {
+    background-color: #282626;
+    border-radius: 7px;
+    border: 3px solid #383838;
+}
+    
     .controls {
       display: flex;
       flex-direction: column;
@@ -82,6 +108,37 @@
   font-size: 0.9em;
 }
 
+    .sort-and-blacklist {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    padding-left: 20px;
+    max-width: 300px;
+  }
+
+  .sort-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f3f3f3;
+  }
+
+  .hide-listened-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f3f3f3;
+  }
+
+  .blacklist-section {
+    margin-top: 10px;
+  }
+
+  label, select, button {
+    color: #f3f3f3;
+  }
     
     .button-group {
   display: flex;
@@ -93,10 +150,17 @@
   padding: 0;
 }
 
+    select {
+    background-color: #383838;
+    border: 1px solid #84AAFB;
+    border-radius: 7px;
+    padding: 5px;
+  }
+    
     button {
       padding: 10px 20px;
       background-color: #84AAFB;
-      color: #383838;
+      color: #282626;
       border: 1px solid #84AAFB;
       border-radius: 7px;
       cursor: pointer;
@@ -115,41 +179,46 @@
     }
 
     .album {
-      background-color: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
+  background-color: #383838;
+  border-radius: 7px;
+  overflow: visible;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
 
-    .album img {
-      width: 100%;
-      height: auto;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
+.album img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease, z-index 0.3s ease;
+  border-radius: 7px;
+}
 
-    .album img:hover {
-      transform: scale(1.05);
-    }
+.album img:hover {
+  transform: scale(1.02);
+  z-index: 10;
+}
 
     .album-details {
       padding: 15px;
       flex-grow: 1;
+      background-color: #383838;
     }
-
+    
     .album-details h3 {
       margin: 0 0 10px 0;
+      color: #f3f3f3;
     }
 
     .album-details p {
       margin: 5px 0;
+      color: #f3f3f3;
     }
 
     .album-details a {
-      color: #333;
+      color: #f3f3f3;
       text-decoration: none;
       font-weight: bold;
     }
@@ -198,34 +267,40 @@
     }
 
     .album-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(10, 10, 120, 0.5);
-      display: none;
-      pointer-events: none;
-    }
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(40, 38, 38, 0.7);
+  display: none;
+  pointer-events: none;
+  z-index: 1;
+}
 
-    .album-listened .album-overlay {
-      display: block;
-    }
+.album-listened .album-overlay {
+  display: block;
+}
+
+.album-listened img:hover {
+  background-color: rgba(40, 38, 38, 0.7);
+}
 
     .mark-listened-btn {
       margin: 10px 15px;
       cursor: pointer;
       padding: 5px 10px;
-      background-color: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
+      background-color: #84AAFB;
+      color: #282626;
+      border: 1px solid #84AAFB;
+      border-radius: 7px;
       align-self: flex-start;
-      transition: background-color 0.3s ease;
+      transition: border 0.3s ease;
+      z-index: 9;
     }
 
     .mark-listened-btn:hover {
-      background-color: #005bb5;
+      border: 1px solid #f3f3f3;
     }
 
     .enlarged-img {
@@ -294,14 +369,23 @@
 
     .blacklist-cross {
       cursor: pointer;
-      color: red;
+      color: #e74c3c;
       margin-left: 10px;
       font-weight: bold;
     }
 
     .blacklist-cross:hover {
-      color: darkred;
+      color: #c0392b;
     }
+    
+    .exclude-genre {
+  color: #e74c3c;
+   margin-left: 5px;
+}
+    
+    .exclude-genre {
+  color: #c0392b;
+}
     
     .genre-filter-item .exclude-genre {
   visibility: hidden;
@@ -333,44 +417,49 @@
 <body>
 
   <div class="controls">
-    <div class="filter-section">
-      <div class="checkbox-container">
-        <label>Жанри:</label>
-        <div class="checkbox-grid" id="genre-checkboxes">
-        </div>
-        <div class="button-group">
-          <button id="select-all-genres">Вибрати всі</button>
-          <button id="deselect-all-genres">Зняти всі</button>
-        </div>
-      </div>
-
-      <div class="checkbox-container">
-        <label>Мови:</label>
-        <div class="checkbox-grid" id="language-checkboxes">
-        </div>
-        <div class="button-group">
-          <button id="select-all-languages">Вибрати всі</button>
-          <button id="deselect-all-languages">Зняти всі</button>
-        </div>
+  <div class="filter-section">
+    <div class="checkbox-container">
+      <label>Жанри:</label>
+      <div class="checkbox-grid" id="genre-checkboxes"></div>
+      <div class="button-group">
+        <button id="select-all-genres">Вибрати всі</button>
+        <button id="deselect-all-genres">Зняти всі</button>
       </div>
     </div>
 
-    <label for="sort-order">Сортування:</label>
-    <select id="sort-order">
-  <option value="desc">Спочатку нові</option>
-  <option value="asc">Спочатку старі</option>
-  <option value="listens-desc">Більше прослуховувань</option>
-</select>
+    <div class="checkbox-container">
+      <label>Мови:</label>
+      <div class="checkbox-grid" id="language-checkboxes"></div>
+      <div class="button-group">
+        <button id="select-all-languages">Вибрати всі</button>
+        <button id="deselect-all-languages">Зняти всі</button>
+      </div>
+    </div>
 
-    <label for="hide-listened">
-  <input type="checkbox" id="hide-listened">
-  Приховати <span id="show-listened-albums" style="cursor: pointer; text-decoration: underline;">прослухані альбоми</span>
-</label>
+    <div class="sort-and-blacklist">
+      <div class="sort-section">
+        <label for="sort-order">Сортування:</label>
+        <select id="sort-order">
+          <option value="desc">Спочатку нові</option>
+          <option value="asc">Спочатку старі</option>
+          <option value="listens-desc">Більше прослуховувань</option>
+        </select>
+      </div>
 
-  <button id="blacklist-button">Чорний список</button>
+      <div class="hide-listened-section">
+        <label for="hide-listened">
+          <input type="checkbox" id="hide-listened"> Приховати <span id="show-listened-albums" style="cursor: pointer; text-decoration: underline;">прослухані альбоми</span>
+        </label>
+      </div>
+
+      <div class="blacklist-section">
+        <button id="blacklist-button">Чорний список</button>
+      </div>
+
+      <label>Альбомів з урахуванням фільтрів: <span id="album-count">0</span></label>
+    </div>
   </div>
-
-  <label>Альбомів з урахуванням фільтрів: <span id="album-count">0</span></label>
+</div>
   
   <div id="albums-container"></div>
   <div class="lazy-loading" id="lazy-loading">Завантаження альбомів...</div>
@@ -386,9 +475,8 @@
     <button id="export-data">Перенесення даних</button>
   <textarea id="data-textarea" readonly style="width: 100%; height: 150px; display: none;"></textarea>
 
-  <!-- Кнопка для загрузки данных -->
   <button id="import-data">Завантажити дані</button>
-  <textarea id="import-textarea" placeholder="Вставьте сюда данные" style="width: 100%; height: 150px;"></textarea>
+  <textarea id="import-textarea" placeholder="Вставте сюди дані" style="width: 100%; height: 150px;"></textarea>
 </div>
     
     <div id="blacklist-content" class="tabcontent active">
@@ -416,13 +504,12 @@ let albumsData = [];
 let albumsMap = new Map();
 let trackToGenres = new Map();
 let currentIndex = 0;
-let sortOrder = 'desc'; // сортировка по умолчанию
-let hideListened = false; // по умолчанию
+let sortOrder = 'desc';
+let hideListened = false;
 
 const batchSize = 10;
 const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
 
-// Загружаем данные с таблиц и инициализируем фильтры
 function fetchAlbumsData() {
   return Promise.all([
     new Promise((resolve) => {
@@ -453,19 +540,16 @@ function fetchAlbumsData() {
       });
     })
   ]).then(([albumData, genreData]) => {
-    processGenreData(genreData); // Обрабатываем данные жанров
-    processAlbumData(albumData); // Обрабатываем данные альбомов
-    populateFilters();           // Отрисовываем чекбоксы фильтров
-    loadFiltersAfterRender();     // Загружаем и применяем фильтры из кэша
+    processGenreData(genreData);
+    processAlbumData(albumData);
+    populateFilters();
   });
 }
 
-// Применение сохранённых фильтров (после рендеринга фильтров)
 function loadFiltersAfterRender() {
   const filterData = JSON.parse(localStorage.getItem('albumFilters'));
 
   if (filterData) {
-    // Восстановление выбранных жанров
     if (Array.isArray(filterData.selectedGenres)) {
       filterData.selectedGenres.forEach(genre => {
         const checkbox = document.getElementById(`genre-${genre}`);
@@ -475,7 +559,6 @@ function loadFiltersAfterRender() {
       });
     }
 
-    // Восстановление исключённых жанров
     if (Array.isArray(filterData.excludedGenres)) {
       filterData.excludedGenres.forEach(genre => {
         const checkbox = document.getElementById(`genre-${genre}`);
@@ -491,7 +574,6 @@ function loadFiltersAfterRender() {
       });
     }
 
-    // Восстановление выбранных языков
     if (Array.isArray(filterData.selectedLanguages)) {
       filterData.selectedLanguages.forEach(language => {
         const checkbox = document.getElementById(`language-${encodeURIComponent(language)}`);
@@ -501,7 +583,6 @@ function loadFiltersAfterRender() {
       });
     }
 
-    // Восстановление исключённых языков
     if (Array.isArray(filterData.excludedLanguages)) {
       filterData.excludedLanguages.forEach(language => {
         const checkbox = document.getElementById(`language-${encodeURIComponent(language)}`);
@@ -511,7 +592,6 @@ function loadFiltersAfterRender() {
       });
     }
 
-    // Восстановление сортировки и чекбокса "Hide Listened"
     if (filterData.sortOrder) {
       document.getElementById('sort-order').value = filterData.sortOrder;
       sortOrder = filterData.sortOrder;
@@ -522,11 +602,9 @@ function loadFiltersAfterRender() {
       hideListened = filterData.hideListened;
     }
 
-    // Применение фильтров после восстановления данных
     applyFilters();
   }
 
-  // Назначаем обработчики событий
   document.querySelectorAll('.genre-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', () => {
       applyFilters();
@@ -554,8 +632,6 @@ function loadFiltersAfterRender() {
   });
 }
 
-
-// Сохраняем выбранные фильтры в локальное хранилище
 function saveFiltersToCache() {
   const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked'))
     .map(checkbox => checkbox.value);
@@ -576,21 +652,32 @@ function saveFiltersToCache() {
     selectedGenres,
     excludedGenres,
     selectedLanguages,
-    excludedLanguages, // Добавляем исключённые языки
+    excludedLanguages,
     sortOrder,
     hideListened
   };
-
-  console.log('Saving filters:', filterData); // Лог сохранения фильтров
 
   localStorage.setItem('albumFilters', JSON.stringify(filterData));
 }
 
     
     function init() {
-  fetchAlbumsData();
+  const blacklistArtists = JSON.parse(localStorage.getItem('blacklistedArtists')) || [];
+  const blacklistLabels = JSON.parse(localStorage.getItem('blacklistedLabels')) || [];
+  const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
+  const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
+
+  fetchAlbumsData().then(() => {
+    if (albumFilters) {
+      console.log("Дані фільтрів знайдено, застосовуються фільтри.");
+      loadFiltersAfterRender();
+    } else {
+      console.log("Фільтри не знайдено, дані завантажено за замовчуванням.");
+      applyFilters();
+    }
+  });
 }
-    
+
   function processGenreData(data) {
     const headers = data[0];
     const languageColumns = [0, 1, 2, 9];
@@ -724,7 +811,6 @@ function saveFiltersToCache() {
     genreCross.textContent = '✖';
     genreCross.classList.add('exclude-genre');
     genreCross.style.cursor = 'pointer';
-    genreCross.style.color = 'red';
     genreCross.setAttribute('data-genre', genre);
 
     genreCross.addEventListener('click', function() {
@@ -778,12 +864,10 @@ function saveFiltersToCache() {
   });
 }
 
-
     function toggleExcludeGenre(genre, checkbox, label, genreCross) {
   if (checkbox.disabled) {
     checkbox.disabled = false;
     genreCross.textContent = '✖';
-    genreCross.style.color = 'red';
     label.style.textDecoration = 'none';
     label.style.color = 'black';
   } else {
@@ -939,10 +1023,10 @@ function handleScroll() {
 
     const listensHtml = `<p>Прослуховувань: ${totalListens}</p>`;
 
-    const starIconHtml = hasGoodGenre ? `<i class="fas fa-star" style="position: absolute; top: 10px; right: 10px; font-size: 24px; color: gold;"></i>` : '';
+    const starIconHtml = hasGoodGenre ? `<i class="fas fa-star" style="position: absolute; top: 10px; right: 10px; font-size: 24px; color: gold; z-index: 11"></i>` : '';
 
-    const blacklistArtistCross = `<span class="blacklist-cross" data-type="artist" data-name="${album.artistName}" style="cursor: pointer; color: red;">✖</span>`;
-    const blacklistLabelCross = album.label ? `<span class="blacklist-cross" data-type="label" data-name="${album.label}" style="cursor: pointer; color: red;">✖</span>` : '';
+    const blacklistArtistCross = `<span class="blacklist-cross" data-type="artist" data-name="${album.artistName}" style="cursor: pointer;">✖</span>`;
+    const blacklistLabelCross = album.label ? `<span class="blacklist-cross" data-type="label" data-name="${album.label}" style="cursor: pointer;">✖</span>` : '';
 
     albumElement.innerHTML = `
       <div class="album-overlay"></div>
@@ -1265,13 +1349,11 @@ document.getElementById('show-listened-albums').addEventListener('click', functi
 }
 
     document.getElementById('export-data').addEventListener('click', () => {
-  // Собираем данные из localStorage
   const blacklistArtists = JSON.parse(localStorage.getItem('blacklistedArtists')) || [];
   const blacklistLabels = JSON.parse(localStorage.getItem('blacklistedLabels')) || [];
   const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
   const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || {};
 
-  // Создаем JSON с этими данными
   const exportData = {
     blacklistArtists,
     blacklistLabels,
@@ -1279,20 +1361,17 @@ document.getElementById('show-listened-albums').addEventListener('click', functi
     albumFilters
   };
 
-  // Преобразуем данные в строку и выводим в textarea
-  const exportDataString = JSON.stringify(exportData, null, 2); // форматируем JSON с отступами
+  const exportDataString = JSON.stringify(exportData, null, 2);
   const dataTextarea = document.getElementById('data-textarea');
   dataTextarea.style.display = 'block';
   dataTextarea.value = exportDataString;
 
-  // Копируем текст в буфер обмена
   dataTextarea.select();
   document.execCommand('copy');
 
   alert('Дані скопійовані в буфер обміну. Вставте їх у новому браузері або на іншому пристрої.');
 });
 
-// Кнопка "Завантажити дані"
 document.getElementById('import-data').addEventListener('click', () => {
   const importTextarea = document.getElementById('import-textarea');
   const importDataString = importTextarea.value;
@@ -1303,10 +1382,8 @@ document.getElementById('import-data').addEventListener('click', () => {
   }
 
   try {
-    // Парсим введенные данные
     const importData = JSON.parse(importDataString);
 
-    // Сохраняем данные в localStorage
     if (importData.blacklistArtists) {
       localStorage.setItem('blacklistedArtists', JSON.stringify(importData.blacklistArtists));
     }
@@ -1324,13 +1401,12 @@ document.getElementById('import-data').addEventListener('click', () => {
     }
 
     alert('Дані успішно завантажені. Оновіть сторінку для застосування змін.');
-    location.reload(); // Перезагружаем страницу для применения новых настроек
+    
   } catch (error) {
     alert('Помилка при завантаженні даних. Перевірте формат введених даних.');
   }
 });
-    
-// Запуск инициализации
+
 init();
 
 </script>
