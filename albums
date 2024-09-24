@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUAM Albums</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>
+  <style>
+    @font-face {
+         font-family: 'CustomFont';
+         src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+    }
+     html, body {
+            font-family: 'CustomFont', Arial, sans-serif;
+      background-color: #282626;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      color: #f3f3f3;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+      gap: 20px;
+    }
+
+    .filter-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .checkbox-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #84AAFB;
+  border-radius: 7px;
+  background-color: #383838;
+  position: relative;
+}
+
+.checkbox-container label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  color: #f3f3f3;
+}
+
+    .genre-name {
+  color: #f3f3f3;
+  font-weight: bold;
+}
+
+.genre-count {
+  color: gray;
+  font-size: 0.9em;
+}
+
+.language-name {
+  font-weight: bold;
+}
+
+.language-count {
+  color: gray;
+  font-size: 0.9em;
+}
+
+    
+    .button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  background-color: #383838;
+  padding: 0;
+}
+
+    button {
+      padding: 10px 20px;
+      background-color: #84AAFB;
+      color: #383838;
+      border: 1px solid #84AAFB;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: border 0.3s ease;
+    }
+
+    button:hover {
+      border: 1px solid #f3f3f3;
+    }
+
+    #albums-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .album {
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .album img {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .album img:hover {
+      transform: scale(1.05);
+    }
+
+    .album-details {
+      padding: 15px;
+      flex-grow: 1;
+    }
+
+    .album-details h3 {
+      margin: 0 0 10px 0;
+    }
+
+    .album-details p {
+      margin: 5px 0;
+    }
+
+    .album-details a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .album-details a:hover {
+      text-decoration: underline;
+    }
+
+    .tracks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: auto;
+      padding: 0 15px 15px 15px;
+    }
+
+    .track-circle {
+      width: 40px;
+      height: 40px;
+      background-color: #eee;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .track-circle:hover {
+      background-color: #ddd;
+    }
+
+    .track-circle i {
+      font-size: 20px;
+      color: #555;
+    }
+
+    .lazy-loading {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    audio {
+      display: none;
+    }
+
+    .album-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 10, 120, 0.5);
+      display: none;
+      pointer-events: none;
+    }
+
+    .album-listened .album-overlay {
+      display: block;
+    }
+
+    .mark-listened-btn {
+      margin: 10px 15px;
+      cursor: pointer;
+      padding: 5px 10px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      align-self: flex-start;
+      transition: background-color 0.3s ease;
+    }
+
+    .mark-listened-btn:hover {
+      background-color: #005bb5;
+    }
+
+    .enlarged-img {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 640px;
+      z-index: 1000;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.tabcontent {
+  display: none;
+}
+
+.tabcontent.active {
+  display: block;
+}
+
+.tablink {
+  background-color: #f1f1f1;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.tablink.active {
+  background-color: #ddd;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+    .blacklist-cross {
+      cursor: pointer;
+      color: red;
+      margin-left: 10px;
+      font-weight: bold;
+    }
+
+    .blacklist-cross:hover {
+      color: darkred;
+    }
+    
+    .genre-filter-item .exclude-genre {
+  visibility: hidden;
+}
+
+.genre-filter-item:hover .exclude-genre {
+  visibility: visible;
+}
+    
+    body.no-scroll {
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .controls button,
+      .controls select,
+      .controls label {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <div class="filter-section">
+      <div class="checkbox-container">
+        <label>Жанри:</label>
+        <div class="checkbox-grid" id="genre-checkboxes">
+        </div>
+        <div class="button-group">
+          <button id="select-all-genres">Вибрати всі</button>
+          <button id="deselect-all-genres">Зняти всі</button>
+        </div>
+      </div>
+
+      <div class="checkbox-container">
+        <label>Мови:</label>
+        <div class="checkbox-grid" id="language-checkboxes">
+        </div>
+        <div class="button-group">
+          <button id="select-all-languages">Вибрати всі</button>
+          <button id="deselect-all-languages">Зняти всі</button>
+        </div>
+      </div>
+    </div>
+
+    <label for="sort-order">Сортування:</label>
+    <select id="sort-order">
+  <option value="desc">Спочатку нові</option>
+  <option value="asc">Спочатку старі</option>
+  <option value="listens-desc">Більше прослуховувань</option>
+</select>
+
+    <label for="hide-listened">
+  <input type="checkbox" id="hide-listened">
+  Приховати <span id="show-listened-albums" style="cursor: pointer; text-decoration: underline;">прослухані альбоми</span>
+</label>
+
+  <button id="blacklist-button">Чорний список</button>
+  </div>
+
+  <label>Альбомів з урахуванням фільтрів: <span id="album-count">0</span></label>
+  
+  <div id="albums-container"></div>
+  <div class="lazy-loading" id="lazy-loading">Завантаження альбомів...</div>
+
+<div id="blacklist-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    
+    <div class="tabs">
+      <button class="tablink active" id="blacklist-tab" onclick="openTab(event, 'blacklist-content')">Чорний список</button>
+      <button class="tablink" id="listened-albums-tab" onclick="openTab(event, 'listened-albums-content')">Прослухані альбоми</button>
+      
+    <button id="export-data">Перенесення даних</button>
+  <textarea id="data-textarea" readonly style="width: 100%; height: 150px; display: none;"></textarea>
+
+  <!-- Кнопка для загрузки данных -->
+  <button id="import-data">Завантажити дані</button>
+  <textarea id="import-textarea" placeholder="Вставьте сюда данные" style="width: 100%; height: 150px;"></textarea>
+</div>
+    
+    <div id="blacklist-content" class="tabcontent active">
+      <h3>Чорний список</h3>
+      <h4>Артисти</h4>
+      <ul id="blacklisted-artists"></ul>
+      <h4>Лейбли</h4>
+      <ul id="blacklisted-labels"></ul>
+    </div>
+    
+    <div id="listened-albums-content" class="tabcontent">
+      <h3>Прослухані альбоми</h3>
+      <ul id="listened-albums-list"></ul>
+    </div>
+  </div>
+</div>
+
+  <script>
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=1080612412&single=true&output=csv";
+const genreSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=1188820798&single=true&output=csv";
+const listenCountsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTAGLlApqsn47ofP8EU8kn9CjY8YabOQmBfm_Th_R60QO5b49nGe75DYfK4oIWHs4mHZ0jCPuanUIc-/pub?gid=0&single=true&output=csv';
+
+let listenCountsData = {};
+let albumsData = [];
+let albumsMap = new Map();
+let trackToGenres = new Map();
+let currentIndex = 0;
+let sortOrder = 'desc'; // сортировка по умолчанию
+let hideListened = false; // по умолчанию
+
+const batchSize = 10;
+const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
+
+// Загружаем данные с таблиц и инициализируем фильтры
+function fetchAlbumsData() {
+  return Promise.all([
+    new Promise((resolve) => {
+      Papa.parse(sheetUrl, {
+        download: true,
+        header: true,
+        complete: function (results) {
+          resolve(results.data);
+        }
+      });
+    }),
+    new Promise((resolve) => {
+      Papa.parse(genreSheetUrl, {
+        download: true,
+        complete: function (results) {
+          resolve(results.data);
+        }
+      });
+    }),
+    new Promise((resolve) => {
+      Papa.parse(listenCountsUrl, {
+        download: true,
+        header: true,
+        complete: function (results) {
+          listenCountsData = processListenCounts(results.data);
+          resolve();
+        }
+      });
+    })
+  ]).then(([albumData, genreData]) => {
+    processGenreData(genreData); // Обрабатываем данные жанров
+    processAlbumData(albumData); // Обрабатываем данные альбомов
+    populateFilters();           // Отрисовываем чекбоксы фильтров
+    loadFiltersAfterRender();     // Загружаем и применяем фильтры из кэша
+  });
+}
+
+// Применение сохранённых фильтров (после рендеринга фильтров)
+function loadFiltersAfterRender() {
+  const filterData = JSON.parse(localStorage.getItem('albumFilters'));
+
+  if (filterData) {
+    // Восстановление выбранных жанров
+    if (Array.isArray(filterData.selectedGenres)) {
+      filterData.selectedGenres.forEach(genre => {
+        const checkbox = document.getElementById(`genre-${genre}`);
+        if (checkbox) {
+          checkbox.checked = true;
+        }
+      });
+    }
+
+    // Восстановление исключённых жанров
+    if (Array.isArray(filterData.excludedGenres)) {
+      filterData.excludedGenres.forEach(genre => {
+        const checkbox = document.getElementById(`genre-${genre}`);
+        if (checkbox) {
+          checkbox.disabled = true;
+          const genreCross = checkbox.parentNode.querySelector('.exclude-genre');
+          genreCross.textContent = '✔';
+          genreCross.style.color = 'green';
+          const label = checkbox.parentNode.querySelector('label');
+          label.style.textDecoration = 'line-through';
+          label.style.color = 'gray';
+        }
+      });
+    }
+
+    // Восстановление выбранных языков
+    if (Array.isArray(filterData.selectedLanguages)) {
+      filterData.selectedLanguages.forEach(language => {
+        const checkbox = document.getElementById(`language-${encodeURIComponent(language)}`);
+        if (checkbox) {
+          checkbox.checked = true;
+        }
+      });
+    }
+
+    // Восстановление исключённых языков
+    if (Array.isArray(filterData.excludedLanguages)) {
+      filterData.excludedLanguages.forEach(language => {
+        const checkbox = document.getElementById(`language-${encodeURIComponent(language)}`);
+        if (checkbox) {
+          checkbox.checked = false;
+        }
+      });
+    }
+
+    // Восстановление сортировки и чекбокса "Hide Listened"
+    if (filterData.sortOrder) {
+      document.getElementById('sort-order').value = filterData.sortOrder;
+      sortOrder = filterData.sortOrder;
+    }
+
+    if (typeof filterData.hideListened === 'boolean') {
+      document.getElementById('hide-listened').checked = filterData.hideListened;
+      hideListened = filterData.hideListened;
+    }
+
+    // Применение фильтров после восстановления данных
+    applyFilters();
+  }
+
+  // Назначаем обработчики событий
+  document.querySelectorAll('.genre-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      applyFilters();
+      saveFiltersToCache();
+    });
+  });
+
+  document.querySelectorAll('.language-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      applyFilters();
+      saveFiltersToCache();
+    });
+  });
+
+  document.getElementById('sort-order').addEventListener('change', (e) => {
+    sortOrder = e.target.value;
+    applyFilters();
+    saveFiltersToCache();
+  });
+
+  document.getElementById('hide-listened').addEventListener('change', (e) => {
+    hideListened = e.target.checked;
+    applyFilters();
+    saveFiltersToCache();
+  });
+}
+
+
+// Сохраняем выбранные фильтры в локальное хранилище
+function saveFiltersToCache() {
+  const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked'))
+    .map(checkbox => checkbox.value);
+  const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled'))
+    .map(checkbox => checkbox.value);
+
+  const selectedLanguages = Array.from(document.querySelectorAll('.language-checkbox:checked'))
+    .map(checkbox => checkbox.value);
+
+  const excludedLanguages = Array.from(document.querySelectorAll('.language-checkbox'))
+    .filter(checkbox => !checkbox.checked)
+    .map(checkbox => checkbox.value);
+
+  const sortOrder = document.getElementById('sort-order').value;
+  const hideListened = document.getElementById('hide-listened').checked;
+
+  const filterData = {
+    selectedGenres,
+    excludedGenres,
+    selectedLanguages,
+    excludedLanguages, // Добавляем исключённые языки
+    sortOrder,
+    hideListened
+  };
+
+  console.log('Saving filters:', filterData); // Лог сохранения фильтров
+
+  localStorage.setItem('albumFilters', JSON.stringify(filterData));
+}
+
+    
+    function init() {
+  fetchAlbumsData();
+}
+    
+  function processGenreData(data) {
+    const headers = data[0];
+    const languageColumns = [0, 1, 2, 9];
+
+    headers.forEach((header, colIndex) => {
+      const isLanguage = languageColumns.includes(colIndex);
+      const category = header.trim();
+
+      for (let rowIndex = 3; rowIndex < data.length; rowIndex++) {
+        const trackUrl = data[rowIndex][colIndex];
+        if (trackUrl) {
+          if (!trackToGenres.has(trackUrl)) {
+            trackToGenres.set(trackUrl, { languages: new Set(), genres: new Set() });
+          }
+          if (isLanguage) {
+            trackToGenres.get(trackUrl).languages.add(category);
+          } else {
+            trackToGenres.get(trackUrl).genres.add(category);
+          }
+        }
+      }
+    });
+  }
+
+  function processAlbumData(rawData) {
+    rawData.forEach(item => {
+      if (item.type === 'album') {
+        if (!albumsMap.has(item.album) && item.album !== "") {
+          albumsMap.set(item.album, {
+            img: item.img,
+            nameAlbum: item.nameAlbum,
+            albumUrl: item.album,
+            artistName: item.nameAA,
+            artistUrl: item.artist,
+            date: item.date,
+            label: item.label,
+            duration: item.duration,
+            tracks: [],
+            listenedTracks: new Set(),
+            listened: listenedAlbums[item.album] || false,
+            languages: new Set(),
+            genres: new Set()
+          });
+        }
+        
+        const album = albumsMap.get(item.album);
+        album.tracks.push({
+          trackUrl: item.track,
+          preview: item.preview
+        });
+
+        const trackGenres = trackToGenres.get(item.track);
+        if (trackGenres) {
+          trackGenres.languages.forEach(lang => album.languages.add(lang));
+          trackGenres.genres.forEach(genre => album.genres.add(genre));
+
+          if (album.genres.size === 0 && album.languages.size > 0) {
+            album.genres.add('pop or indie');
+          }
+        }
+      }
+    });
+
+    albumsData = Array.from(albumsMap.values());
+  }
+
+  function processListenCounts(data) {
+  const listenCounts = {};
+  data.forEach(row => {
+    const trackUri = row.trackUri;
+    const listens = parseInt(row[Object.keys(row)[0]]);
+    if (trackUri && !isNaN(listens)) {
+      listenCounts[trackUri] = listens;
+    }
+  });
+  return listenCounts;
+}
+    
+  function populateFilters() {
+  const genreContainer = document.getElementById('genre-checkboxes');
+  const languageContainer = document.getElementById('language-checkboxes');
+
+  const genresCountMap = new Map();
+  const languagesCountMap = new Map();
+
+  albumsData.forEach(album => {
+    album.genres.forEach(genre => {
+      if (!genresCountMap.has(genre)) {
+        genresCountMap.set(genre, 0);
+      }
+      genresCountMap.set(genre, genresCountMap.get(genre) + 1);
+    });
+
+    album.languages.forEach(language => {
+      if (!languagesCountMap.has(language)) {
+        languagesCountMap.set(language, 0);
+      }
+      languagesCountMap.set(language, languagesCountMap.get(language) + 1);
+    });
+  });
+
+  languagesCountMap.set('Без голосу', albumsData.filter(album => album.languages.size === 0).length);
+
+  genreContainer.innerHTML = '';
+  languageContainer.innerHTML = '';
+
+  const sortedGenres = [...genresCountMap.entries()].sort((a, b) => b[1] - a[1]);
+
+  sortedGenres.forEach(([genre, count]) => {
+    const genreDiv = document.createElement('div');
+    genreDiv.classList.add('genre-filter-item');
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = genre;
+    checkbox.id = `genre-${genre}`;
+    checkbox.classList.add('genre-checkbox');
+
+    const label = document.createElement('label');
+    label.htmlFor = `genre-${genre}`;
+
+    const genreName = document.createElement('span');
+    genreName.classList.add('genre-name');
+    genreName.textContent = genre;
+
+    const genreCount = document.createElement('span');
+    genreCount.classList.add('genre-count');
+    genreCount.textContent = ` (${count})`;
+
+    const genreCross = document.createElement('span');
+    genreCross.textContent = '✖';
+    genreCross.classList.add('exclude-genre');
+    genreCross.style.cursor = 'pointer';
+    genreCross.style.color = 'red';
+    genreCross.setAttribute('data-genre', genre);
+
+    genreCross.addEventListener('click', function() {
+      toggleExcludeGenre(genre, checkbox, label, genreCross);
+    });
+
+    label.appendChild(genreName);
+    label.appendChild(genreCount);
+
+    genreDiv.appendChild(checkbox);
+    genreDiv.appendChild(label);
+    genreDiv.appendChild(genreCross);
+    genreContainer.appendChild(genreDiv);
+
+    checkbox.addEventListener('change', applyFilters);
+  });
+
+  const languageOrder = ['ukr', 'eng', 'other lang', 'rus', 'Без голосу'];
+  languageOrder.forEach(language => {
+    const count = languagesCountMap.get(language) || 0;
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = language;
+    checkbox.id = `language-${encodeURIComponent(language)}`;
+    checkbox.classList.add('language-checkbox');
+
+    const label = document.createElement('label');
+    label.htmlFor = checkbox.id; // Use the encoded ID
+
+    const languageName = document.createElement('span');
+    languageName.classList.add('language-name');
+    languageName.textContent = language;
+
+    const languageCount = document.createElement('span');
+    languageCount.classList.add('language-count');
+    languageCount.textContent = ` (${count})`;
+
+    label.appendChild(checkbox);
+    label.appendChild(languageName);
+    label.appendChild(languageCount);
+
+    languageContainer.appendChild(label);
+    languageContainer.appendChild(document.createElement('br'));
+
+    if (language !== 'rus') {
+      checkbox.checked = true;
+    }
+
+    checkbox.addEventListener('change', applyFilters);
+  });
+}
+
+
+    function toggleExcludeGenre(genre, checkbox, label, genreCross) {
+  if (checkbox.disabled) {
+    checkbox.disabled = false;
+    genreCross.textContent = '✖';
+    genreCross.style.color = 'red';
+    label.style.textDecoration = 'none';
+    label.style.color = 'black';
+  } else {
+    checkbox.disabled = true;
+    genreCross.textContent = '✔';
+    genreCross.style.color = 'green';
+    label.style.textDecoration = 'line-through';
+    label.style.color = 'gray';
+  }
+  applyFilters();
+}
+
+let filteredAlbums = [];
+let blacklistedArtists = new Set(JSON.parse(localStorage.getItem('blacklistedArtists')) || []);
+    let blacklistedLabels = new Set(JSON.parse(localStorage.getItem('blacklistedLabels')) || []);
+    
+function applyFilters() {
+  filteredAlbums = albumsData;
+
+  const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked'))
+    .map(checkbox => checkbox.value);
+
+  const selectedLanguages = Array.from(document.querySelectorAll('.language-checkbox:checked'))
+    .map(checkbox => checkbox.value);
+
+  if (selectedGenres.length > 0) {
+    filteredAlbums = filteredAlbums.filter(album => {
+      return selectedGenres.some(genre => album.genres.has(genre));
+    });
+  }
+
+  if (selectedLanguages.length > 0) {
+    filteredAlbums = filteredAlbums.filter(album => {
+      return selectedLanguages.some(language => {
+        return language === 'Без голосу' ? album.languages.size === 0 : album.languages.has(language);
+      });
+    });
+  }
+
+  const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled'))
+    .map(checkbox => checkbox.value);
+
+  if (excludedGenres.length > 0) {
+    filteredAlbums = filteredAlbums.filter(album => {
+      return !excludedGenres.some(genre => album.genres.has(genre));
+    });
+  }
+
+  filteredAlbums = filteredAlbums.filter(album => !blacklistedArtists.has(album.artistName));
+
+  filteredAlbums = filteredAlbums.filter(album => !blacklistedLabels.has(album.label));
+
+  if (hideListened) {
+    filteredAlbums = filteredAlbums.filter(album => !album.listened);
+  }
+
+  filteredAlbums.forEach(album => {
+    album.totalListens = album.tracks.reduce((sum, track) => {
+      const spotifyUri = track.trackUrl.replace('https://open.spotify.com/track/', 'spotify:track:');
+      return sum + (listenCountsData[spotifyUri] || 0);
+    }, 0);
+  });
+
+  if (sortOrder === 'listens-desc') {
+    filteredAlbums.sort((a, b) => b.totalListens - a.totalListens);
+  } else {
+    filteredAlbums.sort((a, b) => {
+      const dateA = parseDate(a.date);
+      const dateB = parseDate(b.date);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+  }
+
+  currentIndex = 0;
+  renderAlbums(filteredAlbums, true);
+
+  document.getElementById('album-count').textContent = filteredAlbums.length;
+}
+
+document.getElementById('select-all-genres').addEventListener('click', () => {
+  const genreCheckboxes = document.querySelectorAll('.genre-checkbox');
+  genreCheckboxes.forEach(checkbox => checkbox.checked = true);
+  applyFilters();
+});
+
+document.getElementById('deselect-all-genres').addEventListener('click', () => {
+  const genreCheckboxes = document.querySelectorAll('.genre-checkbox');
+  genreCheckboxes.forEach(checkbox => checkbox.checked = false);
+  applyFilters();
+});
+
+document.getElementById('select-all-languages').addEventListener('click', () => {
+  const languageCheckboxes = document.querySelectorAll('.language-checkbox');
+  languageCheckboxes.forEach(checkbox => checkbox.checked = true);
+  applyFilters();
+});
+
+document.getElementById('deselect-all-languages').addEventListener('click', () => {
+  const languageCheckboxes = document.querySelectorAll('.language-checkbox');
+  languageCheckboxes.forEach(checkbox => checkbox.checked = false);
+  applyFilters();
+});
+
+function handleScroll() {
+  if ((window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) && currentIndex < filteredAlbums.length) {
+    renderAlbums(filteredAlbums);
+  }
+}
+
+  function parseDate(dateString) {
+    const [day, month, year] = dateString.split('.').map(Number);
+    return new Date(year + 2000, month - 1, day);
+  }
+
+  function renderAlbums(filteredAlbums = albumsData, reset = false) {
+  const container = document.getElementById('albums-container');
+  
+  if (reset) {
+    container.innerHTML = '';
+  }
+
+  const endIndex = Math.min(currentIndex + batchSize, filteredAlbums.length);
+
+  for (let i = currentIndex; i < endIndex; i++) {
+    const album = filteredAlbums[i];
+
+    const albumElement = document.createElement('div');
+    albumElement.classList.add('album');
+    albumElement.setAttribute('data-album-url', album.albumUrl);
+
+    if (album.listened) {
+      albumElement.classList.add('album-listened');
+    }
+
+    let languages = Array.from(album.languages).join(', ');
+    let genres = Array.from(album.genres);
+
+    const hasGoodGenre = genres.includes("good");
+    genres = genres.filter(genre => genre !== "good");
+
+    genres = genres.length ? genres.join(', ') : 'Немає даних';
+    const languageHtml = languages ? `<p>Мова: ${languages}</p>` : `<p>Мова: без голосу</p>`;
+
+    const labelHtml = (album.artistName !== album.label) ? `<p>Лейбл: ${album.label}</p>` : '';
+
+    let totalListens = 0;
+    album.tracks.forEach(track => {
+      const spotifyUri = track.trackUrl.replace('https://open.spotify.com/track/', 'spotify:track:');
+      if (listenCountsData[spotifyUri]) {
+        totalListens += listenCountsData[spotifyUri];
+      }
+    });
+
+    const listensHtml = `<p>Прослуховувань: ${totalListens}</p>`;
+
+    const starIconHtml = hasGoodGenre ? `<i class="fas fa-star" style="position: absolute; top: 10px; right: 10px; font-size: 24px; color: gold;"></i>` : '';
+
+    const blacklistArtistCross = `<span class="blacklist-cross" data-type="artist" data-name="${album.artistName}" style="cursor: pointer; color: red;">✖</span>`;
+    const blacklistLabelCross = album.label ? `<span class="blacklist-cross" data-type="label" data-name="${album.label}" style="cursor: pointer; color: red;">✖</span>` : '';
+
+    albumElement.innerHTML = `
+      <div class="album-overlay"></div>
+      <img src="${album.img}" alt="${album.nameAlbum}">
+      ${starIconHtml}
+      <div class="album-details">
+        <h3><a href="${album.albumUrl}" target="_blank">${album.nameAlbum}</a></h3>
+        <p>Артист: <a href="${album.artistUrl}" target="_blank">${album.artistName}</a> ${blacklistArtistCross}</p>
+        <p>Дата релізу: ${album.date}</p>
+        ${labelHtml ? `<p>Лейбл: ${album.label} ${blacklistLabelCross}</p>` : ''}
+        <p>Тривалість: ${album.duration}</p>
+        ${languageHtml}
+        <p>Жанри: ${genres}</p>
+        ${listensHtml}
+      </div>
+      <button class="mark-listened-btn" onclick="markAlbumAsListened('${album.albumUrl}', this.closest('.album'))">
+        ${album.listened ? 'Позначити як не прослуханий' : 'Позначити як прослуханий'}
+      </button>
+      <div class="tracks" id="tracks-${i}"></div>
+    `;
+
+    container.appendChild(albumElement);
+
+    albumElement.querySelector('img').addEventListener('click', function () {
+      const imgSrc = this.src;
+      const existingEnlargedImg = document.querySelector('.enlarged-img');
+
+      if (existingEnlargedImg) {
+        existingEnlargedImg.remove();
+        document.body.classList.remove('no-scroll');
+        return;
+      }
+
+      const enlargedImg = document.createElement('img');
+      enlargedImg.src = imgSrc;
+      enlargedImg.classList.add('enlarged-img');
+      document.body.appendChild(enlargedImg);
+      document.body.classList.add('no-scroll');
+
+      enlargedImg.addEventListener('click', function () {
+        enlargedImg.remove();
+        document.body.classList.remove('no-scroll');
+      });
+    });
+
+    const tracksContainer = document.getElementById(`tracks-${i}`);
+    album.tracks.forEach((track, index) => {
+      const trackCircle = document.createElement('a');
+      trackCircle.classList.add('track-circle');
+      trackCircle.href = track.trackUrl;
+      trackCircle.target = "_blank";
+      trackCircle.innerHTML = `<i class="fas fa-music"></i>`;
+
+      const audio = document.createElement('audio');
+      audio.src = track.preview;
+      trackCircle.appendChild(audio);
+
+      trackCircle.addEventListener('mouseenter', () => {
+        audio.play();
+      });
+
+      trackCircle.addEventListener('mouseleave', () => {
+        audio.pause();
+        audio.currentTime = 0;
+      });
+
+      audio.addEventListener('pause', () => {
+        album.listenedTracks.add(track.trackUrl);
+        markTrackAsListenedAfterPause(album, albumElement);
+      });
+
+      tracksContainer.appendChild(trackCircle);
+    });
+  }
+
+  currentIndex = endIndex;
+
+  if (currentIndex >= filteredAlbums.length) {
+    document.getElementById('lazy-loading').textContent = "Більше немає альбомів для завантаження";
+  } else {
+    document.getElementById('lazy-loading').textContent = "Завантаження альбомів...";
+  }
+}
+
+  window.addEventListener('scroll', handleScroll);
+
+  function saveListenedAlbums() {
+  localStorage.setItem('listenedAlbums', JSON.stringify(listenedAlbums));
+}
+
+  function markAlbumAsListened(albumUrl, albumElement, fromModal = false) {
+  const album = albumsMap.get(albumUrl);
+
+  if (fromModal) {
+    delete listenedAlbums[albumUrl];
+    album.listened = false;
+    album.listenedTracks.clear();
+  } else {
+    album.listened = !album.listened;
+
+    if (!album.listened) {
+      delete listenedAlbums[albumUrl];
+      album.listenedTracks.clear();
+    } else {
+      listenedAlbums[albumUrl] = true;
+    }
+  }
+
+  saveListenedAlbums();
+
+  if (albumElement) {
+    const markButton = albumElement.querySelector('.mark-listened-btn');
+    markButton.textContent = album.listened ? 'Позначити як не прослуханий' : 'Позначити як прослуханий';
+
+    if (album.listened) {
+      albumElement.classList.add('album-listened');
+    } else {
+      albumElement.classList.remove('album-listened');
+    }
+
+    if (hideListened && album.listened) {
+      albumElement.style.display = 'none';
+    }
+  }
+
+  updateListenedAlbumsModal();
+  applyFilters();
+}
+
+  function markTrackAsListenedAfterPause(album, albumElement) {
+  if (album.listenedTracks.size === album.tracks.length) {
+    listenedAlbums[album.albumUrl] = true;
+    album.listened = true;
+
+    saveListenedAlbums();
+
+    albumElement.classList.add('album-listened');
+    const markButton = albumElement.querySelector('.mark-listened-btn');
+    markButton.textContent = 'Позначити як не прослуханий';
+
+    if (hideListened) {
+      albumElement.style.display = 'none';
+    }
+  }
+}
+
+    document.getElementById('albums-container').addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('blacklist-cross')) {
+        const type = e.target.getAttribute('data-type');
+        const name = e.target.getAttribute('data-name');
+        if (type === 'artist') {
+          blacklistedArtists.add(name);
+          localStorage.setItem('blacklistedArtists', JSON.stringify(Array.from(blacklistedArtists)));
+        } else if (type === 'label') {
+          blacklistedLabels.add(name);
+          localStorage.setItem('blacklistedLabels', JSON.stringify(Array.from(blacklistedLabels)));
+        }
+        applyFilters();
+      }
+    });
+
+    function showBlacklist(isBlacklist = true) {
+  const modal = document.getElementById('blacklist-modal');
+  const closeBtn = modal.querySelector('.close');
+
+  modal.style.display = 'block';
+
+  closeBtn.onclick = function() {
+    modal.style.display = 'none';
+  };
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  if (isBlacklist) {
+    document.getElementById('blacklist-tab').click();
+  } else {
+    document.getElementById('listened-albums-tab').click();
+  }
+}
+
+function openTab(evt, tabName) {
+  const tablinks = document.querySelectorAll('.tablink');
+  const tabcontents = document.querySelectorAll('.tabcontent');
+
+  tabcontents.forEach(tab => tab.classList.remove('active'));
+  tablinks.forEach(link => link.classList.remove('active'));
+
+  document.getElementById(tabName).classList.add('active');
+
+  if (evt) {
+    evt.currentTarget.classList.add('active');
+  } else {
+    if (tabName === 'blacklist-content') {
+      document.getElementById('blacklist-tab').classList.add('active');
+    } else {
+      document.getElementById('listened-albums-tab').classList.add('active');
+    }
+  }
+
+  if (tabName === 'blacklist-content') {
+    updateBlacklist();
+  } else if (tabName === 'listened-albums-content') {
+    updateListenedAlbumsModal();
+  }
+}
+
+function updateBlacklist() {
+  const artistsList = document.getElementById('blacklisted-artists');
+  const labelsList = document.getElementById('blacklisted-labels');
+
+  artistsList.innerHTML = '';
+  labelsList.innerHTML = '';
+
+  blacklistedArtists.forEach(artist => {
+    const li = document.createElement('li');
+
+    let artistUrl = '';
+    albumsData.forEach(album => {
+      if (album.artistName === artist) {
+        artistUrl = album.artistUrl;
+      }
+    });
+
+    const artistLink = document.createElement('a');
+    artistLink.textContent = artist;
+    artistLink.href = artistUrl || '#';
+    artistLink.target = "_blank";
+    artistLink.style.cursor = 'pointer';
+
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = 'Видалити';
+    removeBtn.addEventListener('click', function() {
+      blacklistedArtists.delete(artist);
+      localStorage.setItem('blacklistedArtists', JSON.stringify(Array.from(blacklistedArtists)));
+      li.remove();
+      applyFilters();
+    });
+
+    li.appendChild(artistLink);
+    li.appendChild(removeBtn);
+    artistsList.appendChild(li);
+  });
+
+  blacklistedLabels.forEach(label => {
+    const li = document.createElement('li');
+    const labelText = document.createElement('span');
+    labelText.textContent = label;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = 'Видалити';
+    removeBtn.addEventListener('click', function() {
+      blacklistedLabels.delete(label);
+      localStorage.setItem('blacklistedLabels', JSON.stringify(Array.from(blacklistedLabels)));
+      li.remove();
+      applyFilters();
+    });
+
+    li.appendChild(labelText);
+    li.appendChild(removeBtn);
+    labelsList.appendChild(li);
+  });
+}
+
+function updateListenedAlbumsModal() {
+  const albumsList = document.getElementById('listened-albums-list');
+  albumsList.innerHTML = '';
+
+  albumsData.forEach(album => {
+    if (album.listened) {
+      const listItem = document.createElement('li');
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = true;
+      checkbox.addEventListener('change', function() {
+        markAlbumAsListened(album.albumUrl, null, true);
+      });
+
+      const albumLink = document.createElement('a');
+      albumLink.href = album.albumUrl;
+      albumLink.target = '_blank';
+      albumLink.textContent = `${album.artistName} - ${album.nameAlbum}`;
+
+      listItem.appendChild(checkbox);
+      listItem.appendChild(albumLink);
+      albumsList.appendChild(listItem);
+    }
+  });
+}
+
+document.getElementById('blacklist-button').addEventListener('click', function() {
+  showBlacklist(true);
+});
+
+document.getElementById('show-listened-albums').addEventListener('click', function(event) {
+  event.preventDefault();
+  showBlacklist(false);
+});
+    
+    function showListenedAlbumsModal() {
+  const modal = document.getElementById('listened-albums-modal');
+  const closeBtn = modal.querySelector('.close');
+
+  updateListenedAlbumsModal();
+
+  modal.style.display = 'block';
+
+  closeBtn.onclick = function() {
+    modal.style.display = 'none';
+  };
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  };
+}
+
+    document.getElementById('export-data').addEventListener('click', () => {
+  // Собираем данные из localStorage
+  const blacklistArtists = JSON.parse(localStorage.getItem('blacklistedArtists')) || [];
+  const blacklistLabels = JSON.parse(localStorage.getItem('blacklistedLabels')) || [];
+  const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
+  const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || {};
+
+  // Создаем JSON с этими данными
+  const exportData = {
+    blacklistArtists,
+    blacklistLabels,
+    listenedAlbums,
+    albumFilters
+  };
+
+  // Преобразуем данные в строку и выводим в textarea
+  const exportDataString = JSON.stringify(exportData, null, 2); // форматируем JSON с отступами
+  const dataTextarea = document.getElementById('data-textarea');
+  dataTextarea.style.display = 'block';
+  dataTextarea.value = exportDataString;
+
+  // Копируем текст в буфер обмена
+  dataTextarea.select();
+  document.execCommand('copy');
+
+  alert('Дані скопійовані в буфер обміну. Вставте їх у новому браузері або на іншому пристрої.');
+});
+
+// Кнопка "Завантажити дані"
+document.getElementById('import-data').addEventListener('click', () => {
+  const importTextarea = document.getElementById('import-textarea');
+  const importDataString = importTextarea.value;
+
+  if (!importDataString) {
+    alert('Введіть дані для завантаження.');
+    return;
+  }
+
+  try {
+    // Парсим введенные данные
+    const importData = JSON.parse(importDataString);
+
+    // Сохраняем данные в localStorage
+    if (importData.blacklistArtists) {
+      localStorage.setItem('blacklistedArtists', JSON.stringify(importData.blacklistArtists));
+    }
+
+    if (importData.blacklistLabels) {
+      localStorage.setItem('blacklistedLabels', JSON.stringify(importData.blacklistLabels));
+    }
+
+    if (importData.listenedAlbums) {
+      localStorage.setItem('listenedAlbums', JSON.stringify(importData.listenedAlbums));
+    }
+
+    if (importData.albumFilters) {
+      localStorage.setItem('albumFilters', JSON.stringify(importData.albumFilters));
+    }
+
+    alert('Дані успішно завантажені. Оновіть сторінку для застосування змін.');
+    location.reload(); // Перезагружаем страницу для применения новых настроек
+  } catch (error) {
+    alert('Помилка при завантаженні даних. Перевірте формат введених даних.');
+  }
+});
+    
+// Запуск инициализации
+init();
+
+</script>
+</body>
+</html>
