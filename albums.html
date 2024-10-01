@@ -1773,7 +1773,7 @@ function renderAlbums(filteredAlbums = albumsData, reset = false) {
         <h3><a href="${album.albumUrl}" target="_blank">${album.nameAlbum}</a></h3>
         <p>Артист: <a href="${album.artistUrl}" target="_blank">${album.artistName}</a> ${blacklistArtistCross}</p>
         <p>Дата релізу: ${album.date}</p>
-        <p>Тип релізу: ${album.type === 'album' ? 'Повноформатний альбом' : 'Міні-альбом'}</p>
+        <p>Тип релізу: ${album.type === 'album' ? 'повноформатний альбом' : 'міні-альбом'}</p>
         ${labelHtml ? `<p>Лейбл: ${album.label} ${blacklistLabelCross}</p>` : ''}
         <p>Тривалість: ${album.duration}</p>
         ${languageHtml}
