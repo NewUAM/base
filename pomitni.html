@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body>
+    <div>
+        <canvas id="trackChartMonth" width="400" height="200"></canvas>
+    </div>
+    <div>
+        <canvas id="trackChartQuarter" width="400" height="200"></canvas>
+    </div>
+    <div>
+        <canvas id="trackChartHalfYear" width="400" height="200"></canvas>
+    </div>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBBdGBuVtrsd_Cb1vpAjAH3jm6ndeg4HqKsPpeqMR-B9eBGbau55BuInBteCIoQYIIlzorSk1CEsLP/pub?output=csv";
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                console.log("CSV Parsing Complete", results);
+                const data = results.data;
+                const parsedDates = data.map(row => {
+                    const date = row["date"];
+                    const count = parseInt(row["count"], 10);
+                    if (date && !isNaN(count)) {
+                        const parsedDate = moment(date, 'YYYY-MM-DD').toDate();
+                        if (parsedDate.getFullYear() === 2024) {
+                            console.log(`Parsed date: ${date}, count: ${count}`);
+                            return {
+                                date: parsedDate,
+                                count: count
+                            };
+                        }
+                    }
+                    console.warn(`Invalid row: ${JSON.stringify(row)}`);
+                    return null;
+                }).filter(item => item && item.date instanceof Date && !isNaN(item.date));
+                
+                if (parsedDates.length === 0) {
+                    console.error("No valid data found to create the chart");
+                    return;
+                }
+                createCharts(parsedDates);
+            },
+            error: function(error) {
+                console.error("Error parsing CSV: ", error);
+            }
+        });
+
+        function createCharts(data) {
+            const monthCounts = {};
+            const quarterCounts = {};
+            const halfYearCounts = {};
+
+            data.forEach(({ date, count }) => {
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                monthCounts[monthKey] = (monthCounts[monthKey] || 0) + count;
+
+                const quarter = Math.floor(date.getMonth() / 3) + 1;
+                const quarterKey = `${date.getFullYear()}-Q${quarter}`;
+                quarterCounts[quarterKey] = (quarterCounts[quarterKey] || 0) + count;
+
+                const halfYear = Math.floor(date.getMonth() / 6) + 1;
+                const halfYearKey = `${date.getFullYear()}-H${halfYear}`;
+                halfYearCounts[halfYearKey] = (halfYearCounts[halfYearKey] || 0) + count;
+            });
+
+            console.log("Month Counts: ", monthCounts);
+            console.log("Quarter Counts: ", quarterCounts);
+            console.log("Half Year Counts: ", halfYearCounts);
+
+            const sortedMonthCounts = Object.keys(monthCounts).sort().reduce((acc, key) => { acc[key] = monthCounts[key]; return acc; }, {});
+            const sortedQuarterCounts = Object.keys(quarterCounts).sort().reduce((acc, key) => { acc[key] = quarterCounts[key]; return acc; }, {});
+            const sortedHalfYearCounts = Object.keys(halfYearCounts).sort().reduce((acc, key) => { acc[key] = halfYearCounts[key]; return acc; }, {});
+
+            createBarChart('trackChartMonth', 'Tracks per Month', sortedMonthCounts, 'rgba(153, 102, 255, 1)');
+            createBarChart('trackChartQuarter', 'Tracks per Quarter', sortedQuarterCounts, 'rgba(255, 159, 64, 1)');
+            createBarChart('trackChartHalfYear', 'Tracks per Half Year', sortedHalfYearCounts, 'rgba(54, 162, 235, 1)');
+        }
+
+        function createBarChart(canvasId, label, dataCounts, borderColor) {
+            const labels = Object.keys(dataCounts);
+            const data = Object.values(dataCounts);
+
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: label,
+                            data: data,
+                            backgroundColor: borderColor,
+                            borderColor: borderColor,
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'category',
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
