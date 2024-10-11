@@ -2695,7 +2695,8 @@ background: #282626;
 <script>
 function isIOS() {
     const iOSDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    return iOSDetected;
+    const firefoxDetected = /Firefox/.test(navigator.userAgent);
+    return iOSDetected || firefoxDetected;
 }
   
 let displayOffset = 0;
