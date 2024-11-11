@@ -180,7 +180,12 @@
     border-bottom: 1px solid #444;
 }
 
-#genre-button, #sort-button, #filters-button {
+      .label-info-text {
+    font-size: 12px;
+    color: #f3f3f3;
+}
+
+#genre-button, #sort-button, #filters-button, #label-button, #city-button {
     position: relative;
     background-color: #f3f3f3;
     color: #282626;
@@ -194,22 +199,22 @@
     z-index: 200;
 }
 
-#genre-button:hover, #sort-button:hover, #filters-button:hover {
+#genre-button:hover, #sort-button:hover, #filters-button:hover, #label-button:hover, #city-button:hover {
       border: 2px solid #84AAFB;
       } 
 
-#genre-button.active, #sort-button.active, #filters-button.active {
-    background-color: #f3f3f3;
+#genre-button.active, #sort-button.active, #filters-button.active, #label-button.active, #city-button.active {
+    background-color: #84AAFB;
     border-radius: 7px 7px 0 0;
-    border: 2px solid #84AAFB;
+    border: 2px solid #f3f3f3;
 }
 
-      #genre-button i, #sort-button i, #filters-button i {
+      #genre-button i, #sort-button i, #filters-button i, #label-button i, #city-button i {
     margin-right: 8px;
     color: #282626;
 }
-      
-#genres-section, #sort-section, #filters-section {
+       
+#genres-section, #sort-section, #filters-section, #labels-section, #cities-section {
     display: block;
     position: relative;
     flex-direction: column;
@@ -222,34 +227,153 @@
     user-select: none !important;
 }
 
-#genres-section.expanded, #sort-section.expanded, #filters-section.expanded {
+#genres-section.expanded, #sort-section.expanded, #filters-section.expanded, #labels-section.expanded, #cities-section.expanded {
   display: block;
     max-height: 1000px;
     padding: 20px;
 }
 
-#genres-section.expanding {
+#genres-section.expanding, #labels-section.expanding, #cities-section.expanding {
     transition: max-height 0.5s ease, padding 0.5s ease;
 }
 
-      #genres-section.expanding .hidden-genre {
+      #genres-section.expanding .hidden-genre, #labels-section.expanding .hidden-label, #cities-section.expanding .hidden-city {
     transition: max-height 0.5s ease, padding 0.5s ease;
 }
            
-#genres-container {
+#genres-container, #labels-container, #cities-container {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     transition: all 0.3s;
     user-select: none !important;
+  max-height: 200px;
+    overflow-y: auto;
+  padding-bottom: 20px;
 }
    
+      #genres-container::-webkit-scrollbar, #labels-container::-webkit-scrollbar, #cities-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    #genres-container::-webkit-scrollbar-track, #labels-container::-webkit-scrollbar-track, #cities-container::-webkit-scrollbar-track {
+        background: #282626;
+    }
+    #genres-container::-webkit-scrollbar-thumb, #labels-container::-webkit-scrollbar-thumb, #cities-container::-webkit-scrollbar-thumb {
+        background-color: #383838;
+        border-radius: 7px;
+        border: 2px solid #282626;
+    }
+      
 :root {
     --genre-button-color: #282626;
     --genre-button-hover-color: #90EE90;
     --hidden-genre-shadow-color: #f3f3f3;
 }
 
+#labels-container .genre-button, #cities-container .genre-button {
+    width: auto;
+    white-space: nowrap; 
+}
+      
+      #labels-container .genre-button .genre-count, #cities-container .genre-button .genre-count {
+    display: inline-block;
+    margin-left: 5px;
+}
+      
+      #labels-container .genre-button.removed .genre-count, #cities-container .genre-button.removed .genre-count {
+    display: none;
+}
+
+      .genres-header, .labels-header, .cities-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.genres-sort-label, .labels-sort-label, .cities-sort-label,
+.dropdown-toggle, .dropdown-menu li {
+    font-size: 14px;
+    color: #f3f3f3;
+    font-weight: 500;
+    font-family: inherit;
+}
+      
+      .cities-sort-label {
+    margin-left: auto;
+}
+
+#genres-sort, #labels-sort, #cities-sort {
+    margin-left: 10px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+}
+
+.dropdown-toggle {
+    background-color: #282626;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    text-align: left;
+    box-shadow: 0 0 0 1px #f3f3f3;
+    outline: none;
+}
+
+.custom-dropdown.open .dropdown-toggle {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.dropdown-toggle:hover {
+    background-color: #383636;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    background-color: #282626;
+    border: 1px solid #f3f3f3;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.custom-dropdown.open .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: inherit;
+}
+
+.dropdown-menu li:hover {
+    background-color: #383838;
+}
+
+.dropdown-menu li:last-child {
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+   
 .genre-button {
     width: 136px;
     height: 20px;
@@ -504,8 +628,7 @@
     border-radius: 0 7px 0 0;
     border: 3px solid #282626;
 }
-
-        
+    
       .no-related-artists {
     display: flex;
     justify-content: center;
@@ -694,7 +817,7 @@ white-space: normal;
   padding-top: 20px;
 }
 
-#genre-button, #sort-button {
+#genre-button, #sort-button, #label-button, #city-button {
     margin-right: 5px;
 }
           
@@ -934,6 +1057,11 @@ z-index: 3;
     font-size: 14px;
 }
 
+      .label-info-text a {
+    color: #84AAFB;
+    text-decoration: none;
+}
+      
 #settings-popup .support-links a {
     color: #84AAFB;
     text-decoration: none;
@@ -1173,6 +1301,16 @@ display: block;
     cursor: pointer;
 }
 
+      .label-tag {
+    background-color: #d0e0f0;
+    color: #282626;
+}
+
+.label-tag.removed {
+    background-color: #fb8484;
+    color: #282626;
+}
+      
 #sort-menu {
     display: flex;
     flex-direction: column;
@@ -1802,7 +1940,7 @@ background: #282626;
         display: none;
     }
     
-  #genre-button, #sort-button, #filters-button {
+  #genre-button, #sort-button, #filters-button, #city-button, #label-button {
     width: auto;
     margin-right: 5px;
     position: relative;
@@ -1817,6 +1955,10 @@ background: #282626;
     z-index: 200;
   }
     
+    #city-button, #label-button, #genres-sort, .genres-sort-label {
+    display: none;
+    }
+    
     .custom-checkbox {
     font-size: 12px;
     }
@@ -1825,7 +1967,7 @@ background: #282626;
         width: 270px;
     }
     
-    #genre-button:hover, #sort-button:hover, #filters-button:hover {
+    #genre-button:hover, #sort-button:hover, #filters-button:hover, #city-button:hover, #label-button:hover {
       border: 1px solid #84AAFB;
       } 
     
@@ -1833,15 +1975,11 @@ background: #282626;
       margin-left: 5px;
     }
     
-    #genre-button i, #sort-button i {
-    margin-right: 5px;
-}
-    
-    #filters-button i {
+    #genre-button i, #sort-button i, #city-button i, #label-button i, #filters-button i {
     margin-right: 3px;
 }
     
-    #genre-button.active, #sort-button.active, #filters-button.active {
+    #genre-button.active, #sort-button.active, #filters-button.active, #city-button.active, #label-button.active {
     border: 1px solid #84AAFB;
 }
     
@@ -1863,6 +2001,7 @@ background: #282626;
         flex-wrap: wrap;
         justify-content: space-between;
         transition: none !important;
+        padding-right: 5px;
     }
     
     #genres-section {
@@ -1950,7 +2089,7 @@ font-size: 14px;
     height: 25px;
 }
 
-#genres-section.expanded, #sort-section.expanded, #filters-section.expanded {
+#genres-section.expanded, #sort-section.expanded, #filters-section.expanded, #city-section.expanded, #label-section.expanded {
     padding: 10px;
   max-height: 300px !important;
 }
@@ -2509,16 +2648,23 @@ background: #282626;
     <img id="logo" src="https://static.wixstatic.com/media/c77f36_34e5f784a1cb4a28bd8d00aeb95a320d~mv2.png" alt="Логотип">
 </a>
     <div id="buttons-wrapper">
-        <button id="genre-button" aria-expanded="false" aria-controls="genres-section">
-            <i class="fas fa-music"></i> <span>Вибір жанру</span>
-        </button>
-        <button id="sort-button" aria-expanded="false" aria-controls="sort-section">
-            <i class="fas fa-sort"></i> <span>Сортування</span>
-        </button>
-        <button id="filters-button" aria-expanded="false" aria-controls="filters-section">
-            <i class="fas fa-filter"></i> <span>Фільтри</span>
-        </button>
-    </div>
+    <button id="genre-button" aria-expanded="false" aria-controls="genres-section">
+        <i class="fas fa-music"></i> <span>Жанри</span>
+    </button>
+    <button id="label-button" aria-expanded="false" aria-controls="labels-section">
+        <i class="fas fa-building"></i> <span>Лейбли</span>
+    </button>      
+      <button id="city-button" aria-expanded="false" aria-controls="cities-section">
+    <i class="fas fa-city"></i> <span>Міста</span>
+</button>     
+    <button id="sort-button" aria-expanded="false" aria-controls="sort-section">
+        <i class="fas fa-sort"></i> <span>Сортувати</span>
+    </button>
+    <button id="filters-button" aria-expanded="false" aria-controls="filters-section">
+        <i class="fas fa-filter"></i> <span>Фільтри</span>
+    </button>
+</div>
+
     <div id="search-container">
         <i id="search-icon" class="fas fa-magnifying-glass"></i>
         <input type="text" id="artist-search" placeholder="Пошук за артистами...">
@@ -2593,12 +2739,61 @@ background: #282626;
 </section>
 
 <section id="genres-section" class="tab-content" aria-hidden="true">
-  <label class="custom-checkbox match-all-genres-tooltip" data-tooltip="При активному режимі будуть показані артисти, у яких зустрічаються всі обрані жанри одночасно. &#10;&#10; Якщо зняти відмітку, показуються артисти, у яких є хоча б один з обраних жанрів.">
-    <input type="checkbox" id="match-all-genres-checkbox" checked>
-    <span class="checkbox-icon"></span>
-    <span class="checkbox-text">Відповідність усім обраним жанрам</span>
-</label>
-    <div id="genres-container"></div>
+  <div class="genres-header">
+    <label class="custom-checkbox match-all-genres-tooltip" data-tooltip="При активному режимі будуть показані артисти, у яких зустрічаються всі обрані жанри одночасно. &#10;&#10; Якщо зняти відмітку, показуються артисти, у яких є хоча б один з обраних жанрів.">
+      <input type="checkbox" id="match-all-genres-checkbox" checked>
+      <span class="checkbox-icon"></span>
+      <span class="checkbox-text">Відповідність усім обраним жанрам</span>
+    </label>
+    <label for="genres-sort" class="genres-sort-label">
+      Сортувати жанри:
+      <div class="custom-dropdown" id="genres-sort">
+        <button class="dropdown-toggle">За кількістю артистів</button>
+        <ul class="dropdown-menu">
+          <li data-value="count">За кількістю артистів</li>
+          <li data-value="name">За назвою</li>
+          <li data-value="listeners">За кількістю слухачів</li>
+        </ul>
+      </div>
+    </label>
+  </div>
+  <div id="genres-container"></div>
+</section>
+
+<section id="labels-section" class="tab-content" aria-hidden="true">
+  <div class="labels-header">
+    <span class="label-info-text">Артистові присвоюється лейбл у разі наявності у нього хоча б одного релізу, що вийшов під цим лейблом.</span>
+    <label for="labels-sort" class="labels-sort-label">
+      Сортувати лейбли:
+      <div class="custom-dropdown" id="labels-sort">
+        <button class="dropdown-toggle">За кількістю артистів</button>
+        <ul class="dropdown-menu">
+          <li data-value="count">За кількістю артистів</li>
+          <li data-value="name">За назвою</li>
+          <li data-value="listeners">За кількістю слухачів</li>
+        </ul>
+      </div>
+    </label>
+  </div>
+  <div id="labels-container"></div>
+</section>
+
+<section id="cities-section" class="tab-content" aria-hidden="true">
+  <div class="cities-header">
+    <span class="label-info-text">Для додавання або заміни міста в артиста заповніть <a href="https://www.nuam.club/add" target="_blank">просту форму</a>.</span>
+    <label for="cities-sort" class="cities-sort-label">
+      Сортувати міста:
+      <div class="custom-dropdown" id="cities-sort">
+        <button class="dropdown-toggle">За кількістю артистів</button>
+        <ul class="dropdown-menu">
+          <li data-value="count">За кількістю артистів</li>
+          <li data-value="name">За назвою</li>
+          <li data-value="listeners">За кількістю слухачів</li>
+        </ul>
+      </div>
+    </label>
+  </div>
+  <div id="cities-container"></div>
 </section>
 
 <section id="sort-section" class="tab-content" aria-hidden="true">
@@ -2610,7 +2805,6 @@ background: #282626;
     <button onclick="sortArtistsHandler('lastReleaseDate', 'desc')"><i class="fas fa-arrow-down-wide-short"></i></button>
     <span>За датою крайнього релізу</span>
   </div>
-      
       <div class="sort-option">
     <button class="clear-sort" onclick="clearSort()">×</button>
     <button onclick="sortArtistsHandler('listeners', 'asc')"><i class="fas fa-arrow-up-wide-short"></i></button>
@@ -2676,7 +2870,7 @@ background: #282626;
   
     <section id="artist-section">
     <div id="no-artists-message">
-        Артистів із такими параметрами не знайдено.<br/><br/>Спробуйте інший набір жанрів, виключіть фільтри або збільште діапазон слухачів на місяць.
+        Артистів із такими параметрами не знайдено.<br/><br/>Спробуйте інший набір жанрів, лейблів або міст, виключіть фільтри або збільште діапазон слухачів на місяць.
     </div>
     <div id="no-artists-name-message">
     Артистів із таким ім'ям не знайдено.<br/><br/>Спробуйте використати для пошуку посилання на профіль артиста в Spotify.
@@ -2712,6 +2906,8 @@ let shuffledArtistsData = [];
 let originalArtistsOrder = [];
 let isSortActive = false;
 let tokenExpiryTime = 0;
+let selectedCities = [];
+let removedCities = [];
 
 async function getAccessToken() {
     const clientId = 'b5ff50f2075e4a15a6820f06a8269c80';
@@ -2775,46 +2971,77 @@ function collectAllArtistURLs(artists) {
   
 let genreCombinations = {};
 let initialGenreCombinations = {};
+let selectedLabels = [];
+let removedLabels = [];
+let labelCombinations = {};
+let initialLabelCombinations = {};
+let cityCombinations = {};
+let initialCityCombinations = {};
 
 function initializeGenreCombinations(artists) {
     genreCombinations = {};
+    labelCombinations = {};
+    cityCombinations = {};
     let genreCounts = {};
     let filteredGenreCounts = {};
+    let labelCounts = {};
+    let filteredLabelCounts = {};
+    let cityCounts = {};
+    let filteredCityCounts = {};
 
     artists.forEach(artist => {
         const artistGenres = artist['Жанр'].split(', ');
+        const artistLabels = [artist['Label'], artist['Label2'], artist['Label3'], artist['Label4'], artist['Label5'], artist['Label6']].filter(Boolean);
+        const artistCity = artist['City'];
 
-        if (artistGenres.some(genre => removedGenres.includes(genre))) {
+        const passesFilters = (!hideRussian || artist['RuLang'] === '') &&
+                              (!filterYearRel || artist['YearRel'] === '+') &&
+                              (!filterMultiRel || artist['MultiRel'] === '+') &&
+                              (!filterDebut || artist['Debut'] === '+');
+
+        if (!passesFilters || artistGenres.some(genre => removedGenres.includes(genre)) || 
+            artistLabels.some(label => removedLabels.includes(label)) || 
+            removedCities.includes(artistCity)) {
             return;
         }
 
-        const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
-        const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
-        const matchesDebut = !filterDebut || artist['Debut'] === '+';
-        const matchesHideRussian = !hideRussian || !artist['RuLang'];
-
-        if (matchesYearRel && matchesMultiRel && matchesDebut && matchesHideRussian) {
+        if ((selectedLabels.length === 0 || selectedLabels.some(label => artistLabels.includes(label))) &&
+            (selectedCities.length === 0 || selectedCities.includes(artistCity))) {
             artistGenres.forEach(genre => {
-                if (!genreCounts[genre]) {
-                    genreCounts[genre] = 0;
-                }
-                genreCounts[genre]++;
+                genreCounts[genre] = (genreCounts[genre] || 0) + 1;
             });
 
             const genreCount = artistGenres.length;
-            for (let i = 1; i < (1 << genreCount); i++) {
-                let combination = [];
-                for (let j = 0; j < genreCount; j++) {
-                    if (i & (1 << j)) {
-                        combination.push(artistGenres[j]);
+            if (matchAllGenres) {
+                for (let i = 1; i < (1 << genreCount); i++) {
+                    let combination = [];
+                    for (let j = 0; j < genreCount; j++) {
+                        if (i & (1 << j)) {
+                            combination.push(artistGenres[j]);
+                        }
                     }
+                    const key = combination.sort().join(',');
+                    filteredGenreCounts[key] = (filteredGenreCounts[key] || 0) + 1;
                 }
-                const key = combination.sort().join(',');
-                if (!filteredGenreCounts[key]) {
-                    filteredGenreCounts[key] = 0;
-                }
-                filteredGenreCounts[key]++;
             }
+        }
+
+        if ((selectedGenres.length === 0 || selectedGenres.every(genre => artistGenres.includes(genre))) &&
+            (selectedCities.length === 0 || selectedCities.includes(artistCity))) {
+            artistLabels.forEach(label => {
+                labelCounts[label] = (labelCounts[label] || 0) + 1;
+            });
+
+            artistLabels.forEach(label => {
+                const key = label;
+                filteredLabelCounts[key] = (filteredLabelCounts[key] || 0) + 1;
+            });
+        }
+
+        if ((selectedGenres.length === 0 || selectedGenres.every(genre => artistGenres.includes(genre))) &&
+            (selectedLabels.length === 0 || selectedLabels.some(label => artistLabels.includes(label)))) {
+            cityCounts[artistCity] = (cityCounts[artistCity] || 0) + 1;
+            filteredCityCounts[artistCity] = (filteredCityCounts[artistCity] || 0) + 1;
         }
     });
 
@@ -2824,17 +3051,342 @@ function initializeGenreCombinations(artists) {
         }
     }
 
-    for (let combination in filteredGenreCounts) {
-        if (filteredGenreCounts.hasOwnProperty(combination)) {
-            if (!genreCombinations[combination]) {
-                genreCombinations[combination] = { count: 0, filterCount: filteredGenreCounts[combination] };
-            } else {
-                genreCombinations[combination].filterCount = filteredGenreCounts[combination];
+    if (matchAllGenres) {
+        for (let combination in filteredGenreCounts) {
+            if (filteredGenreCounts.hasOwnProperty(combination)) {
+                if (!genreCombinations[combination]) {
+                    genreCombinations[combination] = { count: 0, filterCount: filteredGenreCounts[combination] };
+                } else {
+                    genreCombinations[combination].filterCount = filteredGenreCounts[combination];
+                }
             }
         }
     }
 
+    for (let label in labelCounts) {
+        if (labelCounts.hasOwnProperty(label)) {
+            labelCombinations[label] = { count: labelCounts[label], filterCount: labelCounts[label] };
+        }
+    }
+
+    for (let city in cityCounts) {
+        if (cityCounts.hasOwnProperty(city)) {
+            cityCombinations[city] = { 
+                count: cityCounts[city], 
+                filterCount: filteredCityCounts[city] !== undefined ? filteredCityCounts[city] : cityCounts[city] 
+            };
+        }
+    }
+
     initialGenreCombinations = JSON.parse(JSON.stringify(genreCombinations));
+    initialLabelCombinations = JSON.parse(JSON.stringify(labelCombinations));
+    initialCityCombinations = JSON.parse(JSON.stringify(cityCombinations));
+}
+
+  function extractAndDisplayLabels(artists) {
+    const labels = {};
+    artists.forEach(artist => {
+        const artistLabels = [
+            artist['Label'],
+            artist['Label2'],
+            artist['Label3'],
+            artist['Label4'],
+            artist['Label5'],
+            artist['Label6']
+        ].filter(Boolean);
+
+        artistLabels.forEach(label => {
+            labels[label] = (labels[label] || 0) + 1;
+        });
+    });
+
+    const labelsContainer = document.getElementById('labels-container');
+    labelsContainer.innerHTML = '';
+
+    let sortedLabels = Object.entries(labels).sort((a, b) => b[1] - a[1]);
+
+    sortedLabels = sortedLabels.filter(([label, count]) => count >= 3);
+
+    sortedLabels.forEach(([label, count]) => {
+        const labelButton = document.createElement('button');
+        labelButton.className = 'genre-button';
+        labelButton.dataset.label = label;
+        labelButton.innerHTML = `<span class="genre-name">${label}</span><span class="genre-count">(${count})</span>`;
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-genre';
+        removeButton.textContent = '×';
+        removeButton.onclick = event => {
+            event.stopPropagation();
+
+            if (!removedLabels.includes(label)) {
+                removedLabels.push(label);
+                selectedLabels = selectedLabels.filter(l => l !== label);
+                initializeGenreCombinations(artistsData);
+
+                updateFilterTags();
+                updateArtistsDisplay();
+                updateLabelCounts();
+                updateLabelUIState();
+            }
+        };
+        labelButton.appendChild(removeButton);
+
+        if (removedLabels.includes(label)) {
+            labelButton.classList.add('removed');
+        }
+
+        labelsContainer.appendChild(labelButton);
+
+        labelButton.addEventListener('click', () => {
+            if (removedLabels.includes(label)) {
+                restoreLabel(label);
+            } else {
+                toggleLabelSelection(label);
+            }
+
+            updateFilterTags();
+            updateArtistsDisplay();
+            updateLabelCounts();
+            updateLabelUIState();
+        });
+    });
+
+    updateLabelUIState();
+    updateLabelCounts();
+    enforceGrayOutForLabels();
+}
+
+function toggleLabelSelection(label) {
+    const labelIndex = selectedLabels.indexOf(label);
+
+    if (labelIndex > -1) {
+        selectedLabels.splice(labelIndex, 1);
+    } else {
+        selectedLabels.push(label);
+    }
+
+    initializeGenreCombinations(artistsData);
+    updateArtistsDisplay();
+    updateGenreCounts();
+    updateLabelCounts();
+    updateCityCounts();
+    updateGenreUIState();  
+    updateCityUIState();
+    updateFilterTags()
+}
+
+function restoreLabel(label) {
+    const index = removedLabels.indexOf(label);
+    if (index > -1) {
+        removedLabels.splice(index, 1);
+
+        initializeGenreCombinations(artistsData);
+        updateArtistsDisplay();
+        updateLabelCounts();
+        updateLabelUIState();
+        updateFilterTags();
+    }
+}
+
+function updateLabelCounts() {
+    const labelButtons = document.querySelectorAll('.genre-button[data-label]');
+    labelButtons.forEach(button => {
+        const label = button.dataset.label;
+        if (!label) return;
+
+        const labelCountElement = button.querySelector('.genre-count');
+        if (!labelCountElement) return;
+
+        if (removedLabels.includes(label)) {
+            labelCountElement.textContent = `(0)`;
+            button.classList.add('removed');
+            return;
+        }
+
+        if (selectedGenres.length === 0 && selectedCities.length === 0) {
+            const originalCount = labelCombinations[label]?.count || 0;
+            labelCountElement.textContent = `(${originalCount})`;
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+            return;
+        }
+
+        const count = labelCombinations[label]?.filterCount || 0;
+        labelCountElement.textContent = `(${count})`;
+
+        if (count === 0) {
+            button.classList.add('gray-out');
+            button.style.pointerEvents = 'none';
+        } else {
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+        }
+    });
+}
+
+function updateLabelUIState() {
+    const labelButtons = document.querySelectorAll('.genre-button[data-label]');
+
+    labelButtons.forEach(button => {
+        const label = button.dataset.label;
+        if (!label) return;
+
+        if (selectedLabels.includes(label)) {
+            button.classList.add('selected');
+        } else {
+            button.classList.remove('selected');
+        }
+
+        if (removedLabels.includes(label)) {
+            button.classList.add('removed');
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+        } else {
+            button.classList.remove('removed');
+            const count = labelCombinations[label]?.filterCount || 0;
+            if (count === 0) {
+                button.classList.add('gray-out');
+                button.style.pointerEvents = 'none';
+            } else {
+                button.classList.remove('gray-out');
+                button.style.pointerEvents = 'auto';
+            }
+        }
+    });
+}
+
+  function extractAndDisplayCities(artists) {
+    const cities = {};
+    artists.forEach(artist => {
+        const city = artist['City'];
+        if (city) {
+            cities[city] = (cities[city] || 0) + 1;
+        }
+    });
+
+    const citiesContainer = document.getElementById('cities-container');
+    citiesContainer.innerHTML = '';
+
+    const sortedCities = Object.entries(cities).sort((a, b) => b[1] - a[1]);
+
+    sortedCities.forEach(([city, count]) => {
+        const cityButton = document.createElement('button');
+        cityButton.className = 'genre-button';
+        cityButton.dataset.city = city;
+        cityButton.dataset.originalCount = count;
+        cityButton.innerHTML = `<span class="genre-name">${city}</span><span class="genre-count">(${count})</span>`;
+
+        cityButton.onclick = () => {
+            if (removedCities.includes(city)) {
+                restoreCity(city);
+            } else {
+                toggleCitySelection(city);
+            }
+            updateArtistsDisplay();
+            updateCityCounts();
+            updateCityUIState();
+            updateFilterTags();
+        };
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-genre';
+        removeButton.textContent = '×';
+        removeButton.onclick = (event) => {
+            event.stopPropagation();
+
+            if (!removedCities.includes(city)) {
+                removedCities.push(city);
+                selectedCities = selectedCities.filter(c => c !== city);
+
+                initializeGenreCombinations(artistsData);
+
+                updateFilterTags();
+                updateArtistsDisplay();
+                updateCityCounts();
+                updateCityUIState();
+            }
+        };
+
+        cityButton.appendChild(removeButton);
+        citiesContainer.appendChild(cityButton);
+    });
+
+    updateCityUIState();
+    updateCityCounts();
+}
+ 
+function toggleCitySelection(city) {
+    const cityIndex = selectedCities.indexOf(city);
+
+    if (cityIndex > -1) {
+        selectedCities.splice(cityIndex, 1);
+    } else {
+        selectedCities.push(city);
+    }
+
+    initializeGenreCombinations(artistsData);
+    updateArtistsDisplay();
+    updateGenreCounts();
+    updateLabelCounts();
+    updateCityCounts();
+    updateCityUIState();
+    updateFilterTags()
+}
+
+function restoreCity(city) {
+    const index = removedCities.indexOf(city);
+    if (index > -1) {
+        removedCities.splice(index, 1);
+
+        initializeGenreCombinations(artistsData);
+        updateArtistsDisplay();
+        updateCityCounts();
+        updateCityUIState();
+        updateFilterTags();
+    }
+}
+
+function updateCityCounts() {
+    const cityButtons = document.querySelectorAll('.genre-button[data-city]');
+    cityButtons.forEach(button => {
+        const city = button.dataset.city;
+        if (!city) return;
+
+        const cityCountElement = button.querySelector('.genre-count');
+        if (!cityCountElement) return;
+
+        const count = selectedGenres.length === 0 && selectedLabels.length === 0
+            ? cityCombinations[city]?.count 
+            : cityCombinations[city]?.filterCount;
+
+        cityCountElement.textContent = `(${count || 0})`;
+
+        if (count === 0) {
+            button.classList.add('gray-out');
+            button.style.pointerEvents = 'none';
+        } else {
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+        }
+    });
+}
+
+function updateCityUIState() {
+    const cityButtons = document.querySelectorAll('.genre-button[data-city]');
+    cityButtons.forEach(button => {
+        const city = button.dataset.city;
+        if (!city) return;
+
+        if (selectedCities.includes(city)) {
+            button.classList.add('selected');
+        } else if (removedCities.includes(city)) {
+            button.classList.add('removed');
+        } else {
+            button.classList.remove('selected');
+            button.classList.remove('removed');
+        }
+    });
 }
 
 async function fetchArtists() {
@@ -2857,7 +3409,9 @@ async function fetchArtists() {
 
             setupRangeSlider(maxListeners);
             collectAllArtistURLs(artistsData);
-            extractAndDisplayGenres(artistsData);
+            updateGenresDisplay(artistsData);
+            extractAndDisplayLabels(artistsData);
+            extractAndDisplayCities(artistsData);
             initializeSearchIndex(artistsData);
             initializeGenreCombinations(artistsData);
             updateGenreCounts(true);
@@ -2865,7 +3419,6 @@ async function fetchArtists() {
         }
     });
 }
-
 
   let tracksData = [];
 
@@ -2930,147 +3483,6 @@ function shuffleArray(array) {
     }
 }
 
-function extractAndDisplayGenres(artists) {
-    const genres = {};
-    artists.forEach(artist => {
-        artist['Жанр'].split(', ').forEach(genre => {
-            genres[genre] = (genres[genre] || 0) + 1;
-        });
-    });
-
-    const genresContainer = document.getElementById('genres-container');
-    genresContainer.innerHTML = '';
-
-    const sortedGenres = Object.entries(genres).sort((a, b) => b[1] - a[1]);
-
-    const allGenresButton = document.createElement('button');
-    allGenresButton.className = 'genre-button selected';
-    allGenresButton.dataset.genre = 'всі жанри';
-    allGenresButton.innerHTML = '<span class="genre-name">всі жанри</span>';
-    allGenresButton.onclick = () => {
-        selectedGenres = [];
-        removedGenres = [];
-
-        initializeGenreCombinations(artistsData);
-
-        document.querySelectorAll('.genre-button').forEach(button => {
-            button.classList.remove('selected', 'gray-out', 'removed');
-            button.style.pointerEvents = 'auto';
-        });
-
-        updateArtistsDisplay();
-        updateGenreCounts();
-        updateGenreUIState();
-
-        document.getElementById('artist-search').value = '';
-        document.getElementById('clear-search').style.display = 'none';
-        updateFilterTags();
-    };
-    genresContainer.appendChild(allGenresButton);
-
-    sortedGenres.forEach(([genre, count]) => {
-        if (count < 5) {
-            return;
-        }
-
-        const genreButton = document.createElement('button');
-        genreButton.className = 'genre-button';
-        genreButton.dataset.originalCount = count;
-        genreButton.dataset.genre = genre;
-        if (isIOS()) {
-    genreButton.innerHTML = `<span class="genre-name">${genre}</span>`;
-} else {
-    genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${count})</span>`;
-}
-
-        const removeButton = document.createElement('button');
-        removeButton.className = 'remove-genre';
-        removeButton.textContent = '×';
-        removeButton.onclick = (event) => {
-            event.stopPropagation();
-
-            const genre = genreButton.dataset.genre;
-
-            if (!removedGenres.includes(genre)) {
-                removedGenres.push(genre);
-                selectedGenres = selectedGenres.filter(g => g !== genre);
-
-                initializeGenreCombinations(artistsData);
-
-                updateFilterTags();
-                updateArtistsDisplay();
-                updateGenreCounts();
-                updateGenreUIState();
-            }
-        };
-        genreButton.appendChild(removeButton);
-
-        genreButton.onclick = () => {
-            if (removedGenres.includes(genre)) {
-                restoreGenre(genre);
-            } else {
-                toggleGenreSelection(genre);
-            }
-
-            const allGenresButton = document.querySelector('.genre-button[data-genre="всі жанри"]');
-            if (allGenresButton) {
-                allGenresButton.classList.remove('selected');
-            }
-
-            document.getElementById('artist-search').value = '';
-            document.getElementById('clear-search').style.display = 'none';
-            updateFilterTags();
-            updateArtistsDisplay();
-            updateToggleButton();
-            updateGenreCounts();
-        };
-
-        if (count < 10) {
-            genreButton.classList.add('hidden-genre');
-            genreButton.style.display = 'none';
-        }
-
-        genresContainer.appendChild(genreButton);
-    });
-
-    const toggleButton = document.createElement('button');
-    toggleButton.className = 'genre-button toggle-genres show-more-less-button';
-    toggleButton.innerHTML = `<span class="genre-name">Показати ще...</span>`;
-    toggleButton.style.backgroundColor = '#f3f3f3';
-    toggleButton.onclick = () => {
-        const hiddenButtons = document.querySelectorAll('.hidden-genre');
-        const isHidden = Array.from(hiddenButtons).some(button => button.style.display === 'none');
-        hiddenButtons.forEach(button => {
-            button.style.display = isHidden ? 'flex' : 'none';
-        });
-
-        if (isHidden) {
-            toggleButton.innerHTML = `<span class="genre-name">Показати менше</span>`;
-            toggleButton.classList.add('expanded');
-            toggleButton.classList.remove('active');
-        } else {
-            toggleButton.innerHTML = `<span class="genre-name">Показати ще...</span>`;
-            toggleButton.classList.remove('expanded');
-            toggleButton.classList.add('active');
-        }
-
-        const genresSection = document.getElementById('genres-section');
-        requestAnimationFrame(() => {
-            genresSection.style.maxHeight = isHidden ? genresSection.scrollHeight + 'px' : '0';
-        });
-    };
-    const firstHiddenGenreButton = genresContainer.querySelector('.hidden-genre');
-    if (firstHiddenGenreButton) {
-        genresContainer.insertBefore(toggleButton, firstHiddenGenreButton);
-    } else {
-        genresContainer.appendChild(toggleButton);
-    }
-
-    updateToggleButton();
-    updateGenreUIState();
-    updateGenreCounts(true);
-}
-
 let filterYearRel = false;
 let filterMultiRel = false;
 let filterDebut = false;
@@ -3087,6 +3499,10 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeGenreCombinations(artistsData);
         updateGenreCounts();
       updateGenreUIState();
+      updateLabelCounts();
+    updateLabelUIState();
+      updateCityCounts();
+                updateCityUIState();
     });
 
     document.getElementById('multiRel-checkbox').addEventListener('change', function() {
@@ -3098,6 +3514,10 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeGenreCombinations(artistsData);
         updateGenreCounts();
       updateGenreUIState();
+      updateLabelCounts();
+    updateLabelUIState();
+      updateCityCounts();
+                updateCityUIState();
     });
 
     document.getElementById('hide-russian').addEventListener('change', function() {
@@ -3107,6 +3527,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeGenreCombinations(artistsData);
     updateGenreCounts();
     updateGenreUIState();
+    updateLabelCounts();
+    updateLabelUIState();
+    updateCityCounts();
+    updateCityUIState();
 });
 
     document.getElementById('debut-checkbox').addEventListener('change', function() {
@@ -3117,99 +3541,62 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFilterTags();
         initializeGenreCombinations(artistsData);
         updateGenreCounts();
-      updateGenreUIState();
+        updateGenreUIState();
+        updateLabelCounts();
+        updateLabelUIState();
+        updateCityCounts();
+        updateCityUIState();
     });
 
     document.getElementById('match-all-genres-checkbox').addEventListener('change', function() {
-        matchAllGenres = this.checked;
+    matchAllGenres = this.checked;
 
-        if (matchAllGenres) {
-            selectedGenres = selectedGenres.filter(genre => {
-                return artistsData.some(artist => {
-                    const artistGenres = artist['Жанр'].split(', ');
-                    return selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre));
-                });
+    if (matchAllGenres) {
+        selectedGenres = selectedGenres.filter(genre => {
+            return artistsData.some(artist => {
+                const artistGenres = artist['Жанр'].split(', ');
+                return selectedGenres.every(selectedGenre => artistGenres.includes(selectedGenre));
             });
-        }
-
-        updateArtistsDisplay();
-        updateFilterTags();
-        updateGenreCounts();
-      
-        const genreButtons = document.querySelectorAll('.genre-button');
-        genreButtons.forEach(button => {
-            const genre = button.dataset.genre;
-            const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
-            if (count === 0) {
-                button.classList.add('gray-out');
-                button.style.pointerEvents = 'none';
-            } else {
-                button.classList.remove('gray-out');
-                button.style.pointerEvents = 'auto';
-            }
         });
-
-        const allGenresButton = document.querySelector('.genre-button:first-child');
-        if (allGenresButton) {
-            allGenresButton.disabled = false;
-            allGenresButton.classList.remove('gray-out');
-            allGenresButton.style.pointerEvents = 'auto';
-            if (selectedGenres.length === 0) {
-                allGenresButton.classList.add('selected');
-            } else {
-                allGenresButton.classList.remove('selected');
-            }
-        }
-    });
-});
-  
-function updateToggleButton() {
-    const hiddenButtons = document.querySelectorAll('.hidden-genre');
-    const toggleButton = document.querySelector('.toggle-genres');
-    if (!toggleButton) return;
-
-    const activeGenres = selectedGenres.length > 0 ? selectedGenres : ['всі жанри'];
-    const hideRussian = document.getElementById('hide-russian').checked;
-
-    const hasActiveHiddenGenres = Array.from(hiddenButtons).some(button => {
-        const genre = button.dataset.genre;
-        const hasArtists = artistsData.some(artist => {
-            const artistGenres = artist['Жанр'].split(', ');
-            return activeGenres.every(activeGenre => artistGenres.includes(activeGenre)) && artistGenres.includes(genre) && (!hideRussian || !artist['RuLang']);
-        });
-        return hasArtists;
-    });
-
-    if (hasActiveHiddenGenres && !toggleButton.classList.contains('expanded')) {
-        toggleButton.classList.add('active');
-    } else {
-        toggleButton.classList.remove('active');
     }
 
-    toggleButton.disabled = false;
-    toggleButton.style.pointerEvents = 'auto';
+    initializeGenreCombinations(artistsData);
+    updateArtistsDisplay();
+    updateFilterTags();
+    updateGenreCounts();
+    updateLabelCounts();
+    updateCityCounts();
 
-    toggleButton.onclick = () => {
-        const isHidden = Array.from(hiddenButtons).some(button => button.style.display === 'none');
-        hiddenButtons.forEach(button => {
-            button.style.display = isHidden ? 'flex' : 'none';
-        });
-        toggleButton.innerHTML = isHidden ? `<span class="genre-name">Показати менше</span>` : `<span class="genre-name">Показати ще...</span>`;
-        toggleButton.style.backgroundColor = isHidden ? '#f3f3f3' : '#f3f3f3';
-        if (isHidden) {
-            toggleButton.classList.add('expanded');
-            toggleButton.classList.remove('active');
+    const genreButtons = document.querySelectorAll('.genre-button');
+    
+    genreButtons.forEach(button => {
+        const genre = button.dataset.genre;
+        const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
+
+        if (count === 0) {
+            button.classList.add('gray-out');
+            button.style.pointerEvents = 'none';
         } else {
-            toggleButton.classList.remove('expanded');
-            updateToggleButton();
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
         }
-        requestAnimationFrame(() => {
-            const genresSection = document.getElementById('genres-section');
-            genresSection.style.maxHeight = genresSection.scrollHeight + 'px';
-        });
-    };
-}
+    });
 
+    const allGenresButton = document.querySelector('.genre-button:first-child');
+    if (allGenresButton) {
+        allGenresButton.disabled = false;
+        allGenresButton.classList.remove('gray-out');
+        allGenresButton.style.pointerEvents = 'auto';
+
+        if (selectedGenres.length === 0) {
+            allGenresButton.classList.add('selected');
+        } else {
+            allGenresButton.classList.remove('selected');
+        }
+    }
+});
+  });
+  
 function updateFilterTags() {
     const filterList = document.getElementById('filter-list');
     filterList.innerHTML = '';
@@ -3222,7 +3609,7 @@ function updateFilterTags() {
         filterTag.textContent = 'пошуковий запит';
         filterList.appendChild(filterTag);
     } else {
-        if (selectedGenres.length === 0 && removedGenres.length === 0) {
+        if (selectedGenres.length === 0 && removedGenres.length === 0 && selectedLabels.length === 0 && removedLabels.length === 0 && selectedCities.length === 0 && removedCities.length === 0) {
             const filterTag = document.createElement('span');
             filterTag.className = 'filter-tag';
             filterTag.textContent = 'всі жанри';
@@ -3245,6 +3632,57 @@ function updateFilterTags() {
                 filterList.appendChild(filterTag);
             });
 
+            selectedLabels.forEach(label => {
+                const filterTag = document.createElement('span');
+                filterTag.className = 'filter-tag label-tag';
+                filterTag.textContent = label;
+                const removeTag = document.createElement('span');
+                removeTag.className = 'remove-tag';
+                removeTag.textContent = '×';
+                removeTag.onclick = () => {
+                    toggleLabelSelection(label);
+                    initializeGenreCombinations(artistsData);
+                    updateLabelCounts();
+                    updateFilterTags();
+                };
+                filterTag.appendChild(removeTag);
+                filterList.appendChild(filterTag);
+            });
+
+            selectedCities.forEach(city => {
+                const filterTag = document.createElement('span');
+                filterTag.className = 'filter-tag city-tag';
+                filterTag.textContent = city;
+                const removeTag = document.createElement('span');
+                removeTag.className = 'remove-tag';
+                removeTag.textContent = '×';
+                removeTag.onclick = () => {
+                    toggleCitySelection(city);
+                    initializeGenreCombinations(artistsData);
+                    updateCityCounts();
+                    updateFilterTags();
+                };
+                filterTag.appendChild(removeTag);
+                filterList.appendChild(filterTag);
+            });
+
+            removedCities.forEach(city => {
+                const filterTag = document.createElement('span');
+                filterTag.className = 'filter-tag city-tag removed';
+                filterTag.textContent = city;
+                const removeTag = document.createElement('span');
+                removeTag.className = 'remove-tag';
+                removeTag.textContent = '×';
+                removeTag.onclick = () => {
+                    restoreCity(city);
+                    initializeGenreCombinations(artistsData);
+                    updateCityCounts();
+                    updateFilterTags();
+                };
+                filterTag.appendChild(removeTag);
+                filterList.appendChild(filterTag);
+            });
+
             removedGenres.forEach(genre => {
                 const filterTag = document.createElement('span');
                 filterTag.className = 'filter-tag removed';
@@ -3261,7 +3699,24 @@ function updateFilterTags() {
                 filterTag.appendChild(removeTag);
                 filterList.appendChild(filterTag);
             });
-        }
+
+            removedLabels.forEach(label => {
+                const filterTag = document.createElement('span');
+                filterTag.className = 'filter-tag label-tag removed';
+                filterTag.textContent = label;
+                const removeTag = document.createElement('span');
+                removeTag.className = 'remove-tag';
+                removeTag.textContent = '×';
+                removeTag.onclick = () => {
+                    restoreLabel(label);
+                    initializeGenreCombinations(artistsData);
+                    updateLabelCounts();
+                    updateFilterTags();
+                };
+                filterTag.appendChild(removeTag);
+                filterList.appendChild(filterTag);
+            });
+        }  
     }
 
     if (hideRussian) {
@@ -3339,7 +3794,7 @@ function updateFilterTags() {
         filterTag.appendChild(removeTag);
         filterList.appendChild(filterTag);
     }
-  
+
     if (searchQuery) {
         const filterTags = filterList.querySelectorAll('.filter-tag');
         filterTags.forEach(tag => {
@@ -3378,8 +3833,12 @@ function updateArtistsDisplay() {
     updateArtistCounter(currentDisplayList.length);
     updateFilterTags();
     updateGenreCounts();
+    updateLabelCounts();
+    updateCityCounts();
     updateGenreUIState();
-  
+    updateLabelUIState(); 
+    updateCityUIState();
+
     artistScrollContainer.scrollTop = scrollPosition;
 
     const container = document.getElementById('artist-scroll-container');
@@ -3392,6 +3851,8 @@ function updateArtistsDisplay() {
 function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
     const filteredArtists = artists.filter(artist => {
         const artistGenres = artist['Жанр'].split(', ');
+        const artistLabels = [artist['Label'], artist['Label2'], artist['Label3'], artist['Label4'], artist['Label5'], artist['Label6']].filter(Boolean);
+        const artistCity = artist['City'];
         const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
 
         const matchesSelectedGenres = selectedGenres.length === 0 || (
@@ -3400,17 +3861,31 @@ function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
                 : selectedGenres.some(genre => artistGenres.includes(genre))
         );
         const matchesRemovedGenres = removedGenres.length === 0 || !removedGenres.some(genre => artistGenres.includes(genre));
+
+        const matchesSelectedLabels = selectedLabels.length === 0 || selectedLabels.some(label => artistLabels.includes(label));
+        const matchesRemovedLabels = removedLabels.length === 0 || !removedLabels.some(label => artistLabels.includes(label));
+
+        const matchesSelectedCities = selectedCities.length === 0 || selectedCities.includes(artistCity);
+        const matchesRemovedCities = removedCities.length === 0 || !removedCities.includes(artistCity);
+
         const matchesHideRussian = !hideRussian || artist['RuLang'] === '';
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
         const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
         const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
         const matchesDebut = !filterDebut || artist['Debut'] === '+';
 
-        return matchesSelectedGenres && matchesRemovedGenres && matchesHideRussian && matchesListenersRange && matchesYearRel && matchesMultiRel && matchesDebut;
+        return matchesSelectedGenres && matchesRemovedGenres && matchesSelectedLabels && matchesRemovedLabels &&
+               matchesSelectedCities && matchesRemovedCities && matchesHideRussian && matchesListenersRange &&
+               matchesYearRel && matchesMultiRel && matchesDebut;
     });
 
-    updateGenreCounts(); 
-    updateGenreUIState(); 
+    updateGenreCounts();
+    updateLabelCounts();
+    updateCityCounts();
+    updateGenreUIState();
+    updateLabelUIState();
+    updateCityUIState();
+    updateFilterTags()
 
     return filteredArtists;
 }
@@ -3602,7 +4077,7 @@ function displayArtists(artists, reset = false) {
         if (artist['LastRelDate']) {
             const datereleaseElement = document.createElement('div');
             datereleaseElement.className = 'date-release';
-            datereleaseElement.innerHTML = `<i class="fa fa-calendar-plus"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
+            datereleaseElement.innerHTML = `<i class="fa fa-compact-disc"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
             imgContainer.appendChild(datereleaseElement);
 
             if (!artist['Дата додавання']) {
@@ -3643,19 +4118,19 @@ function displayArtists(artists, reset = false) {
         currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
         listenersElement.appendChild(currentListenersSpan);
 
-        if (previousListeners !== undefined && previousListeners !== null && previousListeners !== 0) {
-            const difference = currentListeners - previousListeners;
-            if (difference !== 0) {
-                const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
-                const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
-                const differenceSpan = document.createElement('span');
-                differenceSpan.className = 'difference';
-                differenceSpan.style.color = differenceColor;
-                differenceSpan.textContent = `(${differenceText})`;
-                differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
-                listenersElement.appendChild(differenceSpan);
-            }
-        }
+        if (!isNaN(currentListeners) && !isNaN(previousListeners) && previousListeners !== 0) {
+    const difference = currentListeners - previousListeners;
+    if (difference !== 0) {
+        const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
+        const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
+        const differenceSpan = document.createElement('span');
+        differenceSpan.className = 'difference';
+        differenceSpan.style.color = differenceColor;
+        differenceSpan.textContent = `(${differenceText})`;
+        differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
+        listenersElement.appendChild(differenceSpan);
+    }
+}
 
         if (artist['Instagram']) {
             listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
@@ -3671,15 +4146,13 @@ function displayArtists(artists, reset = false) {
                 genreSpan.textContent = genre;
                 genreSpan.className = 'genre-link';
                 genreSpan.onclick = () => {
-                    selectedGenres = [];
-                    removedGenres = [];
                     document.getElementById('artist-search').value = '';
                   
                     updateFilterTags();
                     updateArtistsDisplay();
                     toggleGenreSelection(genre, artist['Артист']);
                     updateGenreCounts();
-                    updateToggleButton();
+                  
                 };
                 genresElement.appendChild(genreSpan);
                 genresElement.appendChild(document.createTextNode(' '));
@@ -4022,7 +4495,6 @@ function getTracksToPlay(artistId) {
     return [];
 }
 
-
 async function fetchTopTracks(artistId) {
     await ensureValidAccessToken();
 
@@ -4274,19 +4746,21 @@ function clearSort() {
 }
 
   document.addEventListener('DOMContentLoaded', function() {
-    const genresContainer = document.getElementById('genres-container');
+    const containers = [document.getElementById('genres-container'), document.getElementById('labels-container')];
 
-    genresContainer.addEventListener('mouseenter', function(event) {
-        if (event.target.classList.contains('remove-genre')) {
-            event.target.closest('.genre-button').classList.add('red-shadow');
-        }
-    }, true);
+    containers.forEach(container => {
+        container.addEventListener('mouseenter', function(event) {
+            if (event.target.classList.contains('remove-genre')) {
+                event.target.closest('.genre-button').classList.add('red-shadow');
+            }
+        }, true);
 
-    genresContainer.addEventListener('mouseleave', function(event) {
-        if (event.target.classList.contains('remove-genre')) {
-            event.target.closest('.genre-button').classList.remove('red-shadow');
-        }
-    }, true);
+        container.addEventListener('mouseleave', function(event) {
+            if (event.target.classList.contains('remove-genre')) {
+                event.target.closest('.genre-button').classList.remove('red-shadow');
+            }
+        }, true);
+    });
 });
 
 let minListeners = 0;
@@ -4467,18 +4941,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchTimeout = setTimeout(() => {
                     requestAnimationFrame(() => {
                         filterArtistsByName(searchQuery);
-                        clearSearchBtn.style.display = 'block';
-                        selectedGenres = [];
-                        removedGenres = [];
-                   
+                        clearSearchBtn.style.display = 'block';         
                         updateFilterTags();
                     });
                 }, 300);
             } else if (searchQuery.length === 0) {
                 clearTimeout(searchTimeout);
                 clearSearchBtn.style.display = 'none';
-                selectedGenres = [];
-                removedGenres = [];
               
                 requestAnimationFrame(() => {
                     currentDisplayList = applyFilters(originalArtistsOrder);
@@ -4495,8 +4964,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearSearchBtn.addEventListener('click', function() {
     searchInput.value = '';
     clearSearchBtn.style.display = 'none';
-    selectedGenres = [];
-    removedGenres = [];
     hideRussian = document.getElementById('hide-russian').checked;
 
     requestAnimationFrame(() => {
@@ -4533,82 +5000,116 @@ document.addEventListener('DOMContentLoaded', () => {
     trackButtons.parentNode.insertBefore(artistNameElement, trackButtons.nextSibling);
     hidePlayerContainer();
 
-    const artistScrollContainer = document.getElementById('artist-scroll-container');
-    const genresSection = document.getElementById('genres-section');
-    const sortSection = document.getElementById('sort-section');
-    const filtersSection = document.getElementById('filters-section');
+
     const genreButton = document.getElementById('genre-button');
-    const sortButton = document.getElementById('sort-button');
-    const filtersButton = document.getElementById('filters-button');
+const genresSection = document.getElementById('genres-section');
+const labelButton = document.getElementById('label-button');
+const labelsSection = document.getElementById('labels-section');
+const cityButton = document.getElementById('city-button');
+const citiesSection = document.getElementById('cities-section');
+const sortButton = document.getElementById('sort-button');
+const sortSection = document.getElementById('sort-section');
+const filtersButton = document.getElementById('filters-button');
+const filtersSection = document.getElementById('filters-section');
 
-    function collapseSections(exceptSection) {
-        if (exceptSection !== genresSection && genresSection.classList.contains('expanded')) {
-            genresSection.style.maxHeight = '0px';
-            genresSection.classList.remove('expanded');
-            genreButton.setAttribute('aria-expanded', 'false');
-            genreButton.classList.remove('active');
-        }
-        if (exceptSection !== sortSection && sortSection.classList.contains('expanded')) {
-            sortSection.style.maxHeight = '0px';
-            sortSection.classList.remove('expanded');
-            sortButton.setAttribute('aria-expanded', 'false');
-            sortButton.classList.remove('active');
-        }
-        if (exceptSection !== filtersSection && filtersSection.classList.contains('expanded')) {
-            filtersSection.style.maxHeight = '0px';
-            filtersSection.classList.remove('expanded');
-            filtersButton.setAttribute('aria-expanded', 'false');
-            filtersButton.classList.remove('active');
-        }
-    }
+function toggleSection(button, section) {
+    const isExpanded = section.classList.contains('expanded');
 
-    artistScrollContainer.addEventListener('scroll', () => {
-        collapseSections();
+    document.querySelectorAll('[aria-expanded="true"]').forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('active');
     });
 
-    function toggleSection(button, section) {
-        const isExpanded = section.classList.contains('expanded');
+    button.setAttribute('aria-expanded', !isExpanded);
+    section.setAttribute('aria-hidden', isExpanded);
 
-        button.setAttribute('aria-expanded', !isExpanded);
-        section.setAttribute('aria-hidden', isExpanded);
-
-        if (isExpanded) {
-            section.style.maxHeight = '0';
-            section.classList.remove('expanded');
-        } else {
-            section.style.maxHeight = section.scrollHeight + 'px';
-            section.classList.add('expanded');
-        }
-
-        if (!isExpanded) {
-            button.classList.add('active');
-            collapseSections(section);
-        } else {
-            button.classList.remove('active');
-        }
+    if (isExpanded) {
+        section.style.maxHeight = '0';
+        section.classList.remove('expanded');
+        button.classList.remove('active');
+    } else {
+        section.style.maxHeight = section.scrollHeight + 'px';
+        section.classList.add('expanded');
+        button.classList.add('active');
+        collapseSections(section);
     }
+}
 
-    if (genreButton) {
-        genreButton.addEventListener('click', () => {
-            toggleSection(genreButton, genresSection);
+function collapseSections(exceptSection) {
+    if (exceptSection !== genresSection && genresSection.classList.contains('expanded')) {
+        genresSection.style.maxHeight = '0px';
+        genresSection.classList.remove('expanded');
+        genreButton.setAttribute('aria-expanded', 'false');
+        genreButton.classList.remove('active');
+    }
+    if (exceptSection !== sortSection && sortSection.classList.contains('expanded')) {
+        sortSection.style.maxHeight = '0px';
+        sortSection.classList.remove('expanded');
+        sortButton.setAttribute('aria-expanded', 'false');
+        sortButton.classList.remove('active');
+    }
+    if (exceptSection !== filtersSection && filtersSection.classList.contains('expanded')) {
+        filtersSection.style.maxHeight = '0px';
+        filtersSection.classList.remove('expanded');
+        filtersButton.setAttribute('aria-expanded', 'false');
+        filtersButton.classList.remove('active');
+    }
+    if (exceptSection !== labelsSection && labelsSection.classList.contains('expanded')) {
+        labelsSection.style.maxHeight = '0px';
+        labelsSection.classList.remove('expanded');
+        labelButton.setAttribute('aria-expanded', 'false');
+        labelButton.classList.remove('active');
+    }
+    if (exceptSection !== citiesSection && citiesSection.classList.contains('expanded')) {
+        citiesSection.style.maxHeight = '0px';
+        citiesSection.classList.remove('expanded');
+        cityButton.setAttribute('aria-expanded', 'false');
+        cityButton.classList.remove('active');
+    }
+}
+
+if (labelButton) {
+    labelButton.addEventListener('click', () => {
+        toggleSection(labelButton, labelsSection);
+    });
+}
+
+if (cityButton) {
+    cityButton.addEventListener('click', () => {
+        toggleSection(cityButton, citiesSection);
+    });
+}
+
+if (genreButton) {
+    genreButton.addEventListener('click', () => {
+        toggleSection(genreButton, genresSection);
+    });
+}
+
+if (sortButton) {
+    sortButton.addEventListener('click', () => {
+        toggleSection(sortButton, sortSection);
+    });
+}
+
+if (filtersButton) {
+    filtersButton.addEventListener('click', () => {
+        toggleSection(filtersButton, filtersSection);
+    });
+}
+
+genresSection.style.maxHeight = '0';
+sortSection.style.maxHeight = '0';
+filtersSection.style.maxHeight = '0';
+labelsSection.style.maxHeight = '0';
+citiesSection.style.maxHeight = '0';
+
+  const artistScrollContainer = document.getElementById('artist-scroll-container');
+    if (artistScrollContainer) {
+        artistScrollContainer.addEventListener('scroll', () => {
+            collapseSections(null);
         });
     }
-
-    if (sortButton) {
-        sortButton.addEventListener('click', () => {
-            toggleSection(sortButton, sortSection);
-        });
-    }
-
-    if (filtersButton) {
-        filtersButton.addEventListener('click', () => {
-            toggleSection(filtersButton, filtersSection);
-        });
-    }
-
-    genresSection.style.maxHeight = '0';
-    sortSection.style.maxHeight = '0';
-    filtersSection.style.maxHeight = '0';
 });
  
 document.addEventListener('DOMContentLoaded', () => {
@@ -4702,7 +5203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
       
-      const intro = introJs();
+    const intro = introJs();
 
     const options = {
         steps: [
@@ -4718,6 +5219,20 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 element: document.querySelector('#genres-section'),
                 intro: 'Виберіть один або кілька жанрів, щоб відобразити артистів, які відповідають усім обраним категоріям. Число поруч із кожною категорією показує кількість артистів у ній.<br/><br/>При виборі жанру інші категорії будуть оновлені, показуючи тільки доступні комбінації. Ви також можете виключати жанри, щоб прибрати артистів з небажаними стилями.<br/><br/>Зніміть галочку з «Відповідність усім обраним жанрам», щоб побачити всіх артистів, які мають хоча б один з обраних стилів.',
+                position: 'bottom',
+                tooltipClass: 'customTooltip rangeTooltip',
+                disableInteraction: true
+            },
+            {
+                element: document.querySelector('#labels-section'),
+                intro: 'Фільтрувати артистів можна також за лейблами. У нашій базі понад 200 найменувань. Представлені організації можуть бути як лейблами, так і студіями звукозапису, дистриб\'юторами, агенствами, продюсерськими компаніями тощо.<br/><br/>Артистові присвоюється лейбл, якщо вийшов хоча б один реліз з його участю під цим лейблом. Лейбл потрапляє до списку, якщо у нього є хоча б три таких артисти.',
+                position: 'bottom',
+                tooltipClass: 'customTooltip rangeTooltip',
+                disableInteraction: true
+            },
+            {
+                element: document.querySelector('#cities-section'),
+                intro: 'Знайдіть своє рідне місто і послухайте місцевих артистів, або ж влаштуйте музичну подорож Україною.<br/><br/>Міста вказані не у всіх артистів, але їх кількість постійно зростає. Якщо ви артист, його представник або небайдужий слухач, ви можете заповнити просту форму, вказавши артиста і його місто — інформацію буде оновлено того ж дня.',
                 position: 'bottom',
                 tooltipClass: 'customTooltip rangeTooltip',
                 disableInteraction: true
@@ -4766,8 +5281,6 @@ document.addEventListener('DOMContentLoaded', () => {
         doneLabel: 'Готово'
     };
 
-      intro.start();
-      
     if (showDontShowAgain) {
         options.dontShowAgain = true;
         options.dontShowAgainLabel = 'Більше не показувати цей тур';
@@ -4778,13 +5291,26 @@ document.addEventListener('DOMContentLoaded', () => {
     intro.onbeforechange(function(targetElement) {
         const stepIndex = intro._currentStep;
         if (stepIndex === 5) {
+            const labelButton = document.querySelector('#label-button');
+            const labelsSection = document.querySelector('#labels-section');
+            if (labelButton && labelsSection && labelsSection.getAttribute('aria-hidden') === 'false') {
+                labelButton.click();
+            }
+
+            const cityButton = document.querySelector('#city-button');
+            const citiesSection = document.querySelector('#cities-section');
+            if (cityButton && citiesSection && citiesSection.getAttribute('aria-hidden') === 'false') {
+                cityButton.click();
+            }
+        }
+        if (stepIndex === 7) {
             const sortButton = document.querySelector('#sort-button');
             const sortSection = document.querySelector('#sort-section');
             if (sortButton && sortSection && sortSection.getAttribute('aria-hidden') === 'false') {
                 sortButton.click();
             }
         }
-        if (stepIndex === 6) {
+        if (stepIndex === 8) {
             const filtersButton = document.querySelector('#filters-button');
             const filtersSection = document.querySelector('#filters-section');
             if (filtersButton && filtersSection && filtersSection.getAttribute('aria-hidden') === 'false') {
@@ -4795,7 +5321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     intro.onchange(function(targetElement) {
         const stepIndex = intro._currentStep;
-        if (stepIndex === 6) {
+        if (stepIndex === 8) {
             setTimeout(() => {
                 const firstArtist = document.querySelector('.artist-container .artist:first-child');
                 if (firstArtist) {
@@ -4816,6 +5342,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 600);
             }
         } else if (stepIndex === 3) {
+            const labelButton = document.querySelector('#label-button');
+            if (labelButton) {
+                labelButton.click();
+                const checkLabelsSectionLoaded = setInterval(() => {
+                    const labelsSection = document.querySelector('#labels-section');
+                    if (labelsSection && labelsSection.children.length > 0) {
+                        clearInterval(checkLabelsSectionLoaded);
+                        intro.refresh();
+                    }
+                }, 600);
+            }
+        } else if (stepIndex === 4) {
+            const cityButton = document.querySelector('#city-button');
+            if (cityButton) {
+                cityButton.click();
+                const checkCitiesSectionLoaded = setInterval(() => {
+                    const citiesSection = document.querySelector('#cities-section');
+                    if (citiesSection && citiesSection.children.length > 0) {
+                        clearInterval(checkCitiesSectionLoaded);
+                        intro.refresh();
+                    }
+                }, 600);
+            }
+        } else if (stepIndex === 5) {
             const sortButton = document.querySelector('#sort-button');
             if (sortButton && sortButton.getAttribute('aria-expanded') === 'false') {
                 sortButton.click();
@@ -4827,7 +5377,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }, 600);
             }
-        } else if (stepIndex === 4) {
+        } else if (stepIndex === 6) {
             const filtersButton = document.querySelector('#filters-button');
             if (filtersButton && filtersButton.getAttribute('aria-expanded') === 'false') {
                 filtersButton.click();
@@ -4839,7 +5389,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }, 600);
             }
-        } else if (stepIndex === 5) {
+        } else if (stepIndex === 7) {
             const sortButton = document.querySelector('#sort-button');
             const sortSection = document.querySelector('#sort-section');
             if (sortButton && sortSection && sortSection.getAttribute('aria-hidden') === 'false') {
@@ -5099,10 +5649,17 @@ function toggleGenreSelection(genre) {
         selectedGenres.push(genre);
     }
 
+    initializeGenreCombinations(artistsData);
     updateArtistsDisplay();
     updateGenreCounts();
-    updateGenreUIState();
+    updateLabelCounts();
+    updateCityCounts();
+    updateLabelUIState();
+    updateCityUIState();
+    updateFilterTags()
 }
+
+let isUpdating = false;
 
 function updateGenreCounts() {
     const genreButtons = document.querySelectorAll('.genre-button');
@@ -5415,6 +5972,397 @@ if (genreContainer) {
     }
 
     initializeApp();
+});
+
+let genresSortSelect;
+let labelsSortSelect;
+
+function updateGenresDisplay(artists) {
+    const sortValue = genresSortSelect.value;
+    const genresContainer = document.getElementById('genres-container');
+
+    const genres = {};
+    artists.forEach(artist => {
+        const currentListeners =
+            parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+
+        artist['Жанр'].split(', ').forEach(genre => {
+            genres[genre] = genres[genre] || { count: 0, listeners: 0 };
+            genres[genre].count++;
+            genres[genre].listeners += currentListeners;
+        });
+    });
+
+    let sortedGenres = Object.entries(genres);
+
+    if (sortValue === 'name') {
+        sortedGenres.sort((a, b) => a[0].localeCompare(b[0]));
+    } else if (sortValue === 'listeners') {
+        sortedGenres.sort((a, b) => b[1].listeners - a[1].listeners);
+    } else {
+        sortedGenres.sort((a, b) => b[1].count - a[1].count);
+    }
+
+    sortedGenres = sortedGenres.filter(([genre, data]) => data.count >= 5);
+
+    genresContainer.innerHTML = '';
+
+    const allGenresButton = document.createElement('button');
+    allGenresButton.className = 'genre-button';
+    if (selectedGenres.length === 0 && removedGenres.length === 0) {
+        allGenresButton.classList.add('selected');
+    }
+    allGenresButton.dataset.genre = 'всі жанри';
+    allGenresButton.innerHTML = '<span class="genre-name">всі жанри</span>';
+    allGenresButton.onclick = () => {
+        selectedGenres = [];
+        removedGenres = [];
+
+        initializeGenreCombinations(artistsData);
+
+        document.querySelectorAll('.genre-button').forEach(button => {
+            button.classList.remove('selected', 'gray-out', 'removed');
+            button.style.pointerEvents = 'auto';
+        });
+
+        updateArtistsDisplay();
+        updateGenreCounts();
+        updateGenreUIState();
+
+        document.getElementById('artist-search').value = '';
+        document.getElementById('clear-search').style.display = 'none';
+        updateFilterTags();
+    };
+    genresContainer.appendChild(allGenresButton);
+
+    sortedGenres.forEach(([genre, data]) => {
+        if (sortValue === 'count' && data.count < 5) {
+            return;
+        }
+
+        const genreButton = document.createElement('button');
+        genreButton.className = 'genre-button';
+        genreButton.dataset.originalCount = data.count;
+        genreButton.dataset.genre = genre;
+        if (isIOS()) {
+            genreButton.innerHTML = `<span class="genre-name">${genre}</span>`;
+        } else {
+            genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${data.count})</span>`;
+        }
+
+        if (data.count === 0) {
+            genreButton.classList.add('gray-out');
+            genreButton.style.pointerEvents = 'none';
+        }
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-genre';
+        removeButton.textContent = '×';
+        removeButton.onclick = event => {
+            event.stopPropagation();
+
+            if (!removedGenres.includes(genre)) {
+                removedGenres.push(genre);
+                selectedGenres = selectedGenres.filter(g => g !== genre);
+                initializeGenreCombinations(artistsData);
+
+                updateFilterTags();
+                updateArtistsDisplay();
+                updateGenreCounts();
+                updateGenreUIState();
+            }
+        };
+        genreButton.appendChild(removeButton);
+
+        genreButton.onclick = () => {
+            if (removedGenres.includes(genre)) {
+                restoreGenre(genre);
+            } else {
+                toggleGenreSelection(genre);
+            }
+
+            const allGenresButton = document.querySelector('.genre-button[data-genre="всі жанри"]');
+            if (allGenresButton) {
+                allGenresButton.classList.remove('selected');
+            }
+
+            document.getElementById('artist-search').value = '';
+            document.getElementById('clear-search').style.display = 'none';
+            updateFilterTags();
+            updateArtistsDisplay();
+        
+            updateGenreCounts();
+        };
+
+        genresContainer.appendChild(genreButton);
+    });
+
+    updateGenreUIState();
+    updateGenreCounts(true);
+}
+
+function updateLabelsDisplay(artists) {
+    const sortValue = labelsSortSelect.value;
+    const labelsContainer = document.getElementById('labels-container');
+
+    const labels = {};
+    artists.forEach(artist => {
+        const currentListeners =
+            parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+
+        [
+            artist['Label'],
+            artist['Label2'],
+            artist['Label3'],
+            artist['Label4'],
+            artist['Label5'],
+            artist['Label6'],
+        ]
+            .filter(Boolean)
+            .forEach(label => {
+                labels[label] = labels[label] || { count: 0, listeners: 0 };
+                labels[label].count++;
+                labels[label].listeners += currentListeners;
+            });
+    });
+
+    let sortedLabels = Object.entries(labels);
+
+    if (sortValue === 'name') {
+        sortedLabels.sort((a, b) => a[0].localeCompare(b[0]));
+    } else if (sortValue === 'listeners') {
+        sortedLabels.sort((a, b) => b[1].listeners - a[1].listeners);
+    } else {
+        sortedLabels.sort((a, b) => b[1].count - a[1].count);
+    }
+
+    labelsContainer.innerHTML = '';
+    sortedLabels.forEach(([label, data]) => {
+        const labelButton = document.createElement('button');
+        labelButton.className = 'genre-button';
+        labelButton.dataset.label = label;
+
+        if (isIOS()) {
+            labelButton.innerHTML = `<span class="genre-name">${label}</span>`;
+        } else {
+            labelButton.innerHTML = `<span class="genre-name">${label}</span><span class="genre-count">(${data.count})</span>`;
+        }
+
+        if (removedLabels.includes(label)) {
+            labelButton.classList.add('removed');
+        } else if (data.count === 0) {
+            labelButton.classList.add('gray-out');
+            labelButton.style.pointerEvents = 'none';
+        }
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-genre';
+        removeButton.textContent = '×';
+        removeButton.onclick = event => {
+            event.stopPropagation();
+
+            if (!removedLabels.includes(label)) {
+                removedLabels.push(label);
+                selectedLabels = selectedLabels.filter(l => l !== label);
+                initializeGenreCombinations(artistsData);
+
+                updateFilterTags();
+                updateArtistsDisplay();
+                updateLabelCounts();
+                updateLabelUIState();
+            }
+        };
+        labelButton.appendChild(removeButton);
+
+        labelsContainer.appendChild(labelButton);
+
+        labelButton.addEventListener('click', () => {
+            if (removedLabels.includes(label)) {
+                restoreLabel(label);
+            } else {
+                toggleLabelSelection(label);
+            }
+
+            updateFilterTags();
+            updateArtistsDisplay();
+            updateLabelCounts();
+            updateLabelUIState();
+        });
+    });
+
+    updateLabelUIState();
+    updateLabelCounts();
+}
+
+function updateCitiesDisplay(artists) {
+    const sortValue = document.getElementById('cities-sort').value;
+    const citiesContainer = document.getElementById('cities-container');
+
+    const cities = {};
+    artists.forEach(artist => {
+        const currentListeners =
+            parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+
+        const city = artist['City'];
+        if (city) {
+            cities[city] = cities[city] || { count: 0, listeners: 0 };
+            cities[city].count++;
+            cities[city].listeners += currentListeners;
+        }
+    });
+
+    let sortedCities = Object.entries(cities);
+
+    if (sortValue === 'name') {
+        sortedCities.sort((a, b) => a[0].localeCompare(b[0]));
+    } else if (sortValue === 'listeners') {
+        sortedCities.sort((a, b) => b[1].listeners - a[1].listeners);
+    } else {
+        sortedCities.sort((a, b) => b[1].count - a[1].count);
+    }
+
+    citiesContainer.innerHTML = '';
+    sortedCities.forEach(([city, data]) => {
+        const cityButton = document.createElement('button');
+        cityButton.className = 'genre-button';
+        cityButton.dataset.city = city;
+
+        if (isIOS()) {
+            cityButton.innerHTML = `<span class="genre-name">${city}</span>`;
+        } else {
+            cityButton.innerHTML = `<span class="genre-name">${city}</span><span class="genre-count">(${data.count})</span>`;
+        }
+
+        if (removedCities.includes(city)) {
+            cityButton.classList.add('removed');
+        } else if (data.count === 0) {
+            cityButton.classList.add('gray-out');
+            cityButton.style.pointerEvents = 'none';
+        }
+
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-genre';
+        removeButton.textContent = '×';
+        removeButton.onclick = event => {
+            event.stopPropagation();
+
+            if (!removedCities.includes(city)) {
+                removedCities.push(city);
+                selectedCities = selectedCities.filter(c => c !== city);
+                initializeGenreCombinations(artistsData);
+
+                updateFilterTags();
+                updateArtistsDisplay();
+                updateCityCounts();
+                updateCityUIState();
+            }
+        };
+        cityButton.appendChild(removeButton);
+
+        citiesContainer.appendChild(cityButton);
+
+        cityButton.addEventListener('click', () => {
+            if (removedCities.includes(city)) {
+                restoreCity(city);
+            } else {
+                toggleCitySelection(city);
+            }
+
+            updateFilterTags();
+            updateArtistsDisplay();
+            updateCityCounts();
+            updateCityUIState();
+        });
+    });
+
+    updateCityUIState();
+    updateCityCounts();
+}
+
+  function enforceGrayOutForLabels() {
+    const labelButtons = document.querySelectorAll('.genre-button[data-label]');
+    labelButtons.forEach(button => {
+        const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
+        if (count === 0) {
+            button.classList.add('gray-out');
+            button.style.pointerEvents = 'none';
+        } else {
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+        }
+    });
+}
+
+function enforceGrayOutForCities() {
+    const cityButtons = document.querySelectorAll('.genre-button[data-city]');
+    cityButtons.forEach(button => {
+        const count = parseInt(button.querySelector('.genre-count').textContent.replace(/[()]/g, ''), 10);
+        if (count === 0) {
+            button.classList.add('gray-out');
+            button.style.pointerEvents = 'none';
+        } else {
+            button.classList.remove('gray-out');
+            button.style.pointerEvents = 'auto';
+        }
+    });
+}
+  
+document.addEventListener('DOMContentLoaded', function () {
+    genresSortSelect = document.getElementById('genres-sort');
+    labelsSortSelect = document.getElementById('labels-sort');
+    citiesSortSelect = document.getElementById('cities-sort');
+
+    genresSortSelect.addEventListener('change', function () {
+        updateGenresDisplay(artistsData);
+    });
+
+    labelsSortSelect.addEventListener('change', function () {
+        updateLabelsDisplay(artistsData);
+    });
+
+    citiesSortSelect.addEventListener('change', function () {
+        updateCitiesDisplay(artistsData);
+    });
+
+    updateGenresDisplay(artistsData);
+    updateLabelsDisplay(artistsData);
+    updateCitiesDisplay(artistsData);
+});
+
+  document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+  const button = dropdown.querySelector('.dropdown-toggle');
+  const menu = dropdown.querySelector('.dropdown-menu');
+
+  button.addEventListener('click', () => {
+    dropdown.classList.toggle('open');
+  });
+
+  menu.querySelectorAll('li').forEach(item => {
+    item.addEventListener('click', () => {
+      const value = item.getAttribute('data-value');
+      button.textContent = item.textContent;
+      dropdown.classList.remove('open');
+
+      if (dropdown.id === 'genres-sort') {
+        document.getElementById('genres-sort').value = value;
+        updateGenresDisplay(artistsData);
+      } else if (dropdown.id === 'labels-sort') {
+        document.getElementById('labels-sort').value = value;
+        updateLabelsDisplay(artistsData);
+      } else if (dropdown.id === 'cities-sort') {
+        document.getElementById('cities-sort').value = value;
+        updateCitiesDisplay(artistsData);
+      }
+    });
+  });
+});
+
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.custom-dropdown')) {
+    document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+      dropdown.classList.remove('open');
+    });
+  }
 });
 
 </script>
