@@ -2221,114 +2221,95 @@ async function loadCSV(csvUrl) {
 	    }
 	
 	async function createRandomPlaylist(positions) {
-	  isRandomizationActive = true;
-	  for (const position of positions) {
-	    if (!isRandomizationActive) return;
-	
-	    try {
-	      const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${position - 1}&limit=1`, {
-	        headers: {
-	          'Authorization': `Bearer ${accessToken}`
-	        }
-	      });
-	
-	      const data = await response.json();
-	      const track = data.items[0];
-	
-	      if (track && track.track && track.track.album && track.track.preview_url) {
-	        const trackId = track.track.id;
-	
-	        if (!randomPlaylistData.some(item => item.id === trackId)) {
-	          randomPlaylistData.push({ id: trackId });
-	
-	          const album = track.track.album;
-	          const imgSrc = album.images[0].url;
-	          const artistNames = track.track.artists.map(artist => {
-	  return `<a href="${artist.external_urls.spotify}" target="_blank" rel="noopener noreferrer">${artist.name}</a>`;
-	}).join(' & ');
-	          const trackName = track.track.name;
-	          const previewUrl = track.track.preview_url;
-	
-	          const releaseDate = new Date(track.track.album.release_date);
-	          const formattedReleaseDate = releaseDate.toLocaleDateString('uk-UA', { year: '2-digit', month: '2-digit', day: '2-digit' });
-	
-	          const gridItem = document.createElement('figure');
-	gridItem.className = 'grid-item snip1321';
-	gridItem.setAttribute('data-preview-url', previewUrl);
-	gridItem.setAttribute('data-track-id', trackId);
-	
-	const trackUrl = track.track.external_urls.spotify;
-	
-	gridItem.innerHTML = `
-	  <img src="${imgSrc}" alt="${trackName}" loading="lazy">
-	  <div class="container">
-	    <div class="artist">${artistNames}</div>
-	    <div class="text">
-	      <a href="${trackUrl}" target="_blank" rel="noopener noreferrer">${trackName}</a>
-	    </div>
-	    <div class="release-date">${formattedReleaseDate}</div>
-	  </div>
-	  <button class="copy-button"><i class="material-icons">content_copy</i></button>
-	  <button class="play-from-here-button"><div class="inner-button">Програвати звідси</div></button>
-	`;
-	if (!isRandomizationActive) return; 
-	                    gridContainer.appendChild(gridItem);
-	          
-	          const playFromHereButton = gridItem.querySelector('.play-from-here-button');
-	playFromHereButton.addEventListener('click', (event) => {
-	    event.stopPropagation();
-	    
-	    const currentTrackIndexInGrid = Array.from(gridContainer.children).indexOf(event.target.closest('.grid-item'));
-	    
-	    startAutoplay(currentTrackIndexInGrid);
-	}); 
-	
-	          const copyButton = gridItem.querySelector('.copy-button');
-	          copyButton.addEventListener('click', (event) => {
-	            event.stopPropagation();
-	            const iconElement = copyButton.querySelector('.material-icons');
-	    iconElement.textContent = 'check';
-	    setTimeout(() => {
-	        iconElement.textContent = 'content_copy';
-	    }, 2000);
-	            const artistName = event.target.closest('.grid-item').querySelector('.artist').textContent;
-	            const trackName = event.target.closest('.grid-item').querySelector('.text a').textContent;
-	            const textToCopy = `${artistName} - ${trackName}`;
-	            copyToClipboard(textToCopy);
-	          });
-	
-	          const artistElement = gridItem.querySelector('.artist');
-	artistElement.addEventListener('click', (event) => {
-	  event.stopPropagation();
-	
-	  if (audioPlayer.paused) {
-	    return;
-	  }
-	
-	  audioPlayer.pause();
-	  isHovered = false;
-	});
-	
-	const trackNameElement = gridItem.querySelector('.text a');
-	trackNameElement.addEventListener('click', (event) => {
-	  event.stopPropagation();
-	
-	  if (audioPlayer.paused) {
-	    return;
-	  }
-	
-	  audioPlayer.pause();
-	  isHovered = false;
-	});
-	
-	          addCurrentTrackInfoMobile(gridItem, artistNames, trackName, track, trackUrl);
-	          addPlaybackEventListeners(gridItem, previewUrl, artistNames, trackName, track);
-	        }
-	      }
-	    } catch (error) {
-	    }
-	  }
-	}
+    isRandomizationActive = true;
+
+    for (const position of positions) {
+        if (!isRandomizationActive) return;
+
+        try {
+            // Загружаем данные о треке из плейлиста
+            const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${position - 1}&limit=1`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            const data = await response.json();
+            const track = data.items[0];
+
+            if (track && track.track && track.track.album) {
+                const trackId = track.track.id;
+                const previewUrl = csvData[trackId]; // Берём предпрослушивание из CSV
+
+                if (previewUrl && !randomPlaylistData.some(item => item.id === trackId)) {
+                    randomPlaylistData.push({ id: trackId });
+
+                    const album = track.track.album;
+                    const imgSrc = album.images[0].url;
+                    const artistNames = track.track.artists.map(artist => {
+                        return `<a href="${artist.external_urls.spotify}" target="_blank" rel="noopener noreferrer">${artist.name}</a>`;
+                    }).join(' & ');
+                    const trackName = track.track.name;
+
+                    const releaseDate = new Date(track.track.album.release_date);
+                    const formattedReleaseDate = releaseDate.toLocaleDateString('uk-UA', { year: '2-digit', month: '2-digit', day: '2-digit' });
+
+                    const gridItem = document.createElement('figure');
+                    gridItem.className = 'grid-item snip1321';
+                    gridItem.setAttribute('data-preview-url', previewUrl);
+                    gridItem.setAttribute('data-track-id', trackId);
+
+                    const trackUrl = track.track.external_urls.spotify;
+
+                    gridItem.innerHTML = `
+                      <img src="${imgSrc}" alt="${trackName}" loading="lazy">
+                      <div class="container">
+                        <div class="artist">${artistNames}</div>
+                        <div class="text">
+                          <a href="${trackUrl}" target="_blank" rel="noopener noreferrer">${trackName}</a>
+                        </div>
+                        <div class="release-date">${formattedReleaseDate}</div>
+                      </div>
+                      <button class="copy-button"><i class="material-icons">content_copy</i></button>
+                      <button class="play-from-here-button"><div class="inner-button">Програвати звідси</div></button>
+                    `;
+
+                    if (!isRandomizationActive) return;
+                    gridContainer.appendChild(gridItem);
+
+                    const playFromHereButton = gridItem.querySelector('.play-from-here-button');
+                    playFromHereButton.addEventListener('click', (event) => {
+                        event.stopPropagation();
+
+                        const currentTrackIndexInGrid = Array.from(gridContainer.children).indexOf(event.target.closest('.grid-item'));
+
+                        startAutoplay(currentTrackIndexInGrid);
+                    });
+
+                    const copyButton = gridItem.querySelector('.copy-button');
+                    copyButton.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        const iconElement = copyButton.querySelector('.material-icons');
+                        iconElement.textContent = 'check';
+                        setTimeout(() => {
+                            iconElement.textContent = 'content_copy';
+                        }, 2000);
+                        const artistName = event.target.closest('.grid-item').querySelector('.artist').textContent;
+                        const trackName = event.target.closest('.grid-item').querySelector('.text a').textContent;
+                        const textToCopy = `${artistName} - ${trackName}`;
+                        copyToClipboard(textToCopy);
+                    });
+
+                    addCurrentTrackInfoMobile(gridItem, artistNames, trackName, track, trackUrl);
+                    addPlaybackEventListeners(gridItem, previewUrl, artistNames, trackName, track);
+                }
+            }
+        } catch (error) {
+            console.error('Ошибка при создании случайного плейлиста:', error);
+        }
+    }
+}
+
 	
 	    async function loadNextRandomTracks() {
 	  const totalTracks = await getPlaylistInfo(playlistId);
