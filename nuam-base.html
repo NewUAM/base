@@ -3390,17 +3390,20 @@ function updateCityUIState() {
 }
 
 async function fetchArtists() {
-    const response = await fetch('https://docs.google.com/spreadsheets/d/1_PavIrMhHpUHXG7uDrT83yznb2nrJfSd-9G8Hnm9ywM/pub?gid=0&single=true&output=csv');
-    if (!response.ok) {
-        throw new Error('Failed to fetch artists data');
-    }
+    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=0&single=true&output=csv');
     const csvData = await response.text();
+
     Papa.parse(csvData, {
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
             listenerColumns = findListenerColumns(results.meta.fields);
             artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
+            artistsData.forEach(artist => {
+                if (artist['Related']) {
+                    artist.relatedArtists = artist['Related'].split(',').map(id => id.trim());
+                }
+            });
             shuffleArray(artistsData);
             shuffledArtistsData = [...artistsData];
             originalArtistsOrder = [...shuffledArtistsData];
@@ -3921,36 +3924,32 @@ function toggleRelatedArtists(artistElement, artistId) {
 }
 
 async function fetchRelatedArtists(artistId, container) {
-    await ensureValidAccessToken();
+    const artist = artistsData.find(a => a.URL1.includes(artistId));
 
-    const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-    });
-
-    if (!response.ok) {
-        container.innerHTML = '<div class="no-related-artists">Не вдалося отримати схожих артистів</div>';
+    if (!artist || !artist.relatedArtists || artist.relatedArtists.length === 0) {
+        container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
+        container.style.display = 'block';
         return;
     }
 
-    const data = await response.json();
+    const relatedArtistsLinks = artist.relatedArtists
+        .map(relatedId => {
+            const relatedArtist = artistsData.find(a => a.URL1.includes(relatedId));
+            if (relatedArtist) {
+                return `<a class="related-artist-link" href="${relatedArtist.URL1}" target="_blank">${relatedArtist['Артист']}</a>`;
+            }
+            return null;
+        })
+        .filter(Boolean)
+        .join(', ');
 
-    container.innerHTML = '';
-    if (data.artists && data.artists.length > 0) {
-        const filteredArtists = data.artists.filter(relatedArtist => allArtistURLs.has(relatedArtist.id));
-        
-        if (filteredArtists.length > 0) {
-            const relatedArtistsLinks = filteredArtists
-                .map(relatedArtist => `<a class="related-artist-link" href="${relatedArtist.external_urls.spotify}" target="_blank">${relatedArtist.name}</a>`)
-                .join(', ');
-            container.innerHTML = relatedArtistsLinks;
-        } else {
-            container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
-        }
-    } else {
-        container.innerHTML = '<div class="no-related-artists">Схожих артистів не знайдено</div>';
-    }
+    container.innerHTML = relatedArtistsLinks || '<div class="no-related-artists">Схожих артистів не знайдено</div>';
     container.style.display = 'block';
 }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await fetchArtists();
+});
 
 function displayArtists(artists, reset = false) {
     const container = document.querySelector('.artist-container');
