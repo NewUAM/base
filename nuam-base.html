@@ -3468,18 +3468,14 @@ async function fetchTracksData() {
     const cacheKey2025 = 'tracksDataCSV2025';
 
     try {
-        // Получаем данные из кеша или загружаем с URL
         const csvData2024 = await fetchCachedCSV(csv2024URL, cacheKey2024);
         const csvData2025 = await fetchCachedCSV(csv2025URL, cacheKey2025);
 
-        // Парсим оба файла
         const parsedData2024 = Papa.parse(csvData2024, { header: true, skipEmptyLines: true }).data;
         const parsedData2025 = Papa.parse(csvData2025, { header: true, skipEmptyLines: true }).data;
 
-        // Объединяем данные
         const combinedData = [...parsedData2024, ...parsedData2025];
 
-        // Обновляем tracksData с объединёнными данными
         tracksData = combinedData.map(row => ({
             track: row.track,
             artist: row.artist.split('/').pop(),
@@ -3512,7 +3508,7 @@ async function fetchTracksData() {
             preview: row.preview
         }));
     } catch (error) {
-        console.error("Ошибка при обработке CSV:", error);
+        console.error("Помилка під час обробки CSV:", error);
     }
 }
 
@@ -5272,7 +5268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 element: document.querySelector('#filters-section'),
-                intro: 'Тут ви можете виключити зі списку неактивних артистів, які не мали релізів у поточному році, або тих, хто має лише один реліз за весь час. Ви також можете залишити у списку лише дебютантів поточного року. Артисти з російськомовними піснями, реліз яких відбувся з початку 2024 року, виключені зі списку за замовчуванням.',
+                intro: 'Тут ви можете виключити зі списку неактивних артистів, які не мали релізів понад рік, або тих, хто має лише один реліз за весь час. Ви також можете залишити у списку лише дебютантів поточного року. Артисти з російськомовними піснями, реліз яких відбувся з початку 2024 року, виключені зі списку за замовчуванням.',
                 position: 'bottom',
                 tooltipClass: 'customTooltip rangeTooltip',
                 disableInteraction: true
