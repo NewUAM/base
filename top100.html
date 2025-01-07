@@ -1248,7 +1248,7 @@ topBlock.addEventListener('mouseout', () => {
 	
 	      try {
 	        const timestamp = new Date().getTime();
-	        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${offset}&limit=50&_=${timestamp}`, {
+	        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${offset}&limit=100&_=${timestamp}`, {
 	          headers: {
 	            'Authorization': `Bearer ${accessToken}`
 	          }
