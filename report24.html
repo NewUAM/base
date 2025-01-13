@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Музичні підсумки України 2024</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+      @font-face {
+            font-family: 'CustomFont';
+            src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+        }
+        body {
+            font-family: 'CustomFont', Arial;
+            background-color: #282626;
+            color: #f3f3f3;
+            padding: 16px;
+        }
+        .blocks-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+}
+        .block {
+            width: calc(33.333% - 16px);
+            margin-bottom: 16px;
+            background-color: #383838;
+            border: 1px solid #d7da8b;
+            border-radius: 7px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 16px;
+            font-size: 1rem;
+            transition: box-shadow 0.1s ease, transform 0.1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .block:hover {
+            box-shadow: 0px 4px 8px rgba(215, 218, 139, 0.5);
+            transform: translateY(-5px);
+        }
+        .block h3 {
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            color: #84AAFB;
+        }
+        .block p {
+            color: #f3f3f3;
+            font-size: 2rem;
+            margin-top: 8px;
+        }
+        .number {
+            color: #bababa;
+            font-weight: bold;
+        }
+        .number2 {
+            color: #f3f3f3;
+            font-weight: bold;
+        }
+        .block p.secondary {
+            color: #bababa;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        .block p.secondary2 {
+            color: #f3f3f3;
+            font-size: 1.2rem;
+            margin-top: 8px;
+        }
+        .block p.secondary3 {
+            color: #bababa;
+            font-size: 0.7rem;
+            margin-top: 12px;
+        }
+        .block p.secondary4 {
+            color: #f3f3f3;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        .block canvas {
+            max-width: 100%;
+            max-height: 300px;
+            cursor: pointer;
+            pointer-events: none;
+        }
+      #weeklyReleases {
+    pointer-events: auto;
+}
+      #languageChart {
+    pointer-events: auto;
+}
+      #genreChart {
+    pointer-events: auto;
+}
+      #genreChartLegend {
+    margin-top: 6px;
+    line-height: 1;
+}
+#genreChartLegend div {
+    white-space: normal;
+}
+.legend-item {
+    display: flex;
+    justify-content: space-between;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+        .block:has(canvas) {
+            cursor: pointer;
+        }
+        #chartModal canvas {
+            pointer-events: auto;
+        }
+        .visit-base {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .visit-base img {
+            width: 90px;
+            height: auto;
+            margin-left: 10px;
+        }
+        .visit-text {
+            display: flex;
+            flex-direction: column;
+            max-width: 160px;
+        }
+        .visit-text .visit-line {
+            font-size: 0.7rem;
+            line-height: 1.2;
+            margin: 0;
+        }
+        .hover-text {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #f3f3f3;
+            padding: 8px 16px;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .block:hover .hover-text {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        .block:not(:has(canvas)) .hover-text {
+            display: none;
+        }
+.themes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 16px;
+}
+.theme-item {
+    background-color: #383838;
+    border: 1px solid #84AAFB;
+    border-radius: 7px;
+    padding: 12px 16px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: box-shadow 0.1s ease, transform 0.1s ease;
+}
+.theme-name {
+    font-size: 0.9rem;
+    color: #84AAFB;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.theme-count {
+    font-size: 1.2rem;
+    color: #f3f3f3;
+}
+      .duets-tooltip {
+    position: relative;
+    overflow: visible;
+}
+.duets-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    border-radius: 5px;
+    border: 1px solid #d7da8b;
+    white-space: pre-wrap;
+    text-align: center;
+    display: inline-block;
+    min-width: auto;
+    max-width: none;
+    width: max-content;
+    box-sizing: border-box;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+.duets-tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+      #chartModal #growthChartQuestionMark.duets-tooltip::after {
+    max-width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    top: 50%;
+    left: 0; 
+    transform: translate(-80%, -30%);
+    font-weight: normal !important;
+}
+.track-table-button {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background-color: #84AAFB;
+    color: #282626;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 7px;
+    border: 1px solid #d7da8b;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+.track-table-button:hover {
+    transform: translateY(-2px);
+}
+.theme-item {
+    cursor: pointer;
+}
+#debutProjectsBlock,
+#aiArtistsBlock {
+    cursor: pointer;
+}
+      #chartjs-tooltip a {
+  color: #84AAFB;
+  text-decoration: none;
+}
+#chartjs-tooltip a:hover {
+  text-decoration: underline;
+}
+      .tracks-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.track-block {
+  background-color: #383838;
+  border: 1px solid #d7da8b;
+  border-radius: 7px;
+  padding: 8px;
+  text-align: center;
+  font-size: 1rem;
+}
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 16px;
+  height: calc(100% - 60px);
+}
+#tracksColumn {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+#iframeColumn {
+  flex: 1;
+max-width: 385px;
+  overflow: hidden;
+}
+#iframeColumn iframe {
+  max-width: 385px;
+  height: 100%;
+}
+      #fullTracksList {
+    overflow-y: auto;
+    max-height: 100%;
+    padding: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: #84AAFB #383838;
+}
+#fullTracksList::-webkit-scrollbar {
+    width: 8px;
+    background: #383838;
+    border-radius: 7px;
+    margin-right: 8px;
+}
+#fullTracksList::-webkit-scrollbar-thumb {
+    background: #84AAFB;
+    border-radius: 7px;
+    border: 2px solid #383838;
+}
+#fullTracksList::-webkit-scrollbar-thumb:hover {
+    background: #6e99db;
+}
+#fullTracksList::-webkit-scrollbar-corner {
+    background: transparent;
+}
+      .play-button {
+    margin-right: 10px;
+        background: none;
+    border: none;
+    color: #d7da8b;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.play-button:hover {
+    color: #bec17e;
+}
+.track-block a {
+    color: #84AAFB;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+.track-block a:hover {
+    color: #6e99db;
+    text-decoration: underline;
+}
+#topGenresModal .modal-body {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
+    margin: 0 auto;
+}
+      #topGenresModal .tracks-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+#topGenresModal .track-block {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background-color: #383838;
+  border: 1px solid #d7da8b;
+  border-radius: 7px;
+  gap: 8px;
+}
+#topGenresModal .track-block div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+#topGenresModal .track-block span.position {
+  color: #f3f3f3;
+  font-weight: bold;
+}
+#topGenresModal .track-block span.name {
+  color: #84AAFB;
+  font-weight: bold;
+  margin-left: 8px;
+}
+#topGenresModal .track-block span.listens {
+  color: #f3f3f3;
+  text-align: right;
+  flex-shrink: 0;
+}
+        @media (max-width: 768px) {
+            .block {
+                width: calc(50% - 16px);
+            }
+        }
+        @media (max-width: 480px) {
+            .block {
+                width: calc(100% - 16px);
+            }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #282626;
+            border: 1px solid #d7da8b;
+            border-radius: 7px;
+            position: relative;
+            width: 95vw;
+            height: 90vh;
+            margin: auto;
+            overflow: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        .close {
+            color: #d7da8b;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            cursor: pointer;
+        }
+        .modal-chart-container {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: thin;
+            -ms-overflow-style: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #84AAFB #383838;
+        }
+        .modal-chart-container canvas {
+            display: block;
+        }
+        .modal-chart-container::-webkit-scrollbar {
+            height: 8px;
+            background: #383838;
+            border-radius: 7px;
+        }
+        .modal-chart-container::-webkit-scrollbar-thumb {
+            background: #84AAFB;
+            border-radius: 7px;
+            border: 2px solid #383838;
+        }
+        .modal-chart-container::-webkit-scrollbar-thumb:hover {
+            background: #6e99db;
+        }
+        .modal-chart-container::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+        .no-scroll {
+            overflow: hidden;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="blocks-container">
+
+        <!-- 0 -->
+        <div class="block">
+            <h3>Артистів у базі NUAM</h3>
+            <p>12 392</p>
+            <p class="secondary">На момент 31 грудня 2024 року</p>
+            <a href="https://nuam.club/base" class="visit-base" target="_blank" rel="noopener noreferrer">
+                <div class="visit-text">
+                    <p class="visit-line">Відвідайте NUAM Base</p>
+                    <p class="visit-line">для пошуку артистів</p>
+                </div>
+                <img src="https://static.wixstatic.com/shapes/c77f36_468526a078764ea2bac9b61b89a1421c.svg" alt="NUAM Base Logo" />
+            </a>
+        </div>
+
+        <!-- 1 -->
+        <div class="block">
+            <h3>Активних артистів</h3>
+            <p>7750</p>
+            <p class="secondary">Артисти, у яких був хоча б один новий реліз протягом року</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="block">
+            <h3>Випущених треків</h3>
+            <p>53 383</p>
+            <p class="secondary"><span class="number">25 331</span> сингл</p>
+            <p class="secondary"><span class="number">2180</span> міні-альбомів</p>
+            <p class="secondary"><span class="number">1802</span> повноформатних альбомів</p>
+            <p class="secondary"><span class="number">89</span> компіляцій</p>
+          <a href="https://docs.google.com/spreadsheets/d/1WxjXGWHMANk0D7FCxTnGoDTQdTBX-f0SBn0f3QQr6pc/edit?usp=sharing" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   class="track-table-button">
+   Відкрити таблицю<br>з усіма треками
+</a>
+        </div>
+
+        <!-- 3 -->
+        <div class="block">
+            <h3>Загальна тривалість усіх треків</h3>
+            <p>2791 год 3 хв</p>
+            <p class="secondary">Це близько 116 діб або 167 463 хвилини безперервної музики</p>
+            <a href="https://nuam.club/echo" class="visit-base" target="_blank" rel="noopener noreferrer">
+                <div class="visit-text">
+                    <p class="visit-line">Як встигнути все послухати?</p>
+                    <p class="visit-line">Спробуйте NUAM Echo</p>
+                </div>
+                <img src="https://static.wixstatic.com/shapes/c77f36_6d9d8206d5464a8d8729a7ce3718bcfc.svg" alt="NUAM Echo Logo" />
+            </a>
+        </div>
+
+        <!-- 4 -->
+        <div class="block has-chart">
+            <h3>Графік виходу треків</h3>
+            <canvas id="releaseChart"></canvas>
+            <div class="hover-text">Відкрити графік</div>
+        </div>
+
+        <!-- 5 -->
+        <div class="block">
+            <h3>Середня кількість випущених треків на день тижня</h3>
+            <canvas id="weeklyReleases"></canvas>
+        </div>
+
+        <!-- 6 -->
+        <div class="block">
+            <h3>Найрелізніший і найспокійніший день</h3>
+          <p>706</p>
+          <p class="secondary">треків вийшло <span class="number">1 березня</span></p>
+            <p>14</p>
+          <p class="secondary">треків вийшло <span class="number">11 лютого</span></p>
+        </div>
+
+        <!-- 7 -->
+        <div class="block">
+            <h3>Якими мовами співали</h3>
+          <p class="secondary">Враховуються тільки треки з вокалом — <span class="number">30 975</span>. Решта <span class="number">22 408</span> інструментальних та електронних треків до статистики не входять.<p>
+            <canvas id="languageChart"></canvas>
+<p class="secondary3">Натисніть на одну із секцій (крім української) для переходу до технічного плейліста з усіма треками<p>
+        </div>
+
+        <!-- 8 -->
+        <div class="block">
+            <h3>Розподіл базових жанрів</h3>
+            <canvas id="genreChart"></canvas>
+          <p class="secondary3">Натисніть на одну із секцій для переходу до технічного плейліста з усіма треками<p>
+        </div>
+
+        <!-- 9 -->
+<div class="block">
+  <h3>Кількість треків за категоріями</h3>
+  <p class="secondary3">Натисніть на одну із секцій для переходу до технічного плейліста з усіма треками<p>
+    <div class="themes-container">
+        <div class="theme-item duets-tooltip" data-tooltip="Спільні роботи в репі&#10;та електронній музиці&#10;не враховувалися" data-link="https://open.spotify.com/playlist/3RYZ2b6d0z913yN0lhWSwo">
+            <span class="theme-name">Дуети</span>
+            <span class="theme-count">585</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/1wEsnwQ9ItEAA9xkfJ1miN">
+            <span class="theme-name">Кавери</span>
+            <span class="theme-count">285</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/0TVykd17gkU43LUDy2fCtZ">
+            <span class="theme-name">Акапела</span>
+            <span class="theme-count">269</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/3gXWOwUDsEhwASGgOuO1S7">
+            <span class="theme-name">Інструментальна</span>
+            <span class="theme-count">2452</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/5mPZQ2ARfFB17CocxUuRDp">
+            <span class="theme-name">Живий виступ</span>
+            <span class="theme-count">500</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/6wtZii1kIgqHTndlMYGAJd">
+            <span class="theme-name">Фортепіано</span>
+            <span class="theme-count">710</span>
+        </div>
+        <div class="theme-item duets-tooltip" data-tooltip="Тільки фортепіано і вокал,&#10;без використання інших&#10;інструментів" data-link="https://open.spotify.com/playlist/27p56yeeYkpIOqiGUyxjBh">
+            <span class="theme-name">Пісні під фортепіано</span>
+            <span class="theme-count">163</span>
+        </div>
+        <div class="theme-item duets-tooltip" data-tooltip="Тільки гітара і вокал,&#10;без використання інших&#10;інструментів" data-link="https://open.spotify.com/playlist/19t33bVLTOhcVCL63klDEz">
+            <span class="theme-name">Пісні під гітару</span>
+            <span class="theme-count">375</span>
+        </div>
+        <div class="theme-item duets-tooltip" data-tooltip="Інструментальні версії&#10;пісень без вокалу" data-link="https://open.spotify.com/playlist/3HLrpBq7la6DmVX2BGguYe">
+            <span class="theme-name">Мінусовки</span>
+            <span class="theme-count">461</span>
+        </div>
+        <div class="theme-item duets-tooltip" data-tooltip="Інтро, аутро, інтерлюдії,&#10;скіти та інше з альбомів" data-link="https://open.spotify.com/playlist/6oiEiojQpk86cJbGOinYuB">
+            <span class="theme-name">Альбомні вставки</span>
+            <span class="theme-count">400</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/4XpQSV987tSmIyqjMG84rA">
+            <span class="theme-name">Hyperpop</span>
+            <span class="theme-count">190</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/6xgVWNBOGs68J5qiDM5vlm">
+            <span class="theme-name">Synthwave</span>
+            <span class="theme-count">173</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/2zoEMAHadPQkzei6OJ4ETB">
+            <span class="theme-name">Worship</span>
+            <span class="theme-count">310</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/1N01f2K7KHXqQQtQiEzWvk">
+            <span class="theme-name">Cinematic</span>
+            <span class="theme-count">261</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/7tgFjb1pRp3nuYrFu5YK5T">
+            <span class="theme-name">Оперний вокал</span>
+            <span class="theme-count">42</span>
+        </div>
+        <div class="theme-item" data-link="https://open.spotify.com/playlist/01ZxIgp8s12t50928Aw2lX">
+            <span class="theme-name">Експериментальна</span>
+            <span class="theme-count">1325</span>
+        </div>
+    </div>
+</div>
+
+        <!-- 10 -->
+        <div class="block" id="aiArtistsBlock">
+    <h3>Кількість AI-артистів та їхніх треків</h3>
+    <p class="secondary">Треки, повністю (вокал і музика) створені за допомогою штучного інтелекту</p>
+    <p>101</p>
+    <p class="secondary">проєкт</p>
+    <p>2390</p>
+    <p class="secondary">треків</p>
+</div>
+
+              <!-- 11 -->
+        <div class="block">
+            <h3>Загальна кількість прослуховувань всіх треків</h3>
+            <p>1 253 936 464</p>
+            <p class="secondary">Враховувалися тільки прослуховування треків на Spotify, випущених у 2024 році, які мають щонайменше 1000 прослуховувань</p>
+        </div>
+
+        <!-- 12 -->
+        <div class="block">
+            <h3>Кількість треків у різних діапазонах прослуховувань</h3>
+            <canvas id="listeningRangeChart"></canvas>
+          <div class="hover-text">Відкрити графік</div>
+        </div>
+      
+        <!-- 13 -->
+        <div class="block">
+            <h3>Динаміка кількості слухачів у жанрів</h3>
+            <canvas id="growthChart"></canvas>
+            <div class="hover-text">Відкрити графік</div>
+        </div>
+
+        <!-- 14 -->
+        <div class="block" id="debutProjectsBlock">
+    <h3>Кількість дебютних проєктів</h3>
+    <p>1149</p>
+    <p class="secondary">Виконавці/проєкти, які вперше презентували релізи у 2024 році</p>
+</div>
+
+        <!-- 15 -->
+        <div class="block">
+            <h3>Поява дебютних проєктів протягом року</h3>
+            <canvas id="debutChart"></canvas>
+            <div class="hover-text">Відкрити графік</div>
+        </div>
+
+        <!-- 16 -->
+        <div class="block">
+            <h3>Розподіл жанрів дебютних проєктів</h3>
+            <canvas id="debutGenresChart"></canvas>
+            <div class="hover-text">Відкрити графік</div>
+        </div>
+      
+              <!-- 17 -->
+        <div class="block">
+            <h3>Загальна кількість прослуховувань усіх треків дебютних проєктів</h3>
+            <p>14 161 907</p>
+            <p class="secondary">Враховувалися тільки прослуховування треків на Spotify, які мають щонайменше 1000 прослуховувань</p>
+        </div>
+      
+                    <!-- 18 -->
+        <div class="block">
+            <h3>Стан артистів, які дебютували роком раніше</h3>
+            <p class="secondary4">Із <span class="number2">931</span> проєкта, які дебютували у 2023 році, <span class="number2">378</span> не випустили жодного релізу у 2024 році. Решта <span class="number2">553</span> проєкти випустили <span class="number2">2586</span> треків у 2024 році і зібрали <span class="number2">82 616 743</span> прослуховувань на Spotify. <span class="number2">87%</span> цих прослуховувань припали на треки лише 10 артистів: Klavdia Petrivna, Parfeniuk, OSTY, Domiy, Кажанна, Ann in Black, STASYA, iSKra, MAYOROVA і Phil It.</p>
+        </div>
+
+              <!-- 20 -->
+        <div class="block" id="topDebutProjectsBlock">
+    <h3>ТОП-20 дебютних проєктів</h3>
+    <p class="secondary">ТОП артистів складався на основі даних про кількість слухачів на місяць наприкінці грудня на Spotify</p>
+    <div id="debutProjectsList" class="tracks-container"></div>
+</div>
+      
+        <!-- 19 -->
+        <div class="block" id="topTracksBlock">
+  <h3>ТОП-100 треків за прослуховуваннями</h3>
+  <div id="topTracksPreview" class="tracks-container"></div>
+  <button class="track-table-button" id="openFullTracksListBtn">Відкрити весь список</button>
+</div>
+
+        <!-- 20 -->
+        <div class="block" id="topGenresBlock">
+    <h3>ТОП-5 виконавців у кожному жанрі</h3>
+    <div id="topGenresPreview" class="tracks-container"></div>
+    <button class="track-table-button" id="openTopGenresBtn">Відкрити весь ТОП</button>
+</div>
+
+<div id="topGenresModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeTopGenresModal">&times;</span>
+        <div id="fullTopGenresList" class="tracks-container"></div>
+    </div>
+</div>
+
+        <!-- 21 -->
+        <div class="block">
+            <h3>ТОП-5 треків у кожному жанрі</h3>
+            <p class="secondary4">...</p>
+        </div>
+
+        <!-- 22 -->
+        <div class="block">
+            <h3>ТОП-10 виконавців із найстрімкішим зростанням кількості слухачів (з квітня)</h3>
+            <p class="secondary4">...</p>
+        </div>
+
+        <!-- 23 -->
+        <div class="block">
+            <h3>ТОП-10 виконавців із найбільшим падінням аудиторії (з квітня)</h3>
+            <p class="secondary4">...</p>
+        </div>
+
+        <!-- 24 -->
+        <div class="block">
+            <h3>ТОП-10 лейблів із найпопулярнішими виконавцями</h3>
+            <p class="secondary4">Середня кількість прослуховувань за рік</p>
+        </div>
+
+        <!-- 25 -->
+        <div class="block">
+            <h3>ТОП-10 виконавців, які найдовше перебували у чарті Spotify</h3>
+            <p class="secondary4">...</p>
+        </div>
+
+        <!-- 26 -->
+        <div class="block">
+            <h3>ТОП-10 виконавців із найбільшою кількістю випущених треків</h3>
+            <p class="secondary4">З урахуванням лише треків із 1000+ прослуховувань</p>
+        </div>
+
+        <!-- 27 -->
+        <div class="block">
+            <h3>ТОП-10 артистів із найбільшою кількістю появ у кураторських плейлістах</h3>
+            <p class="secondary4">...</p>
+        </div>
+
+    </div>
+
+    <div id="chartModal" class="modal">
+  <div class="modal-content" id="modalContent">
+
+    <span
+      id="growthChartQuestionMark"
+      class="theme-item duets-tooltip"
+      data-tooltip="Числа біля жанрів у легенді вказують кількість артистів у базі, що належать до жанру. Підсумкове число слухачів — це сума слухачів усіх артистів у рамках жанру."
+      style="
+        position: absolute;
+        top: 20px;
+        right: 0px;
+        display: none;
+        cursor: pointer;
+        color: #84AAFB;
+        font-size: 22px; 
+        font-weight: bold;
+        background: none;
+        border: none;
+        padding: 0;
+      "
+    >?</span>
+
+    <span class="close" id="closeModal">&times;</span>
+
+    <div class="modal-chart-container">
+      <canvas id="modalChart"></canvas>
+    </div>
+  </div>
+</div>
+  
+  <div id="topTracksModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeTracksModal">&times;</span>
+    <div class="modal-body">
+      <div id="tracksColumn">
+        <div id="fullTracksList" class="tracks-container"></div>
+      </div>
+      <div id="iframeColumn">
+        <iframe 
+          src="https://newuam.github.io/base/top100.html"
+          frameborder="0"
+          title="TOP-100"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
+
+    <script>
+        Chart.register(ChartDataLabels);
+
+        const allCharts = {};
+        let modalChartInstance = null;
+
+      window.debutChartTooltips = [];
+
+let pinned = false;
+let tooltipEl = null;
+
+function externalTooltipHandler(context) {
+  const { chart, tooltip } = context;
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div');
+    tooltipEl.id = 'chartjs-tooltip';
+    tooltipEl.style.position = 'absolute';
+    tooltipEl.style.pointerEvents = 'auto';
+    tooltipEl.style.backgroundColor = '#282626';
+    tooltipEl.style.color = '#f3f3f3';
+    tooltipEl.style.border = '1px solid #d7da8b';
+    tooltipEl.style.borderRadius = '5px';
+    tooltipEl.style.padding = '10px';
+    tooltipEl.style.zIndex = 999999; 
+    tooltipEl.style.opacity = 0;
+    document.body.appendChild(tooltipEl);
+  }
+
+  if (pinned) {
+    return;
+  }
+
+  if (!tooltip.dataPoints?.length || tooltip.opacity === 0) {
+    tooltipEl.style.opacity = 0;
+    return;
+  }
+
+  const dataIndex = tooltip.dataPoints[0].dataIndex;
+  const dateLabel = tooltip.dataPoints[0].label;
+  const linksHtml = tooltips[dataIndex] || '(немає дебютних проєктів)';
+
+  tooltipEl.innerHTML = `
+    <div style="font-weight:bold; margin-bottom:5px;">${dateLabel}</div>
+    <div style="font-size:0.8rem; color:#bababa; margin-bottom:5px;">
+      зробіть клік для фіксації списку артистів
+    </div>
+    <div>${linksHtml}</div>
+  `;
+
+  const rect = chart.canvas.getBoundingClientRect();
+  const left = rect.left + window.scrollX + tooltip.caretX;
+  const top  = rect.top  + window.scrollY + tooltip.caretY;
+
+  tooltipEl.style.left = left + 'px';
+  tooltipEl.style.top  = top + 'px';
+  tooltipEl.style.opacity = 1;
+}
+
+document.addEventListener('click', function () {
+  if (!tooltipEl) return;
+  if (tooltipEl.style.opacity !== '1') return;
+
+  if (!pinned) {
+    pinned = true;
+  } else {
+    pinned = false;
+    tooltipEl.style.opacity = 0;
+  }
+});
+      
+        function createChart(id, type, labels, data, label, color, extraOptions = {}) {
+    const ctx = document.getElementById(id).getContext('2d');
+
+    const tooltipCallbacks = {
+        releaseChart: {
+            title: function (tooltipItems) {
+                if (tooltipItems.length > 0) {
+                    return `Дата: ${tooltipItems[0].label || 'Невідомо'}`;
+                }
+                return 'Дата невідома';
+            },
+            label: function (tooltipItem) {
+                return `Треків вийшло: ${tooltipItem.raw || 0}`;
+            }
+        },
+        weeklyReleases: {
+            label: function (tooltipItem) {
+                return `Треків: ${tooltipItem.raw}`;
+            }
+        },
+        debutGenresChart: {
+            title: function (tooltipItems) {
+                return tooltipItems[0]?.label || '';
+            },
+            label: function (tooltipItem) {
+                return `Дебютних проєктів: ${tooltipItem.raw}`;
+            }
+        },
+        default: {
+            title: function (tooltipItems) {
+                const originalTitle = tooltipItems.length > 0 ? tooltipItems[0].label : '';
+                return `${originalTitle} прослуховувань`;
+            },
+            label: function (tooltipItem) {
+                return `${tooltipItem.dataset.label || ''}: ${tooltipItem.raw}`;
+            },
+            footer: function () {
+                return '';
+            }
+        }
+    };
+
+    const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: {
+                display: false,
+                labels: {
+                    color: '#f3f3f3'
+                }
+            },
+            tooltip: {
+                callbacks: id === 'weeklyReleases' 
+                    ? tooltipCallbacks.weeklyReleases 
+                    : (id === 'releaseChart' 
+                        ? tooltipCallbacks.releaseChart 
+                        : (id === 'debutGenresChart' 
+                            ? tooltipCallbacks.debutGenresChart 
+                            : tooltipCallbacks.default)),
+                backgroundColor: '#282626',
+                titleColor: '#f3f3f3',
+                bodyColor: '#f3f3f3',
+                footerColor: '#d7da8b',
+                borderColor: '#d7da8b',
+                borderWidth: 1,
+                cornerRadius: 5,
+                displayColors: false
+            },
+            datalabels: {
+                display: false
+            }
+        },
+        scales: {
+            x: { display: false },
+            y: { display: false }
+        }
+    };
+
+    if (id === 'weeklyReleases') {
+        baseOptions.plugins.datalabels.display = true;
+        baseOptions.plugins.datalabels.color = '#f3f3f3';
+        baseOptions.plugins.datalabels.anchor = 'start';
+        baseOptions.plugins.datalabels.align = 'end';
+        baseOptions.plugins.datalabels.rotation = -90;
+        baseOptions.plugins.datalabels.offset = 5;
+        baseOptions.plugins.datalabels.clip = false;
+        baseOptions.plugins.datalabels.font = { size: 14 };
+        baseOptions.plugins.datalabels.formatter = function (value, context) {
+            return context.chart.data.labels[context.dataIndex];
+        };
+
+        baseOptions.scales = {
+            x: { display: false },
+            y: {
+                display: true,
+                beginAtZero: true,
+                ticks: {
+                    color: '#f3f3f3',
+                    padding: 10
+                }
+            }
+        };
+
+        ctx.canvas.style.cursor = 'default';
+    }
+
+    if (id === 'releaseChart' && ctx.canvas.parentElement.classList.contains('block')) {
+        baseOptions.scales = {
+            x: { display: false },
+            y: { display: false }
+        };
+    } else if (id === 'releaseChart') {
+        baseOptions.scales = {
+            x: {
+                display: true,
+                ticks: { maxTicksLimit: 50, color: '#f3f3f3' }
+            },
+            y: {
+                display: true,
+                beginAtZero: true,
+                ticks: { maxTicksLimit: 10, color: '#f3f3f3' }
+            }
+        };
+    }
+
+    const finalOptions = { ...baseOptions, ...extraOptions };
+
+    const chartInstance = new Chart(ctx, {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: data,
+                borderColor: color.border,
+                backgroundColor: color.background,
+                borderWidth: 2,
+                tension: 0.4
+            }]
+        },
+        options: finalOptions
+    });
+
+    allCharts[id] = chartInstance;
+}
+
+        function openModalChart(id) {
+    const modal = document.getElementById('chartModal');
+    modal.style.display = 'flex';
+    document.body.classList.add('no-scroll');
+
+    const iframe = document.getElementById('iframeColumn').querySelector('iframe');
+
+    iframe.addEventListener('load', () => {
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+        if (iframeDocument) {
+            iframeDocument.body.addEventListener('mousemove', (event) => {
+                console.log('Mouse moved inside iframe:', event.clientX, event.clientY);
+            });
+        }
+    });
+
+          const questionMark = document.getElementById('growthChartQuestionMark');
+  if (id === 'growthChart') {
+    questionMark.style.display = 'inline-block';
+  } else {
+    questionMark.style.display = 'none';
+  }
+          
+    if (modalChartInstance) {
+        modalChartInstance.destroy();
+    }
+
+    const originalChart = allCharts[id];
+    const type = originalChart.config.type;
+
+    const data = JSON.parse(JSON.stringify(originalChart.config.data));
+    const options = JSON.parse(JSON.stringify(originalChart.config.options));
+    options.plugins.tooltip.callbacks = originalChart.config.options.plugins.tooltip.callbacks;
+
+    const modalCanvas = document.getElementById('modalChart');
+    const ctx = modalCanvas.getContext('2d');
+    modalCanvas.removeAttribute('style');
+    modalCanvas.removeAttribute('width');
+    modalCanvas.removeAttribute('height');
+
+    const controlsContainer = document.getElementById('growthChartControls');
+    if (controlsContainer) {
+        controlsContainer.remove();
+    }
+
+    if (id === 'debutChart') {
+  options.plugins.tooltip.enabled = false;
+  options.plugins.tooltip.external = externalTooltipHandler;
+  options.plugins.datalabels.display = true;
+  options.plugins.datalabels.color = '#f3f3f3';
+
+  data.labels = data.labels.map(label => {
+    const [year, mm, dd] = label.split('-');
+    return `${mm}.${dd}`;
+  });
+
+  data.datasets.forEach(ds => {
+    ds.borderColor = '#84AAFB';
+    ds.backgroundColor = 'rgba(132, 170, 251, 0.2)';
+    ds.borderWidth = 2;
+    ds.tension = 0.4;
+  });
+}
+
+    if (id === 'releaseChart' || id === 'debutChart') {
+        options.plugins.legend.display = false;
+        options.maintainAspectRatio = false;
+        options.responsive = false;
+        options.scales.x.display = true;
+        options.scales.y.display = true;
+
+        const calculatedWidth = data.labels.length * 20;
+        modalCanvas.setAttribute('width', calculatedWidth);
+        modalCanvas.setAttribute('height', 600);
+
+    } else if (id === 'growthChart') {
+        options.plugins.legend = {
+            display: true,
+            position: 'right',
+            labels: {
+                color: '#f3f3f3',
+                boxWidth: 20,
+                padding: 10,
+                usePointStyle: true,
+            },
+            onHover: (event, legendItem) => {
+                const index = legendItem.datasetIndex;
+                const chart = modalChartInstance;
+
+                chart.data.datasets.forEach((dataset, i) => {
+                    if (i === index) {
+                        dataset.borderWidth = 6;
+                        dataset.borderColor = dataset.originalBorderColor;
+                        dataset.pointBackgroundColor = dataset.originalBorderColor;
+                    } else {
+                        dataset.borderWidth = 2;
+                        dataset.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        dataset.pointBackgroundColor = 'rgba(255, 255, 255, 0.2)';
+                    }
+                });
+                chart.update();
+            },
+            onLeave: () => {
+                const chart = modalChartInstance;
+
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.borderWidth = 2;
+                    dataset.borderColor = dataset.originalBorderColor;
+                    dataset.pointBackgroundColor = dataset.originalBorderColor;
+                });
+                chart.update();
+            },
+        };
+
+        options.maintainAspectRatio = false;
+        options.responsive = true;
+        options.scales.x.display = true;
+        options.scales.y.display = true;
+
+        data.datasets.forEach((dataset) => {
+            dataset.originalBorderColor = dataset.borderColor;
+        });
+
+        modalCanvas.style.width = '100%';
+        modalCanvas.style.height = '100%';
+
+        const modalContent = document.getElementById('modalContent');
+        const newControlsContainer = document.createElement('div');
+        newControlsContainer.id = 'growthChartControls';
+        newControlsContainer.style.display = 'flex';
+        newControlsContainer.style.justifyContent = 'center';
+        newControlsContainer.style.marginBottom = '10px';
+        newControlsContainer.style.gap = '10px';
+
+        const removeAllBtn = document.createElement('button');
+        removeAllBtn.textContent = 'Прибрати всі';
+        removeAllBtn.style.color = '#f3f3f3';
+        removeAllBtn.style.fontWeight = 'bold';
+        removeAllBtn.style.background = 'transparent';
+        removeAllBtn.style.border = '1px solid #f3f3f3';
+        removeAllBtn.style.borderRadius = '7px';
+        removeAllBtn.style.padding = '5px 10px';
+        removeAllBtn.style.cursor = 'pointer';
+        removeAllBtn.style.transition = 'background-color 0.3s, color 0.3s';
+
+        const addAllBtn = document.createElement('button');
+        addAllBtn.textContent = 'Додати всі';
+        addAllBtn.style.color = '#f3f3f3';
+        addAllBtn.style.fontWeight = 'bold';
+        addAllBtn.style.background = 'transparent';
+        addAllBtn.style.border = '1px solid #f3f3f3';
+        addAllBtn.style.borderRadius = '7px';
+        addAllBtn.style.padding = '5px 10px';
+        addAllBtn.style.cursor = 'pointer';
+        addAllBtn.style.transition = 'background-color 0.3s, color 0.3s';
+
+        function setHoverStyles(button) {
+            button.style.backgroundColor = '#f3f3f3';
+            button.style.color = '#282626';
+        }
+
+        function resetStyles(button) {
+            button.style.backgroundColor = 'transparent';
+            button.style.color = '#f3f3f3';
+        }
+
+        removeAllBtn.addEventListener('mouseover', () => setHoverStyles(removeAllBtn));
+        removeAllBtn.addEventListener('mouseout', () => resetStyles(removeAllBtn));
+
+        addAllBtn.addEventListener('mouseover', () => setHoverStyles(addAllBtn));
+        addAllBtn.addEventListener('mouseout', () => resetStyles(addAllBtn));
+
+        removeAllBtn.addEventListener('click', () => {
+            modalChartInstance.data.datasets.forEach((dataset, index) => {
+                modalChartInstance.getDatasetMeta(index).hidden = true;
+            });
+            modalChartInstance.update();
+        });
+
+        addAllBtn.addEventListener('click', () => {
+            modalChartInstance.data.datasets.forEach((dataset, index) => {
+                modalChartInstance.getDatasetMeta(index).hidden = false;
+            });
+            modalChartInstance.update();
+        });
+
+        newControlsContainer.appendChild(removeAllBtn);
+        newControlsContainer.appendChild(addAllBtn);
+
+        const legendContainer = modalContent.querySelector('.chartjs-legend');
+        if (legendContainer) {
+            legendContainer.parentNode.insertBefore(newControlsContainer, legendContainer);
+        } else {
+            modalContent.insertBefore(newControlsContainer, modalContent.firstChild);
+        }
+
+    } else {
+        options.maintainAspectRatio = false;
+        options.responsive = true;
+        options.scales.x.display = true;
+        options.scales.y.display = true;
+
+        modalCanvas.style.width = '100%';
+        modalCanvas.style.height = '100%';
+    }
+
+    modalChartInstance = new Chart(ctx, {
+        type,
+        data,
+        options,
+    });
+}
+
+        function closeModal() {
+            const modal = document.getElementById('chartModal');
+            modal.style.display = 'none';
+            document.body.classList.remove('no-scroll');
+        }
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('chartModal').addEventListener('click', function (e) {
+            const modalContent = document.getElementById('modalContent');
+            if (!modalContent.contains(e.target)) {
+                closeModal();
+            }
+        });
+
+        document.querySelectorAll('.block').forEach(block => {
+    const canvas = block.querySelector('canvas');
+    if (canvas && canvas.id !== 'weeklyReleases' && canvas.id !== 'languageChart' && canvas.id !== 'genreChart') {
+        block.addEventListener('click', () => {
+            openModalChart(canvas.id);
+        });
+    }
+});
+
+        createChart(
+            'releaseChart', 
+            'bar',
+['01.01','02.01','03.01','04.01','05.01','06.01','07.01','08.01','09.01','10.01','11.01','12.01','13.01','14.01','15.01','16.01','17.01','18.01','19.01','20.01','21.01','22.01','23.01','24.01','25.01','26.01','27.01','28.01','29.01','30.01','31.01','01.02','02.02','03.02','04.02','05.02','06.02','07.02','08.02','09.02','10.02','11.02','12.02','13.02','14.02','15.02','16.02','17.02','18.02','19.02','20.02','21.02','22.02','23.02','24.02','25.02','26.02','27.02','28.02','29.02','01.03','02.03','03.03','04.03','05.03','06.03','07.03','08.03','09.03','10.03','11.03','12.03','13.03','14.03','15.03','16.03','17.03','18.03','19.03','20.03','21.03','22.03','23.03','24.03','25.03','26.03','27.03','28.03','29.03','30.03','31.03','01.04','02.04','03.04','04.04','05.04','06.04','07.04','08.04','09.04','10.04','11.04','12.04','13.04','14.04','15.04','16.04','17.04','18.04','19.04','20.04','21.04','22.04','23.04','24.04','25.04','26.04','27.04','28.04','29.04','30.04','01.05','02.05','03.05','04.05','05.05','06.05','07.05','08.05','09.05','10.05','11.05','12.05','13.05','14.05','15.05','16.05','17.05','18.05','19.05','20.05','21.05','22.05','23.05','24.05','25.05','26.05','27.05','28.05','29.05','30.05','31.05','01.06','02.06','03.06','04.06','05.06','06.06','07.06','08.06','09.06','10.06','11.06','12.06','13.06','14.06','15.06','16.06','17.06','18.06','19.06','20.06','21.06','22.06','23.06','24.06','25.06','26.06','27.06','28.06','29.06','30.06','01.07','02.07','03.07','04.07','05.07','06.07','07.07','08.07','09.07','10.07','11.07','12.07','13.07','14.07','15.07','16.07','17.07','18.07','19.07','20.07','21.07','22.07','23.07','24.07','25.07','26.07','27.07','28.07','29.07','30.07','31.07','01.08','02.08','03.08','04.08','05.08','06.08','07.08','08.08','09.08','10.08','11.08','12.08','13.08','14.08','15.08','16.08','17.08','18.08','19.08','20.08','21.08','22.08','23.08','24.08','25.08','26.08','27.08','28.08','29.08','30.08','31.08','01.09','02.09','03.09','04.09','05.09','06.09','07.09','08.09','09.09','10.09','11.09','12.09','13.09','14.09','15.09','16.09','17.09','18.09','19.09','20.09','21.09','22.09','23.09','24.09','25.09','26.09','27.09','28.09','29.09','30.09','01.10','02.10','03.10','04.10','05.10','06.10','07.10','08.10','09.10','10.10','11.10','12.10','13.10','14.10','15.10','16.10','17.10','18.10','19.10','20.10','21.10','22.10','23.10','24.10','25.10','26.10','27.10','28.10','29.10','30.10','31.10','01.11','02.11','03.11','04.11','05.11','06.11','07.11','08.11','09.11','10.11','11.11','12.11','13.11','14.11','15.11','16.11','17.11','18.11','19.11','20.11','21.11','22.11','23.11','24.11','25.11','26.11','27.11','28.11','29.11','30.11','01.12','02.12','03.12','04.12','05.12','06.12','07.12','08.12','09.12','10.12','11.12','12.12','13.12','14.12','15.12','16.12','17.12','18.12','19.12','20.12','21.12','22.12','23.12','24.12','25.12','26.12','27.12','28.12','29.12','30.12','31.12'],
+            [142,36,79,72,283,57,69,104,77,45,59,379,90,55,101,83,72,101,520,77,35,90,75,79,95,520,73,55,72,87,131,165,485,53,36,98,69,68,149,431,101,14,75,83,143,116,550,49,69,123,91,96,145,504,101,68,70,105,122,254,706,62,74,56,135,47,268,527,129,86,83,50,85,146,520,77,39,92,93,119,105,520,61,75,100,66,126,138,382,72,81,127,90,78,160,491,80,53,57,100,108,82,395,87,63,59,80,112,176,476,122,84,134,108,99,128,402,61,31,111,132,171,115,487,58,46,118,105,79,130,492,66,58,86,63,124,152,579,62,57,73,61,49,120,462,47,37,50,83,103,104,598,172,36,76,79,62,141,442,65,40,62,68,78,139,477,107,77,91,61,58,142,528,82,30,92,55,85,117,458,141,68,156,121,74,113,424,84,69,74,146,86,98,497,72,74,108,104,107,90,463,66,34,130,96,65,149,598,46,55,126,97,88,188,465,69,45,83,67,68,160,354,64,69,83,123,105,121,484,43,29,67,148,88,167,479,108,55,50,71,96,91,479,98,144,91,98,78,110,310,83,50,132,149,86,161,516,101,105,70,78,84,117,521,69,55,94,82,89,109,563,41,60,137,144,89,98,422,55,60,76,64,71,178,500,78,73,60,99,113,95,486,44,31,69,92,40,124,604,39,46,127,109,101,191,552,46,56,62,85,62,84,454,71,20,140,79,79,148,517,58,74,55,38,134,142,456,51,76,67,49,52,102,561,48,159,90,73,92,120,496,44,26,86,50,64,179,570,98,39,110,63,71,121,491,70,54,96,108,109,89,520,24,54,74,87],
+            'Вихід треків',
+            { border: '#84AAFB', background: 'rgba(132, 170, 251, 0.2)' }
+        );
+
+        createChart(
+            'weeklyReleases',
+            'bar',
+            ["Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота", "Неділя"],
+            [92, 88, 89, 132, 488, 73, 59],
+            'Релізи за днями тижня',
+            { border: '#84AAFB', background: 'rgba(132, 170, 251, 0.2)' }
+        );
+
+      const languageLinks = {
+    'Українська': null,
+    'Російська': 'https://open.spotify.com/playlist/412fZmj0uAOXwoQKytw4q2',
+    'Англійська': 'https://open.spotify.com/playlist/5y2KM7coeVxrF6xbStJ0Gx',
+    'Інші': 'https://open.spotify.com/playlist/0RjsgIIr260Q9q9I9PbKsc'
+};
+
+document.getElementById('languageChart').addEventListener('click', function (event) {
+    const chart = allCharts['languageChart'];
+
+    const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+    if (points.length) {
+        const firstPoint = points[0];
+        const label = chart.data.labels[firstPoint.index];
+
+        const link = languageLinks[label];
+        if (link) {
+            window.open(link, '_blank');
+        }
+    }
+});
+
+      const languageDetails = {
+    'Російська': {
+        genres: {
+            'pop': '582 треки',
+            'rap': '1296 треків',
+            'trap': '873 треки',
+            'rock': '188 треків',
+            'metal': '71 трек',
+            'post-punk': '39 треків'
+        }
+    }
+};
+  
+  createChart(
+    'languageChart',
+    'pie',
+    ['Українська', 'Російська', 'Англійська', 'Інші'],
+    [24313, 3042, 3300, 320],
+    'Мови',
+    {
+        border: ['#84AAFB'],
+        background: [
+            'rgba(132, 170, 251, 0.2)',
+            'rgba(250, 139, 215, 0.2)',
+            'rgba(215, 218, 139, 0.2)',
+            'rgba(139, 218, 172, 0.2)'
+        ]
+    },
+    {
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                displayColors: false,
+                callbacks: {
+                    title: function (tooltipItems) {
+                        return tooltipItems[0].label;
+                    },
+                    label: function (ctx) {
+                        const label = ctx.label;
+                        const amount = ctx.parsed;
+                        let tooltipText = [`Треків випущено: ${amount}`];
+        
+                        if (label === 'Російська' && languageDetails[label]) {
+                            tooltipText.push('');
+                            tooltipText.push('Жанри:');
+                            for (const [genre, count] of Object.entries(languageDetails[label].genres)) {
+                                tooltipText.push(`• ${genre}: ${count}`);
+                            }
+                        }
+        
+                        return tooltipText;
+                    }
+                },
+                backgroundColor: '#282626',
+                titleColor: '#f3f3f3',
+                bodyColor: '#f3f3f3',
+                borderColor: '#d7da8b',
+                borderWidth: 1,
+                cornerRadius: 5
+            },
+            datalabels: {
+                display: true,
+                clip: false,
+                color: '#ffffff',
+                font: { size: 14, weight: 'bold' },
+                anchor: 'end',
+                align: 'end',
+                textAlign: 'center',
+                offset: (context) => {
+                    const offsetMap = {
+                        'Українська': -80,
+                        'Російська': -70,
+                        'Англійська': -65,
+                        'Інші': -60
+                    };
+                    const labelName = context.chart.data.labels[context.dataIndex];
+                    return offsetMap[labelName] ?? -50;
+                },
+                rotation: (context) => {
+                    const arc = context.chart
+                        .getDatasetMeta(context.datasetIndex)
+                        .data[context.dataIndex];
+                    if (!arc) return 0;
+                    const { startAngle, endAngle } = arc.getProps(['startAngle', 'endAngle'], true);
+                    const midAngle = startAngle + (endAngle - startAngle) / 2;
+                    let deg = (midAngle * 180) / Math.PI - 90;
+                    if (deg > 90) deg -= 180;
+                    else if (deg < -90) deg += 180;
+                    return deg;
+                },
+                formatter: (value, context) => {
+                    const datasetValue = context.chart.data.datasets[0].data[context.dataIndex];
+                    const total = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0);
+                    const percent = ((datasetValue / total) * 100).toFixed(2) + '%';
+                    const labelName = context.chart.data.labels[context.dataIndex];
+                    return [labelName, percent];
+                }
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 0 }
+    }
+);
+
+const legendContainer = document.createElement('div');
+legendContainer.id = 'genreChartLegend';
+legendContainer.style.display = 'flex';
+legendContainer.style.justifyContent = 'center';
+legendContainer.style.marginBottom = '10px';
+legendContainer.style.flexWrap = 'wrap';
+legendContainer.style.gap = '0px';
+
+const genreChartCanvas = document.getElementById('genreChart');
+genreChartCanvas.parentElement.insertBefore(legendContainer, genreChartCanvas);
+
+const chartLabels = [
+  'решта репу', 'trap', 'rock', 'metal', 'post-punk', 
+  'решта електроніки', 'phonk', 'beats', 'background', 
+  'remixes', 'drone'
+];
+
+const chartData = [
+  6147, 3382, 4514, 1619, 347, 
+  8159, 6444, 1964, 675, 
+  606, 446
+];
+
+const chartColors = [
+  'rgba(215, 218, 139, 0.2)',
+  'rgba(215, 218, 139, 0.2)',
+  'rgba(250, 139, 215, 0.2)',
+  'rgba(250, 139, 215, 0.2)',
+  'rgba(250, 139, 215, 0.2)',
+  'rgba(132, 170, 251, 0.2)',
+  'rgba(132, 170, 251, 0.2)',
+  'rgba(132, 170, 251, 0.2)',
+  'rgba(132, 170, 251, 0.2)',
+  'rgba(132, 170, 251, 0.2)',
+  'rgba(132, 170, 251, 0.2)'
+];
+
+const genreLinks = {
+    'решта репу': 'https://open.spotify.com/playlist/2MiVCRKGIAhuuZUaWunYk8',
+    'trap': 'https://open.spotify.com/playlist/1rPREbOURbHRacxnYRys0h',
+    'rock': 'https://open.spotify.com/playlist/4WRWm7wC8ryDSjqZAFqMVD',
+    'metal': 'https://open.spotify.com/playlist/66e6KXafLyXP6hQw8sFr5h',
+    'post-punk': 'https://open.spotify.com/playlist/2paiNyBwnXHME6efaYPmad',
+    'решта електроніки': 'https://open.spotify.com/playlist/5R2p8fq3AyQZrMcX2Tvdl0',
+    'phonk': 'https://open.spotify.com/playlist/2mU9hw6Eje2bYmzs6LRPKK',
+    'beats': 'https://open.spotify.com/playlist/7LU4yV4Nb0VhWwrBIOoSot',
+    'background': 'https://open.spotify.com/playlist/1bUAd4Q8iLY3xanUAY4M5X',
+    'remixes': 'https://open.spotify.com/playlist/0qLDDdUB0F5tO2EdsI3XNz',
+    'drone': 'https://open.spotify.com/playlist/6FMbc3pl1mlA4dg4Hx6BAt'
+};
+
+genreChartCanvas.addEventListener('click', function (event) {
+    const points = genreChart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+    if (points.length > 0) {
+        const firstPoint = points[0];
+        const label = genreChart.data.labels[firstPoint.index];
+
+        const link = genreLinks[label];
+        if (link) {
+            window.open(link, '_blank');
+        }
+    }
+});
+    
+const genreChart = new Chart(genreChartCanvas, {
+  type: 'doughnut',
+  data: {
+    labels: chartLabels,
+    datasets: [{
+      data: chartData,
+      backgroundColor: chartColors,
+      hoverBackgroundColor: chartColors,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        displayColors: false,
+        callbacks: {
+          title: function (tooltipItems) {
+            return tooltipItems.length > 0 ? tooltipItems[0].label : '';
+          },
+          label: function (ctx) {
+            const value = ctx.raw || 0;
+            return `Треків випущено: ${value}`;
+          }
+        },
+        backgroundColor: '#282626',
+        titleColor: '#FFFFFF',
+        bodyColor: '#FFFFFF',
+        borderColor: '#d7da8b',
+        borderWidth: 1,
+        cornerRadius: 5
+      },
+      datalabels: { display: false }
+    },
+    responsive: true,
+    maintainAspectRatio: false
+  }
+});
+
+const legendHTML = `
+  <div style="margin-bottom: 2px; color: #FFFFFF;">
+    <strong>Хіп-хоп</strong> <span style="color: #FFCE56;">9529 треків</span>
+  </div>
+  <div style="margin-bottom: 2px; color: #FFFFFF;">
+    <strong>Альтернативна музика</strong> <span style="color: #FF6384;">6480 треків</span>
+  </div>
+  <div style="margin-bottom: 2px; color: #FFFFFF;">
+    <strong>Електронна музика</strong> <span style="color: #36A2EB;">18 334 трека</span>
+  </div>
+`;
+
+legendContainer.innerHTML = legendHTML;
+
+const growthData = {
+    labels: ['грудень', 'листопад', 'жовтень', 'вересень', 'серпень', 'липень', 'червень', 'травень', 'квітень', 'березень'],
+    datasets: [
+        
+{
+            label: 'pop (2486)',
+            data: [36589244, 33073623, 33781157, 33790677, 34339836, 33309175, 35378653, 41494831, 33728740, 33143266],
+            borderColor: '#98da8b',
+            backgroundColor: '#98da8b',
+            tension: 0.4
+        },
+{
+            label: 'indie (689)',
+            data: [7975326, 7056358, 7024952, 6990523, 7008056, 6449403, 6714028, 7000043, 6702781, 6633755],
+            borderColor: '#98da8b',
+            backgroundColor: '#98da8b',
+            tension: 0.4
+        },
+{
+            label: 'neosoul (75)',
+            data: [1629099, 1002557, 990038, 923052, 961885, 956599, 1057455, 1149129, 1020539, 932211],
+            borderColor: '#98da8b',
+            backgroundColor: '#98da8b',
+            tension: 0.4
+        },
+{
+            label: 'electropop (187)',
+            data: [3803949, 3683462, 3756110, 3746082, 3575417, 3407333, 3631568, 4017307, 3642904, 3595268],
+            borderColor: '#98da8b',
+            backgroundColor: '#98da8b',
+            tension: 0.4
+        },
+{
+            label: 'folk (225)',
+            data: [3480989, 2937317, 2976743, 3005734, 2900455, 2839930, 3059361, 3448692, 3112861, 3194285],
+            borderColor: '#98da8b',
+            backgroundColor: '#98da8b',
+            tension: 0.4
+        },
+{
+            label: 'rock (1351)',
+            data: [11817663, 11055549, 11183584, 11122619, 10949667, 10014331, 10640006, 10943521, 11174183, 10991577],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'metal (629)',
+            data: [2138091, 2054271, 2037202, 2113664, 1935300, 1769537, 1793597, 1829297, 2126589, 1894422],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'prog. metal (27)',
+            data: [959023, 924700, 903248, 931357, 950044, 808946, 795127, 825233, 937066, 894230],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'prog. rock (19)',
+            data: [116904, 124052, 136542, 116153, 125157, 123110, 131118, 145433, 138692, 128022],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'shoegaze (18)',
+            data: [129619, 133137, 114698, 76005, 69632, 62329, 60930, 66240, 46001, 42882],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'post-punk (186)',
+            data: [2587361, 2323387, 2069604, 1934592, 1945515, 1832207, 1913609, 2016707, 1948619, 1930897],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'pop punk (66)',
+            data: [376706, 328642, 321694, 321981, 301355, 278395, 299360, 334824, 338706, 334833],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'punk (95)',
+            data: [330479, 337597, 304655, 309110, 294234, 282767, 314915, 320643, 329164, 336236],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'grunge (26)',
+            data: [310414, 288304, 300935, 282472, 288844, 272081, 290184, 309039, 311393, 305164],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'ska (16)',
+            data: [209841, 162294, 167805, 168077, 173989, 159968, 162705, 170545, 190521, 175355],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'country (31)',
+            data: [1062771, 1083249, 1071929, 1102660, 1032423, 737067, 606605, 414119, 311604, 290190],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'jazz (76)',
+            data: [672591, 609758, 629249, 570014, 516643, 492362, 533238, 591311, 493909, 487627],
+            borderColor: '#fa8b8b',
+            backgroundColor: '#fa8b8b',
+            tension: 0.4
+        },
+{
+            label: 'rap (1405)',
+            data: [14558880, 13343852, 12817683, 12712779, 12994061, 12912841, 12907394, 14902853, 11892423, 11863418],
+            borderColor: '#D7DA8B',
+            backgroundColor: '#D7DA8B',
+            tension: 0.4
+        },
+{
+            label: 'trap (620)',
+            data: [1004560, 948650, 925264, 905756, 927506, 927055, 1124956, 1243854, 1204654, 1178857],
+            borderColor: '#D7DA8B',
+            backgroundColor: '#D7DA8B',
+            tension: 0.4
+        },
+{
+            label: 'hyperpop (94)',
+            data: [8208022, 8255139, 8883510, 9061841, 10080095, 9830275, 8581453, 7411400, 4886877, 3057748],
+            borderColor: '#D7DA8B',
+            backgroundColor: '#D7DA8B',
+            tension: 0.4
+        },
+{
+            label: 'worship (159)',
+            data: [265828, 256949, 269878, 267896, 261630, 253311, 248416, 256319, 262576, 269807],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'estrade (177)',
+            data: [1669535, 1486726, 1470067, 1424291, 1422494, 1251691, 1250925, 1304546, 1245203, 1262610],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'chanson (11)',
+            data: [159650, 161330, 164912, 172357, 165665, 154416, 158986, 172025, 176161, 176890],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'bard (20)',
+            data: [155304, 138363, 145659, 161181, 183823, 188480, 197806, 65687, 48534, 51814],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'covers (15)',
+            data: [283470, 277317, 314133, 324776, 349126, 344749, 338057, 308730, 309604, 292970],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'retro (54)',
+            data: [182356, 156353, 167697, 174379, 179069, 135840, 129662, 138994, 126640, 129593],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'kid (36)',
+            data: [157253, 127146, 118263, 108360, 118617, 95233, 108938, 117732, 124508, 113126],
+            borderColor: '#8bdad7',
+            backgroundColor: '#8bdad7',
+            tension: 0.4
+        },
+{
+            label: 'electronic (1251)',
+            data: [31899206, 30873803, 32131840, 32058373, 33944186, 33441874, 33364540, 32798663, 29306274, 25534865],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'phonk (340)',
+            data: [20204803, 21178521, 22634777, 22987166, 25450725, 26224961, 26710086, 27083749, 26826006, 26211081],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'breaks (64)',
+            data: [358121, 348682, 271983, 219280, 216050, 234067, 209259, 208829, 233620, 208080],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'synthwave (60)',
+            data: [519491, 519519, 543438, 539585, 547063, 538842, 548750, 543008, 568938, 574031],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'rave (27)',
+            data: [375545, 299140, 314314, 316868, 369907, 319003, 347739, 407469, 413244, 417224],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'experimental (244)',
+            data: [994056, 975937, 1003799, 1011838, 956207, 937128, 954883, 969958, 1006256, 1031811],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'drone (99)',
+            data: [1188546, 1144934, 1110856, 1093161, 1054499, 917614, 1018336, 1081476, 1026245, 1033380],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'remixes (33)',
+            data: [386818, 402925, 403736, 417190, 395492, 346943, 389993, 406838, 423608, 425302],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'soundproducer (24)',
+            data: [435520, 447129, 472110, 472718, 473157, 537257, 666757, 669435, 641723, 640235],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'beats (86)',
+            data: [9094697, 9428067, 10007291, 10019058, 11045697, 10794823, 9493144, 8186110, 5385366, 3550902],
+            borderColor: '#84AAFB',
+            backgroundColor: '#84AAFB',
+            tension: 0.4
+        },
+{
+            label: 'instrumental (269)',
+            data: [2999313, 2917097, 2895177, 2765418, 2531682, 2448940, 2823601, 3084427, 3249940, 3115755],
+            borderColor: '#8BDAAC',
+            backgroundColor: '#8BDAAC',
+            tension: 0.4
+        },
+{
+            label: 'piano (63)',
+            data: [2583669, 2521433, 2761986, 2587288, 2387311, 2121771, 2372936, 2542621, 2683837, 2877321],
+            borderColor: '#8BDAAC',
+            backgroundColor: '#8BDAAC',
+            tension: 0.4
+        },
+{
+            label: 'background (18)',
+            data: [376032, 301092, 276508, 317294, 308706, 108240, 279542, 331353, 303922, 322487],
+            borderColor: '#8BDAAC',
+            backgroundColor: '#8BDAAC',
+            tension: 0.4
+        },
+{
+            label: 'spoken word (58)',
+            data: [560851, 517040, 526653, 497095, 516219, 472132, 509785, 543827, 532358, 534723],
+            borderColor: '#8BDAAC',
+            backgroundColor: '#8BDAAC',
+            tension: 0.4
+        },
+{
+            label: 'a cappella (28)',
+            data: [455670, 206247, 162987, 163394, 160900, 151411, 154608, 163695, 166947, 158289],
+            borderColor: '#8BDAAC',
+            backgroundColor: '#8BDAAC',
+            tension: 0.4
+        }
+    ]
+};
+
+const ctx = document.getElementById('growthChart').getContext('2d');
+allCharts['growthChart'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['грудень', 'листопад', 'жовтень', 'вересень', 'серпень', 'липень', 'червень', 'травень', 'квітень', 'березень'],
+        datasets: growthData.datasets.map(dataset => ({
+            ...dataset,
+            pointStyle: 'circle',
+            pointRadius: 5,
+            pointBackgroundColor: dataset.borderColor,
+            pointBorderWidth: 0,
+        }))
+    },
+    options: {
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    title: function (tooltipItems) {
+                        const item = tooltipItems[0];
+                        const month = item.label;
+                        const genre = item.dataset.label.replace(/\s\(\d+\)$/, '');
+                        return `${month} • ${genre}`;
+                    },
+                    label: function (tooltipItem) {
+                        const listeners = tooltipItem.raw;
+                        const formattedListeners =
+                            listeners >= 10000
+                                ? listeners.toLocaleString('uk-UA')
+                                : listeners;
+                        return `Слухачів: ${formattedListeners}`;
+                    },
+                },
+                displayColors: false,
+                backgroundColor: '#282626',
+                titleColor: '#f3f3f3',
+                bodyColor: '#f3f3f3',
+                borderColor: '#d7da8b',
+                borderWidth: 1,
+                cornerRadius: 5,
+            },
+            legend: {
+                display: false
+            },
+            datalabels: {
+                display: false
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                display: false
+            },
+            y: {
+                display: true,
+                beginAtZero: false,
+                ticks: {
+                    callback: function (value) {
+                        return value.toLocaleString('uk-UA');
+                    },
+                    color: '#f3f3f3'
+                },
+                min: (ctx) => {
+                    const activeDatasets = ctx.chart.data.datasets.filter(ds => !ctx.chart.getDatasetMeta(ds.index).hidden);
+                    const allValues = activeDatasets.flatMap(ds => ds.data);
+                    return Math.min(...allValues) || 0;
+                }
+            }
+        }
+    }
+});
+    
+document.addEventListener("DOMContentLoaded", function () {
+const artists = [[['Інші', '7dOAVWJPQscSQ96CAytg8Q'], ['Ірина Кантерук', '1DDMOLjDvTF5hwTRWePtX4'], ['Arman Osyan', '4HQ08kAYtCCfM0nKGzxhVO'], ['Artem Borodatiuk', '2y8mm7IQmQtr5ZpyY39fdK']], [['jankie', '738OwyrD9u0rEkF2tRIwAO']], [['Богдан Малярчук', '1YVczAPmfDxP3YwlMM4TRA']], [['Vlada Chaika', '2LQFnqhqjUEOJ5McYtCW8k'], ['Miss Verona', '2C53sxh7BywrvcoyQvAix6'], ['ЗиМа', '6uopmx8cehpMb7OZFGGaod']], [['hoboth', '1NKaI1yPFkwx5lNALGrv9S'], ['syayvo', '0mKpmicxEHLspigwxBAlZt'], ['Cruel blu', '11QaSjXhEkxGfsT5qciWID'], ['Julia Gorbas', '1UZjVULK1BOq41uyQcKlum'], ['nitavenko', '44FS5zoSNq6EcNcaygH4O3'], ['SHEVTSOV', '4tPSNlmXLxir2A8iOOB3De'], ['Меседж', '52Lf1rmuh9lVUkZil0H4KZ'], ['Y4lee', '2Y5A6HVutIeILdCSN3jyNJ'], ['OLEG', '2nKGt2h5ftLViyNE8azweN']], [['YaSasha', '1xmzTE1p93kB43PowEiad1']], [['OBSKURWA', '1wOdXZryNuEMSj83jLlHBS']], [['Noise Pareidolia', '5k4PE7xjUFNlIGxjAYqrGC'], ['Ігор_МА', '4mhvIMDkDiCUcUPqnpIcV8'], ['Travel Trio', '4QnGVSuGPwC3wuqzfaihtK'], ['Yaroslava Shakti', '4OHGnuGta17OUg8mTYtEB2'], ['Саша Борщ', '3A26pxw5DFhXE4gzOKgXgL']], [['Sasha Norova', '5r3KBbCjpkNxIQ37XnzThR'], ['Baza', '5C39kSAOQsKHlpgi6NI9Lf'], ['Tomi Hazhlinsky', '5zbEjGTOf4oFF84umNKzHU']], [['Ведмедик БО', '37Ibb8iBJJispxOfXlEgI2']], [['ВИР!', '3oUad3wJ5SVnTfBK6vDjtg'], ['Влад Гнатовський', '0pqmt0zLyLIRQIm0mmivTi']], [['van1sll', '1jpBPc5CKEldr1RPZ67TSV'], ['REZAK', '0UbUAQRpl3tCYVKSdzCOTy'], ['MRЯKA', '1scSDbx56CqRcS1mqFe51e']], [], [], [['Art Way', '5NHUvJR51F4axvB4x5ymc8'], ['OLYA', '4SGKiI2VVjkPgX5pIaXLox']], [['Veronika', '2x9zz7mHgMDkGBGebiOVMW'], ['Kotsur Kristina', '7AoaQjizijwUqr1h1r2oE7'], ['KALICH VLAD', '5Fz7GiukFkuIJ46K9Wgi4G']], [['KRASNA', '7tC34ubxpXr8OCP4BXV39u'], ['V.Sova', '5R8758jToxf4SCciMATxCp'], ['MASHUKA', '49ccRxaCGeAhzkttDD108w'], ['Квант', '3UNkGWjkGZqPBMWMdz5cJ6'], ['КНП', '5vBaDjhJhf9EO4AU3FEcB2']], [['David Pasion', '7K1F1tGzZyl53SP7C3ghVo'], ['My Show 048', '4DpjfrczZ7XwygzfFbrL3D'], ['GALKA', '7obLUwJWPkMT5GwCei66Kx'], ['loneliest', '2e3wvu7qTBsZqJS81qE7O2']], [['LolaBiondo', '0HM3EMzwrHkaranYpG10Mk'], ['Maximals', '1TWuKfgwaFhEe0vqsPyaG9'], ['haoLong', '5pPK4QPwX3i2Dnq9hs8fjK'], ['Grisana', '3xlIEjHWmSyFH54pGrzaM9'], ['Бус #1648', '3abQ3GIjbwelbSAaJmzGPl'], ['Blackberry Rose', '2vW6WY3ueutxUIEK1biI0k'], ['PTAX', '3ubpH01C6AgekW9ijoXbq3'], ['Heavensgate', '78mYDOfdAIEYPYcPJnVQK0'], ['DIWAYS', '2Jfl0PysAs7Tkre3D9XbHG'], ['KRISTINA LYSA', '7CZuhp2p2S2wFk4BO0xqvH'], ['ORFEI', '5pilSKFyFVyHPhL5HZHPBk']], [['Debir', '5mOiZdljlTCBogsTMLiShy'], ['de sens', '6437icRKFNPS77UJF4roE8']], [['Потяг до Одеси', '69lizDnPoUOt9Fp6ZAL4hS']], [['Carrie Frank', '3Mf2zeMmXzeVLkf4xM08nO'], ['UnovA', '0qnyexWAICxhlLPqvIdYgC'], ['KILLA SELFIE', '6ueH9z6QRlhGdn76htosQx'], ['Віка Фаріон', '7bsyW0eQOUZktYvFBm0mmP'], ['Alex Krynner', '3hNrzNGzXMpPLQZsHp8QIY']], [['MariKo', '0Dt55KcoGaMH009fYm4tty'], ['Stoneganj', '5MVVPA4CyE5ubNJRmETVup'], ['Христина Шоробура', '588k7CwJrmCgne11VDEMN7'], ['TWENTY SXNTRE', '1ql5DPEpWmt4pc1nQP9KJs'], ['Persian Dare', '1TfdQPVOM3OjTs3pGusZ99']], [['KRABIK', '46ZW2p3xniyPuRhVhT53Ay'], ['Володимир Грушаник', '7xHINUVviJpFAWN9hSmBEP']], [['KLEVAICHUK', '7AzUtwlulkqiHfKfdH8phw'], ['NASTYA SCAR', '76fCiT1wjAsAI63hLNaSKv']], [['ONƎ MORE', '4gRqgi0ekg7FJQBCYJKR7X'], ['The Sonic Temple', '2to4QfMDFnZ2eWYo0LOGmO'], ['Аліна Копилова', '2LE4NZff1oUnINYzLs18sK'], ['Bah-Bah Genesis', '4cuCwzJJZTGpvlCb2yZVI9'], ['Adel Asanty', '58giOfveh0rLPEhycoVVkm'], ['Гексен', '2gZ2AIhYxP4c8hs8trjKra'], ['Tony J', '0n0wJouiDeoQAqtKcFilts'], ['PLUXXXKIDD', '4qbx7J5eiL2mZoMyF7et1y'], ['проспект', '0qW2PoLg89IBOKaHmBnCe0'], ['MONARO', '1MSvJiILrtf3yXecRdHP18'], ['trauma central', '1av2IjQ2XMapCoSw8UDo4L'], ['DEMA', '7Kerwf4fCd6yXLzPgq8kE8'], ['whitecross', '3RarSHHf3VecIaYZMkQ13T'], ['ISSA', '1ieC16mklwxENLLHfgjtQJ']], [['KOMARNICKYI', '3q2QPTOSqjvQ8eJ3r9ejqf']], [['sichneva', '4KS49UDA2SDyXcWlJFYNkh'], ['shabunevych', '5nKYFJ0PN3jB3UGL6IbHKA'], ['SXHVRD', '6UH9bWZWUr4otKxvW9KokC']], [['Poustovit', '2IVYE1z1qRCJZdsvk23sDs'], ['PANTAK', '2YQaXenTs0uLSZJtgQv7IA'], ['написав', '5hELZFctVLrSeKfKLMBaTr']], [['Deviant Blaze', '3UHW8Sd1RHc87Yilotw3Qs']], [['ROIKO', '5ZExxPR00s2kHhMbcwBvsP'], ['MANTRA MOLFARA', '6NANYmPD7w4KYbaJ0UpMZx'], ['Alex Felicis', '49uJiMw8Nma9dyHN9GZpDn'], ['Олексій Сагаловський', '7BY6VogVR5AKDHV1kJiwmH'], ['Alex UA', '1C5veqKSmX0mNlyeXd7ujx'], ['Гнилий Формат', '1ylsuiPUgdV064yeGfWD49']], [['Незламний', '6ZFzxl8slM9RZVtSrdOTGv'], ['КавалЭри', '7mjW9UctJceNuMJ8AKPMps'], ['7PM Worship', '54NLguOKII2gIPdvR2Jfnp']], [['Milestone Seven', '1F9nHlUAiaUsl0FKZiOJSr'], ['Toree', '0zBs5Rmt2ijRUJ8noGqGzN'], ['Deli Kate', '2oQFZBMRYwnNeuv3hES9eb'], ['bo', '1QVfxzhTGmaIkICrAHwGUz'], ['Dima SPALAH', '5izJiDOgZGWkg7AJLmcnTN'], ['Elizabeth', '4s7DEyGNxqjIkFpvqtk9GY'], ['KOZAK TERRY', '2ZZbdKTi9Vxvzxxy8mSikR'], ['Hennadii Boichenko', '4uTX7m4WwkpkIXq955bNnU'], ['FENIX BAND', '1Yf9JZ30Lt94RaQLBFYipt'], ['Valentayna', '16GshHmaZqCSMa6wIvhLhX'], ['Rapsodiy', '66GswcmmzEFS3BFkZRsqSh'], ['your dora', '31sZSJOLfIkk5QFjvVeVCd']], [], [['Питання Є? Питань НемаЄ', '3r8vDUPNBrhhmGq3hhxOu0'], ['Dimetra', '1MPDS1MFyAgPjdLqoxIwpG']], [['Артур Волошин', '7cty8GdIQZeepRWNQFjeph'], ['КАТЯ', '183K06AUNn4y7PYN566zSw']], [['Дбоня Серпенб', '7JJ2aT530qMnW8Pv5RrsRn'], ['Treskit', '37twngqFSLztDvxb3Qronq']], [['VIXXEN', '291hfRq9lCchf2qIS0X6SA']], [['Yoko', '5Lj9dGQ8D7mj4pLUn6miOk'], ['tvlip', '2kUO2u71Fdi76ok5NfIYHn']], [['19.99', '5ePkQVN5GwTkqemJx7Sf6J'], ['Nesamovyta', '2QDQwTdMmYzoJ4N0taK2Bn'], ['POCHYNOK', '4FLeveya5o9PuzcKgqopoR'], ['Mozee Fee', '4DMK1uJ5D5Ym4lHHV7Z3ic']], [['Олена Пушкарук', '1FibZjJvd6ylxoT5HAHzlu'], ['Позивний «Буржуй»', '17ItZZBT24WAYmSnrPmSay']], [['Шана', '6SmEjpveqK5spbcD3xTaxU'], ['Sankvit', '31mr3X7PF3IxX8Va9PhnIu']], [['Ілона Кахідзе', '76JtY99LwsbHmKvn2R8qj4'], ['Ace of Swords', '5EifAHc7MgtoHQTWvLE4Mv']], [], [['DARіЯ', '39ZRIyYQPXKdFWy1nvuzUR'], ['Kuzmichova', '6igWbD5o7Kel4GEQIM8k7S'], ['VINIGHT', '0z2Q3HUUi6ZwaWqKSC9aHt'], ['Вікі Роуз', '43S6nxN5fiQia4CaYo8ALA'], ['YASYA', '5aCNdJIudPvoZL2fkHGrab'], ['ODERIKA', '4nmakyxpvooNLlxbpc4kQB'], ['NEVIL', '3rMqLubKCR5AJK6tHITLiv'], ['Rita Sokolu', '3NZPU8fHGjw6RxYkjvNQLM']], [['ALMAZ', '0m2pr0Ojk65vhm0U7Wd0AZ'], ['Glamour', '2V9WESQvzOEJOsb3hH6aGX'], ['Анастасія Блінцова', '3ITO4KmRK9Ly2aoqslwR7T'], ['Impulse', '0to0tnnSK8y8ACCIOhvDVB'], ['Waidelotte', '4xPyB1OXF3QJ5s3Yu2Mr2w'], ['Benjy Band', '0AApmT8DhMmYrtdpEnr5pX'], ['ZhMan', '1ZTQ1aaTnVq507h4WG1pJo'], ['Олеся Степан', '6tmIlbpEvxgC8FMR20kYb6']], [['RUTA', '4w3B7BouAykMSmMM4GHwV9'], ['NØVA', '0lhuCcvT4ugAvwsRkGnauz'], ['Приборканий Пес', '7B6Gkux9i2mcKHyVzzCS7r'], ['CHABA', '1ku0T5MOu6NHIrYiF0c0u4'], ['Balaniuk', '1Z3GX1VIVx0HvxEEkuYuxE'], ['БІЛЬ', '4HY8YdXwEYMQ2HJyVm6g6k'], ['Nvzlx', '3hclcrXsiYWG2ffVrxyLdi'], ['IPATOVA', '1YkGsKpY7ZwyW7siR4Cg2F'], ['Гуркіт', '13EVS9ngVlRWDelO2BPs5d'], ['Третя Хвиля', '4OenhQQsGnyUgG7pz6jUT5'], ['Jorik Flekss', '2691z9U4I44UYSxaULfYqL'], ['KICHILA', '7x2Nt1UgiYMILzQ6hXx4GQ'], ['MONROTIK', '6YY8Mxr7XJx2qqYn4lC7dr'], ['Dixi', '6O3ejkzZbe2OeUCvY0E6iZ'], ['Цукрова Варта', '7I2IMguLSCKyUiSwCkEInu'], ['vikëlle', '6V6IUkmqpKNuQf3lZCBfyR'], ['олешшшш', '4eBxcCvjYi1wP2Ldq2CZ0k'], ['NSTL', '5EwJ3Vkn1wUDiNCmCpClhw'], ['Vujko', '3Nw4UqT4pAVYc0HFjbZmP6'], ['КОНТОРА', '5hY5qYqjncqnIdwg4fBw6c']], [['Max Serzhenko', '4mNC8bNU67fwoVDa9qGyPG'], ['PEOON', '5KNHcFcX97O96ODHF2DrID'], ['Sklyane oko', '18q9PuXMzOoTeLrM6HN1o3'], ['1310M', '5hnBTQVUZbe8goQkRvleKT']], [['Self Displace', '1VVGCf0OVJeiAXCpzwCdw8'], ['Байстрюки', '5zZiozV7MAGZ17MJQED0Ji'], ['Anna Raido', '2GQvvQbsLQdiM9LbmEnrFH']], [['Свій Сашко', '1XsjYwISXGKwkhuJyecR0e'], ['Олена Новгородська', '0Y7tHk3v2sLz29K8ANQYvF']], [['ДРІТА', '4C1doWhhFm7OZXDuBguhn8'], ['undeaÐ', '1hpyxL7WFZoP0SbR4zuluu'], ['Колишня Бенд', '7p150gErnGNeAaqPb1tSgn'], ['OlekSiWin', '20cb1FJSSJRbPEO3eyP7QI'], ['Sofi_Song', '3h90yanl9TIEtUY8cRNSqa']], [['DARIKA', '51XxwTvBlrFK512cKVK3EQ'], ['TИNKA', '2NpxeSnkYVkIacUpoXPuxe'], ['Bodya Konakov', '6OrYoN1qwBnfXZu6KJRcDG'], ['SAM PRODUCER', '4jDXwNLA2Notn5xKYb0JZo'], ['thattraveler', '1bIPDfnBvJa2MDxGEhAZ5n']], [['SAVMIRA', '62DjPzV8FmAujyqh1HD6M6'], ['KUGATESSA', '1BOpBS41QOt9MLdS7HK6bH'], ['Nikotynes', '74ZSXPEMTgifvgc5PHfiNC'], ['Ross Redluv', '1TUphRro9RocZaaqO482aa'], ['GoldZoro', '2Lt1XDr9KkZkPtYyJvAQdM']], [['Vlad Klepay Klip', '2caTpzK73JOEZL8VmxDCGO'], ['MONTES', '5rAQW8r5eRvErESCUrllXH'], ['sadparade!', '3pAz1lklDa9Y0MvF6H64VK'], ['unnee', '4ifTHTBl8Pznrm6Qbcr8DO'], ['Денис Яричевський', '4vH83GqjSMTkFlfllBvb84'], ['Zorya Polyn', '7Lghue9oxrdSYmO8ZTGEPK'], ['Вбивця Вайбу', '5NCvSnSVKuA0J32FEYPcVX'], ['Two O', '15pHPkXsld23kAOFj0GAx9'], ['Tsezar', '4eaJvuTkRX0VYzy6Vi8L6g']], [['BEZVIHID', '1XP0JReLCcvlCkpBrTZATm'], ['Anna-Kristina', '7FBGxtsz4TMyKvBTYvIkDF'], ['7YA', '2MHnaKYyQ4HZKeSztmXK3j'], ['A.DROZD', '53SthfpBHdBlw0sPYrRAIa']], [['UNDER', '3SumC64AKYSGXNg5h5usB3'], ['ArtemBeach', '4x9sbDl1dgZmZjdYCcAwny'], ['дік спайдерлеґ', '2Rny6iKNI1LeqUKPD9RgJf'], ['Splahi', '4QmpQuSr0OS1AP6Aieb1Lf']], [['Lowlife Misery', '6QD1tR1ymoLmoH9aYsYzLM']], [['SorrySight', '1xO7Iagq8KhR88BMaXulhu'], ['ENVOYS', '1KkKq5fru3JyKXFLqpUnXZ']], [['TIMOFIIV', '3Z2eEaBmuXD4G2bFbi5gSF'], ['Анна Бабич', '5DPBJlcYzldfRpt721XWDa'], ['Красно Ясно', '3wvduxsRwsIvXywraRaeRU'], ['Nebopada', '3qDJTPXAedMiTXgjNwTZRl'], ['КІМНАТА 101', '50tV2EhHkNLx1k76UR6IbA']], [['Mille Pierre', '3OmuXfeT3FHMxxyWh4was1'], ['Ostanniy', '3XtH8MdyjnQQ1E9ar2rNjH'], ['Sergio Brooklyn', '27OHfprA8m8vtPOsF5oBSl'], ['Мрійnick', '0dOYkGautop1U8bpuqfZXT'], ["L'Arc de Langeron", '3thN8PUeXHeiLbWQkHGAty'], ['Mishcha', '662HlY5Tcy49A2DTPq0S0a'], ['Eyes Of Hastur', '62Pg5hUMRrEgdYJOEUH3h4'], ['Protest 18', '3QilVsmx18R1In0OoSgo92'], ["Шум'я | Shum.ya", '3S5UPGPQ9j7yRBD6Hw64Xf'], ['ninoroV', '36KQWaRKTFAxlFSbruw2Dd']], [['Electric Rime', '2A4OQDMKxvNNLQemQlYzAU'], ['DANA QUEEN', '2zKElggexfGBTOhxlFLLb6'], ['Харфанг', '4tvEl314daU4xGzaCKQpUs'], ['Ольо Бурий', '4B3oTXjrsvC4AeYm46j3VQ'], ['YALLA', '5hxaHCEy6shlGBWEer4UJI'], ['Nasampered', '6TSaRfm13eQkQXweGJfmcY'], ['NNNNAUMENKO', '3SDVaz7yUH0BukovsASLEr'], ['Істерія', '4PIBLUDMZubyn03gBLkKe3'], ['Ілля Антонюк', '469j6ViWdK6Qvw1K0EfRoB'], ['Свідки Любові', '7B2OnJVmOwZBVfHkyS2Phf'], ['Stoyka', '5cc0yxBeiCya9VZ6kdZsSJ'], ['Sasha Renkas', '3LfMElduQN6HCvZzy0OMn1'], ['KRAPLI', '6IatFA4t9w9NFTYGeAQDdx'], ['KIBORG', '1dNxdF5B2TOOQrQtqzcxKc'], ['nanataalia', '1GmxKkVI7e4dcTOBAWTSo3'], ['riot riot riot!', '3aXtJ0zvukPNkeE9sx0TDr'], ['Ritual Lovers', '1C8OEmUwqUN8HCHPNBKZir'], ['The Тяга', '14o6XT7uxXX67t65187Qka'], ['DRXGMIND', '2pSZUKZzn3wQhReLfBdw9D']], [['INSTASAMIK', '6Q8WDeLkzhWypgIyG6hDfK'], ['Robozerova', '0jVbDCKO23fXcvGSLZKHYU'], ['FlyingInDaClouds', '1BxIGjkM16YswqDC7jnJx6']], [], [['PATRIKIYA', '40aqjvr4kVSKLNPTzJAlIm'], ['Світлана Вишня', '1RAYSCDXl5kNO3Bx292sfN'], ['TANDEM', '2sFeMCnN6vNW8XuS9J4Kgy'], ['HARMESS', '2V0JwOExoZ0l1Wt4lS5qBd']], [['Devil', '6kvxoq3FH83y1JizhyaDgS'], ['Taki ridni', '3O3zqRcjUHRVcDLLwIUW17'], ['Mika $ha', '3Vr6xbt4VTEgaM2fH3NtIj'], ['Alina Karashchuk', '6WHXGzTJoTMF3oquHKdpKD'], ['CHWBK', '7MJ84SD7nJzbRVnlh1WMfX'], ['Witchers Lynx', '1gAuQuSqtoja6Op5JP2tQ1']], [['BO BOHDAN', '6p7TFMrUMddgaoKrZkVSNc'], ['IRIS-K', '2w72Vq0z1AK28AnXLyHg1z'], ['NOVA kids', '3oVU46DXR9SNFr3hWfVemM']], [['Dana M.', '2ScFtrduSQkS5sw2HrNdc1'], ['Sok1l', '7tuhYUkIZm3AwGiIbT5iM0'], ['Marri Sienn', '6hFkLFls9oYYoCGCMc2xjL'], ['Di Evska', '6oIowcteGXRM8bH2PmjZsD'], ['Лютий', '65wzyTBg9lKt4FnUpiGd7J'], ['Софія Попович', '7H0Orf8xQjYdlvQmt99r30']], [['Morena', '7KwwgnDcboyFsY5yHoSFwK'], ['Єгор Андрюшин', '0XMvqndefJ3P4a8mLe1RBv'], ['MOTRYCH', '2Dp7GR7HIQ3M18O2PTSafD'], ['yungsakhnenko', '5lnjiCJCdXOFmkdBnN2wEG'], ['WinSam', '2fIGzdPWzc32NyfmPkPdRY'], ['FURIYA', '14IGyBBPLP88xTKGDNiVay'], ['ENIGMAN', '3FRuUaZ6L3P2WblNWCeU2Y'], ['E.liquid', '2y4R7EJlLgVpMLtleqYuZn'], ['Zacharovana', '7J6UNkQb8ZueWEpEan3HuH'], ['Sexy Education', '4kk1HhQAkt2TrH7xEHprfi'], ['Veronika', '2x9zz7mHgMDkGBGebiOVMW'], ['MALYNOWA', '5lViosSv6gqn34yQTcGgBw'], ['ONE HUNNA', '4mzthHJZkAdeFkLDOeCMvx'], ['Janxy!', '734HMvhVAVnQbW6XFMzaVS']], [['Sophi Syvak', '3IggV85471DXSlgL1N4eo2'], ['Roman L', '0ThNymMrRX5nRgG41s7vxL'], ['Квітка папороті', '4rHqq9h6VLiKX6UpuaWA6S'], ['Anastasiia Morynets', '3PweA1RveeYIzj7BHZ1eDs']], [['Coolinch', '6qTWfiNKGia2Hk0Xra3vBO']], [['Kaperonchik', '2P90N30TPVgBlO98lhlxJH']], [['Oghostorm', '6SfYH4UwmwubTaomTpDHhQ']], [['zhenya kudryk', '07FDalb0OOtRuuulpgkq4O'], ['KRACHKO', '0PrUdnQMFA9SW2uUCGgBFz']], [['YURIANNA', '5oFKCzbLKi0nIFDUANfP09'], ['Confused', '3Fms0N2LoQwbgFHbJdPzgV'], ['TWONTITY', '48r8BwHX7m9JGK77iGQCzL'], ['Безрадісний Історик', '05j8KUSp4B8EJyZBWH1Mgv'], ['obsxssive', '2DFv7NPwLtMII9A9p0y1H0'], ['NEDOLYA', '0b7u0mtbK2wfjCF08mYP8C'], ['Цемра', '1qsVeDUaqJelkoPwTRPY70'], ['OSTROVA', '3lp51qoKKctxN0AbEG0KRQ']], [['GRISANA', '3EO10LHXB2cF79P8rYAVHz'], ['Crooke', '0nlgpMgd6z0GLmjCPsLnWa'], ['NIGHT KAMELEON', '43iom2wKvzw0Uw8QqmtD6z'], ['Sonjia', '65vsgvAeX6p5XVZzjOsrW3'], ['LS&DS', '3BQAl8bMo5D4Vhibtbbj2W'], ['staticProtector', '2NX2fRTafdiVOweiNhE5zV'], ['Body&Soul', '62W5JIAcz8U3DETosn5kes'], ['Nask Taylor', '1MQ19lQp92K6L6gA3pzOJJ']], [['NataMoro', '6EmYWfSl2tGJgfihGetFsv'], ['Naklep', '12MEDlvV8QeQQ9k6Eco21z'], ['VIZIT', '7hz4AbrTw64J48js7kvBkZ'], ['VIKTORLIFEVLOG', '49C0x3ItesjhC3uKwWnMo5']], [['Птах Відлітає', '6VCQNtA7OM4mCrjKyO6VmI'], ['D.o.C', '1TzEqefBh9n7pR3pMdbB2O'], ['eshkaa', '1vpAEqW3VOc94xRrwNFSU3']], [['iVER', '1rJcHbmihZaCx0CLJVt3j6'], ['Kogna', '5UYcWs7R44Eex5ukHMBFyu']], [['Generic Doom Band Name', '6EvrSoEGBXG6h0Fj4hVAtH']], [['Aleksey Fedorov', '4EAs8OabYaXfoWQwjcimJO']], [['Pashok_luv', '1IORPNVwyyPPopGMEaIo4r']], [['DARIMAR', '5SBJNiqOW9ijJIp09wPYvG'], ['Paks Romana', '5Icr8nsxW3v0dwtrm2e31i'], ['Atlantika', '3Jaq7n0WgTK5fwcfjmEVAH'], ['TVIY ANDRIY', '6SlOvRi3bxg4sMjBZqmY1X'], ['Almaz', '7wKhs3Y6OBULiZFbrIHLrh'], ['BabyPa', '6RUuSQkvgMpg27QfQRpQ34'], ['Michael Mantai', '2swwwMtfq8WQ83hm6bkTWs'], ['Julia Romanyuk', '5MdV1gT6KNDG0HypjnyxNb']], [], [['Sisters Ko', '7dx4QGjNYzMjUGTfbo1kS3']], [['KOLYADA', '3XisccOTw5w6PuLdD4D4Ry'], ['ВХІД ЗАБОРОНЕНО', '5GRa9xpz1pVC7atmV8CFP1']], [['Licette', '0QGDlVsFHnjGZSUCIcRvKN']], [], [['IMARY', '6kIqvgj5gXbmVMsY1UGtks'], ['CHEKO', '51eJjMdUCWpKHGjH2qStrf'], ['KRISTINE', '3eHAvnOXQvgjnuAeEv07Xh'], ['Lana Rednich', '0ncmQ8uLBrQ3UKItVG8hxj'], ['Anthony Junkoid', '73U1gOQtNPXq0d96FtLIHk'], ['Anhedonia Nocturne', '6GTtZ80nYf08eSZwW0dDmc'], ['Михайло Мирка', '6ZcddWiNbuoS1LFA1B5WZa'], ['Тінь', '46VdUvfNkjUXVlmGUw2JWI']], [['The High Mars', '1B3aKrpabxlb3l0nzXxcjX'], ['Lek Sun', '7yt5LLugh6NOuZ48akYJO7'], ['Yetee', '6678HsZbyY7uZUuc6SNx7c'], ['SKOMOROH', '73CYRkd8EILLY467piZcxv'], ['MIRABLVCK', '78AS2NypKJCz1dmkLPLaaU'], ['sadagain', '7zuQRIjvU5KfSLLsx7ZdUE'], ['Шум', '5SzNcoeszEL1tdIBPsSFMV'], ['Nikse', '4Qgx3RcTx6fqpnNZJEvpIw'], ['Klebensina', '2Qp8F7LGwkkioA727iQQsa'], ['Neuro Cat', '4cSEgAV9wGOH9c3aGQ3xAQ'], ['D016', '4MPDfqNMUkYAG0APA0R9gV'], ['Мігрена', '4d5XfuhILicHv8qLrtUFVZ'], ['KABRON', '1aMLGpi0nLbago0N8zlBjE']], [['УДуші', '0YKU5UksZM9dp3zHvVKCuK'], ['Eternal Messiah', '0iVOcLcCR6WbNUy0FCDQ8z'], ['lLlunacharsky', '5pOL6o9SXORY2ASnMn1IaU']], [['Zhanna Skvortsova', '1KvxLSxGg4MwOBrawOvCbv']], [['DJUA', '0tRsvxo69QileqnAHVt0mj'], ['GAMALIA', '7D3seCWBGQ1lpetHIU1Ik3'], ['YA', '0bkO88Z18D87ZnZSPZUbJw'], ['Сашко Науменко та його друзі', '4EJtOr5b9vEMde7xyLdpDH'], ['Huculka', '5LlY2CeZEdmPMTGNslNYZk'], ["KEL'T", '2bD7MZ0mrAJ5QTwQgoEqOI']], [['Таня Тимків', '2qu5eoAQ4Mf3Y4l5RxRZV1'], ['MACHUKHA', '14kfYYo03xytOW74JC9jgO']], [['Kreel Man', '4oiRzAqPpmYM99JhPmV7MQ'], ['TUMANYAN', '6QWs826Obkh0vFPzQC73za'], ['didighost', '0fEvx9uSaPbG0g9A5F7ta6']], [['MONARHA', '4cdanRkN0AJwEvIlsJvLBZ'], ['Віктор Романинець', '2pxDHhNgrIyOiWePTIzhMT'], ['Anton Humenyuk', '3VNHCDa6fdYEjsg4GHPo16'], ['kalevska', '0GSgtEK2RsIhtQ5RaGo7pf'], ['Yuri Not Yuri', '0I5bc9HElPeI7oci6dgO4B'], ['Yeshan', '0JTQIjiTlDlDZBPmoj6y2B'], ['Ari Snow', '7k0l4k6mW0NETb505PxAzm']], [['Do Sliz', '61v6YcV4juu3cN4xzVji03'], ['NICOLE', '32aZ98MvM0BNREOFeL09ap'], ["Evelyn's", '3qnC3oLMtCLKz3Ax1Vqa00'], ['Monophobia', '4yq73le4ewq8lQ06j2bEIv'], ['Mishel band', '07BrvizXH0zxtLWYMmHf7l'], ['secondpart', '76kiH7vVs8wcKL5yUVvJsT']], [['PROBLEMA', '0HCn18BNXaZILqWxI0pmcc'], ['KOTOVA', '4NiiGRbxORtUf46XeqKWLw'], ['ANPV MUSIC', '4sHdW1550O53hglvGZMnvC'], ['Sinfury', '3lvnu8ZdOhL8wsLyAVzWF4']], [['ajesli?', '7ihgX8BDE785TTgzlDFVsI']], [['mxhxtplaya', '1i4XthTkprz50IO6fE3CTM'], ['Sophie & Eugene', '2oDD7IhULZES4vkEM4TTTe'], ['YAROSLAV', '0t4Ep1iNZX8RQ5VWjfTDSr']], [['Делірій', '7h90s2fRgJ5qIBjzMcHS7C'], ['Чорт', '6xgMxPfFccz97R4gBFsDF3']], [['Lipatova', '39to4XWrZqgxJSP3ScNXdW'], ['Litun Illia', '5KaH8PofB6qEbbGmXpTob9'], ['Misha Korolov', '6iyBehgO0oTGO0C9o3jNWk']], [['Всього Найкращого', '3RO2S7vO9YKwuyE1gehMTL'], ['Diana Glebova', '556qm8KkZ0yvO1c2yhimzh'], ['TITAN` 84', '10Zt9pNNGnuRUftz2xhq4Z'], ['Lee Poyane', '2BNIbBWGxfk1pMDOl9d43i'], ['Ion Iris', '61K1XUGAsjZ6iU5yjo0kf0'], ['Alexandra Mazurenko', '0YPAVrPsShZQa0DNgEaPNe'], ['Нестерпно', '29A2wzjeeO4qWiCPgrdbgW']], [['Гурт Тварини', '4LYxXYnY4hKHdgpv3TPDxs'], ['ANNEI', '3wD90XOIzI3qRJFmT0fJLx'], ['Vidana', '0Nf3Vwnd0h9lA0uwziQPP6'], ['WHYROMANTIC', '1kWTnVSprdOGi0oxZHz0wy'], ['Dead Pink', '79twTNIL8YStmNJlKvZ5Y4'], ['Худбудинок', '6AwwB9fZzj1Y8AZWxpkara'], ['D.o.C', '1TzEqefBh9n7pR3pMdbB2O'], ['Бондаренко Олексій', '2Sy4WFXSeoMuXCEKKOaVI5']], [], [['Артём Валько', '2cQMoxHTTM5Dqed1R9NHgt']], [], [['Ola Ola', '6rsyWercxvoeS9hNarnsxu'], ['BLXXDX', '0XWpyiJsnn9W8XeXY6LEQh']], [['Sir Gun', '3lxF0k6tpJjfAKaa6YfFZu']], [['Another Perfect Wonder', '4s6aDTPPIGDANrhEFJvPWD'], ['Yarem4uk', '2U1BsD2ZmAwXIE1LvwB6Gg'], ['Vibe Trio', '1AZa1YB35gJr0tQLRMBJ6O']], [['РІЗНА', '65I8TjwnXIoKvPBhLf5SlC'], ['Sneg', '5CaD94Iy3g5xe8n3KeVpGI'], ['Марія-Олександра', '07RVbhd7qhymJ5RD1fBO8T'], ['smoke screen set', '2P3cG5NbNCHhHx2Jjb09dr'], ['SHALOIMENKO', '2LzYpXX0hh81lb1eKxwXcX'], ['ТОДОРЮК', '7sqfnXZzYshgcVqUiPBzVS'], ['iokamore', '6hSkQmcO1zR1bYcJJWwC7Y'], ['M.Losieva', '3tRgcNMIhLPczcXLfe2buk'], ['Злата Іванів', '7BJt0PhufAr0mDawc10JHF']], [['MOTYLOK', '1fPr1aoxq9OitLtbxOQrfv'], ['ВІА «космічні преколи»', '1pb1KeZWLu9qjzV2cIw7ko'], ['Markus', '4s6PtToKkOvUw3aPxlwpSM'], ['Дзенкінг', '77j0KPvV5mAgzyQ2FzDHs0'], ['Птерозавр Міло', '68iXx6Qmqw6S2cUWGJxZVN'], ['G.Inc', '3hCi31ICsYRsUFcNouCFYz'], ['Группа Росинка', '6kx2VjwSrejVHCoasENQuy']], [['Отець Міцелій', '2U87iRGO4LccPgo9UGzrux'], ['НАЗАР МІКІ', '1cQCeBasjUdqfUDfbtamLa'], ['КАРР4Т', '5RX1a89H4f4dYR8C9GXSHa'], ['Pistalet', '7KwwFXJalxUcdpSFI7H40z'], ['AMUR', '1vkAPRaRP1QDvffbrpKlY1'], ['Felixx_2024', '741X0f8CYAz1n8hPS4PR9L']], [], [['Karolina Key', '5JiQeC8f3HO1ghjE7IPONO'], ['HMAROCHOS', '03PpsMnkqimltnLA5o2r4b'], ['Ксенія Ельтухі', '7raszSi9opjOEsf2vIFBmz'], ['YouMe', '6kxgFtvKzImAjLHKV0wJ0j'], ['Софія Славінська', '0Z1vCX0zRHx2wlUcnr99kZ']], [['Гурт 5,45', '5b3A2UyCX7nSYLrTPTPtwg'], ['Balanov Anton', '4mfa9b7bXhvY0LhifSWpYx'], ['Victoria Bobal', '1m6jI4FypsMIPf9N11l6ll'], ['Fre$hBond', '1ITzjQAeuZmJe9TxfRin5d']], [['LIDIA', '4WBuobunx3aj3B5tKyw9td'], ['Олександр Кравцов', '4XgzPiMQwIvFtb0OWQ49mO'], ['Софія Медведчук', '12abbjpAvWG7WsBRyXqHhm']], [['GloriaBE', '1I76BYHwe2cXAMii9Td712'], ['syperlight', '10LqXpfllNFlf2XgLSP8Gf'], ['Vasylysa', '2TcRuUrAabVPDBk2X0xXeR'], ['orfin', '6gKjCXFYlScuLtOgybrUdH'], ['Металеві Квіти', '6qHETvosIS4aXzfRURiOS2'], ['BLADE REBEL', '6v4sZfnOg98974iucUVFIw'], ['kinderka', '2x72oRsmuLAo7TPdkzG1QH'], ['Степан Пантера', '0RxY72LyXMlrGZ9w4bZqKH'], ['POPUGA', '3BLSer7VvE9j1f6aviMAd0'], ['Мерехтіння', '1F8XRJHwJ5LgxOXsSloLrm']], [['неля гривня', '2cmSlicWj9P7wlMSy2gNjN']], [['LONA BERT', '6ONbsDXG1tWWkF5bhRHHkd'], ['KRISTAL', '0xrtxqF8BcbPVVuc0JDyWc'], ['Репертуар', '14gyXMKusKd27bUqc8BuPl']], [['Tommy Vovk', '3KnG4MHw61Hc1FgS9jhRik']], [['062.squad', '1A8kTetjtClhv7Pvu4ZV1k'], ['Disferia', '1TPyJyfd0ok7dYLSBa4VcH'], ['VITER', '2AajcZ6EmoNequOv4i0fAy'], ['Emio Rad', '2TToiCyjYpZLfTHF2ymvTV'], ['Vikusya Koko', '0isgRCFjswBkkToWaVFMAm'], ['Jerky Jay', '73GEMaq8SKM3CgJX7Ri8jJ'], ['NEKOLYSHE', '6s3rCXKn9PfL0UHgcPalud']], [['SEVERENYUKK', '1ldnGI1KAYR1OMjqYXTXsQ'], ['FALL IN UP', '4GPIP0lNSDhbYqjzvOz3hi']], [['ALEX', '4kR3JxfCDH2pkO71e0Qkdt'], ['dep.ma0', '3Negl5Wl3ZRY9TAJ7U0Fpf'], ['Старі Паркани', '5NR1M9U5UJLB7rit4OQoYL'], ['T I-O', '28D3Cm17JZStA2KtDQMgSv']], [['ICEBRG', '0qI9T61RPUVHu0jgSmr1pp'], ['ZzuppamanN', '7FTbelbntegIJvwiL2iBB7'], ['OBSCORP', '2nOkXuSNDJkhHaLIhMlHJD'], ['STOROZHKO', '2Cl9KuBZarrVi6XL2ytQu9'], ['воЦАП', '0RQeJz3n3pCMgSvodzr9KU'], ['PELYKH', '2jHBhz99WnQLFOiKB5VMfi'], ['BILANIUK', '49ZNjmFR8Urozu4lvRgV5Q'], ['Horhost', '7jJJaFomxZupCOx77r8Bnr'], ['t1immma', '42sUc6wtONfVIzUjdwcby0']], [['Pan.Mykolai', '51SBxI0sZ1g4TnRcsy5dik'], ['GREEMELL', '5nKhYbT6YltF7QkDkD7RdZ'], ['Олексій Златов', '2Erl9qHz3v7PVwzxGdoNC0']], [['space cild', '4l5v75RdWkX0MDERNHTumf']], [['dyvnamari', '5mebC9b6vD35DaVbkzGAW5']], [['DUSHA', '2SIeuH0C0GUW9s69P3KPMu'], ['Бодя Бадьорий', '4Jx84l0g2ucgvFZJ85wc8h'], ['Ruda Boroda', '1dkCL04hTfsP5AylBuOrFR'], ['STAYSEE', '5Sm1R5Fqe87XdTwDY2FoWT'], ['Сойка', '7fMsPupW4oUsvfVJxMGgxU'], ['Never Seen Miami', '489lvCT7X45vEJJ6PdQ1nL']], [['Hollengammler', '2DAntuNaoRMj1Tabmf73o5']], [], [['BLXDERUNNERS1972', '0z6xeHCdQJRgdkWMnKeTJ9'], ['Принц Буба', '3k2eXoIzEu98KJ6r1ztGgh'], ['MARI band', '2rd9nMM2VaKURqV3wQJ2yP'], ['Muravshchyk', '6eDDmbmyz2dR30oCW1OSLv'], ['Kitusha', '6By6Mppdb149RVpWWlM2oa'], ['Vesspucci', '41tHFAYGzXGeaGWa7HerzN']], [], [['Шлях вгору', '0rrvk0AQxVN7S2dJsFHYkg']], [['марто4ка', '0ueO8rjwdxKHXHnh8uAQIr']], [['NAVA', '2T4qDiM7Un9gOBi945Ct4o'], ['Sanya Shik', '4f8WfYYPXJF2wgpHI1Zr2o'], ['Mose', '5nSkVbPMFCdsW1GSWawWG3']], [['Андрій Колісник', '6NjtoaVNRItTVyhg8trcaA'], ['Wallflower', '3CEN7MWJbJzZd3f0Syqamn'], ['Досить!', '1hRp07Hfg7sqCRv3CHpH2U'], ['ДАVID', '4IgsZsoVNAqjiqFrbdzzsF']], [["MAR'YA", '4FPnvpCW3CSzb4bclemkMe'], ['ionesque', '00DL8toayiHAQdQm7Qb81W']], [['Mary Ten', '4meouJrqX2UOh54aaVBgVF'], ['ІНШИМИ ОЧИМА', '33lit2VgTPsfMlFgXD6t6s'], ['NESMAK', '5fhQnBhguqCzvuSIrfXEmq'], ["O'Nelli", '0L5jSljUFePWQm5vlD8Vw5'], ['SOWAY', '6k7QCtnN6y1T05KEnlpNZB'], ['TVIY', '40LRHQ6YBbzUdTr13oEqOc'], ['Марія Гайова', '6AgKGvCCO4DirGLGVpeIkR'], ['So Far Beyond', '0cJB49D5SKS9znTmYDbIZO']], [['Annekkein', '545P6JHr8oxHiZPQT5OmAQ']], [['КАБАН25', '1tNhtfYJBGgdmp8oHg1TCs']], [['HANKA', '3pQjzhEHqh0Sz6BDQGnI1P'], ['А́NA', '3rmDKsITHzvtITdNs5a67J'], ['Borutskiy', '6zsAvn8OOYrkZQGdOj9zBU'], ['crimeskaya', '7v4cw2VVgZ1XQb7vT5gUyS'], ['Lacreex & LezzyB', '79m5GLpG8j3xR7GlLLDAmX']], [['поля', '5L7yVZ7CKiOaCbBugmEKhY'], ['INSHI', '46wdh4AaNynJwpPrRsJsRr'], ['AnAngel', '46NDaW7qxoBSJM2hsCh75I'], ['My Acid Dog', '36CdcZIdLiclSEAgBQaiSY']], [['ЛЮБОВ', '0rloxT8sRuVAUrsUSpahvP'], ['Alina Kosh', '2IJuSA6u3PYaDuAZSxnqSa'], ['DOROTIUK', '4pLtXJisG3vz90FY8F6SsD'], ['Денис Крисенко', '3UwT29BlufYMCepGZLTvkh']], [['SOLODA', '2Pg4YYVBbzUs8MyEL0MrXc'], ['Валерій Заїка', '5MdY8Tcbb5f1hTjlWWL0rb'], ['Lyodorub', '4EjMjNuLQLBXEQWEj3Y1Jo'], ['SEZH', '0Uk3MicovUgfYd2YdNBiPM'], ['STRUM', '2R1GCAPy2nG5FqZSmORMNs'], ['Sherstiuk', '4WgpaJznUeflY0RnqtkWGp'], ['RYMOLA', '0uPzW3l5UA8OQ5tRpxnqvc']], [['СПРИЙЯ', '2l1538kJkbRbAXZiJ7avUt'], ['Johnson', '5Dkqg7ANnHTjk1CGgvNlLx'], ['VodoSlavka', '5BSqsULLSRoiQUgMI5GWFt'], ['Matheus Draco', '16HpW3K976kVCMbWqByqh2'], ['Time Of Team', '1W3WX9X8iVnW3XOdstLDXt'], ['Стій Де Йдеш', '1qkbYtzQTVnNllGAgMdgNz'], ["П'ятий принцип", '2pQ4QjJsot3G4cedFXse5m'], ['Airy Fairy', '15bQiKHwlqsvSw5SKLZRlC'], ['Juzzio', '69kXKd8gXVn0xH0aSAyce3'], ["27'summer", '1r8pPFezwyYSOUnZE7VIwp'], ['1995', '4zcQQob5ulhfMjITFunI3z'], ['moonmixer', '5FDfWvuh19ua2gYLs7p4QF'], ['Клуб Пасивних Курців', '4kKgOuaMAd1en2BPacm3Kv'], ['agreatchaos', '1a99bEQZnWSLFAlk6GWLrV']], [['Radioma', '2NDNq4YyfENHwY7U1LpAFe'], ['Odri', '0kP8163m5cyG13Uc4enKlY'], ['Elenore Storm', '6XxProIHHf3IuSpNhmodId']], [['Ortum', '6UtDhm2FoC8Rb1Q3nGpk7Y'], ['Slizna', '19NiyLK3wueyyXqsn5NI4g'], ['Eugene Boldyr', '1EnboE6dE4sI6DUsVZo704'], ['D1enses', '555OP4sBBN1sRPZ9eGf4oY']], [['ENAVE', '5VgG8UoEv9DdANiXR7jU2P'], ['ГРІН СКРІН', '0Y13s9YXHiMvuHU7rgC040']], [['ASHYK', '4V0CaWLtztCpg2p08hcbni'], ['тінь', '1EA6ZGqftwb3dJWXYQsgzn'], ['Only experience', '0gkys1FiomqSHX9vH01Brl'], ['Nina Shander', '2Nsmd761vKSC5XgojYg4Fp'], ['YUIR', '5Rt8KQCIPF1AhVdSV932ed'], ['Стецик Софія', '13mfLlVKMt2rEfTybpYvIb']], [['Анастасія Чайковська', '4vEk5zRLuTVHWuOSRaDGRu'], ['Asatru', '2TMlIHpWzDs33FFNcbPHTF'], ['nexist', '5nBtAkWrJdhYqaGRvXYhP9'], ['RIFT', '3qrxliq2McDwC2Bc06aeHz'], ['Наталія Ченчик', '5YgDHyQgHrTUbmZjlPjvRN'], ['Nazarii Rubel', '5J0LBSLdS9VPUpS3NskqqN']], [['M Star', '3oLqKeS6UBNUgisnqk4YgB'], ['Hanna', '5NveXRhV50fbtpSvvU6JPX'], ['Epik_27', '4LbQmXkWMuCtRjP5yGWrSs'], ['ROZVIDANA', '0UxBBez2f5xUK1Yd7D18js']], [['BANDANNA', '6BSpeS9WKQfWzue0eneIV1'], ['DONBASGRL', '0Xuf2TiF899O2zWkXLNim0'], ['RecPlay Sessions', '7v9hoDXoshHO1ehneus8Y0'], ['Liubov Bulychova', '0BqpGeZgAKfOtziZHnTrBB'], ['LOSKUTOVA', '5cnhrZLsIMXVxx9RyAk4Wr'], ['Leleka i Paporot', '452SnJVAxr0a1MLjRIpbaV'], ['Oleksandr Leshchenko', '3oMrF4HWYqAMAF0N6Bhokd'], ['OTOZHBO', '1v3ab2wv0lsHzjiZEuWyfl'], ['TAKE ME TO THE AFTER', '4BYJRsi3NIMaLqqgARi6qo'], ['DARING', '6aNlGgZDy97d2qWTFC7uw1'], ['REGINA', '4RB7WpcYNkTv0VtsIC4Gfa'], ['SAMOID', '0TNbM2QRnOL21eR5cktDfN'], ['Cateya', '2azjWuBbIuvsWr1xaQWxKZ'], ['Джап', '5vWunXQG7pjIlYLi9kbjRw'], ['Elusive Dreams', '23vyoQIikFbdsG3OhcLKFl'], ['lillilpapa', '1rFK2L7ckvmpL1sEglM2SY'], ['Ostap Tovstenko', '2UVeMu2z7IBYBVcDAvNBu7'], ['Young SNW', '3FVo1xs3mhKqBrUE11lOMg']], [['Олександр Дасюк', '5ISNa4AZ4WWa8fzXgoBdgX'], ['Олександр Горошко', '5ycwwYa4602MxjkQtH7aGe'], ['LAVENA', '7u42BnR6VK3CYwzG6ni9iq'], ['ARSEN', '5jZs5Kes3HUXnstifNex3l']], [], [['Nalysnyk', '4YvVBd3ChJMvlZFJqk6uRy'], ['KLEY', '5FLil5KYju3LhV50VooGxI']], [['Rentier', '366trmBnpFrqXzdbSZSkKv']], [['SAVLEPOV', '2ztkmULr1yYz4w536w1I1P'], ['G - Bone', '6ymk1720JzlLp48dYlWNAU'], ['Микола Осінній', '7835SYOY3IwCUvYOb8A3Sg']], [['Тетяна Дармограй', '5W7TqOu92QHKrLgE89Djd8'], ['PODILSKY', '45ynNXpJuhDVEXulIGfHO3']], [['Spohad', '3elE9Wickz2oybkTPlAWg9'], ['house of flow', '63CjuABAmTlvsVamUTPG8V'], ['sugarock', '2uozgeLQcq8V3kPeKafN3O'], ['Qtee Rue', '7uqsNvTOJSQsQ67PutDb2O'], ['епідемія сучасності', '0J5pxbs4aP7IrJ5GYOvS1A'], ['Побачимось Пізніше', '6pi1qYUiHUMergaIoSGrBO'], ['Святослав Бойко', '0nRw1RWVhaQPTUbKTyRdKC'], ['Dream In Colour', '0Wo6hx9lXsEL8nXo7VwgUf']], [], [['DUH', '09iYywfDEycA1LNlDz8CNi'], ['український вєздєход', '6xz5g8UZ1ORiDLfVESrwe6'], ['МС Мягкий Металл', '1EaSd279MiEXIDVT7IXD9l']], [['SILINA', '3yATSWv9dF21dPD7EaKKsO'], ['Торрія', '1bf36FSYCNRigyP9Nt0F7a'], ['GarriZont', '71mslFJErGnjml6IVxZ5yw']], [['Аліна Стецюк', '2jLG5Hx1LNjjYUMiyIdiyY'], ['Attila Hazhlinsky', '0fDd1sEZw4EvABKyn8WDiE']], [['DRUM QUEEN', '396fIRc5foc43JYwSV5wOv'], ['DJ KLG', '725gvVatVmThCSeScwKWzJ'], ['mess', '4OdPCFSQNTj7YDr8a5ZuK4'], ['mess', '4OdPCFSQNTj7YDr8a5ZuK4'], ['Cigarette For Two', '4pGR2Wj1dYCxur6gJnx74j'], ['Пежо', '57ja7Ftf8aaM3CrZ4Vuf3Z']], [['ofthepast', '7kv7KJUKRgJZOP0ZmzEmyw'], ['Віктор Мельник', '7oqmnlAauAyblTjkFr2487'], ['orotoshi', '0ch5ITEbJ9D10gCoVjyzxU'], ['GLØCK', '1U0IJg6T1pmRoMjwskLIvY']], [['Ræmën', '4ItFfuuHRIHcHphTf5YQ2Q'], ['TIMA', '5H3Ll4lAshck6fCJvxZRmy'], ['Teddy Trapped', '6issWlB0WQ2yaapGpLntdo'], ['period', '0EoOK1Ni3KZtTDlHK7xDnU'], ['KOLISNYK', '7yc7tcfMmpwG58iuKb5cbu']], [['Emeri', '09e8A3h4gcnyGXkUNQUsbi'], ['Vera Faith', '0phdXOPCu3Kgjgl3lMSmez'], ['NA4TAI', '2zUYprmCYzK9jgO8mB8mmJ']], [['Metamykyta', '2SwcmeVu1ioA8OtXcpcCdb'], ['LANVEL', '0N9yhXfLZjULNLadbgVEIM'], ['MILEVSKA', '6LyDs2ACCddNYvMTIgv6kT'], ['Володимир Швець', '2zGqjStPCkbpveKw6PjnuK'], ['The Sleepers', '3D1V3PeRHMtvm4DKntWvON']], [['Marins', '6GivHOxETZwRvv7MnpcZIr'], ['PALAI', '2ZoRBqTzGcm8ayDUXCv7V2']], [['Simpo', '0cpnA4A90O3hgCndBHPf6t'], ['Шторм Вечірній', '2BD5E1Z78TQhF8XAilMmNR']], [['Zloty', '7mrkLBBeuypSNAsinc2bH5'], ['Trømplay', '6lkRnzld1xDXLJJHPKL6wx']], [['4PIXEL', '2ZiMWeOgOJPXdRLhmG7EsK'], ['AIDEE', '1PBdz3yEYUDPcg0TRSrd2A'], ['D2UBLE EDGED', '3ULB1cqlgSofr81RnV8cqx'], ['гриби мого діда', '3fPSFv7nnOjFQPUPWRTYce'], ['MODEST', '3tZPWSLiHE965dwJga4TXL'], ['beautiful and useless dreams', '2NEiXWuLhFGk3ALebbb5jF'], ['Julia Gamaliy', '5HpD9H8UiRV57ClFQiIm86']], [['LeDaVi', '7ddEdKXj2oxLZY6ysIMRp1'], ['yankee', '1as3SnsPPzBnSTCV2ciKjq'], ['Meрінґе', '3unjeGtcgJ080qUha7f8B7'], ['світанок блакитний', '75pYLuwO3SMvlFkLQwOvJN'], ['танюта', '4JCNqb4oSo91D03JcDMxVK'], ['MiKAEL', '47wZLa3FYmm3dHZQKUmaNB'], ['Gore Carnage', '408NPpwzzPMBEUeOgp6VhC'], ['Lost Point Nemo', '1Zz5qI8wiYtN811cjUjREO'], ['the naked eye', '0mQXSX8Rr9VOCHbAm9gJWH'], ['VLASOVA', '3isl5oheqFTI2Xwj3eoPMd']], [['Miron MIRNIY', '5NjQoJF2yZhzZSkGgfelFq']], [['Всеодно', '6fNiNrXHAjvuI0mXSF8lEz'], ['MRYAKA', '4lvWuxiTmi43FTDUvf4Tvr']], [['ANHELINA', '4hu6u4VGczRuucMkKkQj0o'], ['Charodiyka', '7KQBXIlhqrfkQpFctHVsXq']], [['Di_Si', '6mpwULXFYOJspDF1PzLitG'], ['Ogyda', '1Jv5Is33k34f232XJoKtvk']], [['Майк Клінко', '16fLwLvK9Q8Pur3mYdTGD4'], ['LIFE.GAME', '56zF8XhapYDXOLl8x8wOTg']], [['18uah', '0scpp6zqfpU2KwYeZ3npL0'], ['TOHIKO', '4DUdG27e3Joo2ATfBmNtlL'], ['Li Ona', '70lcIn1dvQlnomTQpW8MSQ'], ['TONY CORLY', '6LlFRG6f7X0JkMnrWAQSyV'], ['Michael Defo', '3eQ3Xlj1oP8ZRpjeSBL0iI'], ['Viskiss', '1xb7dna5sFRvCQ9uSrqmOF']], [['099®', '2vVjrs249CgpWbOV5tmg8g'], ['БЕЗЛЮДНИЙ', '0ddeaDic4SepmAjPHCnAxX'], ['Alina Billionaire', '5E8GHgU1PrESx7AlozH4Yv'], ['Kateryna HULIUK', '5zVQIPwsUGjBwI0hsf2YOW'], ['Olyaska', '3CHYK38IU7Igd9yiOO3I9J'], ['Тигролови', '7ya9vbX3gUrgDhw6JGUeLu'], ['daivi', '39XSA3vKPj2YgRQa31h20l'], ['Steblevska', '2bT94RKYD4Giyzy3xNPR3J']], [['DARK WAY', '6vWcLzH2if2IXqcXHfZpj4']], [], [['TAMADA', '0mjdZDycMKBAACXbOaeuhn'], ['Alyona Minova', '0uCYUwAAsZMlETvcIEkoVr']], [['Everyone Will Die', '1WoJvKgJGH2vwYzuX18gUm']], [['Wave Ex', '3vFVrIUZq4DklJgZ9slRqF'], ["VIL'NI", '78C0Fe9lhfaLP2EKhTrdRe'], ['Ramazanova', '10qUI0cMO9Zcx5doyOY00V']], [['FAJNA', '15zyQ3w7KshyMjzfcr3BAt'], ['eatyou', '444oltOrU803cAUkTralQ9'], ['New Abstraction', '2VRVGPvpHSTPD2nwMZV3Jp'], ['Nightspell', '0ghaLFnGEfg3NifIo7rOKB']], [['Хто така Ана?', '6o9BJkwFx5G8FaqNwRfSnV'], ['Emot3rror', '4zn3O2URjbKGGDkngLuhnx'], ['Внуки Фаріон', '2YVwx0OdOCrgi8AqSFrBlu'], ['Парасотченко', '1qKOHxcaN8kus1umN5fDd1']], [['тобі не зайде', '4QhFoItq6QTE1Tm76RBANR'], ['Гурт Арфочки', '7DwKEc5YkGYrr9DTsxwdXI']], [['Kura1desu', '1u2uncn1eLhDO1MFHLvXsW'], ['OKIN', '5mRaXC6bXKkTFU4A9HrBr0']], [['Olxo', '4JmYlSSNxTSe35KPNWuQxX'], ['LYDIANS', '5y8CTAwYdDRLgGxAR6jFqW'], ['Vilni Music Global', '6aURBq9alpPqM2aFCBSjcF'], ['Пан Парасоля', '5bWCxW18dUL0ll835T2sQq']], [['kunai', '485MwodhJfzy90DVjJ7OsS'], ['Danylo Skoropadsky', '1O9WpB2PjPuNyPud4UB7DG']], [['Michael Hotra', '6vO6mgmPidIFi7UK9ktYUa'], ['Banduragirl', '0EecZ3ExZ0JL9Uu8o4deKO'], ['labuba', '4D1PgHYseVNCQlW3z5l27s'], ['Suïrgazm', '0vI2uI6cDeog5el1rtTc9u']], [['ANDRE', '6cnqecx7eFsVlNWuP6IRJz'], ['MR.FRIZE', '5ZP2Q3Oihm47ZBTXal50qu'], ['ЮРІЙ ПУСТОВІТ', '5Zh5DJxRmf08RxaYwdJiVf']], [['yosyaa', '3G8XcG1zIsU5edIBQGsnIV'], ['Вікторія Гапич', '6WcBMNyXR5wfzOdQcA5UmS'], ['ТАК НІХТО НЕ КОХАВ', '4EakfedcZx3dWWaJuVKxi7'], ['SOLDI', '1uzsizMgf0bi80DNrE0n4t'], ['ZELENYI', '5HwkTYONbYw9243iZJdxOU'], ['ЧІК', '4INE0JTG2XYLXEXodEjvH6'], ['Polynesia', '59m2TVXMsvFOm7XUeliIvi'], ['Останній семестр', '7zHx40lBkV7i3VWAa5ew1E'], ['Продам Гараж', '6c9RmtNS76TlIrZPoiVW1d'], ['MIGELO', '0gTVA4TYtU6Ts7eyzFctKe'], ['Kateryna Demchak', '2rTyv8tyjVMglp5IrsQN81']], [['MosaicMuse', '6YLWbGX4JAuekwvhD36iQf'], ['My Last Promise', '6CZa2Q4afdyicSxyU3hcgM']], [['Dimaro Magic', '6ACdeShJKAXK7gC1ogBSKW'], ['Декомунізованний', '19rOdIPXJ6LoEqTUF8ixpk'], ['LIL NIKSO', '2aWWs9VH6C5XQ8bUHX7sKY']], [['Lady Drill Era', '6meRahmUrbmw4f5f6msT6o'], ['TATKO', '7hFEzbu6Yilj9yUoxVvqQ4'], ['Chingachpuk & Vano', '1AHXTnxMfSndy5N4Q7vFzZ'], ['PillowBoys', '18T9MVSAeNZvmVMz0knAMA']], [['nacht yar', '0hAXPNvne1UyMcCaeph2Sh'], ['скот', '2oLmBIRITHj45mbBylM8Zc']], [['Hanna Mriya', '6nmxNFLS8zsqa7eFVplRjo'], ['Махра & ШизІк', '2jPwaCOJWI2A5xbQIKbkrY'], ['ONELLI PROJECT', '1adN3ewpC7dvC0tTkQ2Vt1']], [['Mommy Buys a Dance Machine', '75c2qFQkPFqzRvxpjCsJQT'], ['Олена Мозгова', '7HSPixGpom3SASB0K0WBwM']], [['BIONIC', '4sQkck58ui0L9TxfMUxFlX'], ['Eva Ivy', '5PBxEuVPEsOHRyoRxw1Nvw'], ['Dianell', '08RZPW8ooFDCidsMNXHqrJ'], ['YAKVIR', '5wMfqwe8uLfW9N9fdImBsu'], ['Lie Flower', '5cqOLGWUGtBtYPM5EBuKZq'], ['Pink Lips', '0ecsbppKQz30cwkVhIgvEs'], ['Saltfalls', '3Uj2nQoNbsBrx3pspvsjJw'], ['.mva', '4Tb5uwxbOirO8mPmpVkFHP'], ['PURPRUSS', '4OaIi9SM6o903w2qn6Wyov']], [['kissesfromeldar', '7GP413tTRIYhPfubxubMjZ']], [['b@s0krit', '2s1eWRC9DOGJKOt9FWnU6s'], ['Vishnya', '3345bZvUdPJfWADDLPgNYU'], ['Valentino$', '4bnILR2zUzHUtTHd7osShZ']], [['Pavlo Gorevyj', '6DdR1tUX3azgdLxkAfc3oi']], [['HONZYK', '3kuII9Ykq54Uo0L2DTRGQZ']], [['FILOMENA', '3XbaCeLB8hJiVZMLoX3Zqs'], ['IRENA.UA', '5PZPLGjKDSJgS9FTlhbFjM'], ['IZXNXMI', '2bN5FxToaB1wAOV9Bd3JRE']], [['folioris', '3iHmsUgakkqLDSRVdmv4K6'], ['Taya', '5Ffei3HAnDySinURxuotT1'], ['Тетяна Труш', '4eW4YWcNOTJr5B0AN2dPV7']], [['SESTRA BLYZNYUCHKA', '07wX92iwQAz5vXfU9GGcJO'], ['KOLOHEARTS', '4hy8LCm2BjubVSqE3l2Kfb'], ['PUSSBLUDS', '2NajmP7W9Jeeq9kDT8J0iW'], ['NAЇVNA', '7MWrJHDpJIqOItUqzY9b9h'], ['R.O.3.A', '2y1BKSmTSYHsVeiUPl5NyG'], ['Kortes', '1t3okoGbORZTAYWFKr9e7d'], ['BRITNEY', '1UNnp9JOrlR3gobnvB8aIf']], [['забудь минуле', '5K0cTdPPXCf2Vw09C76eet']], [], [['Fade Dreams', '5r9xH96pTuqfOG0PBFtzi7'], ['D.K.', '4UQkKXQDBIOpu1lwkkVzAp'], ['Сергій Дяченко', '5CEphZlkL6gFvWGeBIxjSL'], ['Rebus', '2e8zVJtlmStz3kZWuhVP0b'], ['SLAVA PEKAR', '0Uj2AGY1uMDRV9sj6hUSxe']], [['Jazzy Pic', '273MAzBrCTRkn5sScMdtJ7'], ['Aura Lex', '5ywJeEX43HN6zxcPCXVV34']], [['MRHNNSRP', '3Vd3zKcGVaBwmcsBJimzQT'], ['Вуйни | Aunts', '0Lm0qMW9jREaVOw0zVY3iS'], ['Тимур Скорпіонов', '4uM01pU14C3UkgoolgWQmJ']], [['Юля Бєляєва', '1nymLZF998GMqjipcFoF0N'], ['KRBK', '0E56Ncr2I37JQhW71UJALE'], ['DUMA', '6EfOf1x0adsAAy55AkdTNW'], ['in.Emptiness', '2UKuQC4GMQeOLEGlZzugeI'], ['Double Gray Day', '2l4ilPQBHsqlgRQ3RyGNM9']], [['INTERSHUM', '2JGdxSVKeQdrllDxxNdznd'], ['be3tebe', '2ohR3OHFWxP1AMzSusVg6v'], ['Обмаль Питань', '2wuXEH5Y7HdcdztNoRSoIO'], ['Vorne', '09n3op0KBXIgnGAw63XZru'], ['Liulchuk', '3fIxz0rZlpoGhxsNUHLCKv'], ['EELOXIL', '4Ec60u3dRHms4NrC3Pol2u'], ['Double Kick Band', '21JE25M6Fv2yxyuZ9xhI0x']], [['Gerdan Theatre', '5NUrxDtcq1skH9VczZevvG'], ['сонце далі', '3ZaPuBS9CvayjpzhFE80AY']], [['Вадим Здищук', '6ehjSkMBwCCUx6YiFjTQVC']], [['Astrid way', '1uFlQE8xHqTKzke6q8PSje'], ['океан серед пустоти', '47ClypQxHuofamjhUGiLmj'], ['Olena Prada', '5SnnjcuvSd5g0jCZXY4jDM']], [['Vadymovych', '0zCVGXOFZJnfr1c6glqyyI'], ['THLYI', '5O7EudbVVJychHBpm2RyXw']], [['$ilver $quad', '40l4lUrxwJRo4hRohiTscw']], [['DADISHA', '4NrYwup3WDMj5upyWRosOn'], ['Mova Tila', '48KgtM4aesS7B7jtcUv2yK'], ['Aleksir', '3Xuy05UMx5lFo6J61v3V0T'], ['pollyséna', '701tkyvZL9Cf7BffrezT9F'], ['НІХТО', '1GUnWEcXciuLgev8tSNNpm'], ['КАЗУС', '11zzpkAGY0B0QElW6zrZEw'], ['SeptimA', '4wsw5HQUH38thJLIVEkJVh'], ['ISHOWWHY', '0RCr7J1KehSrikNcPzmo8E']], [['Limonade', '78sJK7Q7jJMYicRtb6ZCay'], ['МосТар', '6oEDVAYH4vFJ6ozeXxfEW2'], ['Koliya', '19FMacympszyEO8s0S2S0j'], ['$ANNEX', '33LPV3AfVCHLR3kUngBBwL']], [['SVOE KOLO', '4GYCZhBSThy5LupNtLwOwA']], [['північнийсхід', '1c9qhnw2nrHQKa3anSaa8I'], ['Alexander Sinitskiy', '48qTBCCkRgZUeofFh46ARx'], ['KMODERN', '53zf0ibKzRtGmtemyLhF1P']], [['В віршах', '69LGdEeYR0K1N2HEHIJciw']], [['AVAKA', '2Wf6L4HT9ktkuFKa8PH9BI']], [['shtormi', '57MqRhVelCFzx3PRwXXZbU'], ['nusia', '7idvUpODaG0Y1oYFSTY1kL']], [['wasteoftime', '0lMHopWICjs0zED7KqGplU'], ['GURICH', '5HeJBlFEZJzMXvxkDREXZN'], ['NELLI', '20A9DVcemRkC5toH6rG0Va'], ['Triple Sense', '3nMhDe9ObaQEI1ZVmDJ7ne']], [['Floscule', '3myXeA61vpk5Rm2ReaipNL'], ['Марина Нещерет', '3FVMymr0FsThKzXfYCPU4g'], ['Neyodovana', '67rFKZi46mUN49wX7RDbX0'], ['Serhii Chulan', '42Ln8kkSORE1oeTc3DQPTw'], ['Таїсія Савенко', '2bVU5PlhsYGNnTJFdvoAAM']], [['Метелиця', '2WCrbjExizSvdiqMKkXVUC']], [['kissekae', '44NXjOk3A9hhfmgaOBXfvW']], [['shorestyle', '47FhTHEnoNxRYXVE8KUp6R'], ['Grey Beaver', '54VaDqR0ShaEbXJG6zq96U'], ['СЗЧ', '6OOiVyg1oYGIuYg1KGWH1L']], [['Natali Fair', '28jzNuIb0R12AbkP4cl3Ke'], ['Bezuglyy', '63ePI2AvtZglyyEo1cZN1R']], [['Frich', '41OJH8QlIvXg1Dn0afwfvy'], ['Timbiusss', '4U6gwMwgaZBDmFOXGvWp0c'], ['WestUpVibe', '17YEMlbRXiGABXKIa2v0Hz']], [['Alexandra Malatskovska', '2JArRK4L9uJ8XUDkbbT72y'], ['ERNEST', '5wRKNChZJvmukNwo4TMbik'], ['Snakehunters', '0gXfQnoCza4XlDm8FqxFsV'], ['Ssirko', '7pZnkZo9NovCRjrSzusFBR'], ['ANNA VOLOSHINA', '2ryFBwUIZVXrcF4Ezgb55t']], [['Julia Motoryha', '1CQKSc5RXi6GcqTzGMcftg'], ['ШупШик', '33vZAIc7yqqUXXrMKPpIQL'], ['OwlNeck', '683ATTjsCvPuVD7xItjTAw'], ['Ліза Ясько', '15seyfGTPdzE8grEMbcXC8'], ['Maryna Makusheva', '4FnQAjDzZMSHn28SeYmUTI'], ['CherNy', '6hD7WeEXSfkxTohLsG5xHi'], ['Doomed Lord', '4IcUAyeYu8zua65nvBHaXC'], ['No Remorse', '2XcWilhbbQCbQLZNOyv0TX'], ['ШобШо', '2cBrz0VMe7ZkCnoQ106vG8'], ['TORGMASH', '6qJOhNL5HBXlpL92B0XjYJ'], ['Elinkaa', '5GJg3TgTdMUdzmvG4RwaGy']], [['Руслан Гресь', '2fvCZtHYzyOy5ayToqWpF9'], ['Двоє у Човні', '7FZJGmpdPMDNldRBEM5QBw'], ['Shмель & Odessit', '2ue1dbxqYqb3QKAt8avNhw']], [['Марина Хмєловська', '0l1sssea9P8QL0O0x2qKL4'], ['Jerry Neir', '6VZCVKrqFxGU6wctZEfxql']], [['The Winkels', '1E2jhb0AoAwectHAUpWiCd']], [['Feviane', '5D09M3zWukfwLwEZRrOa14']], [['Slukhay Sashu', '7bovXIoMqWNOibj93PfU7J']], [['Outlight', '4QH5Y18XfbHjU3oHvi5QrS'], ['Starykova Hrystyna', '3LqWp9ksT2mJXdonoCxOLk']], [['Den Samota', '1KfiitVmbemyFTG2XRQpl1'], ['Kariatida.', '0tjqdJnUuqhHNbS3heNpSI'], ['Mary Poppers', '7Ls3B3D3sqedwQHIGH9gMg'], ['MARSIK', '2ugftaLMINcoBqEvI3NXIi'], ['Технофайт', '2mzmH717Vb8lz7Nu9Y8hgP'], ['AXEE CEO', '5vtODUf23tRWVnGvynBLjJ'], ['KATENKO', '4HQnN5zYNLh8XO8WiWK0i2'], ['squall.', '09yGs53CtFWSsrQy40ZQg3'], ['Аґрус', '4tbHJ98UfWrtzPjdcuadUr'], ['HOLTVENKO', '574YyHrEv0EAP2ZDxHfckE'], ['lesyk', '71pQT9bDTMeNV7rieORXyT']], [['hjumən', '1XMpmdg3jlXHcIk4D87tXf'], ['ЕПОХА', '5XsZasaWPQD862iYffwiBR']], [['Slend Dogg', '7FMSIi3SbS4FO3vHuth96c'], ['811', '4hnFAFO5k7E0RCw9YaMgZy'], ['Дика гравітація', '7fnXDCdGWy4df92kf2wdeM'], ['Ларіят', '6KQktCAPIDpY7NqfIp1Bvg']], [['Костянтин Подільський', '5GdE0FEeCk6QmsWhm8qWLU'], ['A.I.V.A.', '0DGNyuuiAzQBdKifmK4Ax0'], ['ZAHMARNA', '6obUJM9V6a1iB01ywUi7b4'], ['High Surfers', '251xJNdWsjRFzbSbmXYAYW']], [['Romik H', '69pclxKxUnqwnvQs1n7QgL']], [['Soffi', '1j1cOMKkZQGH9CLux1lbLV']], [['SlovoViryMusic', '0bNZo6JJ2g4XORrBKtPZea'], ['TSYTSKA', '3PhakdGorl97XKMuJy0OWX'], ['сліпволкер', '4HQGLUdJxGBIvNabi4QCPJ']], [['DENYS HRYSHCHUK', '221TypQqNuvSWtth5uI0jo'], ['DOFAMIN', '3MZdgPwJ03mLifg7ehn2Ed'], ['BLESS DEATH', '3lnxSjM3ZUfz7XOR4Xn5xK'], ['ТVOЯ', '0BNRE7e5iXKuNNWkfDekbL'], ['Land of sky', '44stLEENJRYZlfOsCj5egO']], [['ПТСР', '6rZC5OQJEkiFoq6r8n9wyA']], [['Syncope Cats', '7s4VqlOE8bWiQauqj9q6FV']], [['мій найкращий друг', '2d28SApv0ETrdNYgfuzKbz']], [['Анна Митько', '4LKRTQJFGZk1L2yosqZgEt'], ['Tonight Romantic', '7HImlXgzZw1qcTW2vwA88O']], [['Ukrlanch', '0jNjNh6MiPpX1z9LnJYvzr'], ['Нейронні музиканти', '0E9X6x3Jfr7TCSI2HxI3gi']], [['BORZO', '4JZZQpL8ofuVVpZYaLRWwE'], ['KALI', '5jXZUvUXm8YDSZsMLSR63A']], [['Хохуля', '32J7xFYaenYWxgBh8kmQBW'], ['РОТОРНИЙ ЕКСКАВАТОР', '3KU11wbcwSFS8xu8MNqVal'], ['YULIA NELSON', '34DN4Vx1kTF2C3LrfyqvQM'], ['ANDR', '1IW51XwXiABCOIykTKdMY8'], ['Bysaha', '2PHYzUmSgYqw7ZRmuYKPJd'], ['No Reflex', '7KR34XxnPk4pcJYRxAUKI1'], ['fairyboy', '0pU6ovbcYEgoBkssC6z9Sr'], ['IVOVI', '2pFe48u5wShSZDZG7BZBe7'], ['CHLORЇNE', '6tWXLHVDHcLMebpVcRdVsJ'], ['Max Smogol', '5nLc6JLGihVp2UOQ81TgYQ']], [['проспект металургів', '4Gd7bLm0PSy5waxwVK0xvZ']], [], [['Суспільне Євробачення', '4M73QpI5YK6YMOP6GfrCqP'], ['Суспільне Євробачення', '4M73QpI5YK6YMOP6GfrCqP'], ['Суспільне Євробачення', '4M73QpI5YK6YMOP6GfrCqP'], ['Артем Котенко', '6Y122b9KCg3y4v6YKqwc8f']], [['DJ сметана', '6pETB8ksI72aVMd5y2ctma']], [['Zoey', '0MM5N3fEpcdJ1OYLVomXDU'], ['SMAL KATE', '5wS0LOvDfubCwDTmuUPMEc']], [['kl4v1r', '2jpjXc73OK7QEjQgp78NPv'], ['One EyE', '7a4KIUX7dos9D74x6IzoPH'], ['Potorocha Khrypka', '2ANp7r4fG0AJPQmJ0eR8OH'], ['Gravehorror', '5BqSm3TGbWVLUM9wAFyRdm'], ['Sofiie...', '0D2gzEN9bmzEokXwQWvL5J']], [['СХІДНИЙ 27', '3cOEn3upYVXPINyaKJ76BD'], ['kittens on the balcony', '2BSIqBBMbAZXsNMWgi8xcD'], ['Khrystyna Kozak', '2UVTHACBXx1pS7Gr1Ieecg'], ['Subsai', '2DEwQTaPClVduuKmAUD6De'], ['Невідомий Виконавець', '5LXm1kmZRNkJ497XY7DhfF'], ['MaestroM7', '45QKJsUghic1r5DE97cwt3'], ['blidiy', '3JZuXLn21bYuJb7gQK4pGX']], [['ігор', '6gQoMqfWA3qv1VHkfNfvll']], [], [], [['партер', '291ypqOwowm8FuZuRKW0iF']], [['Argillite', '0DZhKOq1hLeqesjOsk9x7v']], [['MANU', '4Kt9zTYHWFaj8RDXV95aQl'], ['Samotniy Vovk', '0NEFdr2BuDQxKeyKbDOTSN'], ['ЗновІзнов', '50zlCtEqw7WZnR7DeLRqb0'], ['B52', '4n8LcZYCxthDBBDz5cAB62']], [['LIANKO', '1gxXq5qRXwQsxzN2EsNSEl'], ['Volaj', '2F3dGGJmoEZSyfVSGloSWq'], ['Black Swan', '09ZBVcUx5dOZl34CszZ8u9'], ['Massive Mutation', '7beuHPoqejWHsJW196S0HC'], ['Kozyr', '2fcBKC3nhSYIdprJK7oVr7'], ['rem', '1pumHY80pUwHkL7iOyR5lV'], ['Wel-Pas', '0p3WH0hvhvikTVKSotm2pe'], ['LEYLA', '6W6RyRpr9INpRyqKokd7TU']], [['ShtrihKot', '2DLhRw3XD9nPAQUJTaLtlE']], [['Breath Control Play', '3FiGFYNauu4KloG1QqQP8L']], [['циркуляр', '6J9aDtZS217jD8U1cmHBvz']], [['KODAR', '5J53NGurb4fYuTKOoHmjft'], ['GuysDay', '4CjXqgPMC3T64FUKAV7eEW']], [['Nazar Vorobel', '0WCuKXD64Mbjgd3SwWOAzT']], [['Vanek', '1E8x08y9fjZBft5coVPzC4']], [['TSEKHMESTRUK', '4FWBlJVsdXNm8yqLK4Vwsb'], ['LASTIVKA', '2xpadViaGB8VBsTTnsWvEg'], ['Спогади', '5OJJvr9fX3h1cEJAsk1QlH'], ['Julia Murash', '5wEY4BRxzTKcM1NxMKf4Fw'], ['Анастейша', '7iLzr1sG2MXegjyAa2tL1u'], ['ОБСЕС!Я', '2KOv7gAY5lu4VEslEpgrMI'], ['Sofira', '6IsIXhoZSxqf4BKGKGiN88']], [['mxkxta', '2cWTNBGz21BaVctSqoKGHI']], [['Hidden Roses', '08ftg0NYCiZW7ySwrUbhKi']], [['АннА Сонцева', '6wgMZy4xuz16KzoW03kDLp'], ['Дмитро Буза', '67s9RczFL3rK1Wh2df7A8C']], [['Яринич Андрій', '5NXfMv07iK6XRY3jyWkkxk']], [['shanøn ~', '4LYPFjzinFZsAfMzVZPBi6']], [['IraIka', '7mcub6ABNjDfJhoURYk1OR'], ['OK.BLOSSOM', '24VBoUXgFxoR5WIfDj6fBu'], ['nnnuuun', '3olgQ4rSkd87aPKcEeYGDC'], ['Opanas', '0JgKygfb0HZQU3zBlm5xjU'], ['наташа', '1tHZJ9CNsFWN2sZ7pMZVfn']], [['Ярина Квасній', '5GhYqDWFFjv6w7QdREQSzd'], ['Ріна Кармін', '0w33gV7F1nCFRW7AFekDwY'], ['Borshch', '0dDZq6yvHuYQXOM6SOLVs5'], ['POTRIBNYI', '3WNTpeRkv4ybUGwaJDYnzj'], ['Shaman Blues Night', '7c2ZNhubJYxlw2goOKSNYP'], ['OLIVIA', '4rRiYcnCNOm0tGlT9EEaff']], [['Daryshyn Nazar', '07wMQmp7tzQxbi8WCIyajB']], [['Ruїn', '6VTYz60zp6gf9HNPeGwOkR']], [['Advantage Project', '0UrDXMglwXgqkxZF40VEZG']], [['СПІВУН', '4JXAenBsrZBFtx8U2PNkkn'], ['Trooylo', '1ataeIEJrC4FFwKof0MtRy']], [['Follow You', '52kV9Xhffmq4gVS8ybfyFu'], ['Misha Twest', '66UUNVWyfPjOpjbuYSAFg4'], ['Sidorenko', '2ZUQaWMNLcSKFj2YgRSeUR'], ['Deep Fur Project', '6SmziTaax3KENiC8r9UoAT'], ['Кіт Узвар', '7fhCm7IcD17TFhne80dm6I']], [['YURII KACHMAR', '1ZrlMbySL6K0bq8sukTyYs']], [['INAKSHA', '1yBzAV2I1HFTWKHTn8uZKX'], ['FAYNER', '4xooujaZw917pPGiBeMHFU'], ['Багно', '5cDViIHJvaYKl3ZEM89OIW'], ['Stereonich', '7hnr6AtxkH3TgpaJtoNfej'], ['Asya', '1ybFR64qCssynvsXZaEkgm'], ['K.Tenology', '66ZRAeGnrxRfLI4ferTjrH']], [], [['Replay', '2OA51IQX9IwHJqIAqDRfoB']], [['K3RNY', '5VQPekMTdilRnDV185NDT9']], [], [['tramplean', '4FNuoiISRigRe08hf2r8O9']], [['Kvitka Gaevska', '3AG8liEUzbdkh50PHuKFLL'], ['Уникаючий', '1HSYrKJtN0V5UMEpEGxEoD'], ['Warflame', '6McDCI06Elwj5wM3DcRcnP'], ['ЯК-НЕБУДЬ', '1z8epX7ARCuHFXnxerzR0g']], [['Pulstoris', '1oBiQNSNg3yUfjC8whWnOh'], ['UA', '0IZ1KrDAARDZk9jrFEpu96'], ['DARLIN', '59Giy6VJ2An4XLX6JhDcPe'], ['Main Street', '0ENgyTsBWD1D8WLokqIzHv'], ['DARKANNA', '5FTcXreihxMrqfY8PDyEvW'], ['Намахана', '0Jkp46WV8nq16X5JgJKcCv'], ['Ігор Целип', '2ynFV3wXWfIsuESuL2gLTq'], ['D.Steck', '0aMyztwxrYMiLcmvacjgHu']], [['Diva Iren', '6FvjjlviUnR6Y9ff6Z2AQw']], [], [['KHUDETSKYI', '5TLrNScaoWjkTCpmn1aNGv']], [['MERIT', '1LJ1urc0VsKazBwZlPopAy']], [['Malisa', '6eAKHMTXMSwJST086bxEt2'], ['Lorey Stefan', '5FBKdNolYD0qeASRIgxMuI']], [['DEMI', '6OK8llYIX0Q4iCCK43g8MN'], ['Аліна Савчук', '4VRD5muKNHIos0zH38POvV']], [['HARNYI', '6JggecUYgrr2x9Y7FMii7w'], ['PRYVYD', '2AQV46S6GbN860TgM9X9KZ'], ['Kain Vega', '2TvAAbXqvDeYIIdEV3MXqP']], [['Анна Трегуб', '0UTTwY88NiAfc40D2PzE7W']], [], [['YAMARYNA', '23tzfLxSylIiO93ED7VS0X']], [['aна', '6UWCWSwx7AsbFOwdeJtc72']], [], [['MRIA', '3N39QAJhFJuR7mBWZrTYpq']], [['Kateryna Rohova', '7408wcUAvd9FNziPgQF59C'], ['Anastasiia Vaskivska', '6Fk0PJKVjQIPb4kCtBAOsd'], ['GurtKit', '247rY6uyGdUm1niLxSqQUa'], ['SISTERS MIX', '5ivLbTSNMEAB3bKHtZoBn2'], ['Voskoboinyk', '2zEEEbIH8NtVpsyO77fau8'], ['Ольга Старовойт', '3cz7vuqLou0iUHiCa8CQOL'], ['k1nqq', '3eoJ0yLy7hH1AARdnxSM2J'], ['DARIMAR', '0r9BBfm0mr4KjToC07t6vR'], ['PAKS ROMANA', '2nQKvngN8QpkLLvZTBeRki']], [], [['Rostin', '5dVtKPo96LOXBCFrC1T5iN'], ['Margarita Gariga', '4IjIJqls1n8tgEDwHDfyxr'], ['Busy Beaver', '11d3m3tHKQ2hlpnxTseLKU']], [['Maryjazzwoman', '0qMnTrSJizXxIosGlPPYZN'], ['GIO LIN', '4F1qR4QK7ftKo5HyiiCE3z']], [['blacoleo', '2nkuOkZkFQf1WuPyOJJFEG'], ['Molodsha', '5XwhSbopJgf8jHvIMSAsEn'], ['BOHOSLAVETS', '4m2xqjePIjqUevkUAIXpaS']], [], [], [['Monart', '27UII9AHMfeI6svO4b9sbR'], ['Anna Druk', '1sPcRXB1Cis0ebKcRyfbp8']], [['Віцик', '6rKQWq9Myo4ruCtSWpqoP1'], ['SIVA', '3rox3HDO0SwzApt6Mtoz32']], [['Mmy Polly', '4IAc9wTQkQubVp4tXzI1jz']], [['When Tomorrow Falls', '6VOPodziCEFc86Rn9Vg0Xy'], ['MOMMY KAT', '1t3xZpblmye1Vx9Gwdh3wf'], ['Мова Трав', '3zlnUZRRw8pAjHx7hjFSmc'], ['Darli', '76gw2ekfjco8szjFG9OXZ0']], [['Mary Me', '2slOOMyNIR6BVeo8ZU6ijb']], [['Lil Airy', '7u6upyT0pt9YR7cFCRCIhm']], [['Piman', '1CwLSg4l2vGTyCUwvK1Cvh'], ['Slavskyi', '5gpaR1nU77HuzCGL5RRV9S'], ['The Mentor', '0Lfn8pABZ3BG1QL14iezDP']], [['Molh', '7avPr2cMQ1z0QneYvfBy3G'], ['майже напевно', '3bMiiZeAThUtcWQEReVh0D'], ['Вихід Є', '2ENIOZfKw1mqTlEPC8HVeJ'], ['МИSAN', '38qdmN1Nb28LBfhD8NWG4I'], ['Iry', '4SHVy3dEFBnUoATS7PZH5v'], ['LEKSUS', '62PoS9MqU850j99lj59hyP']], [], [['Zvuki Zemli', '16C52XZafktN9lTzVPEDqQ']], [['LYOLYA', '6wxx8HeXigSCNBHVVsnsxv'], ['Sho Kapets', '1o8LWW4dwK8aZ97LxjYrbI']], [['Євгенія Скорій', '1jkSahwxuXbYV3IWQ7qwFP'], ['Тротуар', '5NBxbM3QiOZCWOksgUY90Y']], [['Вероніка Магазова', '1Gnt7EiHjfxnxwVGAKGYXf']], [], [['Полин', '4N34bHaIuKOnWHOBDBJasS'], ['MARTA PRIMA', '0xJfnWxJ5CmH6icyRA4JJK'], ['Женя Гергель', '0FZfV6l1TvUdnDdRXMKy73'], ['Технічна Пауза', '1AIvBpjkTTtMTTlnJeXsEX'], ['Шукач Пригод', '4feQERVioNywkahDMf1lfK'], ['Andriy K.', '1cD8r5KcBna87RcjLsOPzH'], ['Caveprawns', '5WtG2YeQNLbOKzYHnmaHhr'], ['Serpovskiy_D', '0lKtaP3gw2zYbImkVvChLr']], [], [['ідіома', '4nPwg2kHtJG0C1C772WIbW'], ['DZHABER', '5n9E2cxGao2cjS5ECPTi00'], ['neurostatica', '7eDgZSLWjqwOn3Yf66B8wl']], [['гірша версія себе', '2EXdcRiIR3ox3jsq0TFNLl'], ['Софія Верига', '5WbrK3Ff1LmmbaKV7x5mAq']], [['Дарія Бутинська', '5U4PrcQCsriPfgxrEiFXih'], ['Кодекс Честі', '4dd33Z5IsCZn69IBbQp0o2']], [['OneByGun', '0jk7wpmXAuTGGDyj8fBkB0']], [['flecok', '3od1aMqZNKfgwfA7RAQgef']], [['Динозаври', '04zlcsnP5PBACn1lCx09wr'], ['Навіщо', '75v9oNXVckAwOERXnAZIIS'], ['Данило Олійник', '4kRndxpOHcwExXTShJ1u9P'], ['Блекфіш', '1VHJFHPhojU6jseMUCyLLN'], ['PulseSiren', '61uZ5MHrQ6jF0DPHZrfo9T'], ['Альфатер', '2DsQ1FRVEdNbHTsXvKIRel'], ['Mykola Zhadan', '0GH8vGFrvirl17mjtB2RSC']], [['MARHOSHA', '7DVnOnFfYNRPQfXy9sQk79']], [], [['VINOKUROVA', '1iSU6tIoUt0Ug7kqKUFHDm']], [], [['Дарина Величко', '27jPBKOwt5ZJpabmytF7MM']], [['The way it burns', '4KGnsvwaDyu5IED8cfVowi'], ['Gabriel Konovarro', '1qfY4Rim1VtBF7XSSeDGoD'], ['ХАЙДАУТ', '6LwWAsTTw9ezGGycPb6qid']], [['SCHIRA', '28FxcyaJV7fc0xO8xsl4ID'], ['VBILOUS', '6lbgQCK9ZTj1X3TnmJr2wJ'], ['NOVO', '0CRb0sP7C4Se7Jh5yJpIqy'], ['Пішки до моря', '1UbnwAuJgCoAzvO1vaCYH4'], ['ALBINA', '42yPQiHLhzWQrTQpFWwWED'], ["Povin'", '5JmdCeZUntMWY5XxqgQcRe'], ['Silence Therapy', '18vNzlC4nUkaiibsY12HEs'], ['NADINKO', '5bbi10tkNwx4nyFMRNoApk']], [['Neidealna', '6zcJ6dImotBrDTP2fqEQK2']], [], [['Ілля Кубай', '1Nz1cxKinrTPPE64zBONU1']], [['Banzay', '2eopr3GsV1QCoT0strA3ND']], [], [], [['Piankota', '1vuSqxRTxxA5O6929aj6yr'], ['DYM', '485OniiEjctrsVFW5KrCB5'], ['Paras', '2P79J6YaSaCweauQj888S4'], ['Raul & Omar', '7jc0RHwmpbjnU90yp9AcRw'], ['Anna Doyna', '64dl1foKukJO0Qtu1ungxb']], [], [], [], [], [], [], [['Danechka Belyi', '70GpQrVRpcTcMXaTEPAFCO'], ['БодяНаБітах', '0dN8l7b8VqpuOItY3hKItS'], ['Микола Толкачев', '2Y3yd0MFsWEVem1hx2O9FT']], [['TATRA', '67tx3PUsLqZY4qDOGdFwWx']], [], [], []];
+
+const counts = [4, 1, 1, 3, 9, 1, 1, 5, 3, 1, 2, 3, 0, 0, 2, 3, 5, 4, 11, 2, 1, 5, 5, 2, 2, 14, 1, 3, 3, 1, 6, 3, 12, 0, 2, 2, 2, 1, 2, 4, 2, 2, 2, 0, 8, 8, 20, 4, 3, 2, 5, 5, 5, 9, 4, 4, 1, 2, 5, 10, 19, 3, 0, 4, 6, 3, 6, 14, 4, 1, 1, 1, 2, 8, 8, 4, 3, 2, 1, 1, 1, 8, 0, 1, 2, 1, 0, 8, 13, 3, 1, 6, 2, 3, 7, 6, 4, 1, 3, 2, 3, 7, 8, 0, 1, 0, 2, 1, 3, 9, 7, 6, 0, 5, 4, 3, 10, 1, 3, 1, 7, 2, 4, 9, 3, 1, 1, 6, 1, 0, 6, 0, 1, 1, 3, 4, 2, 8, 1, 1, 5, 4, 4, 7, 14, 3, 4, 2, 6, 6, 4, 18, 4, 0, 2, 1, 3, 2, 8, 0, 3, 3, 2, 6, 4, 5, 3, 5, 2, 2, 2, 7, 10, 1, 2, 2, 2, 2, 6, 8, 1, 0, 2, 1, 3, 4, 4, 2, 2, 4, 2, 4, 3, 11, 2, 3, 4, 2, 3, 2, 9, 1, 3, 1, 1, 3, 3, 7, 1, 0, 5, 2, 3, 5, 7, 2, 1, 3, 2, 1, 8, 4, 1, 3, 1, 1, 2, 4, 5, 1, 1, 3, 2, 3, 5, 11, 3, 2, 1, 1, 1, 2, 11, 2, 4, 4, 1, 1, 3, 5, 1, 1, 1, 2, 2, 2, 10, 1, 0, 4, 1, 2, 5, 7, 1, 0, 0, 1, 1, 4, 8, 1, 1, 1, 2, 1, 1, 7, 1, 1, 2, 1, 1, 5, 6, 1, 1, 1, 2, 5, 1, 6, 0, 1, 1, 0, 1, 4, 8, 1, 0, 1, 1, 2, 2, 3, 1, 0, 1, 1, 0, 1, 9, 0, 3, 2, 3, 0, 0, 2, 2, 1, 4, 1, 1, 3, 6, 0, 1, 2, 2, 1, 0, 8, 0, 3, 2, 2, 1, 1, 7, 1, 0, 1, 0, 1, 3, 8, 1, 0, 1, 1, 0, 0, 5, 0, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0];
+
+const labels = [];
+  for (let month = 0; month < 12; month++) {
+    for (let day = 1; day <= new Date(2024, month + 1, 0).getDate(); day++) {
+      labels.push(`2024-${String(month+1).padStart(2, "0")}-${String(day).padStart(2,"0")}`);
+    }
+  }
+
+  window.tooltips = [];
+  const data = [];
+
+  counts.forEach((count, dateIndex) => {
+    data.push(count);
+
+    const dayArtists = artists[dateIndex] || [];
+    const htmlLinks = dayArtists
+      .map(([name, id]) => `<a href="https://open.spotify.com/artist/${id}" target="_blank">${name}</a>`)
+      .join("<br>");
+
+    window.tooltips.push(htmlLinks);
+  });
+
+  createChart(
+  'debutChart',
+  'bar',
+  labels,
+  data,
+  'Дебюти',
+  { 
+    border: '#84AAFB',
+    background: 'rgba(132, 170, 251, 0.2)'
+  },
+  {
+    responsive: true,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        enabled: false,
+        external: externalTooltipHandler
+      },
+      datalabels: {
+        display: false
+      }
+    }
+  }
+);
+});
+
+        createChart(
+            'debutGenresChart',
+            'bar',
+            ['Pop', 'Rock', 'Rap', 'Indie', 'Electronic', 'Metal', 'AI', 'Trap', 'Kid', 'Instrumental', 'Experimental', 'Phonk', 'Black Metal', 'Folk', 'Electropop', 'Breaks', 'Punk', 'Post-Punk', 'Ambient', 'Emo', 'Pop Punk', 'Death Metal', 'Worship', 'Hyperpop', 'Shoegaze', 'Jazz'],
+            [473, 223, 169, 142, 70, 69, 57, 38, 30, 27, 21, 19, 18, 18, 14, 11, 11, 10, 7, 6, 6, 6, 6, 5, 5, 5],
+            'Жанри дебютів',
+            { border: '#84AAFB', background: 'rgba(132, 170, 251, 0.2)' }
+        );
+
+        createChart(
+    'listeningRangeChart',
+    'bar',
+    ['<1000', '1000‒5000', '5000‒10 000', '10 000‒50 000', '50 000‒100 000', '100 000‒500 000', '500 000‒1 000 000', '1 000 000>'],
+    [37623, 7154, 2631, 3936, 792, 989, 172, 141],
+    'Кількість треків',
+    { border: '#84AAFB', background: 'rgba(132, 170, 251, 0.2)' },
+    {
+        scales: {
+            x: {
+                display: false
+            },
+            y: {
+                type: 'logarithmic',
+                display: false,
+                beginAtZero: false,
+                ticks: {
+                    callback: function(value) {
+                        return Number(value).toLocaleString();
+                    }
+                }
+            }
+        }
+    }
+);
+
+      document.querySelectorAll('.theme-item').forEach(item => {
+    item.addEventListener('click', function () {
+        const link = this.getAttribute('data-link');
+        if (link) {
+            window.open(link, '_blank');
+        }
+    });
+});
+
+document.getElementById('debutProjectsBlock').addEventListener('click', function () {
+    window.open('https://open.spotify.com/playlist/1rHu7iRYi26V1wD4PRtEB3', '_blank');
+});
+
+document.getElementById('aiArtistsBlock').addEventListener('click', function () {
+    window.open('https://open.spotify.com/playlist/46783nxlTWUxDghlX7DN8A', '_blank');
+});
+      
+      document.addEventListener("DOMContentLoaded", function () {
+    const debutProjects = [
+        { name: "Do Sliz", id: "61v6YcV4juu3cN4xzVji03", hash: "e0f8f0e1735b8934ba8b5e8d5beeab3fb00cb310" },
+        { name: "Харфанг", id: "4tvEl314daU4xGzaCKQpUs", hash: "dd7046d71122ccf70652dd7ce90acb31e24c158e" },
+        { name: "ASHYK", id: "4V0CaWLtztCpg2p08hcbni", hash: "d82c62c4ae97f0c727f5f95bbfc9f1215bf5a163" },
+        { name: "sadagainе", id: "7zuQRIjvU5KfSLLsx7ZdUE", hash: "b05668b2c1e80612f6255a297cca267817c901c3" },
+        { name: "Артем Котенко", id: "6Y122b9KCg3y4v6YKqwc8f", hash: "d4bdd46cbb5cd996fac2a9d3013d48615d326c7b" },
+        { name: "GRISANA", id: "3EO10LHXB2cF79P8rYAVHz", hash: "13e4bfbd486795932afc846a78258c0f69786022" },
+        { name: "KUGATESSA", id: "1BOpBS41QOt9MLdS7HK6bH", hash: "ff08494725902358e0dcf5bd57509dd956ea38fe" },
+        { name: "Voskoboiny", id: "2zEEEbIH8NtVpsyO77fau8", hash: "9552f71c7947356754cab62e84186d41b7d18033" },
+        { name: "VBILOUS", id: "6lbgQCK9ZTj1X3TnmJr2wJ", hash: "2adba0c9a64be698fdfdcc009d99c02245d3af89" },
+        { name: "Floscule", id: "3myXeA61vpk5Rm2ReaipNL", hash: "c3605be6933b96e071f4a5d57c0ca86c275b1f43" },
+        { name: "TIMA", id: "5H3Ll4lAshck6fCJvxZRmy", hash: "04b571e2b4da2cbf7e76a9795f34601a25eb3dfe" },
+        { name: "Pan.Mykolai", id: "51SBxI0sZ1g4TnRcsy5dik", hash: "bad7f6dfe9d9c134211c2cc42d278e8b08139a40" },
+        { name: "Vanek", id: "1E8x08y9fjZBft5coVPzC4", hash: "99fb28eea1d9272178c5d54d7971c3c673eba4fb" },
+        { name: "Пішки до моря", id: "1UbnwAuJgCoAzvO1vaCYH4", hash: "313ad5c0eda05acb6522b9ac48d519021a72002b" },
+        { name: "Vera Faith", id: "0phdXOPCu3Kgjgl3lMSmez", hash: "6302c8a35621f5b6612dec7edae7528d4349e741" },
+        { name: "NICOLE", id: "32aZ98MvM0BNREOFeL09ap", hash: "f13884fc372e21a6f4f6e5cd5769927a819e9f47" },
+        { name: "Бодя Бадьорий", id: "4Jx84l0g2ucgvFZJ85wc8h", hash: "e19ac992b6fc727ed9fa34f5d17ba3d37c1358f3" },
+        { name: "STOROZHKO", id: "2Cl9KuBZarrVi6XL2ytQu9", hash: "c4cbf1ced121b546f51a92d6e3c4f5e7101e0ac3" },
+        { name: "Вікі Роуз", id: "43S6nxN5fiQia4CaYo8ALA", hash: "46f9b992f170c3b649023763a373ee99fc372234" },
+        { name: "Данило Олійник", id: "4kRndxpOHcwExXTShJ1u9P", hash: "69dc3589d7b18f643652139e40010d2e43a23518" },
+    ];
+
+    const listContainer = document.getElementById("debutProjectsList");
+let currentAudio = null;
+
+debutProjects.forEach((artist) => {
+    const listItem = document.createElement("div");
+    listItem.classList.add("track-block");
+
+    const playButton = document.createElement("button");
+    playButton.classList.add("play-button");
+    playButton.textContent = "▶";
+
+    const audio = new Audio(`https://p.scdn.co/mp3-preview/${artist.hash}`);
+
+    playButton.addEventListener("click", () => {
+        if (currentAudio && currentAudio.audio !== audio) {
+            currentAudio.audio.pause();
+            currentAudio.audio.currentTime = 0;
+            currentAudio.button.textContent = "▶";
+        }
+      
+        if (currentAudio && currentAudio.audio === audio) {
+            audio.pause();
+            audio.currentTime = 0;
+            playButton.textContent = "▶";
+            currentAudio = null;
+        } else {
+            audio.play();
+            playButton.textContent = "⏹";
+            currentAudio = { audio, button: playButton };
+        }
+    });
+
+    const artistLink = document.createElement("a");
+    artistLink.href = `https://open.spotify.com/artist/${artist.id}`;
+    artistLink.target = "_blank";
+    artistLink.textContent = artist.name;
+
+    listItem.appendChild(playButton);
+    listItem.appendChild(artistLink);
+    listContainer.appendChild(listItem);
+});
+});
+
+const genresData = {
+    pop: [
+        { name: "Jerry Heil", listens: 53674052 },
+        { name: "alyona alyona", listens: 50841117 },
+        { name: "Klavdia Petrivna", listens: 35947564 },
+        { name: "Carpetman", listens: 18536192 },
+        { name: "DOROFEEVA", listens: 16580275 },
+        { name: "Parfeniuk", listens: 13953176 },
+        { name: "YAKTAK", listens: 13179269 },
+        { name: "Artem Pivovarov", listens: 12177103 },
+        { name: "KOLA", listens: 10602265 },
+        { name: "Wellboy", listens: 9390853 },
+        { name: "MONATIK", listens: 8446552 },
+        { name: "OSTY", listens: 7830501 },
+        { name: "Tina Karol", listens: 7457783 },
+        { name: "Nikow", listens: 6826089 },
+        { name: "KALUSH", listens: 6680293 },
+        { name: "Геля Зозуля", listens: 6274965 },
+        { name: "SHUMEI", listens: 5820691 },
+        { name: "Маша Кондратенко", listens: 5456354 },
+        { name: "Domiy", listens: 5223727 },
+        { name: "CHEEV", listens: 3930075 }
+    ],
+    indie: [
+        { name: "МУР", listens: 4932242 },
+        { name: "Кажанна", listens: 2209978 },
+        { name: "Do Sliz", listens: 1966043 },
+        { name: "NAZVA", listens: 1705532 },
+        { name: "Lely45", listens: 1600495 },
+        { name: "Shmiska", listens: 1230434 },
+        { name: "badactress", listens: 1070460 },
+        { name: "KRUTЬ", listens: 1044403 },
+        { name: "Околиця", listens: 934828 },
+        { name: "Tember Blanche", listens: 934130 },
+        { name: "Phil It", listens: 918286 },
+        { name: "Khrystyna Soloviy", listens: 814965 },
+        { name: "Liza Bibikova", listens: 795586 },
+        { name: "Vivienne Mort", listens: 684504 },
+        { name: "MOLODI", listens: 612315 },
+        { name: "LATEXFAUNA", listens: 600956 },
+        { name: "Мія Рамарі", listens: 517255 },
+        { name: "туди-сюди і смерть", listens: 512555 },
+        { name: "YARIMA", listens: 470959 },
+        { name: "Макс Пташник", listens: 455307 }
+    ],
+    electropop: [
+        { name: "Go_A", listens: 1904192 },
+        { name: "TVORCHI", listens: 1789561 },
+        { name: "Alina Pash", listens: 1676859 },
+        { name: "BADWOR7H", listens: 1364898 },
+        { name: "badactress", listens: 1070460 },
+        { name: "NAHABA", listens: 513834 },
+        { name: "YARIMA", listens: 470959 },
+        { name: "saymory", listens: 423112 },
+        { name: "Gordiy Starukh", listens: 394338 },
+        { name: "The Curly", listens: 330379 },
+        { name: "Ницо Потворно", listens: 308813 },
+        { name: "ONUKA", listens: 301553 },
+        { name: "DOBRYVA", listens: 294665 },
+        { name: "СТРУКТУРА ЩАСТЯ", listens: 267435 },
+        { name: "Love, Mary", listens: 253581 },
+        { name: "Zbaraski", listens: 236494 },
+        { name: "ТУЧА", listens: 211539 },
+        { name: "KUGATESSA", listens: 202710 },
+        { name: "YUVI", listens: 168960 },
+        { name: "Ariadna", listens: 152389 }
+    ],
+    folk: [
+        { name: "KOZAK SIROMAHA", listens: 2458562 },
+        { name: "Go_A", listens: 1904192 },
+        { name: "NAZVA", listens: 1705532 },
+        { name: "Alina Pash", listens: 1676859 },
+        { name: "STASYA", listens: 1348350 },
+        { name: "FIЇNKA", listens: 1197273 },
+        { name: "Khrystyna Soloviy", listens: 814965 },
+        { name: "Vivienne Mort", listens: 684504 },
+        { name: "YAGODY", listens: 518502 },
+        { name: "NAHABA", listens: 513834 },
+        { name: "Gordiy Starukh", listens: 394338 },
+        { name: "ONUKA", listens: 301553 },
+        { name: "Dagadana", listens: 272401 },
+        { name: "KHAYAT", listens: 236135 },
+        { name: "Юля Юріна", listens: 226526 },
+        { name: "ANKA", listens: 202366 },
+        { name: "Authentix", listens: 178685 },
+        { name: "Gerdan Theatre", listens: 154598 },
+        { name: "MosaicMuse", listens: 146538 },
+        { name: "Oxana Trach", listens: 145230 }
+    ],
+    rock: [
+        { name: "Okean Elzy", listens: 7177778 },
+        { name: "Schmalgauzen", listens: 6300927 },
+        { name: "хейтспіч", listens: 3243549 },
+        { name: "SadSvit", listens: 3171313 },
+        { name: "Alex Yarmak", listens: 2028427 },
+        { name: "Ziferblat", listens: 1685951 },
+        { name: "DIBROVA", listens: 1115370 },
+        { name: "Цвях", listens: 902245 },
+        { name: "Antytila", listens: 872799 },
+        { name: "teeNsad", listens: 870526 },
+        { name: "dity inzheneriv", listens: 852418 },
+        { name: "Rohata Zhaba", listens: 805377 },
+        { name: "BLIND8", listens: 779268 },
+        { name: "паліндром", listens: 772048 },
+        { name: "Sershen&Zaritskaya", listens: 766920 },
+        { name: "Жадан і Собаки", listens: 704402 },
+        { name: "The Unsleeping", listens: 702278 },
+        { name: "O.Torvald", listens: 659579 },
+        { name: "Karna", listens: 638068 },
+        { name: "Сусіди Стерплять", listens: 588529 }
+    ],
+metal: [
+        { name: "Jinjer", listens: 5385576 },
+        { name: "Blade and Bath", listens: 2373223 },
+        { name: "Alex Yarmak", listens: 2028427 },
+        { name: "BLIND8", listens: 779268 },
+        { name: "Sershen&Zaritskaya", listens: 766920 },
+        { name: "Labyrinthus Stellarum", listens: 693004 },
+        { name: "Burned Time Machine", listens: 654220 },
+        { name: "Karna", listens: 638068 },
+        { name: "Sick Solution", listens: 549281 },
+        { name: "Veil of Visions", listens: 395254 },
+        { name: "Svrm", listens: 367086 },
+        { name: "0%Mercury", listens: 278203 },
+        { name: "Doömzday", listens: 223153 },
+        { name: "Midgard", listens: 160535 },
+        { name: "Mordox", listens: 153877 },
+        { name: "True Tough", listens: 138758 },
+        { name: "The Hate Club", listens: 128470 },
+        { name: "Grandma's Smuzi", listens: 122431 },
+        { name: "Space Of Variations", listens: 116555 },
+        { name: "ОТРУТА", listens: 105014 }
+    ],
+    rap: [
+        { name: "Clonnex", listens: 10934653 },
+        { name: "jockii druce", listens: 4321401 },
+        { name: "OTOY", listens: 2096963 },
+        { name: "Міша Правильний", listens: 1405804 },
+        { name: "Фрай", listens: 1002020 },
+        { name: "STOSLIV", listens: 891295 },
+        { name: "lesfleures", listens: 862106 },
+        { name: "Гоня", listens: 647952 },
+        { name: "Білий Бо", listens: 437062 },
+        { name: "satelibra", listens: 420695 },
+        { name: "Blockbaby", listens: 342086 },
+        { name: "Orexov Mk", listens: 319406 },
+        { name: "Dofamin", listens: 291163 },
+        { name: "Bankai_lofi", listens: 255909 },
+        { name: "Шершень", listens: 254740 },
+        { name: "YungKerya", listens: 249948 },
+        { name: "рома майк", listens: 234711 },
+        { name: "NoBaby", listens: 233949 },
+        { name: "elarm", listens: 232634 },
+        { name: "НКНКТ", listens: 225707 }
+    ],
+    electronic: [
+        { name: "ARTBAT", listens: 33186006 },
+        { name: "Rory in early 20s", listens: 19026214 },
+        { name: "Yellow Pvnk", listens: 16451721 },
+        { name: "Miss Monique", listens: 16247058 },
+        { name: "Korolova", listens: 13857142 },
+        { name: "Unresolved", listens: 5917432 },
+        { name: "Horbatso", listens: 5136792 },
+        { name: "Plaha", listens: 4236871 },
+        { name: "Scott Rill", listens: 3731080 },
+        { name: "Leat'eq", listens: 3646415 },
+        { name: "iilliaa", listens: 3306008 },
+        { name: "Spartaque", listens: 2389655 },
+        { name: "Miss K8", listens: 2124552 },
+        { name: "Lynhare", listens: 1834926 },
+        { name: "8Kays", listens: 1587814 },
+        { name: "drwncvnt", listens: 1488052 },
+        { name: "LÜRUM", listens: 1158557 },
+        { name: "Tom Brook", listens: 1136533 },
+        { name: "Winter Kid", listens: 1033562 },
+        { name: "Woo York", listens: 1022395 }
+    ],
+    phonk: [
+        { name: "CHASHKAKEFIRA", listens: 20818031 },
+        { name: "xONLYx", listens: 15210754 },
+        { name: "Lowx", listens: 10890512 },
+        { name: "MoonDeity", listens: 10232034 },
+        { name: "Hensonn", listens: 8951469 },
+        { name: "SCXR SOUL", listens: 7608062 },
+        { name: "svlient", listens: 6720081 },
+        { name: "requi3m", listens: 6151539 },
+        { name: "yash1oka", listens: 5778116 },
+        { name: "snxff", listens: 5271660 },
+        { name: "STXSTN", listens: 4799967 },
+        { name: "XI$OW", listens: 4566267 },
+        { name: "ARCHEZ", listens: 3679057 },
+        { name: "D4C", listens: 3581542 },
+        { name: "Xantesha", listens: 3529775 },
+        { name: "CXSMPX", listens: 3155200 },
+        { name: "MVRLLIN", listens: 3109898 },
+        { name: "GXNRC", listens: 2677121 },
+        { name: "SARCOMA HORROR", listens: 2560071 },
+        { name: "SAY3AM", listens: 2223713 }
+    ]
+};
+
+const previewContainer = document.getElementById("topGenresPreview");
+const fullContainer = document.getElementById("fullTopGenresList");
+
+function createModalArtistRow(artist, index) {
+    const row = document.createElement("div");
+
+    const position = document.createElement("span");
+    position.textContent = String(index + 1).padStart(2, '0') + ".";
+    position.classList.add("position");
+
+    const name = document.createElement("span");
+    name.textContent = artist.name;
+    name.classList.add("name");
+
+    const listens = document.createElement("span");
+    listens.textContent = artist.listens.toLocaleString();
+    listens.classList.add("listens");
+
+    const positionNameContainer = document.createElement("div");
+    positionNameContainer.style.display = "flex";
+    positionNameContainer.style.alignItems = "center";
+    positionNameContainer.style.gap = "4px";
+    positionNameContainer.appendChild(position);
+    positionNameContainer.appendChild(name);
+
+    row.appendChild(positionNameContainer);
+    row.appendChild(listens);
+
+    return row;
+}
+
+Object.entries(genresData).forEach(([genre, artists]) => {
+    const genreBlock = document.createElement("div");
+    genreBlock.classList.add("track-block");
+
+    const genreTitle = document.createElement("h4");
+    genreTitle.textContent = genre.toUpperCase();
+    genreBlock.appendChild(genreTitle);
+
+    artists.forEach((artist, index) => {
+        genreBlock.appendChild(createModalArtistRow(artist, index));
+    });
+
+    fullContainer.appendChild(genreBlock);
+});
+
+function createPreviewArtistRow(artist) {
+    const row = document.createElement("div");
+    row.textContent = artist.name;
+    row.style.color = "#84AAFB";
+    row.style.padding = "4px 0";
+    return row;
+}
+
+['pop', 'rock', 'rap', 'electronic'].forEach(genre => {
+    const genreBlock = document.createElement("div");
+    genreBlock.classList.add("track-block");
+
+    const genreTitle = document.createElement("h4");
+    genreTitle.textContent = genre.toUpperCase();
+    genreTitle.style.marginBottom = "8px";
+    genreBlock.appendChild(genreTitle);
+
+    genresData[genre].slice(0, 3).forEach(artist => {
+        genreBlock.appendChild(createPreviewArtistRow(artist));
+    });
+
+    previewContainer.appendChild(genreBlock);
+});
+
+const modal = document.getElementById("topGenresModal");
+const openBtn = document.getElementById("openTopGenresBtn");
+const closeBtn = document.getElementById("closeTopGenresModal");
+
+openBtn.addEventListener("click", () => {
+    modal.style.display = "flex";
+    document.body.classList.add("no-scroll");
+});
+
+closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    document.body.classList.remove("no-scroll");
+});
+
+modal.addEventListener("click", (e) => {
+    if (!document.querySelector(".modal-content").contains(e.target)) {
+        modal.style.display = "none";
+        document.body.classList.remove("no-scroll");
+    }
+});
+
+      document.addEventListener("DOMContentLoaded", function() {
+    const top100Tracks = [
+  "фрози - kompa pasión",
+  "alyona alyona, Jerry Heil - Teresa & Maria",
+  "Klavdia Petrivna - Я тобі брехала",
+  "Artem Pivovarov, Klavdia Petrivna - Барабан",
+  "Carpetman - You Will Never Know It",
+  "DOROFEEVA, LEBIGA - А я все плакала",
+  "Wellboy, Parfeniuk - Забий",
+  "Carpetman - Can't lose more",
+  "MONATIK - А що?",
+  "CHASHKAKEFIRA, DJ PXRPLE - COLLAR!",
+  "OSTY, Klavdia Petrivna - Не лякай",
+  "requi3m - LIKE A",
+  "Lowx - Dance on the Moon",
+  "DOROFEEVA - Хартбіт",
+  "Miss Monique - Bloom At Night",
+  "Miss Monique - Look At You",
+  "STXSTN, snxff - LITSAR PEKLA",
+  "Watsebha - Sun",
+  "Klavdia Petrivna - Театр",
+  "Jerry Heil, alyona alyona - ПОДОЛЯНОЧКА (GET UP)",
+  "Lowx - END",
+  "Clonnex - ТЦК",
+  "CHASHKAKEFIRA, DJ PXRPLE - KOKIYO",
+  "KOLA - Salut papa",
+  "Artem Pivovarov, The Вуса, Дурнєв, Леви На Джипі, Куцевалов - О, Панно!",
+  "Tina Karol, SHUMEI - Стерва",
+  "CHEEV - Рана",
+  "YAKTAK - Нижча зростом",
+  "Okean Elzy - Як ніколи",
+  "Nikow - зупини її",
+  "CXSMPX - too late to be sorry.",
+  "Watsebha - Walk",
+  "KOLA, Parfeniuk - Температура",
+  "Klavdia Petrivna, Маша Кондратенко - Їде дах",
+  "YARMAK - ВАВИЛОН",
+  "Анна Трінчер - Бар за баром",
+  "YAKTAK - LaLaLa",
+  "Jinjer - Someone's Daughter",
+  "Jerry Heil, Volodymyr Dantes - ГУБИ У ГУБАХ",
+  "Schmalgauzen - Тетяна",
+  "Tina Karol, SHUMEI - Дзвони",
+  "Геля Зозуля, Adam - Особистий рай",
+  "Hensonn - Diamonds",
+  "MoonDeity, ARCHEZ - READY TO ROLL",
+  "KOLA - Міліметр",
+  "YAKTAK, CKAYA - Небо",
+  "Carpetman - Anyway, I Love It",
+  "Ziferblat - Place I Call Home",
+  "YAKTAK - Ендорфін",
+  "SCXR SOUL - Dreams may run away",
+  "SARCOMA HORROR - badtrip",
+  "SoFo - Sweet Apollo",
+  "CHASHKAKEFIRA, D4C - BARRETE!",
+  "Parfeniuk - На даху",
+  "Hensonn - Krushlaser",
+  "MELOVIN, iSKra - Обиратиму себе",
+  "KALUSH, Adam, Balsam - Останній раз",
+  "KAZKA, МУЛЬТИТРЕК - Тону",
+  "Максим Бородін - Не відпускай",
+  "jockii druce - бути долбайобом",
+  "Tina Karol - Троянди",
+  "Carpetman - What Does It Mean To You",
+  "KLIM - Shining Sun",
+  "Miss Monique - Veselka",
+  "SKYLERR, Agape - Люби мене",
+  "Маша Кондратенко, OSTY - Білі ночі",
+  "SCXR SOUL - SHADOW LADY",
+  "MELOVIN - DREAMER",
+  "DOROFEEVA - Нітрогліцерин",
+  "Sudno - Тону",
+  "MoonDeity - BURNING SOULS",
+  "DOVI, SKOFKA - Один день потому",
+  "KOZAK SIROMAHA - Останній маяк",
+  "ОЧІ В ОЧІ - Кине трубку",
+  "jockii druce, DOROFEEVA, BADWOR7H - журба",
+  "Domiy - Тепло так",
+  "Okean Elzy, YAKTAK, KOLA, SHUMEI, Jerry Heil - Той день - OE30 edition",
+  "Jinjer - Rogue",
+  "svlient - SIT DOWN!",
+  "Nikow - Бальзам",
+  "SAMCHUK - Мадам",
+  "YAKTAK - 10 поверхів",
+  "Геля Зозуля - Весела пісня",
+  "Klavdia Petrivna, OSTY - Сніг",
+  "YAKTAK, Kosmirak - Букети",
+  "FIЇNKA, Іван Попович - Гуцулянка",
+  "TVORCHI, Klavdia Petrivna - Орбіти",
+  "KOLA, KALUSH - Упіймай моє серце",
+  "Schmalgauzen - Наново",
+  "KRUTЬ - Квітну з тобою",
+  "Hensonn - Jump",
+  "Clonnex, Маша Кондратенко - Ванька-Встанька 2",
+  "Parfeniuk - Дякую",
+  "XI$OW - Slide De Vorada",
+  "KOLA - Цілуй",
+  "KALUSH, Balsam - Розбуди мене",
+  "Tina Karol - Відчиняю",
+  "MoonDeity - SEX",
+  "Agape - Люблю тебе",
+  "DIBROVA, Олена Тополя - Хочеш"
+];
+  
+    const previewContainer = document.getElementById("topTracksPreview");
+    if (!previewContainer) {
+      console.error("Элемент с id 'topTracksPreview' не найден.");
+      return;
+    }
+    let previewHTML = "";
+    for (let i = 0; i < 10; i++) {
+      previewHTML += `<div class="track-block">${top100Tracks[i]}</div>`;
+    }
+    previewContainer.innerHTML = previewHTML;
+  
+    const fullContainer = document.getElementById("fullTracksList");
+    if (!fullContainer) {
+      console.error("Элемент с id 'fullTracksList' не найден.");
+      return;
+    }
+    let fullHTML = "";
+    for (let i = 0; i < top100Tracks.length; i++) {
+      const position = i + 1;
+      fullHTML += `<div class="track-block">${position}. ${top100Tracks[i]}</div>`;
+    }
+    fullContainer.innerHTML = fullHTML;
+  
+    const openBtn = document.getElementById("openFullTracksListBtn");
+    const modal = document.getElementById("topTracksModal");
+    const closeBtn = document.getElementById("closeTracksModal");
+  
+    if (!openBtn) {
+      console.error("Элемент с id 'openFullTracksListBtn' не найден.");
+      return;
+    }
+    if (!modal) {
+      console.error("Элемент с id 'topTracksModal' не найден.");
+      return;
+    }
+    if (!closeBtn) {
+      console.error("Элемент с id 'closeTracksModal' не найден.");
+      return;
+    }
+  
+    openBtn.addEventListener("click", () => {
+      modal.style.display = "flex";
+      document.body.classList.add("no-scroll");
+    });
+  
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      document.body.classList.remove("no-scroll");
+    });
+  
+    modal.addEventListener("click", (e) => {
+      const content = document.querySelector("#topTracksModal .modal-content");
+      if (!content.contains(e.target)) {
+        modal.style.display = "none";
+        document.body.classList.remove("no-scroll");
+      }
+    });
+  });
+      
+      document.addEventListener("DOMContentLoaded", function () {
+    const masonryInstance = new Masonry('.blocks-container', {
+        itemSelector: '.block',
+        columnWidth: '.block',
+        percentPosition: true,
+        gutter: 16
+    });
+
+    window.addEventListener('resize', () => masonryInstance.layout());
+
+    const images = document.querySelectorAll('.blocks-container img');
+    const totalImages = images.length;
+    let loadedImages = 0;
+
+    images.forEach((img) => {
+        if (img.complete) {
+            loadedImages++;
+            if (loadedImages === totalImages) {
+                masonryInstance.layout();
+            }
+        } else {
+            img.addEventListener('load', () => {
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    masonryInstance.layout();
+                }
+            });
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
