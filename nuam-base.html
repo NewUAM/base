@@ -3381,38 +3381,49 @@ function updateCityUIState() {
     });
 }
 
+let isArtistsDataLoaded = false;
+
 async function fetchArtists() {
-    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=0&single=true&output=csv');
-    const csvData = await response.text();
+    if (isArtistsDataLoaded) return;
+    isArtistsDataLoaded = true;
 
-    Papa.parse(csvData, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            listenerColumns = findListenerColumns(results.meta.fields);
-            artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
-            artistsData.forEach(artist => {
-                if (artist['Related']) {
-                    artist.relatedArtists = artist['Related'].split(',').map(id => id.trim());
-                }
-            });
-            shuffleArray(artistsData);
-            shuffledArtistsData = [...artistsData];
-            originalArtistsOrder = [...shuffledArtistsData];
+    try {
+        const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=0&single=true&output=csv');
+        if (!response.ok) throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
 
-            const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
+        const csvData = await response.text();
 
-            setupRangeSlider(maxListeners);
-            collectAllArtistURLs(artistsData);
-            updateGenresDisplay(artistsData);
-            extractAndDisplayLabels(artistsData);
-            extractAndDisplayCities(artistsData);
-            initializeSearchIndex(artistsData);
-            initializeGenreCombinations(artistsData);
-            updateGenreCounts(true);
-            updateArtistsDisplay();
-        }
-    });
+        Papa.parse(csvData, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                listenerColumns = findListenerColumns(results.meta.fields);
+                artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
+                artistsData.forEach(artist => {
+                    if (artist['Related']) {
+                        artist.relatedArtists = artist['Related'].split(',').map(id => id.trim());
+                    }
+                });
+                shuffleArray(artistsData);
+                shuffledArtistsData = [...artistsData];
+                originalArtistsOrder = [...shuffledArtistsData];
+
+                const maxListeners = Math.max(...artistsData.map(artist => parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0));
+
+                setupRangeSlider(maxListeners);
+                collectAllArtistURLs(artistsData);
+                updateGenresDisplay(artistsData);
+                extractAndDisplayLabels(artistsData);
+                extractAndDisplayCities(artistsData);
+                initializeSearchIndex(artistsData);
+                initializeGenreCombinations(artistsData);
+                updateGenreCounts(true);
+                updateArtistsDisplay();
+            }
+        });
+    } catch (error) {
+        console.error('Помилка обробки даних артистів:', error);
+    }
 }
 
   let tracksData = [];
@@ -3465,11 +3476,13 @@ async function fetchTracksData() {
     const csv2024URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=1080612412&single=true&output=csv';
     const csv2025URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=381944221&single=true&output=csv';
     const cacheKey2024 = 'tracksDataCSV2024';
-    const cacheKey2025 = 'tracksDataCSV2025';
 
     try {
         const csvData2024 = await fetchCachedCSV(csv2024URL, cacheKey2024);
-        const csvData2025 = await fetchCachedCSV(csv2025URL, cacheKey2025);
+
+        const response2025 = await fetch(csv2025URL);
+        if (!response2025.ok) throw new Error("Ошибка при загрузке tracksDataCSV2025");
+        const csvData2025 = await response2025.text();
 
         const parsedData2024 = Papa.parse(csvData2024, { header: true, skipEmptyLines: true }).data;
         const parsedData2025 = Papa.parse(csvData2025, { header: true, skipEmptyLines: true }).data;
@@ -3508,15 +3521,13 @@ async function fetchTracksData() {
             preview: row.preview
         }));
     } catch (error) {
-        console.error("Помилка під час обробки CSV:", error);
+        console.error("Ошибка обработки CSV:", error);
     }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchTracksData();
 });
-
-fetchTracksData();
   
 function findListenerColumns(header) {
     let listenerColumns = [];
