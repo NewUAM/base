@@ -39,7 +39,7 @@
             font-family: 'CustomFont', Arial;
             background-color: #282626;
             color: #f3f3f3;
-            padding: 96px 8px 16px;
+            padding: 96px 0px 60px 8px;
         }
       #pageHeader {
     position: fixed;
@@ -49,7 +49,7 @@
     height: 80px;
     padding: 0 16px;
     background-color: #383838;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -545,6 +545,47 @@ max-width: 385px;
     box-sizing: border-box;
     margin-bottom: 16px;
 }
+      #pageFooter {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    padding: 0 16px;
+    background-color: #383838;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.footer-center {
+    text-align: center;
+    color: #f3f3f3;
+    font-size: 14px;
+    font-weight: bold;
+}
+.footer-right {
+    text-align: right;
+    color: #f3f3f3;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.footer-right a {
+    color: #84AAFB;
+    text-decoration: none;
+}
+.footer-right a:hover {
+    text-decoration: underline;
+}
       @media (min-width: 769px) {
     #topInfoBlock {
         width: calc(100% - 16px);
@@ -726,6 +767,9 @@ max-width: 385px;
             box-shadow: none;
             transform: none;
         }
+        #pageFooter {
+    display: none;
+}
 }
     </style>
 </head>
@@ -1049,6 +1093,22 @@ max-width: 385px;
   </div>
 </div>
 
+  <footer id="pageFooter">
+    <div class="footer-content">
+        <div class="footer-center">
+            <span>© 2025 NUAM</span>
+        </div>
+        <div class="footer-right">
+            <p>
+                Потрібні додаткові дані? Пишіть 
+                <a href="mailto:hi@nuam.club">hi@nuam.club</a><br />
+                А краще будьте простішими і пишіть 
+                <a href="https://t.me/livefimenko" target="_blank" rel="noopener noreferrer">сюди</a>
+            </p>
+        </div>
+    </div>
+</footer>
+  
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script src="https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
@@ -2739,7 +2799,7 @@ modal.addEventListener("click", (e) => {
   
     const previewContainer = document.getElementById("topTracksPreview");
     if (!previewContainer) {
-      console.error("Элемент с id 'topTracksPreview' не найден.");
+      console.error("id 'topTracksPreview' не знайден.");
       return;
     }
     let previewHTML = "";
@@ -2750,7 +2810,7 @@ modal.addEventListener("click", (e) => {
   
     const fullContainer = document.getElementById("fullTracksList");
     if (!fullContainer) {
-      console.error("Элемент с id 'fullTracksList' не найден.");
+      console.error("id 'fullTracksList' не знайден.");
       return;
     }
     let fullHTML = "";
@@ -2765,15 +2825,15 @@ modal.addEventListener("click", (e) => {
     const closeBtn = document.getElementById("closeTracksModal");
   
     if (!openBtn) {
-      console.error("Элемент с id 'openFullTracksListBtn' не найден.");
+      console.error("id 'openFullTracksListBtn' не знайден.");
       return;
     }
     if (!modal) {
-      console.error("Элемент с id 'topTracksModal' не найден.");
+      console.error("id 'topTracksModal' не знайден.");
       return;
     }
     if (!closeBtn) {
-      console.error("Элемент с id 'closeTracksModal' не найден.");
+      console.error("id 'closeTracksModal' не знайден.");
       return;
     }
   
@@ -2825,6 +2885,36 @@ modal.addEventListener("click", (e) => {
             });
         }
     });
+});
+
+      document.addEventListener("DOMContentLoaded", function () {
+    const masonryInstance = new Masonry('.blocks-container', {
+        itemSelector: '.block',
+        columnWidth: '.block',
+        percentPosition: true,
+        gutter: 16
+    });
+
+    window.addEventListener('resize', () => masonryInstance.layout());
+
+    const images = document.querySelectorAll('.blocks-container img');
+    const totalImages = images.length;
+    let loadedImages = 0;
+
+    images.forEach((img) => {
+        if (img.complete) {
+            loadedImages++;
+        } else {
+            img.addEventListener('load', () => {
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    masonryInstance.layout();
+                }
+            });
+        }
+    });
+
+    window.addEventListener('load', () => masonryInstance.layout());
 });
 
     </script>
