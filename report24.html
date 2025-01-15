@@ -31,7 +31,6 @@
 *::-webkit-scrollbar-corner {
     background-color: transparent;
 }
-
       @font-face {
             font-family: 'CustomFont';
             src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
@@ -40,8 +39,38 @@
             font-family: 'CustomFont', Arial;
             background-color: #282626;
             color: #f3f3f3;
-            padding: 8px;
+            padding: 96px 8px 16px;
         }
+      #pageHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    padding: 0 16px;
+    background-color: #383838;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+.header-logo a {
+    display: block;
+    height: 40px;
+}
+.header-logo img {
+    height: 100%;
+    width: auto;
+}
+.header-title {
+    margin: 0;
+    font-size: 28px;
+    color: #f3f3f3;
+    font-weight: bold;
+    text-align: right;
+}
         .blocks-container {
     display: flex;
     flex-wrap: wrap;
@@ -195,7 +224,7 @@
 }
 .theme-item {
     background-color: #383838;
-    border: 1px solid #84AAFB;
+    border: 1px solid rgba(215, 218, 139, 0.5);
     border-radius: 7px;
     padding: 12px 16px;
     width: 150px;
@@ -300,7 +329,7 @@
 }
 .track-block {
   background-color: #383838;
-  border: 1px solid #d7da8b;
+  border: 1px solid rgba(215, 218, 139, 0.5);
   border-radius: 7px;
   padding: 8px;
   text-align: center;
@@ -534,6 +563,19 @@ max-width: 385px;
     *::-webkit-scrollbar {
         display: none;
     }
+        body {
+            padding: 54px 8px 16px;
+        }
+        #pageHeader {
+    height: 40px;
+    padding: 0 8px;
+}
+        .header-logo a {
+    height: 20px;
+}
+.header-title {
+    font-size: 12px;
+}
         #topInfoBlock .desktop-only {
         display: none !important;
     }
@@ -688,6 +730,16 @@ max-width: 385px;
     </style>
 </head>
 <body>
+  
+<header id="pageHeader">
+    <div class="header-logo">
+        <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">
+            <img src="https://static.wixstatic.com/shapes/c77f36_74a77409cfed4bb4b069509d564822ff.svg" alt="Логотип" />
+        </a>
+    </div>
+    <h1 class="header-title">Музика України 2024. Підсумки</h1>
+</header>
+
   <div id="topInfoBlock">
     Звіт заснований на відкритих даних Spotify. Усі зазначені числа стосуються тільки цієї платформи.
     <span class="mobile-only">Звіт рекомендується переглядати з комп'ютера.</span>
@@ -1072,152 +1124,166 @@ document.addEventListener('click', function () {
   }
 });
       
-        function createChart(id, type, labels, data, label, color, extraOptions = {}) {
-    const ctx = document.getElementById(id).getContext('2d');
+    function createChart(id, type, labels, data, label, color, extraOptions = {}) {
+        const ctx = document.getElementById(id).getContext('2d');
 
-    const tooltipCallbacks = {
-        releaseChart: {
-            title: function (tooltipItems) {
-                if (tooltipItems.length > 0) {
-                    return `Дата: ${tooltipItems[0].label || 'Невідомо'}`;
+        const tooltipCallbacks = {
+            releaseChart: {
+                title: function (tooltipItems) {
+                    if (tooltipItems.length > 0) {
+                        return `Дата: ${tooltipItems[0].label || 'Невідомо'}`;
+                    }
+                    return 'Дата невідома';
+                },
+                label: function (tooltipItem) {
+                    return `Треків вийшло: ${tooltipItem.raw || 0}`;
                 }
-                return 'Дата невідома';
             },
-            label: function (tooltipItem) {
-                return `Треків вийшло: ${tooltipItem.raw || 0}`;
-            }
+            weeklyReleases: {
+                label: function (tooltipItem) {
+                    return `Треків: ${tooltipItem.raw}`;
+                }
+            },
+            debutGenresChart: {
+                title: function (tooltipItems) {
+                    return tooltipItems[0]?.label || '';
+                },
+                label: function (tooltipItem) {
+                    return `Дебютних проєктів: ${tooltipItem.raw}`;
+                }
+            },
+            listeningRangeChart: {
+        title: function (tooltipItems) {
+            const label = tooltipItems[0]?.label || '';
+            return `${label} прослуховувань`;
         },
-        weeklyReleases: {
-            label: function (tooltipItem) {
-                return `Треків: ${tooltipItem.raw}`;
-            }
-        },
-        debutGenresChart: {
-            title: function (tooltipItems) {
-                return tooltipItems[0]?.label || '';
-            },
-            label: function (tooltipItem) {
-                return `Дебютних проєктів: ${tooltipItem.raw}`;
-            }
-        },
-        default: {
-            title: function (tooltipItems) {
-                const originalTitle = tooltipItems.length > 0 ? tooltipItems[0].label : '';
-                return `${originalTitle} прослуховувань`;
-            },
-            label: function (tooltipItem) {
-                return `${tooltipItem.dataset.label || ''}: ${tooltipItem.raw}`;
-            },
-            footer: function () {
-                return '';
-            }
+        label: function (tooltipItem) {
+            const value = tooltipItem.raw;
+            const total = tooltipItem.dataset.data.reduce((acc, val) => acc + val, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${value} треків (${percentage}%)`;
         }
-    };
+    },
+            default: {
+                title: function (tooltipItems) {
+                    const originalTitle = tooltipItems.length > 0 ? tooltipItems[0].label : '';
+                    return `${originalTitle} прослуховувань`;
+                },
+                label: function (tooltipItem) {
+                    return `${tooltipItem.dataset.label || ''}: ${tooltipItem.raw}`;
+                },
+                footer: function () {
+                    return '';
+                }
+            }
+        };
 
-    const baseOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-            legend: {
-                display: false,
-                labels: {
-                    color: '#f3f3f3'
+        const baseOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false,
+                    labels: {
+                        color: '#f3f3f3'
+                    }
+                },
+                tooltip: {
+                    callbacks: id === 'listeningRangeChart'
+                        ? tooltipCallbacks.listeningRangeChart
+                        : (id === 'weeklyReleases'
+                            ? tooltipCallbacks.weeklyReleases
+                            : (id === 'releaseChart'
+                                ? tooltipCallbacks.releaseChart
+                                : (id === 'debutGenresChart'
+                                    ? tooltipCallbacks.debutGenresChart
+                                    : tooltipCallbacks.default))),
+                    backgroundColor: '#282626',
+                    titleColor: '#f3f3f3',
+                    bodyColor: '#f3f3f3',
+                    footerColor: '#d7da8b',
+                    borderColor: '#d7da8b',
+                    borderWidth: 1,
+                    cornerRadius: 5,
+                    displayColors: false
+                },
+                datalabels: {
+                    display: false
                 }
             },
-            tooltip: {
-                callbacks: id === 'weeklyReleases' 
-                    ? tooltipCallbacks.weeklyReleases 
-                    : (id === 'releaseChart' 
-                        ? tooltipCallbacks.releaseChart 
-                        : (id === 'debutGenresChart' 
-                            ? tooltipCallbacks.debutGenresChart 
-                            : tooltipCallbacks.default)),
-                backgroundColor: '#282626',
-                titleColor: '#f3f3f3',
-                bodyColor: '#f3f3f3',
-                footerColor: '#d7da8b',
-                borderColor: '#d7da8b',
-                borderWidth: 1,
-                cornerRadius: 5,
-                displayColors: false
-            },
-            datalabels: {
-                display: false
+            scales: {
+                x: { display: false },
+                y: { display: false }
             }
-        },
-        scales: {
-            x: { display: false },
-            y: { display: false }
+        };
+
+        if (id === 'weeklyReleases') {
+            baseOptions.plugins.datalabels.display = true;
+            baseOptions.plugins.datalabels.color = '#f3f3f3';
+            baseOptions.plugins.datalabels.anchor = 'start';
+            baseOptions.plugins.datalabels.align = 'end';
+            baseOptions.plugins.datalabels.rotation = -90;
+            baseOptions.plugins.datalabels.offset = 5;
+            baseOptions.plugins.datalabels.clip = false;
+            baseOptions.plugins.datalabels.font = { size: 14 };
+            baseOptions.plugins.datalabels.formatter = function (value, context) {
+                return context.chart.data.labels[context.dataIndex];
+            };
+
+            baseOptions.scales = {
+                x: { display: false },
+                y: {
+                    display: true,
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#f3f3f3',
+                        padding: 10
+                    }
+                }
+            };
+
+            ctx.canvas.style.cursor = 'default';
         }
-    };
 
-    if (id === 'weeklyReleases') {
-        baseOptions.plugins.datalabels.display = true;
-        baseOptions.plugins.datalabels.color = '#f3f3f3';
-        baseOptions.plugins.datalabels.anchor = 'start';
-        baseOptions.plugins.datalabels.align = 'end';
-        baseOptions.plugins.datalabels.rotation = -90;
-        baseOptions.plugins.datalabels.offset = 5;
-        baseOptions.plugins.datalabels.clip = false;
-        baseOptions.plugins.datalabels.font = { size: 14 };
-        baseOptions.plugins.datalabels.formatter = function (value, context) {
-            return context.chart.data.labels[context.dataIndex];
-        };
-
-        baseOptions.scales = {
-            x: { display: false },
-            y: {
-                display: true,
-                beginAtZero: true,
-                ticks: {
-                    color: '#f3f3f3',
-                    padding: 10
+        if (id === 'releaseChart' && ctx.canvas.parentElement.classList.contains('block')) {
+            baseOptions.scales = {
+                x: { display: false },
+                y: { display: false }
+            };
+        } else if (id === 'releaseChart') {
+            baseOptions.scales = {
+                x: {
+                    display: true,
+                    ticks: { maxTicksLimit: 50, color: '#f3f3f3' }
+                },
+                y: {
+                    display: true,
+                    beginAtZero: true,
+                    ticks: { maxTicksLimit: 10, color: '#f3f3f3' }
                 }
-            }
-        };
+            };
+        }
 
-        ctx.canvas.style.cursor = 'default';
-    }
+        const finalOptions = { ...baseOptions, ...extraOptions };
 
-    if (id === 'releaseChart' && ctx.canvas.parentElement.classList.contains('block')) {
-        baseOptions.scales = {
-            x: { display: false },
-            y: { display: false }
-        };
-    } else if (id === 'releaseChart') {
-        baseOptions.scales = {
-            x: {
-                display: true,
-                ticks: { maxTicksLimit: 50, color: '#f3f3f3' }
+        const chartInstance = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: color.border,
+                    backgroundColor: color.background,
+                    borderWidth: 2,
+                    tension: 0.4
+                }]
             },
-            y: {
-                display: true,
-                beginAtZero: true,
-                ticks: { maxTicksLimit: 10, color: '#f3f3f3' }
-            }
-        };
+            options: finalOptions
+        });
+
+        allCharts[id] = chartInstance;
     }
-
-    const finalOptions = { ...baseOptions, ...extraOptions };
-
-    const chartInstance = new Chart(ctx, {
-        type: type,
-        data: {
-            labels: labels,
-            datasets: [{
-                label: label,
-                data: data,
-                borderColor: color.border,
-                backgroundColor: color.background,
-                borderWidth: 2,
-                tension: 0.4
-            }]
-        },
-        options: finalOptions
-    });
-
-    allCharts[id] = chartInstance;
-}
 
         function openModalChart(id) {
     const modal = document.getElementById('chartModal');
@@ -1505,11 +1571,17 @@ document.getElementById('languageChart').addEventListener('click', function (eve
             'rock': '188 треків',
             'metal': '71 трек',
             'post-punk': '39 треків'
-        }
+        },
+        yearComparison: [
+            'Порівняння з минулими роками:',
+            '2023: 13.15% на основі 8470 артистів',
+            '2022: 16.70% на основі 4109 артистів',
+            '2021: ну, самі знаєте'
+        ]
     }
 };
-  
-  createChart(
+
+createChart(
     'languageChart',
     'pie',
     ['Українська', 'Російська', 'Англійська', 'Інші'],
@@ -1537,15 +1609,18 @@ document.getElementById('languageChart').addEventListener('click', function (eve
                         const label = ctx.label;
                         const amount = ctx.parsed;
                         let tooltipText = [`Треків випущено: ${amount}`];
-        
+
                         if (label === 'Російська' && languageDetails[label]) {
                             tooltipText.push('');
                             tooltipText.push('Жанри:');
                             for (const [genre, count] of Object.entries(languageDetails[label].genres)) {
                                 tooltipText.push(`• ${genre}: ${count}`);
                             }
+
+                            tooltipText.push('');
+                            tooltipText.push(...languageDetails[label].yearComparison);
                         }
-        
+
                         return tooltipText;
                     }
                 },
@@ -2157,30 +2232,30 @@ const labels = [];
         );
 
         createChart(
-    'listeningRangeChart',
-    'bar',
-    ['<1000', '1000‒5000', '5000‒10 000', '10 000‒50 000', '50 000‒100 000', '100 000‒500 000', '500 000‒1 000 000', '1 000 000>'],
-    [37623, 7154, 2631, 3936, 792, 989, 172, 141],
-    'Кількість треків',
-    { border: '#84AAFB', background: 'rgba(132, 170, 251, 0.2)' },
-    {
-        scales: {
-            x: {
-                display: false
-            },
-            y: {
-                type: 'logarithmic',
-                display: false,
-                beginAtZero: false,
-                ticks: {
-                    callback: function(value) {
-                        return Number(value).toLocaleString();
+        'listeningRangeChart',
+        'bar',
+        ['<1000', '1000‒5000', '5000‒10 000', '10 000‒50 000', '50 000‒100 000', '100 000‒500 000', '500 000‒1 000 000', '1 000 000>'],
+        [37623, 7154, 2631, 3936, 792, 989, 172, 141],
+        'Кількість треків',
+        { border: '#84AAFB', background: 'rgba(132, 170, 251, 0.2)' },
+        {
+            scales: {
+                x: {
+                    display: false
+                },
+                y: {
+                    type: 'logarithmic',
+                    display: false,
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function (value) {
+                            return Number(value).toLocaleString();
+                        }
                     }
                 }
             }
         }
-    }
-);
+    );
 
       document.querySelectorAll('.theme-item').forEach(item => {
     item.addEventListener('click', function () {
