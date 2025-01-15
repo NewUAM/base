@@ -1147,9 +1147,11 @@ function externalTooltipHandler(context) {
   }
 
   if (!tooltip.dataPoints?.length || tooltip.opacity === 0) {
-    tooltipEl.style.opacity = 0;
-    return;
-  }
+  tooltipEl.style.opacity = 0;
+  tooltipEl.style.pointerEvents = 'none'; 
+  tooltipEl.innerHTML = ''; 
+  return;
+}
 
   const dataIndex = tooltip.dataPoints[0].dataIndex;
   const dateLabel = tooltip.dataPoints[0].label;
@@ -1170,6 +1172,7 @@ function externalTooltipHandler(context) {
   tooltipEl.style.left = left + 'px';
   tooltipEl.style.top  = top + 'px';
   tooltipEl.style.opacity = 1;
+  tooltipEl.style.pointerEvents = 'auto';
 }
 
 document.addEventListener('click', function () {
