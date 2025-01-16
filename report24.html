@@ -571,7 +571,50 @@ max-width: 385px;
     text-align: center;
     color: #f3f3f3;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-link {
+    color: #bababa;
+    text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
+}
+.footer-link:hover {
+    color: #6e99db;
+}
+.footer-note {
+    color: #bababa;
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.footer-note:hover {
+    color: #6e99db;
+}
+.question-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    background-color: #bababa;
+    color: #383838;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.footer-note:hover .question-icon {
+    background-color: #6e99db;
+    color: #fff;
 }
 .footer-right {
     text-align: right;
@@ -785,7 +828,7 @@ max-width: 385px;
 </header>
 
   <div id="topInfoBlock">
-    Звіт заснований на відкритих даних Spotify. Усі зазначені числа стосуються тільки цієї платформи.
+    Звіт створений на основі відкритих даних Spotify — усі релізи та дані про прослуховування отримані виключно з цієї платформи. Артисти, які відстежувалися, взяті з власної бази NUAM, разом із жанрами, присвоєними їм та їхнім релізам.
     <span class="mobile-only">Звіт рекомендується переглядати з комп'ютера.</span>
 </div>
   
@@ -1097,7 +1140,11 @@ max-width: 385px;
   <footer id="pageFooter">
     <div class="footer-content">
         <div class="footer-center">
-            <span>© 2025 NUAM</span>
+            <a href="https://nuam.club" target="_blank" rel="noopener noreferrer" class="footer-link">© 2025 NUAM</a>
+            <a href="https://send.monobank.ua/jar/2BLPSRWwYb" target="_blank" rel="noopener noreferrer" class="footer-note">
+                | Наступного року подібного звіту може не бути
+                <span class="question-icon">?</span>
+            </a>
         </div>
         <div class="footer-right">
             <p>
