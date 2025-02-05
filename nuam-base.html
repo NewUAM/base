@@ -2843,7 +2843,7 @@ background: #282626;
     <label class="custom-checkbox" for="debut-checkbox">
         <input type="checkbox" id="debut-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        <span class="checkbox-text">Показати тільки артистів, які дебютували у 2024 році</span>
+        <span class="checkbox-text">Показати тільки артистів, які дебютували у 2025 році</span>
     </label>
 </section>
 
@@ -2989,7 +2989,7 @@ function initializeGenreCombinations(artists) {
         const passesFilters = (!hideRussian || artist['RuLang'] === '') &&
                               (!filterYearRel || artist['YearRel'] === '+') &&
                               (!filterMultiRel || artist['MultiRel'] === '+') &&
-                              (!filterDebut || artist['Debut24'] === '+');
+                              (!filterDebut || artist['Debut'] === '+');
 
         if (!passesFilters || artistGenres.some(genre => removedGenres.includes(genre)) || 
             artistLabels.some(label => removedLabels.includes(label)) || 
@@ -3847,7 +3847,7 @@ function updateFilterTags() {
     if (filterDebut) {
         const filterTag = document.createElement('span');
         filterTag.className = 'filter-tag check';
-        filterTag.textContent = 'дебют 2024 року';
+        filterTag.textContent = 'дебют 2025 року';
         const removeTag = document.createElement('span');
         removeTag.className = 'remove-tag';
         removeTag.textContent = '×';
@@ -3940,7 +3940,7 @@ function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
         const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
         const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
-        const matchesDebut = !filterDebut || artist['Debut24'] === '+';
+        const matchesDebut = !filterDebut || artist['Debut'] === '+';
 
         return matchesSelectedGenres && matchesRemovedGenres && matchesSelectedLabels && matchesRemovedLabels &&
                matchesSelectedCities && matchesRemovedCities && matchesHideRussian && matchesListenersRange &&
@@ -4113,10 +4113,10 @@ function displayArtists(artists, reset = false) {
             iconContainer.appendChild(tagElement);
         }
 
-        if (artist['Debut24'] === '+') {
+        if (artist['Debut'] === '+') {
             const debutIcon = document.createElement('div');
             debutIcon.className = 'debut-icon';
-            debutIcon.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував у 2024 році"></i>';
+            debutIcon.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував у 2025 році"></i>';
             debutIcon.style.color = '#d5da8d';
             debutIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(debutIcon);
@@ -5828,7 +5828,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const matchesFilters = (!filterYearRel || artist['YearRel'] === '+') &&
                                    (!filterMultiRel || artist['MultiRel'] === '+') &&
-                                   (!filterDebut || artist['Debut24'] === '+') &&
+                                   (!filterDebut || artist['Debut'] === '+') &&
                                    (!hideRussian || !artist['RuLang']);
 
             return matchesGenre && matchesFilters;
