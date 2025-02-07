@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дані з CSV</title>
+  <style>
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'CustomFont', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #282626;
+      overflow: hidden;
+    }
+    
+    .container {
+      width: 760px;
+      display: flex;
+      border: 1px solid #84AAFB;
+      border-radius: 7px;
+    }
+
+    .block {
+      width: 190px;
+      height: 120px;
+      position: relative;
+      color: #f3f3f3;
+      padding-left: 30px;
+      box-sizing: border-box;
+      font-size: 14px;
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .text {
+      max-width: calc(100% - 20px);
+    }
+
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid #f3f3f3;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .block:nth-child(1) {
+      background-color: #282626;
+      border-top-left-radius: 7px;
+      border-bottom-left-radius: 7px;
+      padding-left: 0px;
+    }
+
+    .block:nth-child(2) {
+      background-color: #393737;
+    }
+
+    .block:nth-child(3) {
+      background-color: #494849;
+    }
+
+    .block:nth-child(4) {
+      background-color: #5a595a;
+      border-top-right-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
+
+    .block::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 60px 0 60px 30px;
+      border-color: transparent transparent transparent currentColor;
+      z-index: 2;
+    }
+
+    .block:nth-child(1)::after { border-left-color: #282626; }
+    .block:nth-child(2)::after { border-left-color: #393737; }
+    .block:nth-child(3)::after { border-left-color: #494849; }
+    .block:nth-child(4)::after { display: none; }
+    
+    .chart-title {
+  text-align: center;
+  font-family: 'CustomFont', Arial, sans-serif;
+  font-size: 22px;
+  margin: 20px 0;
+  margin-bottom: -10px;
+  color: #f3f3f3;
+}
+    
+    .chart-loader-container {
+  position: relative;
+  width: 760px;
+  height: 760px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+    
+    .chart-loader-container .loader {
+  margin-bottom: 600px;
+}
+    
+    #radarChart {
+    width: 760px;
+    height: 760px;
+    padding: 0;
+    margin: 0;
+    display: block;
+  }
+    
+@media screen and (max-width: 400px) { 
+  .container {
+    width: 310px;
+    flex-direction: column;
+  }
+
+  .block {
+    width: 310px;
+    height: 100px;
+    padding-left: 0px;
+  }
+
+  .block::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 25px 155px 0 155px;
+    border-color: #282626 transparent transparent transparent;
+    z-index: 2;
+    transform: translateX(-50%);
+  }
+
+  .block:nth-child(1) {
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+      border-bottom-left-radius: 0px;
+    }
+
+    .block:nth-child(4) {
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+      border-top-right-radius: 0px;
+    }
+  
+  .block:nth-child(1)::after { border-color: #282626 transparent transparent transparent; }
+  .block:nth-child(2)::after { border-color: #393737 transparent transparent transparent; }
+  .block:nth-child(3)::after { border-color: #494849 transparent transparent transparent; }
+
+  .block:nth-child(4)::after {
+    display: none;
+  }
+  
+  .desktop-text {
+    display: none;
+  }
+  .mobile-text {
+  text-align: center;
+}
+
+.mobile-text span {
+  display: inline-block;
+  white-space: nowrap;
+}
+.mobile-text.extra-padding {
+    padding-top: 25px;
+  }
+  .chart-title,
+  .chart-loader-container {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 401px) {
+  .desktop-text {
+    display: block;
+  }
+  .mobile-text {
+    display: none;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="block" id="block1">
+      <div class="loader"></div>
+    </div>
+    <div class="block" id="block2">
+      <div class="loader"></div>
+    </div>
+    <div class="block" id="block3">
+      <div class="loader"></div>
+    </div>
+    <div class="block" id="block4">
+      <div class="loader"></div>
+    </div>
+  </div>
+
+  <div style="width: 760px;">
+  <h2 class="chart-title">Жанри і теми треків дебютних артистів</h2>
+  <div class="chart-loader-container">
+    <div class="loader"></div>
+    <canvas id="radarChart" style="display: none;"></canvas>
+  </div>
+</div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=1536164689&single=true&output=csv";
+
+Papa.parse(csvUrl, {
+  download: true,
+  header: false,
+  complete: function(results) {
+    const data = results.data;
+
+    const debutProjects = data[5][0];
+    const totalTracks = data[48][1];
+    const tracksOver1k = data[48][2];
+    const totalListens = data[48][0];
+
+    function formatNumberWithSpaces(number) {
+      if (number >= 10000) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      }
+      return number.toString();
+    }
+
+    const isMobile = window.innerWidth <= 400;
+
+    document.getElementById('block1').innerHTML = isMobile
+      ? `<div class="mobile-text">
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(debutProjects)}</span> музичних проєктів<br>
+          дебютували у 2025 році
+        </div>`
+      : `<div class="desktop-text">
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(debutProjects)}</span> музичних<br>
+          проєктів<br>
+          дебютували<br>
+          у 2025 році
+        </div>`;
+
+    document.getElementById('block2').innerHTML = isMobile
+      ? `<div class="mobile-text extra-padding">
+          Разом вони випустили<br>
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(totalTracks)}</span> треків
+        </div>`
+      : `<div class="desktop-text">
+          Разом вони<br>
+          випустили<br>
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(totalTracks)}</span> треків
+        </div>`;
+
+    document.getElementById('block3').innerHTML = isMobile
+      ? `<div class="mobile-text extra-padding">
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(tracksOver1k)}</span> з них набрали понад 1000<br>
+          прослуховувань на Spotify
+        </div>`
+      : `<div class="desktop-text">
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(tracksOver1k)}</span> з них набрали<br>
+          понад 1000<br>
+          прослуховувань<br>
+          на Spotify
+        </div>`;
+
+    document.getElementById('block4').innerHTML = isMobile
+      ? `<div class="mobile-text extra-padding">
+          Загальна кількість прослуховувань<br>
+          таких треків: <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(totalListens)}</span>
+        </div>`
+      : `<div class="desktop-text">
+          Загальна кількість<br>
+          прослуховувань<br>
+          таких треків:<br>
+          <span style="color: #84AAFB; font-weight: bold;">${formatNumberWithSpaces(totalListens)}</span>
+        </div>`;
+
+    let genres = [];
+    let trackCounts = [];
+    for (let col = 3; col < data[48].length; col++) {
+      if (col !== 6 && col !== 7) {
+        const genre = data[47][col];
+        const count = parseInt(data[48][col], 10);
+        if (genre && !isNaN(count)) {
+          genres.push(genre);
+          trackCounts.push(count);
+        }
+      }
+    }
+
+    document.querySelector('.loader').style.display = 'none';
+    document.getElementById('radarChart').style.display = 'block';
+
+    new Chart(document.getElementById('radarChart').getContext('2d'), {
+  type: 'radar',
+  data: {
+    labels: genres,
+    datasets: [{
+      label: 'Кількість треків',
+      data: trackCounts,
+      backgroundColor: 'rgba(132, 170, 251, 0.4)',
+      borderColor: '#84AAFB',
+      borderWidth: 2,
+      pointBackgroundColor: '#84AAFB',
+      pointBorderColor: '#84AAFB',
+    }]
+  },
+  options: {
+  responsive: false,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      displayColors: false,
+      backgroundColor: '#383838',
+      borderColor: '#d7da8b',
+      borderWidth: 1,
+      callbacks: {
+        title: function(context) {
+          return context[0].label;
+        },
+        label: function(context) {
+          return 'Кількість треків: ' + context.raw;
+        }
+      }
+    }
+  },
+  elements: {
+    line: {
+      tension: 0.4
+    }
+  },
+  scales: {
+    r: {
+      ticks: {
+        color: '#bababa',
+        backdropColor: '#383838',
+        backdropPadding: 4,
+        font: {
+          size: 12
+        }
+      },
+      grid: {
+        color: '#383838'
+      },
+      pointLabels: {
+        color: '#bababa',
+        font: {
+          size: 14
+        }
+      },
+      angleLines: {
+        color: '#383838'
+      }
+    }
+  }
+}
+});
+  }
+});
+  </script>
+</body>
+</html>
