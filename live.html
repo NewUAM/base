@@ -762,9 +762,29 @@
 
   currentVideoItem = videoItem;
 
-  videoItem.innerHTML = `<div class="video-container" id="player-${videoId}"></div>`;
+  let container = videoItem.querySelector('.video-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'video-container';
+    videoItem.appendChild(container);
+  }
 
-  const container = videoItem.querySelector('.video-container');
+  let iframe = container.querySelector('iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    container.appendChild(iframe);
+  }
+
+  const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&rel=0&color=white&hl=ua`;
+  
+  iframe.setAttribute("frameborder", "0");
+  iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay");
+  iframe.setAttribute("allowfullscreen", "true");
+
+  setTimeout(() => {
+    iframe.src = videoSrc;
+  }, 300);
+
   if (window.innerWidth <= 768) {
     setTimeout(() => {
       videoItem.classList.add('expand-mobile');
@@ -776,16 +796,6 @@
       container.classList.add('expand-desktop');
     }, 10);
   }
-
-  new YT.Player(`player-${videoId}`, {
-    videoId: videoId,
-    playerVars: { 'autoplay': 1, 'mute': 0, 'rel': 0, 'color': 'white', 'hl': 'ua' },
-    events: {
-      'onReady': (event) => event.target.playVideo()
-    }
-  });
-
-  videoItem.onclick = null;
 
   observer.observe(videoItem);
 }
