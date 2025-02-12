@@ -372,28 +372,6 @@
   .footer-right {
     display: none;
   }
-    .fullscreen-btn {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    background: rgba(0, 0, 0, 1);
-    color: white;
-    border: 1px solid #f3f3f3;
-    padding: 8px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    z-index: 1000;
-    border-radius: 0 0 7px 0;
-}
-
-.fullscreen-btn:hover {
-    background: rgba(0, 0, 0, 1);
-}
-
-.fullscreen-btn.exit {
-    right: 0px;
-}
-
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -751,40 +729,6 @@
     let currentVideoItem = null;
     let observer;
 
-    function enterFullscreen(element, enterBtn, exitBtn) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-    }
-
-    setTimeout(() => {
-        enterBtn.style.display = "none";
-        exitBtn.style.display = "block";
-    }, 300);
-}
-
-    function exitFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-    }
-
-    setTimeout(() => {
-        document.querySelector(".fullscreen-btn.enter").style.display = "block";
-        document.querySelector(".fullscreen-btn.exit").style.display = "none";
-    }, 300);
-}
-
     function setPreview(videoItem) {
   const videoId = videoItem.dataset.videoId;
   videoItem.innerHTML = `
@@ -832,11 +776,9 @@
 
     videoItem.innerHTML = `
         <div class="video-container">
-            <iframe id="youtube-player" src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0&color=white&hl=ua"
+            <iframe id="youtube-player" src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&color=white&hl=ua"
                 frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
-            <button class="fullscreen-btn enter">⛶</button>
-            <button class="fullscreen-btn exit" style="display: none;">✕</button>
         </div>
     `;
 
@@ -863,12 +805,6 @@
             iframe.click();
         }
     }, 1000);
-
-    const enterBtn = videoItem.querySelector('.fullscreen-btn.enter');
-    const exitBtn = videoItem.querySelector('.fullscreen-btn.exit');
-
-    enterBtn.addEventListener("click", () => enterFullscreen(container, enterBtn, exitBtn));
-    exitBtn.addEventListener("click", exitFullscreen);
 }
 
     function moveToFloatingBlock(videoItem) {
@@ -1110,17 +1046,6 @@ videos.forEach(videoGroup => {
     document.addEventListener('DOMContentLoaded', () => {
       observeVideos();
     });
-    
-    document.addEventListener('DOMContentLoaded', () => {
-    observeVideos();
-
-    setTimeout(() => {
-        document.querySelectorAll("iframe").forEach(iframe => {
-            iframe.setAttribute("allowfullscreen", "true");
-        });
-    }, 1000);
-});
-
 </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </body>
