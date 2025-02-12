@@ -2,30 +2,87 @@
 <html lang="ua">
 <head>
   <meta charset="UTF-8">
-  <title>test</title>
+  <title>NUAM Live</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    @font-face {
+            font-family: 'CustomFont';
+            src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+        }
+        body {
+      font-family: 'CustomFont', Arial;
       margin: 20px;
       background-color: #282626;
-      color: #fff;
+      color: #f3f3f3;
     }
+    #pageHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    padding: 0 16px;
+    background-color: #383838;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+    .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+    .header-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 1px;
+    height: 24px;
+    background-color: #f3f3f3;
+}
+    .header-logo a {
+    display: block;
+    height: 40px;
+}
+.header-logo img {
+    height: 100%;
+    width: auto;
+  user-select: none;
+}
+.header-title {
+    margin: 0;
+    font-size: 28px;
+    color: #f3f3f3;
+    font-weight: bold;
+    text-align: right;
+  user-select: none;
+}
+    #content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding-top: 80px;
+  padding-bottom: 60px;
+}
     .group-block {
-      background-color: #383838;
-      padding: 20px;
-      border-radius: 7px;
-      margin-bottom: 20px;
-    }
+  background-color: #383838;
+  padding: 20px;
+  border-radius: 7px;
+  overflow: hidden;
+}
     .group-block h2 {
       margin: 0 0 20px 0;
       font-size: 24px;
     }
     .video-list {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-    }
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
     .video-item {
   display: flex;
   align-items: center;
@@ -44,6 +101,8 @@
   object-fit: cover;
   border-radius: 7px;
   display: block;
+  cursor: pointer;
+  user-select: none;
 }
     .play-button {
       position: absolute;
@@ -57,6 +116,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
       z-index: 2;
     }
     .play-button:before {
@@ -65,7 +125,7 @@
       margin-left: 5px;
       border-style: solid;
       border-width: 12px 0 12px 20px;
-      border-color: transparent transparent transparent #fff;
+      border-color: transparent transparent transparent #f3f3f3;
     }
     .video-container {
       position: absolute;
@@ -74,14 +134,45 @@
       width: 100%;
       height: 100%;
       z-index: 2;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+      user-select: none;
     }
+    .video-item.expand-mobile {
+  width: 280px;
+  height: 158px;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+.video-item.expand-desktop {
+  width: 480px;
+  height: 270px;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+.video-item {
+  transition: width 0.2s ease, height 0.2s ease;
+}
+.video-container.expand-mobile {
+  width: 100%;
+  height: 100%;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+.video-container.expand-desktop {
+  width: 100%;
+  height: 100%;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+.video-container {
+  transition: width 0.2s ease, height 0.2s ease;
+}
     .video-container.floating {
   position: fixed;
   width: 320px !important;
   height: 180px !important;
   z-index: 1000 !important;
   cursor: grab;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
+  border-radius: 7px;
+  user-select: none;
+  max-height: calc(100vh - 140px - 30px);
 }
 .draggable-wrapper {
   position: absolute;
@@ -91,28 +182,42 @@
   width: 100%;
 }
 .draggable-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 30px;
   background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
   user-select: none;
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
+  box-sizing: border-box;
 }
-.draggable-area div {
-  width: 50px;
-  height: 4px;
-  background: #ffffff;
-  margin: 2px 0;
-  border-radius: 2px;
+.draggable-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+  padding-left: 5px;
+  color: #383838;
+}
+.draggable-lines div {
+  width: 100%;
+  height: 2px;
+  background: #383838;
+  border-radius: 1px;
+}
+.drag-icon {
+  font-size: 20px;
+  color: #383838;
+  cursor: grab;
+  padding: 5px;
+  margin-top: 2px;
 }
     iframe {
       width: 100%;
       height: 100%;
-      border-radius: 7px;
+      border-radius: 7px 7px 0 0;
     }
     .floating-close {
       position: absolute;
@@ -121,13 +226,150 @@
       width: 30px;
       height: 30px;
       background: #ff4c4c;
-      color: #fff;
+      color: #f3f3f3;
       border: none;
       border-radius: 50%;
       font-size: 16px;
       cursor: pointer;
+      opacity: 0.8;
       z-index: 1010;
-    }
+      display: flex;
+  align-items: center;
+  justify-content: center;
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+.floating-close:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  background: #ff6666;
+}
+    #pageFooter {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    padding: 0 5px;
+    background-color: #383838;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+      .footer-left {
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.footer-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-center a {
+    text-decoration: none;
+}
+.footer-center a:hover {
+    text-decoration: none;
+}
+.footer-icon {
+    color: #bababa;
+    font-size: 24px;
+    transition: color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    user-select: none;
+}
+.footer-icon:hover {
+    color: #6e99db;
+}
+.footer-link {
+    color: #bababa;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    user-select: none;
+}
+.footer-link:hover {
+    color: #6e99db;
+}
+    .video-button-desktop {
+    padding: 8px 12px;
+    background-color: #f3f3f3;
+    color: #282626;
+    border: none;
+    border-radius: 7px;
+    font-family: 'CustomFont', Arial;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 40px;
+    line-height: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.video-button-desktop:hover {
+    background-color: white;
+    color: #000;
+}
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .video-button-mobile {
+    padding: 6px 6px;
+    background-color: #f3f3f3;
+    color: #282626;
+    border: none;
+    border-radius: 7px;
+    font-family: 'CustomFont', Arial;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 20px;
+    line-height: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.video-button-mobile:hover {
+    background-color: white;
+    color: #000;
+}
+  .video-button-mobile,
+  .footer-right {
+    display: none;
+  }
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -135,375 +377,345 @@
     ::-webkit-scrollbar-track {
       background: #282626;
     }
+    ::-webkit-scrollbar-track:vertical {
+  background-color: #383636;
+}
     ::-webkit-scrollbar-thumb {
       background-color: #d7da8b;
-      border-radius: 4px;
+      border-radius: 7px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background-color: #c6c979;
     }
+    @media (max-width: 768px) {
+  body {
+      margin: 5px;
+    }
+      #pageHeader {
+    height: 40px;
+    padding: 0 8px;
+}
+      .header-separator {
+    display: none;
+}
+        .header-logo a {
+    height: 20px;
+}
+.header-title {
+    font-size: 12px;
+}
+      #content {
+    grid-template-columns: 1fr;
+    gap: 10px;
+        padding-top: 40px;
+    padding-bottom: 40px;
+  }
+      .group-block {
+  padding: 10px;
+}
+      .group-block h2 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+      .video-item {
+  width: 160px;
+  height: 90px;
+}
+ .video-list {
+  padding-bottom: 5px;
+}     
+      .play-button {
+      width: 30px;
+      height: 30px;
+    }
+          .play-button:before {
+      margin-left: 2px;
+      border-width: 6px 0 6px 10px;
+    }
+    .video-container.floating {
+  width: 310px !important;
+  height: 174px !important;
+}
+    .draggable-area {
+  display: none;
+}
+      #pageFooter {
+        height: 40px;
+      }
+      .footer-icon {
+    font-size: 18px;
+    width: 20px;
+}
+.footer-link {
+    font-size: 12px;
+}
+      .video-button-desktop {
+      display: none;
+    }
+
+    .footer-right,
+    .video-button-mobile {
+      display: block;
+    }
+    iframe {
+      border-radius: 7px;
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    }
   </style>
 </head>
 <body>
-  <div id="content"></div>
+  <header id="pageHeader">
+  <div class="header-logo">
+    <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">
+      <img src="https://static.wixstatic.com/shapes/c77f36_74a77409cfed4bb4b069509d564822ff.svg" alt="Логотип" />
+    </a>
+  </div>
+  <div class="header-content">
+    <a href="https://forms.gle/myLrxLDNy3aEmXzA8" target="_blank" class="video-button-desktop">
+        Ми теж граємо <br> Хочемо таке відео
+    </a>
+    <div class="header-separator"></div>
+    <h1 class="header-title">Live сесії українських гуртів</h1>
+</div>
+</header>
 
+<div id="content"></div>
+
+<footer id="pageFooter">
+  <div class="footer-content">
+    <div class="footer-left">
+      <a href="https://nuam.club" target="_blank" rel="noopener noreferrer" class="footer-link">
+        © 2025 NUAM
+      </a>
+    </div>
+    <div class="footer-center">
+      <a href="https://t.me/NewUAM" target="_blank" rel="noopener noreferrer" class="footer-icon">
+        <i class="fab fa-telegram"></i>
+      </a>
+      <a href="https://instagram.com/newuam" target="_blank" rel="noopener noreferrer" class="footer-icon">
+        <i class="fa-brands fa-square-instagram"></i>
+      </a>
+    </div>
+    <div class="footer-right">
+      <a href="https://forms.gle/myLrxLDNy3aEmXzA8" target="_blank" class="video-button-mobile">
+        Ми теж граємо <br> Хочемо таке відео
+      </a>
+    </div>
+  </div>
+</footer>
+  
   <script>
     const videos = [
-      {group: "1914", id: "sFGoIdVCKds"},
-{group: "АСАФАТОV", id: "UH2cma_5i5c"},
-{group: "АСАФАТОV", id: "7goIwUm82DQ"},
-{group: "АСАФАТОV", id: "-HdSSQwMtuE"},
-{group: "АСАФАТОV", id: "cFYJYpYwGaw"},
-{group: "АСАФАТОV", id: "Qp_dTLk2FvQ"},
-{group: "8LIS5", id: "3JYphbaSBzk"},
-{group: "Мері", id: "NTiJwhtUauE"},
-{group: "Мері", id: "JxEhetug534"},
-{group: "Мері", id: "4gJXD4nT3CY"},
-{group: "Мері", id: "sbVVokDxvfw"},
-{group: "Мері", id: "NdljHt3GR70"},
-{group: "Восьмий День", id: "hwDxiXkfVt0"},
-{group: "Восьмий День", id: "O2XDIJZQebw"},
-{group: "Восьмий День", id: "o5KRdg0HmE4"},
-{group: "Гапочка", id: "h2jSNq521i8"},
-{group: "Гапочка", id: "bSk8pJSANdE"},
-{group: "ДжессіДжем", id: "qq_POeIILek"},
-{group: "ДжессіДжем", id: "r2JEEfso5QU"},
-{group: "ДжессіДжем", id: "ry6CYGQ9abI"},
-{group: "dity inzheneriv", id: "E21ZtX3E3RU"},
-{group: "ЕЛЛІС", id: "ZP5Mu7Hw-FM"},
-{group: "ЕМАЛЬ", id: "H8UBwoC0JCg"},
-{group: "ЕМАЛЬ", id: "ZAbzvdRb5oc"},
-{group: "Жадан і Собаки", id: "2dzCqkakgso"},
-{group: "Fiolet", id: "10E8GGE-A6o"},
-{group: "Fiolet", id: "GEpTl7qQezc"},
-{group: "Fiolet", id: "E6fR5_k7cIc"},
-{group: "краш тест", id: "G_KUNXBrbEs"},
-{group: "Микола Пацюк", id: "o-KI-hutUpM"},
-{group: "Obiymy Doschu", id: "XAV3V-_CeK0"},
-{group: "Obiymy Doschu", id: "j6cprjePWgo"},
-{group: "Obiymy Doschu", id: "U1XV7--gtRs"},
-{group: "паліндром", id: "tFTwFAWAL7k"},
-{group: "паліндром", id: "d8PZKMG0grw"},
-{group: "The Кум", id: "FA9iXVOc6X0"},
-{group: "The Кум", id: "lTcFMl9q-sk"},
-{group: "Роялькіт", id: "a0r7_thy9Xg"},
-{group: "Роялькіт", id: "3FsTpH2awjk"},
-{group: "Роялькіт", id: "s8aTmfesFsQ"},
-{group: "саметой", id: "ycCT1LaTBK0"},
-{group: "Хмарно з Проясненнями", id: "cjyBghxXw8Y"},
-{group: "Чиста Криниця", id: "loQg-2TIu-Q"},
-{group: "Яка існуЄ", id: "RaG1jnXt85U"},
-{group: "Яка існуЄ", id: "oAUIBbpaFiQ"},
-{group: "Anton Purtseladze", id: "jY-4amhgdRY"},
-{group: "AUDITORIA", id: "SnGVDkDEYmQ"},
-{group: "AUDITORIA", id: "7oYRHMv5aTE"},
-{group: "Ben Obert", id: "taIMq3e1vsU"},
-{group: "Ben Obert", id: "Woeeoc-Zo1Y"},
-{group: "Ben Obert", id: "OYS1TLEHK_8"},
-{group: "Blast Shapes", id: "gYtidYVkSj8"},
-{group: "Чумацький Шлях (CH.SH)", id: "dEkFNB0LNA8"},
-{group: "Didodub", id: "094W9TGjF7o"},
-{group: "Didodub", id: "pUZmacBP0mA"},
-{group: "Didodub", id: "lTyeDdIn7hc"},
-{group: "DIZHAK", id: "4TY4prCAM-Y"},
-{group: "Drag Me Out", id: "ZeNHYrCidIE"},
-{group: "Drag Me Out", id: "cOM0gvDWa6M"},
-{group: "Dreadnought in the Pond", id: "TNExvaRgmk4"},
-{group: "Dreadnought in the Pond", id: "w4Y_k6ZzlX0"},
-{group: "Dreadnought in the Pond", id: "_xyCa0WXzhc"},
-{group: "Dreadnought in the Pond", id: "srZ-uCR88js"},
-{group: "Dreadnought in the Pond", id: "aN3xxSY46vI"},
-{group: "éllia", id: "D5gWMqnz9wo"},
-{group: "éllia", id: "-mPqsmqFPkM"},
-{group: "éllia", id: "vRWId6iqy7s"},
-{group: "éllia", id: "R6HTjGxn-hY"},
-{group: "Epolets", id: "JHtRhLUXfII"},
-{group: "Eye Tea", id: "GKfU09weZYU"},
-{group: "Eye Tea", id: "vPzCtCUI-pg"},
-{group: "Eye Tea", id: "PoCZj86YG6g"},
-{group: "Ezra Fraze-Frazenko", id: "Q2vm63qFPhg"},
-{group: "Ezra Fraze-Frazenko", id: "bvz91_zM8r4"},
-{group: "Ezra Fraze-Frazenko", id: "eRkI2A_uNFI"},
-{group: "Ezra Fraze-Frazenko", id: "oAaJ1MBswnw"},
-{group: "Ezra Fraze-Frazenko", id: "HLrOoR2HR_Y"},
-{group: "Ezra Fraze-Frazenko", id: "GcOmVLeeZ2I"},
-{group: "Ezra Fraze-Frazenko", id: "AvD22OOmDjo"},
-{group: "Ezra Fraze-Frazenko", id: "7Druw75QKo0"},
-{group: "Ezra Fraze-Frazenko", id: "Qz9gL9syW-E"},
-{group: "Ezra Fraze-Frazenko", id: "fgNdYTuxKIw"},
-{group: "Ezra Fraze-Frazenko", id: "mkox0y9VDy8"},
-{group: "Ezra Fraze-Frazenko", id: "MMB30laC2Dw"},
-{group: "Fadelights", id: "JDIAoIPkws4"},
-{group: "Fadelights", id: "ful_bIuesIk"},
-{group: "Fateful", id: "yuXL9G6dPdA"},
-{group: "FliT", id: "xV3ecZTwbXk"},
-{group: "Gránat", id: "Lt6Cr_2HyTo"},
-{group: "Gránat", id: "eVUNeKOlt3A"},
-{group: "Gránat", id: "_B30kXhf4Uc"},
-{group: "Grandma'pick", id: "g53CguDIHYk"},
-{group: "Green Smile Mind", id: "Bg7SkBHfaAY"},
-{group: "hackedface", id: "KipH-eY38BI"},
-{group: "hurtom", id: "tD6Yb2DHCYY"},
-{group: "I Hate Myself Because", id: "OMmcSKFUu9U"},
-{group: "I Hate Myself Because", id: "qn3YSkRabLY"},
-{group: "I Hate Myself Because", id: "Ll76nJhtubc"},
-{group: "Ignea", id: "mUCyMH-Q_bg"},
-{group: "Ignea", id: "Xv5dTt_uyqM"},
-{group: "Ignea", id: "GghXFl1cWQg"},
-{group: "Ignea", id: "N2YO9qvYcac"},
-{group: "Ignea", id: "Zk6rjRoFc1o"},
-{group: "Ignea", id: "PogzrU8WPjo"},
-{group: "Incomer", id: "NXDf0otghyE"},
-{group: "Incomer", id: "vuf3g_dVYZs"},
-{group: "Incomer", id: "gOnnMFsi7tk"},
-{group: "JAN!S", id: "Cz1zEfYp86o"},
-{group: "JAN!S", id: "TjaqMIKNgq8"},
-{group: "Jillhouse", id: "CPT1H8ef4II"},
-{group: "JOUNT", id: "vIaO_pd1AEM"},
-{group: "Krabfist", id: "hXAc-8DyhjA"},
-{group: "Kroda", id: "3-EP1kYxwpY"},
-{group: "Kthona", id: "Yt2y9c3HyI0"},
-{group: "Lady Aphina", id: "169W8VgrmKY"},
-{group: "Lady Aphina", id: "vNAEiWCfTt4"},
-{group: "MapleMaps", id: "gHYFsD5k2Ls"},
-{group: "MapleMaps", id: "RtmdPLuRGNE"},
-{group: "MapleMaps", id: "pPDdFZcRDAQ"},
-{group: "Lost Message", id: "pqztbfE4jRs"},
-{group: "Lost Message", id: "gF-bEDRs0Ng"},
-{group: "Lost Message", id: "gBCgJ_iNkQs"},
-{group: "Lost Message", id: "FxG-DPuTDog"},
-{group: "Love'n'Joy", id: "bgKywjoZFpM"},
-{group: "Vagabond Specter", id: "bjt-pG1ILm0"},
-{group: "Lybid_1", id: "AOfU1g3SyE0"},
-{group: "Lybid_1", id: "fSEGs_TvOi0"},
-{group: "Lybid_1", id: "zzMvP03Ag7s"},
-{group: "Lybid_1", id: "oTEoolQZj6Y"},
-{group: "Lybid_1", id: "_N_N8KBQQB4"},
-{group: "Lybid_1", id: "UPnQBdKfitQ"},
-{group: "MAZEPA", id: "o573DK3lvvA"},
-{group: "MAZEPA", id: "_331iiu8Md0"},
-{group: "MAZEPA", id: "YAEg3bLnrtQ"},
-{group: "MAZEPA", id: "JGtqoIHsIu8"},
-{group: "MAZEPA", id: "_FdABYRxkKY"},
-{group: "MAZEPA", id: "eedn5I7-GYQ"},
-{group: "MAZEPA", id: "DXa1uRW8oYk"},
-{group: "MAZEPA", id: "F6f04mqDUrw"},
-{group: "MAZEPA", id: "OXx_6Eij_nY"},
-{group: "Merva", id: "Chcmf57jIlo"},
-{group: "Merva", id: "rhLPJDlTTms"},
-{group: "Mist Tower", id: "UcYgbe7doXg"},
-{group: "Nick Lemon Band", id: "4Ee9iFs2z78"},
-{group: "Nick Lemon Band", id: "D2J0maijNqw"},
-{group: "ONE LIGHT INSIDE", id: "NtGnVMuBgkM"},
-{group: "ONE LIGHT INSIDE", id: "mrqDqoE6kBk"},
-{group: "ONE LIGHT INSIDE", id: "WJUMQoIXKbc"},
-{group: "ONE LIGHT INSIDE", id: "EpR3M1CcbBk"},
-{group: "ONE LIGHT INSIDE", id: "GbbPGRYYSqQ"},
-{group: "Papa's Old Speaker", id: "a-5-QwCTYJ0"},
-{group: "Papa's Old Speaker", id: "lPweGuzVI7M"},
-{group: "POVYTA", id: "IfstPmv1rPQ"},
-{group: "Rabbit Leader", id: "boCWGn5_B08"},
-{group: "Rabbit Leader", id: "kRsS0v-uClA"},
-{group: "Re-read", id: "83KOMjTCnHk"},
-{group: "Re-read", id: "DKKCHyUIt6Q"},
-{group: "REIVA", id: "5ksJTXH-pJ0"},
-{group: "REIVA", id: "pISOlriFd2o"},
-{group: "Reve ta Stohne", id: "E2fGebWbhyg"},
-{group: "Reve ta Stohne", id: "lG13VM4-DOY"},
-{group: "Reve ta Stohne", id: "oL079er057M"},
-{group: "Reve ta Stohne", id: "CF6isg-29xw"},
-{group: "SadSvit", id: "MIBU1nzRtIs"},
-{group: "Sleep in Heads", id: "1BZqU2dKCqM"},
-{group: "Space Of Variations", id: "8sLmHQIxD_Y"},
-{group: "Space Of Variations", id: "FEIlfda3uQw"},
-{group: "The Gitas", id: "6FuGv1mF1jE"},
-{group: "The Hardkiss", id: "PJ5qk042lqY"},
-{group: "The Hardkiss", id: "DdbJ13VWJpo"},
-{group: "The Hardkiss", id: "hKkntMCJ6WU"},
-{group: "The Hardkiss", id: "g4zoPK8y5fk"},
-{group: "The Hardkiss", id: "AHyL5SqpjVc"},
-{group: "The Hardkiss", id: "zcLy67DT0bw"},
-{group: "The Hardkiss", id: "-89RzFyLiNo"},
-{group: "The Hardkiss", id: "-nGCREdcmPc"},
-{group: "The Hardkiss", id: "jwf6wYUVLXA"},
-{group: "The Mova", id: "f7T_QdY1izc"},
-{group: "The Rising Waters", id: "Ecluz_7x18U"},
-{group: "The Rising Waters", id: "gI4ZQDWuGnE"},
-{group: "The Rising Waters", id: "x7WL-itvjkQ"},
-{group: "TOLOKA", id: "ET4BOPQyjfI"},
-{group: "TOLOKA", id: "3Dh2REaMSws"},
-{group: "TOLOKA", id: "DE6PMxbwcg4"},
-{group: "TOLOKA", id: "2yCDBCrWKB4"},
-{group: "Trip Inside Me", id: "3nTqv7RAHRU"},
-{group: "Trip Inside Me", id: "2462xyTQWX8"},
-{group: "Try Lying Awake", id: "7XnX_FYMJ2Y"},
-{group: "VARTI", id: "VRmm57k0PCY"},
-{group: "Violet Raymoor", id: "dCbrXFr-5dM"},
-{group: "Violet Raymoor", id: "RhtdfE7uPTE"},
-{group: "Way Station", id: "fwHCO8ZHlK0"},
-{group: "Way Station", id: "wdfIodB0vCQ"},
-{group: "-YCH", id: "P_m6HtyRGu4"},
-{group: "-YCH", id: "_TulirSyog4"},
-{group: "Стас Корольов", id: "mmfKJp_bmPY"},
-{group: "КОМІЛЬФО", id: "2aZxj3Sou1U"},
-{group: "КОМІЛЬФО", id: "sVvxaaw0XQE"},
-{group: "КОМІЛЬФО", id: "CLXDpNlKGyQ"},
-{group: "КОМІЛЬФО", id: "gb_EoeYNOAw"},
-{group: "КОМІЛЬФО", id: "wjAvb5gO5IQ"},
-{group: "ESQUIZET", id: "OCJZwqtcVDQ"},
-{group: "5 Vymir", id: "s9VvWrrYias"},
-{group: "5 Vymir", id: "swSwqQI3fJk"},
-{group: "5 Vymir", id: "aY9aA30LRcQ"},
-{group: "5 Vymir", id: "zMnZ-blwp1Y"},
-{group: "Джозерс", id: "Qrs2EJ6ryAg"},
-{group: "Леді Джанк", id: "-l8Vo_d2RHs"},
-{group: "Леді Джанк", id: "XR2qeZaina0"},
-{group: "Osnova", id: "Ccvu4ms4K80"},
-{group: "Secret Avenue", id: "v--CWhgEVR8"},
-{group: "#ShameOnYou", id: "igKjiWTHI6A"},
-{group: "0%Mercury", id: "QiubLjkwUU4"},
-{group: "Бери Своє", id: "1K37PrkhMhk"},
-{group: "Апатія", id: "Nd_7q_Rz4tc"},
-{group: "Безодня", id: "QV9naImXVfE"},
-{group: "Гапочка", id: "tMSOmtzg0dE"},
-{group: "Гапочка", id: "XgZbf416-VI"},
-{group: "Zlypni", id: "Au-KGUW5uZo"},
-{group: "Джеронімо", id: "XBH72op3Zq8"},
-{group: "Джеронімо", id: "3aQjj-TDub8"},
-{group: "ЕЛЛІС", id: "YVuZOixTcFc"},
-{group: "Жадан і Собаки", id: "CIi4KsNEXmg"},
-{group: "Жадан і Собаки", id: "IWV91uK4bcA"},
-{group: "Жадан і Собаки", id: "1RuvtemEkOE"},
-{group: "Жадан і Собаки", id: "oazSjgPl1D8"},
-{group: "КораЛЛі", id: "fEUQyhSObMg"},
-{group: "КораЛЛі", id: "Fdjssxc32_k"},
-{group: "КораЛЛі", id: "518loaYFddk"},
-{group: "КораЛЛі", id: "mDxT4VS3KXs"},
-{group: "Крихітка", id: "PWmSUW09xZE"},
-{group: "Оркестр Че", id: "H5wwDLwH_80"},
-{group: "ОТРУТА", id: "lAmItCRcFoQ"},
-{group: "паліндром", id: "bq6QlN_nNaE"},
-{group: "Робаний Йот", id: "MX6951cmomo"},
-{group: "Тимчасові Електромережі", id: "__tZnIr3s3w"},
-{group: "Ульмо Три", id: "VshJuOdi8Wg"},
-{group: "Alinda", id: "46punelmdOQ"},
-{group: "Alinda", id: "rrioGe5XVys"},
-{group: "Alinda", id: "oZR9pEaIMOo"},
-{group: "Alinda", id: "5tBxZsG7GcE"},
-{group: "Andrew Bear", id: "E2PI05YgchE"},
-{group: "Bahroma", id: "65BrBn_1-_0"},
-{group: "Battle Axe Culture", id: "IG-3-u4w9XM"},
-{group: "Battle Axe Culture", id: "OItPNG1XAMw"},
-{group: "Battle Axe Culture", id: "c78Llb-3UWs"},
-{group: "Battle Axe Culture", id: "lOZkDY2xLX8"},
-{group: "Battle Axe Culture", id: "ViRayMVKx9o"},
-{group: "Ben Obert", id: "qI1clkC834w"},
-{group: "Blackstone Road", id: "yZlITuwR31Y"},
-{group: "BLIND8", id: "IIpcLdAybgM"},
-{group: "BLIND8", id: "bGg0i1Yq07k"},
-{group: "BLIND8", id: "rRT5kh0wFBM"},
-{group: "BLIND8", id: "b4t50ZDuDXg"},
-{group: "Bloom Twins", id: "QLi4RE2luXc"},
-{group: "Bloom Twins", id: "eenzg0s6NjI"},
-{group: "Bloom Twins", id: "P7RWS51oprw"},
-{group: "Bloom Twins", id: "0oohkR7VyCE"},
-{group: "Bomg", id: "UbBOgCj81VI"},
-{group: "Braii", id: "6zk0g3PLadg"},
-{group: "Braii", id: "g2qK0gRTZ54"},
-{group: "Burned Time Machine", id: "tqwsmPoz-dk"},
-{group: "Stoneganj", id: "wGMjo_1VZqg"},
-{group: "Chains of Memories", id: "xv97FBotB-U"},
-{group: "Cherry-Merry", id: "4_u1M26tHMA"},
-{group: "TIK", id: "EhLMSg8ZOso"},
-{group: "Cold Comfort", id: "BnHts5AQE-Q"},
-{group: "Defective", id: "0wA6Rcv40hI"},
-{group: "Dreadnought in the Pond", id: "bbZmOOIpmfI"},
-{group: "E.K.A", id: "cG-Bci40Dtk"},
-{group: "E.K.A", id: "_Qil8pgR1YQ"},
-{group: "E.K.A", id: "rHS6XnMSQ1E"},
-{group: "Elephant Opinions", id: "_gdhW7tHxq4"},
-{group: "Elephant Opinions", id: "p9NTwogDwQY"},
-{group: "Elephant Opinions", id: "09-zOSKJQxs"},
-{group: "Elephant Opinions", id: "kByfjfPvKlY"},
-{group: "Elephant Opinions", id: "CCIfD-9P2tA"},
-{group: "Entree", id: "VeEj_uA4EDs"},
-{group: "firejam", id: "TZdkNMk8xMo"},
-{group: "firejam", id: "rwZsFaAlh3M"},
-{group: "Fontaliza", id: "4qTVD7Z_ODE"},
-{group: "Gooma", id: "YB7OObcPais"},
-{group: "Harmata", id: "M8WyPhQNUoo"},
-{group: "Harmata", id: "G9yTSW8fq7g"},
-{group: "Harmata", id: "d5a1P3TlEX8"},
-{group: "Hiels", id: "kOUeI4BVZcA"},
-{group: "Joryj Kłoc", id: "PVHzRybjtzw"},
-{group: "Karna", id: "pu9_v-c8byg"},
-{group: "Karna", id: "S2cu7b11DOQ"},
-{group: "Karna", id: "UDNBjvfiZqY"},
-{group: "KLEFT", id: "wOy37NXuUJM"},
-{group: "KLEFT", id: "6_MxvSBM-v4"},
-{group: "KLEFT", id: "edqiqT778CE"},
-{group: "La Horsa Bianca", id: "vCd66xEINBI"},
-{group: "La Horsa Bianca", id: "UgRwKxITa1g"},
-{group: "La Horsa Bianca", id: "Brj89zKFYJA"},
-{group: "Labyrinthus Stellarum", id: "iCox4PoqBP4"},
-{group: "LiveN", id: "iRmHTWlsuS8"},
-{group: "Love'n'Joy", id: "uvw1QfIR6v0"},
-{group: "Love'n'Joy", id: "NjKB3O7WJis"},
-{group: "Love'n'Joy", id: "goP60lAwjGo"},
-{group: "Luiku", id: "KHwQRT5lihA"},
-{group: "Lvivdanceclub", id: "carAdaoa3Yc"},
-{group: "Lvivdanceclub", id: "2P82XsWhsek"},
-{group: "Lvivdanceclub", id: "9jSqpRT38cE"},
-{group: "Lvivdanceclub", id: "_nXU81IBgqk"},
-{group: "Man from Light", id: "099oUyvqf9w"},
-{group: "Man from Light", id: "XDk1gPX95bA"},
-{group: "Man from Light", id: "ZVkci8_vrbw"},
-{group: "Man from Light", id: "grDP84G07gE"},
-{group: "mandarinaduck", id: "84WfsrXZBms"},
-{group: "MAZEPA", id: "NpWwC_nZE-8"},
-{group: "Mother Witch & Dead Water Ghosts", id: "MTV0wYHKZNU"},
-{group: "Mother Witch & Dead Water Ghosts", id: "AARWcaXItAc"},
-{group: "Mother Witch & Dead Water Ghosts", id: "04W4ca5xazs"},
-{group: "Mu2Moon", id: "4w83RPWcV4o"},
-{group: "MY EX I", id: "dykFudcJewQ"},
-{group: "MY EX I", id: "D_mPOWqk1ZA"},
-{group: "My Personal Murderer", id: "3KRqcmppDVY"},
-{group: "My Personal Murderer", id: "pe81NRTtxjw"},
-{group: "Mzlv", id: "nf10X03AxT0"},
-{group: "Mzlv", id: "vXLOxfYNHfI"},
-{group: "O.Torvald", id: "Yxe8p-pz3fM"},
-{group: "Octopus Kraft", id: "06APZSD0Ujw"},
-{group: "Octopus Kraft", id: "Q1OjXZvuwtE"},
-{group: "Octopus Kraft", id: "0QGJwbU-tI4"},
-{group: "Octopus Kraft", id: "WfLTqGjZ_UM"},
-{group: "Octopus Kraft", id: "AEKt5rfdiGY"},
-{group: "Octopus Kraft", id: "-yvH7DuoqjI"},
-{group: "Octopus Kraft", id: "J5rwtCta6HA"},
-{group: "Odradek Room", id: "e6qgTaPvjlw"},
-{group: "Odradek Room", id: "x4H7ReHLJzQ"},
-{group: "Ogyda", id: "jMKZvCb_QzU"},
-{group: "Ogyda", id: "cBKtcWClzCw"},
-{group: "Ogyda", id: "aZ0wfkgo3CE"},
-{group: "Olya Jaya", id: "AUAJiMRrK3I"},
-{group: "Olya Jaya", id: "7qHQX9Zd2U0"},
-{group: "Ownstone", id: "xSAj6PijCsg"},
-    ];
+  {group: "1914", ids: "sFGoIdVCKds"},
+{group: "Ziferblat", ids: "9BGdOUfPxPs, Bwpyfmzsu-g, xchGuq2oFjc, jTLDxUkMgDc"},
+{group: "Глава 94", ids: "VETaDyVMRao, M6bAX3eyPZg, nrDor3cPkLo"},
+{group: "АСАФАТОV", ids: "UH2cma_5i5c, 7goIwUm82DQ, -HdSSQwMtuE, cFYJYpYwGaw, Qp_dTLk2FvQ"},
+{group: "8LIS5", ids: "3JYphbaSBzk"},
+{group: "Мері", ids: "NTiJwhtUauE, JxEhetug534, 4gJXD4nT3CY, sbVVokDxvfw, NdljHt3GR70"},
+{group: "Восьмий День", ids: "hwDxiXkfVt0, O2XDIJZQebw, o5KRdg0HmE4"},
+{group: "Гапочка", ids: "h2jSNq521i8, bSk8pJSANdE, tMSOmtzg0dE, XgZbf416-VI"},
+{group: "ДжессіДжем", ids: "qq_POeIILek, r2JEEfso5QU, ry6CYGQ9abI"},
+{group: "dity inzheneriv", ids: "E21ZtX3E3RU"},
+{group: "ЕЛЛІС", ids: "ZP5Mu7Hw-FM, YVuZOixTcFc"},
+{group: "ЕМАЛЬ", ids: "H8UBwoC0JCg, ZAbzvdRb5oc"},
+{group: "Жадан і Собаки", ids: "2dzCqkakgso, CIi4KsNEXmg, IWV91uK4bcA, 1RuvtemEkOE, oazSjgPl1D8"},
+{group: "Fiolet", ids: "10E8GGE-A6o, GEpTl7qQezc, E6fR5_k7cIc"},
+{group: "краш тест", ids: "G_KUNXBrbEs"},
+{group: "Микола Пацюк", ids: "o-KI-hutUpM"},
+{group: "Obiymy Doschu", ids: "XAV3V-_CeK0, j6cprjePWgo, U1XV7--gtRs"},
+{group: "паліндром", ids: "tFTwFAWAL7k, d8PZKMG0grw, bq6QlN_nNaE"},
+{group: "The Кум", ids: "FA9iXVOc6X0, lTcFMl9q-sk"},
+{group: "Роялькіт", ids: "a0r7_thy9Xg, 3FsTpH2awjk, s8aTmfesFsQ"},
+{group: "саметой", ids: "ycCT1LaTBK0"},
+{group: "Хмарно з Проясненнями", ids: "cjyBghxXw8Y"},
+{group: "Чиста Криниця", ids: "loQg-2TIu-Q"},
+{group: "Яка існуЄ", ids: "RaG1jnXt85U, oAUIBbpaFiQ"},
+{group: "Anton Purtseladze", ids: "jY-4amhgdRY"},
+{group: "AUDITORIA", ids: "SnGVDkDEYmQ, 7oYRHMv5aTE"},
+{group: "Ben Obert", ids: "taIMq3e1vsU, Woeeoc-Zo1Y, OYS1TLEHK_8, qI1clkC834w"},
+{group: "Blast Shapes", ids: "gYtidYVkSj8"},
+{group: "Чумацький Шлях (CH.SH)", ids: "dEkFNB0LNA8"},
+{group: "Didodub", ids: "094W9TGjF7o, pUZmacBP0mA, lTyeDdIn7hc"},
+{group: "DIZHAK", ids: "4TY4prCAM-Y"},
+{group: "Drag Me Out", ids: "ZeNHYrCidIE, cOM0gvDWa6M"},
+{group: "Dreadnought in the Pond", ids: "TNExvaRgmk4, w4Y_k6ZzlX0, _xyCa0WXzhc, srZ-uCR88js, aN3xxSY46vI, bbZmOOIpmfI"},
+{group: "éllia", ids: "D5gWMqnz9wo, -mPqsmqFPkM, vRWId6iqy7s, R6HTjGxn-hY"},
+{group: "Epolets", ids: "JHtRhLUXfII"},
+{group: "Eye Tea", ids: "GKfU09weZYU, vPzCtCUI-pg, PoCZj86YG6g"},
+{group: "Ezra Fraze-Frazenko", ids: "Q2vm63qFPhg, bvz91_zM8r4, eRkI2A_uNFI, oAaJ1MBswnw, HLrOoR2HR_Y, GcOmVLeeZ2I, AvD22OOmDjo, 7Druw75QKo0, Qz9gL9syW-E, fgNdYTuxKIw, mkox0y9VDy8, MMB30laC2Dw"},
+{group: "Fadelights", ids: "JDIAoIPkws4, ful_bIuesIk"},
+{group: "Fateful", ids: "yuXL9G6dPdA"},
+{group: "FliT", ids: "xV3ecZTwbXk"},
+{group: "Gránat", ids: "Lt6Cr_2HyTo, eVUNeKOlt3A, _B30kXhf4Uc"},
+{group: "Grandma'pick", ids: "g53CguDIHYk"},
+{group: "Green Smile Mind", ids: "Bg7SkBHfaAY"},
+{group: "hackedface", ids: "KipH-eY38BI"},
+{group: "hurtom", ids: "tD6Yb2DHCYY"},
+{group: "I Hate Myself Because", ids: "OMmcSKFUu9U, qn3YSkRabLY, Ll76nJhtubc"},
+{group: "Ignea", ids: "mUCyMH-Q_bg, Xv5dTt_uyqM, GghXFl1cWQg, N2YO9qvYcac, Zk6rjRoFc1o, PogzrU8WPjo"},
+{group: "Incomer", ids: "NXDf0otghyE, vuf3g_dVYZs, gOnnMFsi7tk"},
+{group: "JAN!S", ids: "Cz1zEfYp86o, TjaqMIKNgq8"},
+{group: "Jillhouse", ids: "CPT1H8ef4II"},
+{group: "JOUNT", ids: "vIaO_pd1AEM"},
+{group: "Krabfist", ids: "hXAc-8DyhjA"},
+{group: "Kroda", ids: "3-EP1kYxwpY"},
+{group: "Kthona", ids: "Yt2y9c3HyI0"},
+{group: "Lady Aphina", ids: "169W8VgrmKY, vNAEiWCfTt4"},
+{group: "MapleMaps", ids: "gHYFsD5k2Ls, RtmdPLuRGNE, pPDdFZcRDAQ"},
+{group: "Lost Message", ids: "pqztbfE4jRs, gF-bEDRs0Ng, gBCgJ_iNkQs, FxG-DPuTDog"},
+{group: "Love'n'Joy", ids: "bgKywjoZFpM, uvw1QfIR6v0, NjKB3O7WJis, goP60lAwjGo"},
+{group: "Vagabond Specter", ids: "bjt-pG1ILm0"},
+{group: "Lybid_1", ids: "AOfU1g3SyE0, fSEGs_TvOi0, zzMvP03Ag7s, oTEoolQZj6Y, _N_N8KBQQB4, UPnQBdKfitQ"},
+{group: "MAZEPA", ids: "o573DK3lvvA, _331iiu8Md0, YAEg3bLnrtQ, JGtqoIHsIu8, _FdABYRxkKY, eedn5I7-GYQ, DXa1uRW8oYk, F6f04mqDUrw, OXx_6Eij_nY, NpWwC_nZE-8"},
+{group: "Merva", ids: "Chcmf57jIlo, rhLPJDlTTms"},
+{group: "Mist Tower", ids: "UcYgbe7doXg"},
+{group: "Nick Lemon Band", ids: "4Ee9iFs2z78, D2J0maijNqw"},
+{group: "ONE LIGHT INSIDE", ids: "NtGnVMuBgkM, mrqDqoE6kBk, WJUMQoIXKbc, EpR3M1CcbBk, GbbPGRYYSqQ"},
+{group: "Papa's Old Speaker", ids: "a-5-QwCTYJ0, lPweGuzVI7M"},
+{group: "POVYTA", ids: "IfstPmv1rPQ"},
+{group: "Rabbit Leader", ids: "boCWGn5_B08, kRsS0v-uClA"},
+{group: "Re-read", ids: "83KOMjTCnHk, DKKCHyUIt6Q"},
+{group: "REIVA", ids: "5ksJTXH-pJ0, pISOlriFd2o"},
+{group: "Reve ta Stohne", ids: "E2fGebWbhyg, lG13VM4-DOY, oL079er057M, CF6isg-29xw"},
+{group: "SadSvit", ids: "MIBU1nzRtIs"},
+{group: "Sleep in Heads", ids: "1BZqU2dKCqM"},
+{group: "Space Of Variations", ids: "8sLmHQIxD_Y, FEIlfda3uQw"},
+{group: "The Gitas", ids: "6FuGv1mF1jE, 1439j6R3jvI"},
+{group: "The Hardkiss", ids: "PJ5qk042lqY, DdbJ13VWJpo, hKkntMCJ6WU, g4zoPK8y5fk, AHyL5SqpjVc, zcLy67DT0bw, -89RzFyLiNo, -nGCREdcmPc, jwf6wYUVLXA"},
+{group: "The Mova", ids: "f7T_QdY1izc"},
+{group: "The Rising Waters", ids: "Ecluz_7x18U, gI4ZQDWuGnE, x7WL-itvjkQ"},
+{group: "TOLOKA", ids: "ET4BOPQyjfI, 3Dh2REaMSws, DE6PMxbwcg4, 2yCDBCrWKB4"},
+{group: "Trip Inside Me", ids: "3nTqv7RAHRU, 2462xyTQWX8, gaCDom1mM2c, dOczLNZIp4k, L-oUJmnuX9I, 66-EVnGjQjc"},
+{group: "Try Lying Awake", ids: "7XnX_FYMJ2Y"},
+{group: "VARTI", ids: "VRmm57k0PCY"},
+{group: "Violet Raymoor", ids: "dCbrXFr-5dM, RhtdfE7uPTE"},
+{group: "Way Station", ids: "fwHCO8ZHlK0, wdfIodB0vCQ, z8S3vChS6nQ, DDvid-oISoY, egWqqY57nxA, yYE7vdup_z0, kWVo4j9PPGc, RqIH0AyPJsg, 8DhMDzbQGQI"},
+{group: "-YCH", ids: "P_m6HtyRGu4, _TulirSyog4"},
+{group: "Стас Корольов", ids: "mmfKJp_bmPY"},
+{group: "КОМІЛЬФО", ids: "2aZxj3Sou1U, sVvxaaw0XQE, CLXDpNlKGyQ, gb_EoeYNOAw, wjAvb5gO5IQ"},
+{group: "ESQUIZET", ids: "OCJZwqtcVDQ"},
+{group: "5 Vymir", ids: "s9VvWrrYias, swSwqQI3fJk, aY9aA30LRcQ, zMnZ-blwp1Y"},
+{group: "Джозерс", ids: "Qrs2EJ6ryAg"},
+{group: "Леді Джанк", ids: "-l8Vo_d2RHs, XR2qeZaina0"},
+{group: "Osnova", ids: "Ccvu4ms4K80"},
+{group: "Secret Avenue", ids: "v--CWhgEVR8"},
+{group: "#ShameOnYou", ids: "igKjiWTHI6A"},
+{group: "0%Mercury", ids: "QiubLjkwUU4"},
+{group: "Бери Своє", ids: "1K37PrkhMhk"},
+{group: "Апатія", ids: "Nd_7q_Rz4tc"},
+{group: "Безодня", ids: "QV9naImXVfE"},
+{group: "Zlypni", ids: "Au-KGUW5uZo"},
+{group: "Джеронімо", ids: "XBH72op3Zq8, 3aQjj-TDub8"},
+{group: "КораЛЛі", ids: "fEUQyhSObMg, Fdjssxc32_k, 518loaYFddk, mDxT4VS3KXs"},
+{group: "Крихітка", ids: "PWmSUW09xZE"},
+{group: "Оркестр Че", ids: "H5wwDLwH_80"},
+{group: "ОТРУТА", ids: "lAmItCRcFoQ"},
+{group: "Робаний Йот", ids: "MX6951cmomo"},
+{group: "Тимчасові Електромережі", ids: "__tZnIr3s3w"},
+{group: "Ульмо Три", ids: "VshJuOdi8Wg"},
+{group: "Alinda", ids: "46punelmdOQ, rrioGe5XVys, oZR9pEaIMOo, 5tBxZsG7GcE"},
+{group: "Andrew Bear", ids: "E2PI05YgchE"},
+{group: "Bahroma", ids: "65BrBn_1-_0"},
+{group: "Battle Axe Culture", ids: "IG-3-u4w9XM, OItPNG1XAMw, c78Llb-3UWs, lOZkDY2xLX8, ViRayMVKx9o"},
+{group: "Blackstone Road", ids: "yZlITuwR31Y"},
+{group: "BLIND8", ids: "IIpcLdAybgM, bGg0i1Yq07k, rRT5kh0wFBM, b4t50ZDuDXg"},
+{group: "Bloom Twins", ids: "QLi4RE2luXc, eenzg0s6NjI, P7RWS51oprw, 0oohkR7VyCE"},
+{group: "Bomg", ids: "UbBOgCj81VI"},
+{group: "Braii", ids: "6zk0g3PLadg, g2qK0gRTZ54, jGbNTs3_qWA"},
+{group: "Burned Time Machine", ids: "tqwsmPoz-dk"},
+{group: "Stoneganj", ids: "wGMjo_1VZqg"},
+{group: "Chains of Memories", ids: "xv97FBotB-U"},
+{group: "Cherry-Merry", ids: "4_u1M26tHMA"},
+{group: "TIK", ids: "EhLMSg8ZOso"},
+{group: "Cold Comfort", ids: "BnHts5AQE-Q"},
+{group: "Defective", ids: "0wA6Rcv40hI"},
+{group: "E.K.A", ids: "cG-Bci40Dtk, _Qil8pgR1YQ, rHS6XnMSQ1E"},
+{group: "Elephant Opinions", ids: "_gdhW7tHxq4, p9NTwogDwQY, 09-zOSKJQxs, kByfjfPvKlY, CCIfD-9P2tA"},
+{group: "Entree", ids: "VeEj_uA4EDs"},
+{group: "firejam", ids: "TZdkNMk8xMo, rwZsFaAlh3M"},
+{group: "Fontaliza", ids: "4qTVD7Z_ODE, 1OHp6em9u40"},
+{group: "Gooma", ids: "YB7OObcPais"},
+{group: "Harmata", ids: "M8WyPhQNUoo, G9yTSW8fq7g, d5a1P3TlEX8"},
+{group: "Hiels", ids: "kOUeI4BVZcA"},
+{group: "Joryj Kłoc", ids: "PVHzRybjtzw"},
+{group: "Karna", ids: "pu9_v-c8byg, S2cu7b11DOQ, UDNBjvfiZqY"},
+{group: "KLEFT", ids: "wOy37NXuUJM, 6_MxvSBM-v4, edqiqT778CE"},
+{group: "La Horsa Bianca", ids: "vCd66xEINBI, UgRwKxITa1g, Brj89zKFYJA"},
+{group: "Labyrinthus Stellarum", ids: "iCox4PoqBP4"},
+{group: "LiveN", ids: "iRmHTWlsuS8"},
+{group: "Luiku", ids: "KHwQRT5lihA"},
+{group: "Lvivdanceclub", ids: "carAdaoa3Yc, 2P82XsWhsek, 9jSqpRT38cE, _nXU81IBgqk"},
+{group: "Man from Light", ids: "099oUyvqf9w, XDk1gPX95bA, ZVkci8_vrbw, grDP84G07gE"},
+{group: "mandarinaduck", ids: "84WfsrXZBms"},
+{group: "Mother Witch & Dead Water Ghosts", ids: "MTV0wYHKZNU, AARWcaXItAc, 04W4ca5xazs"},
+{group: "Mu2Moon", ids: "4w83RPWcV4o"},
+{group: "MY EX I", ids: "dykFudcJewQ, D_mPOWqk1ZA"},
+{group: "My Personal Murderer", ids: "3KRqcmppDVY, pe81NRTtxjw"},
+{group: "Mzlv", ids: "nf10X03AxT0, vXLOxfYNHfI"},
+{group: "O.Torvald", ids: "Yxe8p-pz3fM"},
+{group: "Octopus Kraft", ids: "06APZSD0Ujw, Q1OjXZvuwtE, 0QGJwbU-tI4, WfLTqGjZ_UM, AEKt5rfdiGY, -yvH7DuoqjI, J5rwtCta6HA"},
+{group: "Odradek Room", ids: "e6qgTaPvjlw, x4H7ReHLJzQ"},
+{group: "Ogyda", ids: "jMKZvCb_QzU, cBKtcWClzCw, aZ0wfkgo3CE"},
+{group: "Olya Jaya", ids: "AUAJiMRrK3I, 7qHQX9Zd2U0"},
+{group: "Ownstone", ids: "xSAj6PijCsg"},
+{group: "Paycash", ids: "KyOA8pYF69M, SaIeJqGtKTs, GU5VlC85lWU, sU6LzR6oT1Q, gPLg5gVVHJA"},
+{group: "Planet Bit", ids: "wRX54YpoWxY, a8_S4fEDpGg, xUkFFRjQQyY"},
+{group: "Pree Tone", ids: "7UFBv2HOWDA, jcsn_gYhXdc, VNCr0eF1h_M"},
+{group: "Telema", ids: "5GSoQphTauI"},
+{group: "Risin Sabotage", ids: "0xpP3P8jL_Y, jonFEbpT2QI"},
+{group: "Rudnic Ore", ids: "mKdkxg2bHj8"},
+{group: "Seaeye", ids: "Z1SHsHEq68U, 3n_6plKS0kw"},
+{group: "Septa", ids: "1wRNc20iaYM"},
+{group: "Sex Blender", ids: "m9_-WKkIV-Q"},
+{group: "Shiva The Destructor", ids: "Rge20gku8ck"},
+{group: "Sick Solution", ids: "_rP3UXKIdfM"},
+{group: "SLICE OF STORY", ids: "OheEHfbajdI, 6IQ4xD1NB6U, 4pnQPkIsIEY, 35qrk_ahOz8"},
+{group: "Somali Yacht Club", ids: "8YC3DxeJCVI"},
+{group: "STANZA", ids: "Adg56G0obkM"},
+{group: "Straytones", ids: "MR-Xxu7KAnQ, wFo-uo-_ldg, ACok1fevuNo, _-uCAKNS4rE, rm13yPWK6fc"},
+{group: "Suicideburg", ids: "5P2ZXZYJOJ0"},
+{group: "The Beatchess", ids: "cHa9bCtjwz0, hrKvuW32iyo, u7njC_dMvqw"},
+{group: "The Elephants", ids: "uRLDikC3Ju0, E_QXk_Tq0P4, 3kd-kVuZlFQ"},
+{group: "The Heavy Crawls", ids: "gi30cppzVYs"},
+{group: "The Hypnotunez", ids: "a5kyYsKYgb8, Il3HQAGhSEg"},
+{group: "The Maunt", ids: "sS5cV-B43Cc, Xdwt0HqXjKU, abnxrw2_cCY, vkjsi2WIsJ0, DSX8HCT8ICs, wMx2ImIPiOg"},
+{group: "The Nietzsche", ids: "tODViVOvEE4"},
+{group: "The Segments", ids: "IPM1LPc6Rn4"},
+{group: "The Sunset Survival", ids: "KceaXG_hw-o"},
+{group: "The Unsleeping", ids: "yLeQGHck4pY, S2VrOxR9Ho4"},
+{group: "DZ'OB", ids: "j6BI5T7MNoc"},
+{group: "Гурт [О]", ids: "rhWVa-0qih4"},
+{group: "INDT", ids: "c8G5l3j1OV0"},
+{group: "OFLIYAN", ids: "lvDpKcaeGhs"},
+{group: "Лівінстон", ids: "pdxSp29CsOM"},
+{group: "ADAM", ids: "R7oPdTTZans"},
+{group: "ЦЕЩО", ids: "UUKA0yrpmko"},
+{group: "YUKO", ids: "mYLlcoLpD-g"},
+{group: "Triple Jump", ids: "Lsx0boI_37o"},
+{group: "True Tough", ids: "zMclfW3FqpU, OLhVhhY1Pi4, YDTEs94YNB0, _V03prQo7Cw, FwABJzs3OB4, LPVapamBDTI"},
+{group: "U_C", ids: "Old54JxJO74"},
+{group: "Море Спокою", ids: "t4zMGQgJWww, XC0cVZbxs7g, Q2dIuccuPFc, YleKR-VfY5Q, VsBc1rMAFEI, QszzWifCiWY, KqbzyUjV9_c, KKMpiVPJKy4"},
+{group: "Velikhan", ids: "PgKNmzOxOPg, j6SVzACIGz4"},
+{group: "Vinok", ids: "UhnWMuc48-Q, J-eRkgQ9JSA, DvnO0--HctM, TAOF9AG0v8Q"},
+{group: "Virgin Call", ids: "wy3ofKRbkLc"},
+{group: "Volodymyr Dantes", ids: "ZcMbzj6l8-M"},
+{group: "WAHOMO", ids: "NTChH8RZJds, y3wt2-oGRH4, cVNbnPsE9uk, lN0-tEizlzc"},
+{group: "WentSeat", ids: "wu16T8PPBZM, fhQfACV9_5Q"},
+{group: "White Ward", ids: "7b_cNjfeV8g, IkkcrzsaPTQ"},
+{group: "Your Inner God", ids: "mhEnptbTlpk, e-8lIH3Wllg, Q96HJaEpvrc"},
+{group: "Yurcash", ids: "FhEy-QZuUWA"},
+{group: "ZERNO", ids: "kQrPDLsLRtA, KZ8AxsYTY5Q"},
+{group: "Maria Lui", ids: "x67hoKz6844"}
+];
 
     let currentVideoItem = null;
     let observer;
 
     function setPreview(videoItem) {
-      const videoId = videoItem.dataset.videoId;
-      videoItem.innerHTML = `
-        <div class="cover">
-          <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Видео">
-          <div class="play-button"></div>
-        </div>
-      `;
-      videoItem.onclick = () => playVideo(videoItem);
-    }
-
-    function revertToPreview(videoItem) {
   const videoId = videoItem.dataset.videoId;
   videoItem.innerHTML = `
     <div class="cover">
@@ -511,14 +723,31 @@
       <div class="play-button"></div>
     </div>
   `;
-  
+  videoItem.onclick = () => playVideo(videoItem);
+}
+
+    function revertToPreview(videoItem) {
+  const videoId = videoItem.dataset.videoId;
+
+  videoItem.innerHTML = `
+    <div class="cover">
+      <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="Видео">
+      <div class="play-button"></div>
+    </div>
+  `;
+
+  videoItem.classList.remove('expand-mobile', 'expand-desktop');
+  const container = videoItem.querySelector('.video-container');
+  if (container) {
+    container.classList.remove('expand-mobile', 'expand-desktop');
+  }
+
   videoItem.onclick = null;
 
   setTimeout(() => {
     videoItem.onclick = () => playVideo(videoItem);
   }, 0);
 }
-
 
     function playVideo(videoItem) {
   const videoId = videoItem.dataset.videoId;
@@ -531,100 +760,154 @@
   }
 
   currentVideoItem = videoItem;
+
   videoItem.innerHTML = `
     <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+      <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&color=white&hl=ua" 
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen></iframe>
     </div>
   `;
+
   videoItem.onclick = null;
+
+  const container = videoItem.querySelector('.video-container');
+  if (window.innerWidth <= 768) {
+    setTimeout(() => {
+      videoItem.classList.add('expand-mobile');
+      container.classList.add('expand-mobile');
+    }, 10);
+  } else {
+    setTimeout(() => {
+      videoItem.classList.add('expand-desktop');
+      container.classList.add('expand-desktop');
+    }, 10);
+  }
 
   observer.observe(videoItem);
 }
 
     function moveToFloatingBlock(videoItem) {
-      const container = videoItem.querySelector('.video-container');
-      if (container && !container.classList.contains('floating')) {
-        container.classList.add('floating');
+  const container = videoItem.querySelector('.video-container');
+  if (container && !container.classList.contains('floating')) {
+    container.classList.add('floating');
 
-        const savedPosition = JSON.parse(localStorage.getItem('floatingVideoPosition'));
-        if (savedPosition) {
-          container.style.left = `${savedPosition.x}px`;
-          container.style.top = `${savedPosition.y}px`;
-        } else {
-          container.style.left = 'auto';
-          container.style.top = '20px';
-          container.style.right = '20px';
-        }
+    if (window.innerWidth <= 768) {
+      const header = document.getElementById('pageHeader');
+      const headerHeight = header ? header.offsetHeight : 40;
+      container.style.left = '0px';
+      container.style.top = `${headerHeight}px`;
 
-        if (!container.querySelector('.draggable-area')) {
-          const draggableArea = document.createElement('div');
-          draggableArea.className = 'draggable-area';
-          draggableArea.innerHTML = `
-            <div></div>
-            <div></div>
-            <div></div>
-          `;
-          container.appendChild(draggableArea);
-
-          let isDragging = false;
-          let startX, startY;
-          let currentX = 0, currentY = 0;
-
-          draggableArea.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            const containerRect = container.getBoundingClientRect();
-            startX = e.clientX - containerRect.left;
-            startY = e.clientY - containerRect.top;
-            container.style.cursor = 'grabbing';
-          });
-
-          document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-              currentX = e.clientX - startX;
-              currentY = e.clientY - startY;
-
-              const containerRect = container.getBoundingClientRect();
-              const draggableHeight = container.querySelector('.draggable-area').offsetHeight;
-              const windowWidth = window.innerWidth;
-              const windowHeight = window.innerHeight;
-
-              currentX = Math.max(0, Math.min(currentX, windowWidth - containerRect.width));
-              currentY = Math.max(0, Math.min(currentY, windowHeight - containerRect.height - draggableHeight));
-
-              container.style.left = `${currentX}px`;
-              container.style.top = `${currentY}px`;
-              container.style.transform = 'none';
-
-              localStorage.setItem('floatingVideoPosition', JSON.stringify({ x: currentX, y: currentY }));
-            }
-          });
-
-          document.addEventListener('mouseup', () => {
-            if (isDragging) {
-              isDragging = false;
-              container.style.cursor = 'grab';
-            }
-          });
-        }
-
-        if (!container.querySelector('.floating-close')) {
-          const closeBtn = document.createElement('button');
-          closeBtn.innerText = '✕';
-          closeBtn.className = 'floating-close';
-          closeBtn.onclick = () => {
-  container.remove();
-  if (currentVideoItem) {
-    currentVideoItem.dataset.closed = "true";
-    revertToPreview(currentVideoItem);
-    currentVideoItem = null;
-  }
-};
-          container.appendChild(closeBtn);
-        }
+      const existingDraggable = container.querySelector('.draggable-area');
+      if (existingDraggable) {
+        existingDraggable.remove();
       }
+
+      if (!container.querySelector('.floating-close')) {
+        const closeBtn = document.createElement('button');
+        closeBtn.innerText = '✕';
+        closeBtn.className = 'floating-close';
+        closeBtn.onclick = () => {
+          container.remove();
+          if (currentVideoItem) {
+            currentVideoItem.dataset.closed = "true";
+            revertToPreview(currentVideoItem);
+            currentVideoItem = null;
+          }
+        };
+        container.appendChild(closeBtn);
+      }
+
+      return;
     }
+
+    const savedPosition = JSON.parse(localStorage.getItem('floatingVideoPosition'));
+    if (savedPosition) {
+      container.style.left = `${savedPosition.x}px`;
+      container.style.top = `${savedPosition.y}px`;
+    } else {
+      container.style.left = '20px';
+      container.style.top = '20px';
+    }
+
+    if (!container.querySelector('.draggable-area')) {
+      const draggableArea = document.createElement('div');
+      draggableArea.className = 'draggable-area';
+      draggableArea.innerHTML = `
+        <div class="draggable-lines">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="drag-icon">⠿</div>
+      `;
+      container.appendChild(draggableArea);
+
+      let isDragging = false;
+      let startX, startY;
+      let currentX = 0, currentY = 0;
+      let animationFrameId;
+
+      draggableArea.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const containerRect = container.getBoundingClientRect();
+        startX = e.clientX - containerRect.left;
+        startY = e.clientY - containerRect.top;
+        container.style.cursor = 'grabbing';
+      });
+
+      function updatePosition() {
+        container.style.left = `${currentX}px`;
+        container.style.top = `${currentY}px`;
+        container.style.transform = 'none';
+        animationFrameId = null;
+      }
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          const headerHeight = 80;
+          const footerHeight = 60;
+          const draggableHeight = 37;
+          const scrollbarWidth = 8;
+          const playerHeight = container.offsetHeight;
+
+          const maxX = window.innerWidth - container.offsetWidth - scrollbarWidth;
+          const maxY = window.innerHeight - footerHeight - playerHeight - draggableHeight;
+
+          currentX = Math.max(0, Math.min(e.clientX - startX, maxX));
+          currentY = Math.max(headerHeight, Math.min(e.clientY - startY, maxY));
+
+          if (!animationFrameId) {
+            animationFrameId = requestAnimationFrame(updatePosition);
+          }
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          container.style.cursor = 'grab';
+          localStorage.setItem('floatingVideoPosition', JSON.stringify({ x: currentX, y: currentY }));
+        }
+      });
+    }
+
+    if (!container.querySelector('.floating-close')) {
+      const closeBtn = document.createElement('button');
+      closeBtn.innerText = '✕';
+      closeBtn.className = 'floating-close';
+      closeBtn.onclick = () => {
+        container.remove();
+        if (currentVideoItem) {
+          currentVideoItem.dataset.closed = "true";
+          revertToPreview(currentVideoItem);
+          currentVideoItem = null;
+        }
+      };
+      container.appendChild(closeBtn);
+    }
+  }
+}
 
     function revertFloating(videoItem) {
       const container = videoItem.querySelector('.video-container');
@@ -647,65 +930,104 @@
   if (observer) {
     observer.disconnect();
   }
-
+  
   observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const videoItem = entry.target;
-
       if (videoItem.dataset.closed === "true") {
         observer.unobserve(videoItem);
         return;
       }
-
-      if (videoItem === currentVideoItem) {
-        const container = videoItem.querySelector('.video-container');
-        if (container) {
-          if (!entry.isIntersecting && !container.classList.contains('floating')) {
-            moveToFloatingBlock(videoItem);
-          }
-          if (entry.isIntersecting && container.classList.contains('floating')) {
-            revertFloating(videoItem);
-          }
+      if (videoItem !== currentVideoItem) return;
+      
+      const container = videoItem.querySelector('.video-container');
+      
+      if (window.innerWidth <= 768) {
+        const videoRect = videoItem.getBoundingClientRect();
+        const verticallyOut = videoRect.top < 0 || videoRect.bottom > window.innerHeight;
+        
+        if (verticallyOut && container && !container.classList.contains('floating')) {
+          moveToFloatingBlock(videoItem);
+        }
+        if (!verticallyOut && container && container.classList.contains('floating')) {
+          revertFloating(videoItem);
+        }
+      } else {
+        if (!entry.isIntersecting && container && !container.classList.contains('floating')) {
+          moveToFloatingBlock(videoItem);
+        }
+        if (entry.isIntersecting && container && container.classList.contains('floating')) {
+          revertFloating(videoItem);
         }
       }
     });
   }, { threshold: 0.5 });
-
+  
   document.querySelectorAll('.video-item').forEach(videoItem => observer.observe(videoItem));
 }
 
-    const groupedVideos = {};
-    videos.forEach(video => {
-      if (!groupedVideos[video.group]) {
-        groupedVideos[video.group] = [];
-      }
-      groupedVideos[video.group].push(video);
-    });
+    function checkFloatingStatus() {
+  if (!currentVideoItem) return;
+  const container = currentVideoItem.querySelector('.video-container');
+  if (!container) return;
+  
+  if (window.innerWidth > 768) return;
+  
+  const rect = currentVideoItem.getBoundingClientRect();
+  
+  if ((rect.top < 0 || rect.bottom > window.innerHeight) && !container.classList.contains('floating')) {
+    moveToFloatingBlock(currentVideoItem);
+  }
 
+  if (rect.top >= 0 && rect.bottom <= window.innerHeight && container.classList.contains('floating')) {
+    revertFloating(currentVideoItem);
+  }
+}
+
+window.addEventListener('scroll', checkFloatingStatus);
+window.addEventListener('resize', checkFloatingStatus);
+
+    function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+    
     const content = document.getElementById('content');
-    for (const group in groupedVideos) {
-      const block = document.createElement('div');
-      block.className = 'group-block';
-      const title = document.createElement('h2');
-      title.textContent = group;
-      block.appendChild(title);
-      const videoList = document.createElement('div');
-      videoList.className = 'video-list';
-      groupedVideos[group].forEach(video => {
-        const videoItem = document.createElement('div');
-        videoItem.className = 'video-item';
-        videoItem.dataset.videoId = video.id;
-        setPreview(videoItem);
-        videoList.appendChild(videoItem);
-      });
-      block.appendChild(videoList);
-      content.appendChild(block);
-    }
+
+shuffleArray(videos);
+
+videos.forEach(videoGroup => {
+  const block = document.createElement('div');
+  block.className = 'group-block';
+
+  const title = document.createElement('h2');
+  title.textContent = videoGroup.group;
+  block.appendChild(title);
+
+  const videoList = document.createElement('div');
+  videoList.className = 'video-list';
+
+  const videoIds = videoGroup.ids.split(", ");
+  videoIds.forEach(videoId => {
+    const videoItem = document.createElement('div');
+    videoItem.className = 'video-item';
+    videoItem.dataset.videoId = videoId.trim();
+
+    setPreview(videoItem);
+    videoList.appendChild(videoItem);
+  });
+
+  block.appendChild(videoList);
+  content.appendChild(block);
+});
 
     document.addEventListener('DOMContentLoaded', () => {
       observeVideos();
     });
 </script>
 <script src="https://www.youtube.com/iframe_api"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </body>
 </html>
