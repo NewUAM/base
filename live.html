@@ -2,7 +2,9 @@
 <html lang="ua">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NUAM Live</title>
+</head>
   <style>
     @font-face {
             font-family: 'CustomFont';
@@ -387,7 +389,7 @@
     ::-webkit-scrollbar-thumb:hover {
       background-color: #c6c979;
     }
-    @media (max-width: 1030px) {
+    @media (max-width: 768px) {
   body {
       margin: 5px;
     }
@@ -772,7 +774,7 @@
   videoItem.onclick = null;
 
   const container = videoItem.querySelector('.video-container');
-  if (window.innerWidth <= 1030) {
+  if (window.innerWidth <= 768) {
     setTimeout(() => {
       videoItem.classList.add('expand-mobile');
       container.classList.add('expand-mobile');
@@ -792,7 +794,7 @@
   if (container && !container.classList.contains('floating')) {
     container.classList.add('floating');
 
-    if (window.innerWidth <= 1030) {
+    if (window.innerWidth <= 768) {
       const header = document.getElementById('pageHeader');
       const headerHeight = header ? header.offsetHeight : 40;
       container.style.left = '0px';
@@ -942,7 +944,7 @@
       
       const container = videoItem.querySelector('.video-container');
       
-      if (window.innerWidth <= 1030) {
+      if (window.innerWidth <= 768) {
         const videoRect = videoItem.getBoundingClientRect();
         const verticallyOut = videoRect.top < 0 || videoRect.bottom > window.innerHeight;
         
@@ -971,7 +973,7 @@
   const container = currentVideoItem.querySelector('.video-container');
   if (!container) return;
   
-  if (window.innerWidth > 1030) return;
+  if (window.innerWidth > 768) return;
   
   const rect = currentVideoItem.getBoundingClientRect();
   
