@@ -753,6 +753,7 @@
 
     function playVideo(videoItem) {
   const videoId = videoItem.dataset.videoId;
+
   videoItem.dataset.closed = "false";
 
   if (currentVideoItem && currentVideoItem !== videoItem) {
@@ -762,29 +763,17 @@
 
   currentVideoItem = videoItem;
 
-  let container = videoItem.querySelector('.video-container');
-  if (!container) {
-    container = document.createElement('div');
-    container.className = 'video-container';
-    videoItem.appendChild(container);
-  } else {
-    container.innerHTML = ''; // Очищаем только содержимое, оставляя контейнер
-  }
+  videoItem.innerHTML = `
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&color=white&hl=ua" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen></iframe>
+    </div>
+  `;
 
-  const playerId = `yt-player-${videoId}`;
-  const playerDiv = document.createElement('div');
-  playerDiv.id = playerId;
-  container.appendChild(playerDiv);
+  videoItem.onclick = null;
 
-  // YouTube API: создаём плеер и принудительно запускаем видео
-  new YT.Player(playerId, {
-    videoId: videoId,
-    playerVars: { 'autoplay': 1, 'mute': 0, 'rel': 0, 'color': 'white', 'hl': 'ua' },
-    events: {
-      'onReady': (event) => event.target.playVideo()
-    }
-  });
-
+  const container = videoItem.querySelector('.video-container');
   if (window.innerWidth <= 768) {
     setTimeout(() => {
       videoItem.classList.add('expand-mobile');
@@ -799,7 +788,6 @@
 
   observer.observe(videoItem);
 }
-
 
     function moveToFloatingBlock(videoItem) {
   const container = videoItem.querySelector('.video-container');
