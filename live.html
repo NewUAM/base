@@ -753,7 +753,6 @@
 
     function playVideo(videoItem) {
   const videoId = videoItem.dataset.videoId;
-
   videoItem.dataset.closed = "false";
 
   if (currentVideoItem && currentVideoItem !== videoItem) {
@@ -763,15 +762,7 @@
 
   currentVideoItem = videoItem;
 
-  videoItem.innerHTML = `
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&color=white&hl=ua" 
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen></iframe>
-    </div>
-  `;
-
-  videoItem.onclick = null;
+  videoItem.innerHTML = `<div class="video-container" id="player-${videoId}"></div>`;
 
   const container = videoItem.querySelector('.video-container');
   if (window.innerWidth <= 768) {
@@ -785,6 +776,16 @@
       container.classList.add('expand-desktop');
     }, 10);
   }
+
+  new YT.Player(`player-${videoId}`, {
+    videoId: videoId,
+    playerVars: { 'autoplay': 1, 'mute': 0, 'rel': 0, 'color': 'white', 'hl': 'ua' },
+    events: {
+      'onReady': (event) => event.target.playVideo()
+    }
+  });
+
+  videoItem.onclick = null;
 
   observer.observe(videoItem);
 }
@@ -1029,7 +1030,7 @@ videos.forEach(videoGroup => {
       observeVideos();
     });
 </script>
-<script src="https://www.youtube.com/iframe_api"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </body>
 </html>
