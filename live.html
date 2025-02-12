@@ -767,23 +767,23 @@
     container = document.createElement('div');
     container.className = 'video-container';
     videoItem.appendChild(container);
+  } else {
+    container.innerHTML = ''; // Очищаем только содержимое, оставляя контейнер
   }
 
-  let iframe = container.querySelector('iframe');
-  if (!iframe) {
-    iframe = document.createElement('iframe');
-    container.appendChild(iframe);
-  }
+  const playerId = `yt-player-${videoId}`;
+  const playerDiv = document.createElement('div');
+  playerDiv.id = playerId;
+  container.appendChild(playerDiv);
 
-  const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&rel=0&color=white&hl=ua`;
-  
-  iframe.setAttribute("frameborder", "0");
-  iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay");
-  iframe.setAttribute("allowfullscreen", "true");
-
-  setTimeout(() => {
-    iframe.src = videoSrc;
-  }, 300);
+  // YouTube API: создаём плеер и принудительно запускаем видео
+  new YT.Player(playerId, {
+    videoId: videoId,
+    playerVars: { 'autoplay': 1, 'mute': 0, 'rel': 0, 'color': 'white', 'hl': 'ua' },
+    events: {
+      'onReady': (event) => event.target.playVideo()
+    }
+  });
 
   if (window.innerWidth <= 768) {
     setTimeout(() => {
@@ -799,6 +799,7 @@
 
   observer.observe(videoItem);
 }
+
 
     function moveToFloatingBlock(videoItem) {
   const container = videoItem.querySelector('.video-container');
