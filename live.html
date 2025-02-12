@@ -2,9 +2,7 @@
 <html lang="ua">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NUAM Live</title>
-</head>
   <style>
     @font-face {
             font-family: 'CustomFont';
@@ -344,26 +342,26 @@
     gap: 16px;
   }
   .video-button-mobile {
-  padding: 4px 8px;
-  background-color: #f3f3f3;
-  color: #282626;
-  border: none;
-  border-radius: 7px;
-  font-family: 'CustomFont', Arial;
-  font-size: 11px;
-  font-weight: bold;
-  cursor: pointer;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  box-sizing: border-box;
-  line-height: 1.2;
+    padding: 6px 6px;
+    background-color: #f3f3f3;
+    color: #282626;
+    border: none;
+    border-radius: 7px;
+    font-family: 'CustomFont', Arial;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 20px;
+    line-height: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 .video-button-mobile:hover {
     background-color: white;
     color: #000;
@@ -397,22 +395,15 @@
     height: 40px;
     padding: 0 8px;
 }
+      .header-separator {
+    display: none;
+}
         .header-logo a {
     height: 20px;
 }
 .header-title {
-        font-size: 12px;
-        text-align: center;
-        line-height: 1.2;
-    }
-
-    .header-title span {
-        display: none;
-    }
-    .header-title::after {
-        content: "гуртів";
-        display: block;
-    }
+    font-size: 12px;
+}
       #content {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -449,7 +440,7 @@
   display: none;
 }
       #pageFooter {
-        display: none;
+        height: 40px;
       }
       .footer-icon {
     font-size: 18px;
@@ -459,12 +450,9 @@
     font-size: 12px;
 }
       .video-button-desktop {
-    padding: 4px 6px;
-    font-size: 10px;
-    font-weight: normal;
-    height: 20px;
-    line-height: 10px;
-}
+      display: none;
+    }
+
     .footer-right,
     .video-button-mobile {
       display: block;
@@ -491,9 +479,7 @@
         Ми теж граємо <br> Хочемо таке відео
     </a>
     <div class="header-separator"></div>
-    <h1 class="header-title">
-    Live сесії <span>українських гуртів</span>
-</h1>
+    <h1 class="header-title">Live сесії українських гуртів</h1>
 </div>
 </header>
 
@@ -764,47 +750,41 @@
 }
 
     function playVideo(videoItem) {
-    const videoId = videoItem.dataset.videoId;
-    videoItem.dataset.closed = "false";
+  const videoId = videoItem.dataset.videoId;
 
-    if (currentVideoItem && currentVideoItem !== videoItem) {
-        revertToPreview(currentVideoItem);
-        currentVideoItem = null;
-    }
+  videoItem.dataset.closed = "false";
 
-    currentVideoItem = videoItem;
+  if (currentVideoItem && currentVideoItem !== videoItem) {
+    revertToPreview(currentVideoItem);
+    currentVideoItem = null;
+  }
 
-    videoItem.innerHTML = `
-        <div class="video-container">
-            <iframe id="youtube-player" src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&color=white&hl=ua"
-                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-        </div>
-    `;
+  currentVideoItem = videoItem;
 
-    videoItem.onclick = null;
+  videoItem.innerHTML = `
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&color=white&hl=ua" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen></iframe>
+    </div>
+  `;
 
-    const container = videoItem.querySelector('.video-container');
-    if (window.innerWidth <= 768) {
-        setTimeout(() => {
-            videoItem.classList.add('expand-mobile');
-            container.classList.add('expand-mobile');
-        }, 10);
-    } else {
-        setTimeout(() => {
-            videoItem.classList.add('expand-desktop');
-            container.classList.add('expand-desktop');
-        }, 10);
-    }
+  videoItem.onclick = null;
 
-    observer.observe(videoItem);
-
+  const container = videoItem.querySelector('.video-container');
+  if (window.innerWidth <= 768) {
     setTimeout(() => {
-        const iframe = document.getElementById('youtube-player');
-        if (iframe) {
-            iframe.click();
-        }
-    }, 1000);
+      videoItem.classList.add('expand-mobile');
+      container.classList.add('expand-mobile');
+    }, 10);
+  } else {
+    setTimeout(() => {
+      videoItem.classList.add('expand-desktop');
+      container.classList.add('expand-desktop');
+    }, 10);
+  }
+
+  observer.observe(videoItem);
 }
 
     function moveToFloatingBlock(videoItem) {
@@ -1047,6 +1027,7 @@ videos.forEach(videoGroup => {
       observeVideos();
     });
 </script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </body>
 </html>
