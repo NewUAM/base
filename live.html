@@ -363,7 +363,6 @@
   box-sizing: border-box;
   line-height: 1.2;
 }
-
 .video-button-mobile:hover {
     background-color: white;
     color: #000;
@@ -385,6 +384,7 @@
     ::-webkit-scrollbar-thumb {
       background-color: #d7da8b;
       border-radius: 7px;
+      cursor: grab;
     }
     ::-webkit-scrollbar-thumb:hover {
       background-color: #c6c979;
@@ -405,7 +405,6 @@
         text-align: center;
         line-height: 1.2;
     }
-
     .header-title span {
         display: none;
     }
@@ -413,6 +412,9 @@
         content: "гуртів";
         display: block;
     }
+      .video-container.floating {
+    transition: none !important;
+  }
       #content {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -817,6 +819,8 @@
     container.classList.add('floating');
 
     if (window.innerWidth <= 768) {
+      container.style.transition = 'none';
+
       const header = document.getElementById('pageHeader');
       const headerHeight = header ? header.offsetHeight : 40;
       container.style.left = '0px';
@@ -844,6 +848,8 @@
 
       return;
     }
+
+    container.style.transition = '';
 
     const savedPosition = JSON.parse(localStorage.getItem('floatingVideoPosition'));
     if (savedPosition) {
