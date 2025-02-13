@@ -4089,7 +4089,7 @@ function displayArtists(artists, reset = false) {
         if (artist['YearRel'] !== '+') {
             const yearRelIcon = document.createElement('div');
             yearRelIcon.className = 'year-rel-icon';
-            yearRelIcon.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Немає релізів цього року"></i>';
+            yearRelIcon.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Немає релізів понад рік"></i>';
             yearRelIcon.style.color = '#fb8484';
             yearRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(yearRelIcon);
@@ -5241,7 +5241,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const options = {
         steps: [
             {
-                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 12 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
+                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 13 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
                 disableInteraction: true
             },
             {
