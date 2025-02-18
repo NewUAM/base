@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог плейлістів</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'CustomFont', sans-serif;
+            background-color: #383838;
+            color: #F3F3F3;
+            font-size: 16px;
+        }
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d7da8b;
+        }
+      
+      #progress-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    padding: 20px;
+    border-radius: 7px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #F3F3F3;
+    z-index: 1000;
+}
+
+#progress-bar {
+    width: 100%;
+    height: 20px;
+    margin-top: 10px;
+    border: 1px solid #d7da8b;
+    border-radius: 7px;
+    background: #282626;
+    overflow: hidden;
+}
+
+#progress-bar::-webkit-progress-bar {
+    background-color: #282626;
+    border-radius: 7px;
+}
+
+#progress-bar::-webkit-progress-value {
+    background-color: #84AAFB;
+    border-radius: 7px;
+}
+
+#progress-bar::-moz-progress-bar {
+    background-color: #84AAFB;
+    border-radius: 7px;
+}
+
+#progress-text {
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#main-content {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+#main-content.visible {
+    visibility: visible;
+    opacity: 1;
+}
+  
+        .playlist-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .cover-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 7px;
+            margin-right: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #84AAFB;
+        }
+        .playlist-name {
+            font-weight: bold;
+            font-size: 18px;
+            display: inline;
+            margin-right: 10px;
+        }
+        .description {
+            font-size: 14px;
+        }
+        .description-title {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        img {
+            -webkit-user-drag: none;
+            user-select: none;
+            pointer-events: none;
+        }
+        input#search-input {
+            width: 400px;
+            padding: 10px 15px;
+            margin: 0;
+            border: 1px solid #d7da8b;
+            border-radius: 7px;
+            background-color: #282626;
+            color: #F3F3F3;
+            font-size: 16px;
+        }
+        input#search-input::placeholder {
+            color: #B2B2B2;
+            font-size: 14px;
+        }
+        input#search-input:focus {
+            border-color: #84AAFB;
+            outline: none;
+            background-color: #383838;
+        }
+        input#search-input:-webkit-autofill {
+            background-color: #383838 !important;
+            color: #F3F3F3 !important;
+            -webkit-text-fill-color: #F3F3F3 !important;
+            border: 1px solid #84AAFB !important;
+            -webkit-box-shadow: 0 0 0px 1000px #383838 inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+            caret-color: #F3F3F3;
+        }
+        .tab-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #282626;
+    padding: 10px;
+    gap: 10px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #F3F3F3;
+    font-weight: bold;
+    border: none;
+    background: none;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button.active {
+    border-bottom: 3px solid #d7da8b;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.search-container.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.search-label {
+    font-size: 14px;
+    color: #bababa;
+}
+
+#search-input {
+    width: 300px;
+    padding: 10px 15px;
+    border: 1px solid #d7da8b;
+    border-radius: 7px;
+    background-color: #282626;
+    color: #F3F3F3;
+    font-size: 16px;
+}
+
+#search-input::placeholder {
+    color: #B2B2B2;
+    font-size: 14px;
+}
+
+#search-input:focus {
+    border-color: #84AAFB;
+    outline: none;
+    background-color: #383838;
+}
+
+        .tab-content {
+            display: none;
+            padding: 10px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+      #artist-average-position {
+    color: #bababa;
+}
+.info-block {
+    max-width: 600px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+        @media (max-width: 600px) {
+            body, html {
+                background-color: transparent;
+                font-size: 14px;
+            }
+            .cover-image {
+                width: 70px;
+                height: 70px;
+                margin-right: 10px;
+                margin-left: 5px;
+            }
+            ::-webkit-scrollbar {
+                width: 7px;
+            }
+            .playlist-name {
+                font-size: 16px;
+            }
+            .description {
+                display: none;
+            }
+          .info-block {
+        max-width: 100%;
+    }
+            .info-block div strong {
+                font-weight: normal;
+            }
+            input#search-input {
+                width: 100%;
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-container" style="display: none;">
+        <progress id="progress-bar" value="0" max="100"></progress>
+        <span id="progress-text">Завантаження...</span>
+    </div>
+    <div id="main-content">
+
+    <div id="progress-container" style="display: none; margin-bottom: 10px;">
+        Завантаження: <progress id="progress-bar" value="0" max="100" style="width: 100%;"></progress>
+        <span id="progress-text">0%</span>
+    </div>
+
+    <div class="tab-container">
+    <button class="tab-button active" data-tab="playlists">Плейлісти</button>
+    <button class="tab-button" data-tab="stats">Статистика</button>
+    <div class="search-container">
+        <label for="search-input" class="search-label">Знайти треки в плейлістах:</label>
+        <input type="text" id="search-input" placeholder="Вставте посилання на трек, альбом або артиста в Spotify">
+    </div>
+</div>
+
+    <div id="playlists" class="tab-content active">
+      <div id="artist-info" style="display: none; background-color: #282626; padding: 15px; border-radius: 7px; margin-bottom: 20px;">
+    <div id="artist-name" style="font-weight: bold; font-size: 1.2em; margin-bottom: 10px;"></div>
+    <div>Кількість плейлістів, у яких перебуває артист: <span id="artist-playlist-count">0</span></div>
+    <div>Кількість унікальних треків у цих плейлістах: <span id="artist-track-count">0</span></div>
+    <div>
+        Середня позиція у всіх плейлістах 
+        <span style="font-size: calc(100% - 2px); color: #bababa;">(враховуються позиції не нижче 50-ї)</span>: 
+        <span id="artist-average-position" style="color: inherit;">0</span>
+    </div>
+</div>
+      
+      <div id="track-info" style="display: none; background-color: #282626; padding: 15px; border-radius: 7px; margin-bottom: 20px;">
+    <div id="track-name" style="font-weight: bold; font-size: 1.2em; margin-bottom: 10px;"></div>
+    <div>Кількість плейлістів, у яких перебуває трек: <span id="track-playlist-count">0</span></div>
+    <div>
+        Середня позиція у всіх плейлістах 
+        <span style="font-size: calc(100% - 2px); color: #bababa;">(враховуються позиції не нижче 50-ї)</span>: 
+        <span id="track-average-position" style="color: inherit;">0</span>
+    </div>
+</div>
+
+      <div id="album-info" style="display: none; background-color: #282626; padding: 15px; border-radius: 7px; margin-bottom: 20px;">
+    <div id="album-name" style="font-weight: bold; font-size: 1.2em; margin-bottom: 10px;"></div>
+    <div>Кількість плейлістів, у яких перебувають треки з альбому: <span id="album-playlist-count">0</span></div>
+    <div>
+        Середня позиція треків у плейлістах 
+        <span style="font-size: calc(100% - 2px); color: #bababa;">(враховуються позиції не нижче 50-ї)</span>: 
+        <span id="album-average-position" style="color: inherit;">0</span>
+    </div>
+    <div id="album-tracks-in-playlists" style="display: none;">
+        У плейлісти додано треків: <span id="tracks-in-playlists-count">0</span> із <span id="total-album-tracks">0</span>.
+    </div>
+</div>
+      
+        <div id="data-table"></div>
+    </div>
+    <div id="stats" class="tab-content">
+        <div id="stats-container"></div>
+    </div>
+</div>
+  
+<script>
+const clientId = '0948b3bd26d94015937c6b56c609ee0c';
+const clientSecret = '8bc7866966b64f9f89ae10483101754d';
+let spotifyToken = null;
+let allRecords = [];
+const trackCache = {};
+
+async function getSpotifyToken() {
+    if (spotifyToken) return spotifyToken;
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `grant_type=client_credentials&client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`
+    });
+    const data = await response.json();
+    spotifyToken = data.access_token;
+    return spotifyToken;
+}
+
+async function getTracksInfo(trackIds) {
+    const uniqueIds = trackIds.filter(id => !trackCache[id]);
+    if (uniqueIds.length) {
+        const token = await getSpotifyToken();
+        const chunkSize = 50;
+        const chunks = [];
+
+        for (let i = 0; i < uniqueIds.length; i += chunkSize) {
+            chunks.push(uniqueIds.slice(i, i + chunkSize));
+        }
+
+        for (const chunk of chunks) {
+            const url = 'https://api.spotify.com/v1/tracks?ids=' + chunk.join(',');
+            const response = await fetch(url, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await response.json();
+            (data.tracks || []).forEach(t => trackCache[t.id] = t);
+        }
+    }
+
+    return trackIds.map(id => trackCache[id]).filter(Boolean);
+}
+
+async function loadData() {
+    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6SC0P8UDbIYiOERfoSMNIJbHLYsGSgHefjx2v-c2fOatVyDntUdy1ekC3_PDpY9akAMP3fBiUnnY5/pub?gid=1793209054&single=true&output=csv';
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const mainContent = document.getElementById('main-content');
+
+    mainContent.classList.remove('visible');
+    progressContainer.style.display = 'flex';
+
+    const db = await openIndexedDB();
+
+    getFileSize(url, async (err, fileSize) => {
+        if (!err && fileSize) {
+            const cachedSize = await getCachedSize(db);
+            if (cachedSize === fileSize) {
+                const cachedCSV = await getCachedCSV(db);
+                if (cachedCSV) {
+                    processCSV(cachedCSV);
+                    progressContainer.style.display = 'none';
+                    mainContent.classList.add('visible');
+                    return;
+                }
+            }
+            fetchAndCacheCSV(db, url, fileSize, progressContainer, progressBar, progressText, mainContent);
+        } else {
+            fetchAndCacheCSV(db, url, null, progressContainer, progressBar, progressText, mainContent);
+        }
+    });
+}
+
+function openIndexedDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('CSVCacheDB', 1);
+        request.onupgradeneeded = function () {
+            const db = request.result;
+            db.createObjectStore('cache', { keyPath: 'key' });
+        };
+        request.onsuccess = function () {
+            resolve(request.result);
+        };
+        request.onerror = function () {
+            reject('Помилка відкриття бази даних');
+        };
+    });
+}
+
+function getCachedCSV(db) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction('cache', 'readonly');
+        const store = transaction.objectStore('cache');
+        const request = store.get('csv');
+        request.onsuccess = function () {
+            resolve(request.result ? request.result.data : null);
+        };
+        request.onerror = function () {
+            reject('Помилка читання з кешу');
+        };
+    });
+}
+
+function getCachedSize(db) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction('cache', 'readonly');
+        const store = transaction.objectStore('cache');
+        const request = store.get('size');
+        request.onsuccess = function () {
+            resolve(request.result ? request.result.data : null);
+        };
+        request.onerror = function () {
+            reject('Помилка порівняння бази з кешу та наявної');
+        };
+    });
+}
+
+function saveToCache(db, key, data) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction('cache', 'readwrite');
+        const store = transaction.objectStore('cache');
+        const request = store.put({ key, data });
+        request.onsuccess = function () {
+            resolve();
+        };
+        request.onerror = function () {
+            reject('Помилка запису бази в кеш');
+        };
+    });
+}
+
+function fetchAndCacheCSV(db, url, fileSize, progressContainer, progressBar, progressText, mainContent) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'text';
+
+    xhr.onprogress = function (event) {
+        if (fileSize) {
+            const percentComplete = Math.round((event.loaded / fileSize) * 100);
+            progressBar.value = percentComplete;
+            progressText.textContent = `${percentComplete}% (${(fileSize / (1024 * 1024)).toFixed(1)} MB)`;
+        } else {
+            progressText.textContent = `Завантаження...`;
+        }
+    };
+
+    xhr.onload = async function () {
+        if (xhr.status === 200) {
+            await saveToCache(db, 'csv', xhr.responseText);
+            if (fileSize) {
+                await saveToCache(db, 'size', fileSize);
+            }
+            processCSV(xhr.responseText);
+            progressContainer.style.display = 'none';
+            mainContent.classList.add('visible');
+        } else {
+            progressContainer.style.display = 'none';
+            mainContent.classList.add('visible');
+            alert('Помилка при завантаженні CSV');
+        }
+    };
+
+    xhr.onerror = function () {
+        progressContainer.style.display = 'none';
+        mainContent.classList.add('visible');
+        alert('Помилка завантаження CSV');
+    };
+
+    xhr.send();
+}
+
+function processCSV(csvData) {
+    Papa.parse(csvData, {
+        header: false,
+        complete: function (results) {
+            processRows(results.data);
+        }
+    });
+}
+
+function getFileSize(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('HEAD', url, true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const size = xhr.getResponseHeader('Content-Length');
+            if (size) {
+                callback(null, parseInt(size, 10));
+            } else {
+                callback('Content-Length недоступний', null);
+            }
+        } else {
+            callback('Помилка порівняння бази з кешу та наявної', null);
+        }
+    };
+    xhr.onerror = function () {
+        callback('Помилка виконання HEAD-запиту', null);
+    };
+    xhr.send();
+}
+
+function generateInfoHTML(record, positionText = '', isSearchActive = false) {
+    return `
+        <div class="playlist-row">
+            <a href="${record.url}" target="_blank"><img src="${record.imageUrl}" alt="" class="cover-image"></a>
+            <div class="info-block">
+                <a href="${record.url}" target="_blank" class="playlist-name">${record.name}</a>
+                <div>Від <a href="${record.authorUrl}" target="_blank">${record.author}</a></div><br/>
+                <div><strong>Підписників:</strong> ${record.subscribers}</div>
+                <div><strong>Треків:</strong> ${record.tracks}</div>
+                <div><strong>Останнє оновлення:</strong> ${record.lastUpdate}</div><br/>
+                ${isSearchActive ? `<div class="description"> ${positionText}</div>` : `<div class="description"><strong>Опис:</strong> ${record.description}</div>`}
+            </div>
+        </div>
+    `;
+}
+
+let filteredRecords = [];
+
+function processRows(rows) {
+    let twoMonthsAgo = new Date();
+    twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 1);
+
+    const dataTable = document.getElementById('data-table');
+    dataTable.innerHTML = '';
+
+    allRecords = [];
+    filteredRecords = [];
+
+    for (let col = 1; col < rows[0].length; col++) {
+        const tracksData = rows.slice(9).map(row => row[col]).filter(Boolean);
+        const [day, month, year] = rows[8][col].split('.');
+        const fullYear = parseInt(year, 10);
+        const lastUpdateDate = new Date(`${fullYear}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
+
+        let record = {
+            playlistId: col,
+            name: rows[0][col],
+            url: rows[1][col],
+            imageUrl: rows[2][col].startsWith('https://mosaic.') ? 
+                'https://static.wixstatic.com/media/c77f36_7f3b2641cfb54486917bf2ee639b3f7b~mv2.png' : rows[2][col],
+            subscribers: parseInt(rows[3][col], 10),
+            tracks: rows[4][col],
+            lastUpdate: rows[8][col].trim(),
+            author: rows[5][col],
+            authorUrl: rows[6][col],
+            description: rows[7][col] || 'Опис відсутній',
+            tracksData,
+            lastUpdateDate
+        };
+
+        allRecords.push(record);
+
+        if (record.subscribers >= 100 && lastUpdateDate >= twoMonthsAgo) {
+            filteredRecords.push(record);
+        }
+    }
+
+    filteredRecords.sort((a, b) => b.subscribers - a.subscribers);
+    renderRecords(filteredRecords);
+    removeEmojisOnMobile();
+
+    renderStatistics(allRecords);
+}
+
+function renderRecords(records) {
+    const dataTable = document.getElementById('data-table');
+    dataTable.innerHTML = '';
+    records.forEach(record => {
+        dataTable.innerHTML += generateInfoHTML(record);
+    });
+}
+
+async function renderSearchResults(records) {
+    const dataTable = document.getElementById('data-table');
+    dataTable.innerHTML = '';
+
+    const allArtistTrackIds = [];
+    for (const record of records) {
+        if (record.type === 'artist') {
+            for (const pos of record.positions) {
+                const [trackId, albumId, artistIds] = record.tracksData[pos - 1].split(':');
+                if (trackId && artistIds.split(',').includes(record.searchId)) {
+                    allArtistTrackIds.push(trackId);
+                }
+            }
+        }
+    }
+
+    const uniqueArtistTrackIds = [...new Set(allArtistTrackIds)];
+    const allTracks = uniqueArtistTrackIds.length ? await getTracksInfo(uniqueArtistTrackIds) : [];
+    const trackMap = {};
+    allTracks.forEach(t => trackMap[t.id] = t);
+
+    let isFirstPlaylist = true;
+
+    const wrapInBlock = (content) => `
+        <div style="background-color: #282626; padding: 10px; border-radius: 7px;">
+            ${content}
+        </div>
+    `;
+
+    for (const record of records) {
+        let positionContent = '';
+        if (record.type === 'track') {
+            positionContent = `Трек перебуває на позиції ${record.positions.join(', ')}`;
+        } else if (record.type === 'album') {
+            if (record.positions.length === 1) {
+                positionContent = `Трек з цього альбому знаходиться на позиції ${record.positions[0]}`;
+            } else {
+                const positions = record.positions.slice(0, -1).join(', ') + ' і ' + record.positions.slice(-1);
+                positionContent = `Треки з цього альбому знаходяться на позиціях ${positions}`;
+            }
+        } else if (record.type === 'artist') {
+            const artistTrackLinks = [];
+            let artistName = null;
+            record.positions.forEach((pos, index) => {
+                const [trackId, albumId, artistIds] = record.tracksData[pos - 1].split(':');
+                if (trackId && trackMap[trackId] && artistIds.split(',').includes(record.searchId)) {
+                    const track = trackMap[trackId];
+                    const artist = track.artists.find(a => a.id === record.searchId);
+                    if (artist) {
+                        artistName = artist.name;
+                        const positionSuffix = index === 0 && isFirstPlaylist
+                            ? ` (${pos} позиція в плейлісті)`
+                            : ` (${pos})`;
+                        artistTrackLinks.push(
+                            `<a href="${track.external_urls.spotify}" target="_blank">${track.name}</a>${positionSuffix}`
+                        );
+                    }
+                }
+            });
+            const trackCount = artistTrackLinks.length;
+
+            let trackWord = 'треків';
+            if (trackCount % 10 === 1 && trackCount % 100 !== 11) {
+                trackWord = 'трек';
+            } else if (trackCount % 10 >= 2 && trackCount % 10 <= 4 && 
+                       (trackCount % 100 < 10 || trackCount % 100 >= 20)) {
+                trackWord = 'треки';
+            }
+
+            positionContent = `${trackCount} ${trackWord} ${artistName} у плейлісті: ${artistTrackLinks.join(', ')}`;
+        }
+
+        const wrappedContent = wrapInBlock(positionContent);
+        dataTable.innerHTML += generateInfoHTML(record, wrappedContent, true);
+
+        if (isFirstPlaylist) isFirstPlaylist = false;
+    }
+}
+
+function removeEmojisOnMobile() {
+    if (window.innerWidth <= 600) {
+        const emojisToRemove = ["\ud83d\udfe1", "\u26aa", "\ud83d\udc4a\ud83c\udffb", "\ud83d\udc9b", "\ud83d\udc99", "\u2728", "\ud83e\ude76", "\ud83d\ude1d"];
+        document.querySelectorAll('.playlist-name, .description, .info-block a[target="_blank"]').forEach(element => {
+            element.textContent = element.textContent.replace(new RegExp(emojisToRemove.join('|'), 'gu'), '');
+        });
+    }
+}
+
+async function renderStatistics(records) {
+    const statsContainer = document.getElementById('stats-container');
+    statsContainer.innerHTML = '';
+
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const filteredRecords = records.filter(record => record.lastUpdateDate >= oneMonthAgo);
+
+    const allTracks = [];
+    for (let i = 0; i < filteredRecords.length; i++) {
+        const rec = filteredRecords[i];
+        const tracksData = rec.tracksData;
+        for (let j = 0; j < tracksData.length; j++) {
+            const t = tracksData[j];
+            const parts = t.split(':');
+            const trackId = parts[0];
+            if (!trackId) continue;
+            const albumId = parts[1];
+            const artistIds = parts[2] ? parts[2].split(',') : [];
+            allTracks.push({
+                trackId,
+                albumId,
+                artistIds,
+                position: j + 1,
+                playlistId: rec.playlistId
+            });
+        }
+    }
+
+    const trackCountMap = {};
+    const artistCountMap = {};
+    const artistTrackMap = {};
+    const trackPositionMap = {};
+    const artistPositionMap = {};
+    const trackPlaylistMap = {};
+    const artistPlaylistMap = {};
+    const playlistSetsByArtist = {};
+
+    for (let i = 0; i < allTracks.length; i++) {
+        const item = allTracks[i];
+
+        if (!trackCountMap[item.trackId]) trackCountMap[item.trackId] = 0;
+        trackCountMap[item.trackId]++;
+
+        if (!trackPositionMap[item.trackId]) trackPositionMap[item.trackId] = [];
+        trackPositionMap[item.trackId].push(item.position);
+
+        if (!trackPlaylistMap[item.trackId]) trackPlaylistMap[item.trackId] = new Set();
+        if (item.position <= 50) trackPlaylistMap[item.trackId].add(item.playlistId);
+
+        const aIds = item.artistIds;
+        for (let k = 0; k < aIds.length; k++) {
+            const aId = aIds[k];
+            if (!artistTrackMap[aId]) artistTrackMap[aId] = new Set();
+            artistTrackMap[aId].add(item.trackId);
+
+            if (!artistPositionMap[aId]) artistPositionMap[aId] = [];
+            artistPositionMap[aId].push(item.position);
+
+            if (!artistPlaylistMap[aId]) artistPlaylistMap[aId] = new Set();
+            if (item.position <= 50) artistPlaylistMap[aId].add(item.playlistId);
+        }
+    }
+
+    for (let i = 0; i < filteredRecords.length; i++) {
+        const rec = filteredRecords[i];
+        const uniqueArtistsInPlaylist = new Set();
+        const tracksData = rec.tracksData;
+        for (let j = 0; j < tracksData.length; j++) {
+            const t = tracksData[j];
+            const parts = t.split(':');
+            if (parts[2]) {
+                const aIds = parts[2].split(',');
+                for (let k = 0; k < aIds.length; k++) {
+                    uniqueArtistsInPlaylist.add(aIds[k]);
+                }
+            }
+        }
+        uniqueArtistsInPlaylist.forEach(aId => {
+            if (!playlistSetsByArtist[aId]) playlistSetsByArtist[aId] = new Set();
+            playlistSetsByArtist[aId].add(rec.playlistId);
+        });
+    }
+
+    const aKeys = Object.keys(playlistSetsByArtist);
+    for (let i = 0; i < aKeys.length; i++) {
+        const aId = aKeys[i];
+        artistCountMap[aId] = playlistSetsByArtist[aId].size;
+    }
+
+    const trackIds = Object.keys(trackCountMap);
+    const artistIds = Object.keys(artistCountMap);
+
+    const trackAvgPos = [];
+    for (let i = 0; i < trackIds.length; i++) {
+        const id = trackIds[i];
+        const positions = trackPositionMap[id];
+        const filtered = [];
+        for (let m = 0; m < positions.length; m++) {
+            if (positions[m] <= 50) filtered.push(positions[m]);
+        }
+        const count = filtered.length;
+        if (count < 10) continue;
+        let score = 0;
+        let sumPos = 0;
+        for (let n = 0; n < filtered.length; n++) {
+            score += 1 / filtered[n];
+            sumPos += filtered[n];
+        }
+        const avgPosition = sumPos / count;
+        const uniquePlaylistCount = trackPlaylistMap[id] ? trackPlaylistMap[id].size : 0;
+        trackAvgPos.push({ id, score, count: uniquePlaylistCount, avgPosition });
+    }
+    trackAvgPos.sort((a, b) => b.score - a.score);
+    trackAvgPos.splice(10);
+
+    const artistAvgPos = [];
+    for (let i = 0; i < artistIds.length; i++) {
+        const id = artistIds[i];
+        const positions = artistPositionMap[id];
+        if (!positions) continue;
+        const validPositions = [];
+        for (let m = 0; m < positions.length; m++) {
+            if (positions[m] <= 50) validPositions.push(positions[m]);
+        }
+        const uniquePlaylistCount = artistPlaylistMap[id] ? artistPlaylistMap[id].size : 0;
+        if (uniquePlaylistCount < 10) continue;
+        let score = 0;
+        let sumPos = 0;
+        for (let n = 0; n < validPositions.length; n++) {
+            score += 1 / validPositions[n];
+            sumPos += validPositions[n];
+        }
+        const avgPosition = sumPos / validPositions.length;
+        artistAvgPos.push({ id, score, count: uniquePlaylistCount, avgPosition });
+    }
+    artistAvgPos.sort((a, b) => b.score - a.score);
+    artistAvgPos.splice(10);
+
+    const topTracksByCount = trackIds
+        .sort((a, b) => trackCountMap[b] - trackCountMap[a])
+        .slice(0, 10);
+
+    const topArtistsByCount = artistIds
+        .sort((a, b) => artistCountMap[b] - artistCountMap[a])
+        .slice(0, 10);
+
+    let statsCache = JSON.parse(localStorage.getItem('statsCache2') || '{}');
+    const requiredTrackIds = [];
+    {
+        const setCheck = new Set();
+        for (let i = 0; i < topTracksByCount.length; i++) {
+            const id = topTracksByCount[i];
+            if (!setCheck.has(id)) {
+                setCheck.add(id);
+                requiredTrackIds.push(id);
+            }
+        }
+        for (let i = 0; i < trackAvgPos.length; i++) {
+            const id = trackAvgPos[i].id;
+            if (!setCheck.has(id)) {
+                setCheck.add(id);
+                requiredTrackIds.push(id);
+            }
+        }
+    }
+    const uncachedTrackIds = [];
+    for (let i = 0; i < requiredTrackIds.length; i++) {
+        const id = requiredTrackIds[i];
+        if (!statsCache[id]) uncachedTrackIds.push(id);
+    }
+
+    if (uncachedTrackIds.length > 0) {
+        const uncachedTracks = await getTracksInfo(uncachedTrackIds);
+        for (let i = 0; i < uncachedTracks.length; i++) {
+            const track = uncachedTracks[i];
+            if (track && track.id) {
+                statsCache[track.id] = {
+                    id: track.id,
+                    name: track.name,
+                    artists: track.artists || [],
+                    url: (track.external_urls && track.external_urls.spotify) || null
+                };
+            }
+        }
+        localStorage.setItem('statsCache2', JSON.stringify(statsCache));
+    }
+
+    const trackCountInfo = [];
+    for (let i = 0; i < topTracksByCount.length; i++) {
+        const id = topTracksByCount[i];
+        if (statsCache[id]) trackCountInfo.push(statsCache[id]);
+    }
+
+    const trackAvgInfo = [];
+    for (let i = 0; i < trackAvgPos.length; i++) {
+        const item = trackAvgPos[i];
+        if (statsCache[item.id]) trackAvgInfo.push(statsCache[item.id]);
+    }
+
+    let artistCache = JSON.parse(localStorage.getItem('artistCache2') || '{}');
+    const requiredArtistIds = [];
+    {
+        const setCheck = new Set();
+        for (let i = 0; i < topArtistsByCount.length; i++) {
+            const id = topArtistsByCount[i];
+            if (!setCheck.has(id)) {
+                setCheck.add(id);
+                requiredArtistIds.push(id);
+            }
+        }
+        for (let i = 0; i < artistAvgPos.length; i++) {
+            const id = artistAvgPos[i].id;
+            if (!setCheck.has(id)) {
+                setCheck.add(id);
+                requiredArtistIds.push(id);
+            }
+        }
+    }
+    const uncachedArtistIds = [];
+    for (let i = 0; i < requiredArtistIds.length; i++) {
+        const id = requiredArtistIds[i];
+        if (!artistCache[id]) uncachedArtistIds.push(id);
+    }
+
+    if (uncachedArtistIds.length > 0) {
+        const uncachedArtists = await getArtistsInfo(uncachedArtistIds);
+        for (let i = 0; i < uncachedArtists.length; i++) {
+            const artist = uncachedArtists[i];
+            if (artist && artist.id) {
+                artistCache[artist.id] = {
+                    id: artist.id,
+                    name: artist.name,
+                    url: (artist.external_urls && artist.external_urls.spotify) || null
+                };
+            }
+        }
+        localStorage.setItem('artistCache2', JSON.stringify(artistCache));
+    }
+
+    const artistCountInfo = [];
+    for (let i = 0; i < topArtistsByCount.length; i++) {
+        const id = topArtistsByCount[i];
+        if (artistCache[id]) artistCountInfo.push(artistCache[id]);
+    }
+
+    const artistAvgInfo = [];
+    for (let i = 0; i < artistAvgPos.length; i++) {
+        const item = artistAvgPos[i];
+        if (artistCache[item.id]) artistAvgInfo.push(artistCache[item.id]);
+    }
+
+    const pluralize = (number, one, few, many) => {
+        if (number % 10 === 1 && number % 100 !== 11) return one;
+        if (number % 10 >= 2 && number % 10 <= 4 && (number % 100 < 10 || number % 100 >= 20)) return few;
+        return many;
+    };
+
+    const buildList = (items, title, map, isTrackList = false, showExtra = false) => {
+        let html = `<div style="margin-bottom:20px;"><h3 style="margin:0;margin-bottom:10px;">${title}</h3><ol>`;
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (map[item.id]) {
+                if (isTrackList) {
+                    const track = map[item.id];
+                    const artists = track.artists.map(artist => artist.name).join(', ');
+                    html += `<li><a href="${track.url}" target="_blank">${artists} - ${track.name}</a>${
+                        showExtra
+                            ? ` (у ${item.count} ${pluralize(item.count, 'плейлісті', 'плейлістах', 'плейлістах')} із середньою позицією ${item.avgPosition.toFixed(2)})`
+                            : ` (у ${item.count} ${pluralize(item.count, 'плейлісті', 'плейлістах', 'плейлістах')})`
+                    }</li>`;
+                } else {
+                    const artist = map[item.id];
+                    const trackCount = artistTrackMap[item.id] ? artistTrackMap[item.id].size : 0;
+                    html += `<li><a href="${artist.url}" target="_blank">${artist.name}</a>${
+                        showExtra
+                            ? ` (у ${item.count} ${pluralize(item.count, 'плейлісті', 'плейлістах', 'плейлістах')} із середньою позицією ${item.avgPosition.toFixed(2)})`
+                            : ` (${trackCount} трек${pluralize(trackCount, '', 'и', 'ів')} у ${item.count} ${pluralize(item.count, 'плейлісті', 'плейлістах', 'плейлістах')})`
+                    }</li>`;
+                }
+            }
+        }
+        html += "</ol></div>";
+        return html;
+    };
+
+    let finalHtml = '';
+    {
+        const arr = [];
+        for (let i = 0; i < topTracksByCount.length; i++) {
+            const id = topTracksByCount[i];
+            arr.push({ id, count: trackCountMap[id] });
+        }
+        finalHtml += buildList(arr, 'Треки з найбільшою кількістю появ у плейлістах', statsCache, true);
+    }
+    {
+        const arr = [];
+        for (let i = 0; i < topArtistsByCount.length; i++) {
+            const id = topArtistsByCount[i];
+            arr.push({ id, count: artistCountMap[id] });
+        }
+        finalHtml += buildList(arr, 'Артисти з найбільшою кількістю появ у плейлістах', artistCache);
+    }
+    finalHtml += buildList(trackAvgPos, 'Треки з найвищою середньою позицією в плейлістах', statsCache, true, true);
+    finalHtml += buildList(artistAvgPos, 'Артисти з найвищою середньою позицією в плейлістах', artistCache, false, true);
+
+    statsContainer.innerHTML = finalHtml;
+}
+
+async function getArtistsInfo(artistIds) {
+    const token = await getSpotifyToken();
+    const chunkSize = 50;
+    const chunks = [];
+
+    for (let i = 0; i < artistIds.length; i += chunkSize) {
+        chunks.push(artistIds.slice(i, i + chunkSize));
+    }
+
+    const artistPromises = chunks.map(async chunk => {
+        const url = `https://api.spotify.com/v1/artists?ids=${chunk.join(',')}`;
+        const response = await fetch(url, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await response.json();
+        return data.artists || [];
+    });
+
+    const allArtists = await Promise.all(artistPromises);
+    return allArtists.flat();
+}
+
+  async function updateArtistInfo(artistId) {
+    const artistInfoBlock = document.getElementById('artist-info');
+    const artistNameElement = document.getElementById('artist-name');
+    const playlistCountElement = document.getElementById('artist-playlist-count');
+    const trackCountElement = document.getElementById('artist-track-count');
+    const averagePositionElement = document.getElementById('artist-average-position');
+
+    let uniquePlaylistIds = new Set();
+    let uniqueTrackIds = new Set();
+    let totalPosition = 0;
+    let validPositionCount = 0;
+
+    allRecords.forEach(record => {
+        record.tracksData.forEach((track, index) => {
+            const [trackId, albumId, artistIds] = track.split(':');
+            if (artistIds.split(',').includes(artistId)) {
+                uniqueTrackIds.add(trackId);
+
+                if (index + 1 <= 50) {
+                    totalPosition += index + 1;
+                    validPositionCount++;
+                }
+
+                uniquePlaylistIds.add(record.playlistId);
+            }
+        });
+    });
+
+    const playlistCount = uniquePlaylistIds.size;
+    const trackCount = uniqueTrackIds.size;
+
+    playlistCountElement.textContent = playlistCount;
+    trackCountElement.textContent = trackCount;
+
+    if (validPositionCount > 0) {
+        const averagePosition = (totalPosition / validPositionCount).toFixed(2);
+        averagePositionElement.textContent = averagePosition;
+        averagePositionElement.parentNode.style.display = 'block';
+    } else {
+        averagePositionElement.parentNode.style.display = 'none';
+    }
+
+    const artistName = Object.values(trackCache)
+        .flatMap(track => track.artists || [])
+        .find(artist => artist.id === artistId)?.name;
+
+    if (artistName) {
+        artistNameElement.textContent = artistName;
+    } else {
+        artistNameElement.textContent = 'Завантаження імені...';
+        const uniqueTrackIds = Array.from(uniqueTrackIds).filter(id => !trackCache[id]);
+if (uniqueTrackIds.length > 0) {
+    const allTracks = await getTracksInfo(uniqueTrackIds);
+}
+        const updatedArtistName = allTracks
+            .flatMap(track => track.artists || [])
+            .find(artist => artist.id === artistId)?.name || 'Невідомий артист';
+        artistNameElement.textContent = updatedArtistName;
+    }
+
+    artistInfoBlock.style.display = playlistCount > 0 || trackCount > 0 ? 'block' : 'none';
+}
+
+  async function updateTrackInfo(trackId) {
+    const trackInfoBlock = document.getElementById('track-info');
+    const trackNameElement = document.getElementById('track-name');
+    const playlistCountElement = document.getElementById('track-playlist-count');
+    const averagePositionElement = document.getElementById('track-average-position');
+
+    let uniquePlaylistIds = new Set();
+    let totalPosition = 0;
+    let validPositionCount = 0;
+
+    allRecords.forEach(record => {
+        record.tracksData.forEach((track, index) => {
+            const [currentTrackId] = track.split(':');
+            if (currentTrackId === trackId) {
+                uniquePlaylistIds.add(record.playlistId);
+
+                if (index + 1 <= 50) {
+                    totalPosition += index + 1;
+                    validPositionCount++;
+                }
+            }
+        });
+    });
+
+    const playlistCount = uniquePlaylistIds.size;
+
+    playlistCountElement.textContent = playlistCount;
+
+    if (validPositionCount > 0) {
+        const averagePosition = (totalPosition / validPositionCount).toFixed(2);
+        averagePositionElement.textContent = averagePosition;
+        averagePositionElement.parentNode.style.display = 'block';
+    } else {
+        averagePositionElement.parentNode.style.display = 'none';
+    }
+
+    let trackName = 'Невідомий трек';
+    if (trackCache[trackId]) {
+        const track = trackCache[trackId];
+        const artistNames = track.artists.map(artist => artist.name).join(', ');
+        trackName = `${artistNames} - ${track.name}`;
+    } else {
+        const allTracks = await getTracksInfo([trackId]);
+        if (allTracks.length > 0) {
+            const track = allTracks[0];
+            const artistNames = track.artists.map(artist => artist.name).join(', ');
+            trackName = `${artistNames} - ${track.name}`;
+        }
+    }
+
+    trackNameElement.textContent = trackName;
+    trackInfoBlock.style.display = playlistCount > 0 ? 'block' : 'none';
+}
+
+async function updateAlbumInfo(albumId) {
+    const albumInfoBlock = document.getElementById('album-info');
+    const albumNameElement = document.getElementById('album-name');
+    const playlistCountElement = document.getElementById('album-playlist-count');
+    const averagePositionElement = document.getElementById('album-average-position');
+    const tracksInPlaylistsElement = document.getElementById('album-tracks-in-playlists');
+    const tracksInPlaylistsCountElement = document.getElementById('tracks-in-playlists-count');
+    const totalAlbumTracksElement = document.getElementById('total-album-tracks');
+
+    let uniquePlaylistIds = new Set();
+    let totalPosition = 0;
+    let validPositionCount = 0;
+    let uniqueTracksInPlaylists = new Set();
+    let albumTracks = [];
+
+    const token = await getSpotifyToken();
+    const albumResponse = await fetch(`https://api.spotify.com/v1/albums/${albumId}`, {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const albumData = await albumResponse.json();
+
+    if (albumData && albumData.tracks && albumData.tracks.items) {
+        albumTracks = albumData.tracks.items.map(track => track.id);
+    }
+
+    allRecords.forEach(record => {
+        record.tracksData.forEach((track, index) => {
+            const [trackId] = track.split(':');
+            if (albumTracks.includes(trackId)) {
+                uniquePlaylistIds.add(record.playlistId);
+
+                if (index + 1 <= 50) {
+                    totalPosition += index + 1;
+                    validPositionCount++;
+                }
+
+                uniqueTracksInPlaylists.add(trackId);
+            }
+        });
+    });
+
+    const playlistCount = uniquePlaylistIds.size;
+    const totalAlbumTracks = albumTracks.length;
+
+    playlistCountElement.textContent = playlistCount;
+
+    if (validPositionCount > 0) {
+        const averagePosition = (totalPosition / validPositionCount).toFixed(2);
+        averagePositionElement.textContent = averagePosition;
+        averagePositionElement.parentNode.style.display = 'block';
+    } else {
+        averagePositionElement.parentNode.style.display = 'none';
+    }
+
+    if (totalAlbumTracks > 1) {
+        tracksInPlaylistsCountElement.textContent = uniqueTracksInPlaylists.size;
+        totalAlbumTracksElement.textContent = totalAlbumTracks;
+        tracksInPlaylistsElement.style.display = 'block';
+    } else {
+        tracksInPlaylistsElement.style.display = 'none';
+    }
+
+    const albumName = `${albumData.artists.map(artist => artist.name).join(', ')} - ${albumData.name}`;
+    albumNameElement.textContent = albumName;
+
+    albumInfoBlock.style.display = playlistCount > 0 ? 'block' : 'none';
+}
+
+let debounceTimeout = null;
+
+document.getElementById('search-input').addEventListener('input', function () {
+    clearTimeout(debounceTimeout);
+
+    const query = this.value.trim();
+
+    debounceTimeout = setTimeout(async () => {
+        if (!query) {
+            renderRecords(filteredRecords);
+            document.getElementById('artist-info').style.display = 'none';
+            document.getElementById('track-info').style.display = 'none';
+            document.getElementById('album-info').style.display = 'none';
+            return;
+        }
+
+        const match = query.match(/(track|album|artist)\/([\w\d]+)/);
+        if (!match) return;
+
+        const type = match[1];
+        const id = match[2];
+
+        const searchResults = allRecords.map(record => {
+            const positions = [];
+            record.tracksData.forEach((track, index) => {
+                const [trackId, albumId, artistIds] = track.split(':');
+                if (
+                    (type === 'track' && trackId === id) ||
+                    (type === 'album' && albumId === id) ||
+                    (type === 'artist' && artistIds.split(',').includes(id))
+                ) {
+                    positions.push(index + 1);
+                }
+            });
+            return positions.length ? { ...record, positions, type, searchId: id } : null;
+        }).filter(Boolean);
+
+        await renderSearchResults(searchResults);
+
+        if (type === 'artist') {
+            await updateArtistInfo(id);
+        } else if (type === 'track') {
+            await updateTrackInfo(id);
+        } else if (type === 'album') {
+            await updateAlbumInfo(id);
+        }
+    }, 10);
+});
+
+document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const tab = button.getAttribute('data-tab');
+
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.getElementById(tab).classList.add('active');
+
+        const searchContainer = document.querySelector('.search-container');
+        if (tab === 'playlists') {
+            searchContainer.classList.remove('hidden');
+        } else {
+            searchContainer.classList.add('hidden');
+        }
+    });
+});
+
+loadData();
+  
+</script>
+</body>
+</html>
