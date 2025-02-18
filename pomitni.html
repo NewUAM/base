@@ -1,129 +1,342 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Chart</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <title>Як працює NUAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 20px;
+            background-color: #282626;
+            color: #f3f3f3;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        a {
+            color: #c9ffda;
+        }
+        h1 {
+            color: #84AAFB;
+            text-align: center;
+        }
+        h2 {
+            color: #84AAFB;
+        }
+        h3 {
+            color: #d7da8b;
+        }
+        h4 {
+            margin-bottom: 0;
+            font-size: 18px;
+            color: white;
+        }
+        p {
+            line-height: 1.6;
+            margin-top: 0;
+        }
+        .highlight {
+            background-color: #c0392b;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #fff;
+        }
+        @keyframes highlight-fade {
+    0% { background-color: rgba(255, 255, 0, 0.8); }
+    100% { background-color: transparent; }
+        }
+.highlighted {
+    animation: highlight-fade 2s ease-out;
+        }
+        .note {
+            border-left: 4px solid #f39c12;
+            background-color: #3b3b3b;
+            padding: 10px;
+            margin: 10px 0;
+            color: #e0e0e0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .external-link {
+    color: #c9ffda;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.external-link::after {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23c9ffda" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 1 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+.external-link:hover::after {
+    opacity: 1;
+}
+      .tooltip {
+    position: relative;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+}
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: #383838;
+    color: #f3f3f3;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: normal;
+    max-width: 320px;
+    min-width: 160px;
+    text-align: left;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    pointer-events: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+.tooltip::after {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+@media (min-width: 500px) {
+    .tooltip::after {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+}
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+}
+      .centered-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+    </style>
 </head>
 <body>
-    <div>
-        <canvas id="trackChartMonth" width="400" height="200"></canvas>
-    </div>
-    <div>
-        <canvas id="trackChartQuarter" width="400" height="200"></canvas>
-    </div>
-    <div>
-        <canvas id="trackChartHalfYear" width="400" height="200"></canvas>
-    </div>
-
+    <h1>Як працює NUAM</h1>
+    <p>Технічно весь NUAM — це кілька баз даних (артисти, треки, лейбли, плейлисти тощо). Усі вони пов'язані одна з одною та обмінюються інформацією. Бази являють собою звичайні Google Таблиці зі скриптами, написаними на Google Apps Script (JavaScript з API Google). Більша частина скриптів запускається автоматично у встановлений час для запуску парсингу або обміну інформацією між базами. Дані з таблиць передаються на сайт у вигляді csv-файлів.
+<br><br>
+Для парсингу рідко використовується офіційний API сервісів. Перевага віддається парсингу JSON-відповідей, з яких зазвичай можна дістати більше даних, використовувати недокументовані параметри в запиті, а також збільшити швидкість отримання даних і уникнути різних квот.</p>
+    <br><h2>Пошук нових артистів</h2>
+    <p>Пошук нових артистів здійснюється в автоматичному режимі. Спеціально створені скрипти щодня парсять дані зібраних для цих цілей баз <a href="#playlist-base">плейлистів</a> і <a href="#label-base">лейблів</a>, сторінки пошуку з різними параметрами, а також інші музичні сервіси. Усі отримані дані проходять фільтрацію і потрапляють у спеціальну таблицю. На виході маємо список нових артистів, яких ще немає в базі NUAM. Їх потрібно додатково перевірити вручну, а всі їхні треки за поточний рік розсортувати за <a href="#track-base">технічними плейлистами</a>.
+    
+    <h3>Методи знаходження нових артистів</h3>
+    <h4>Парсинг плейлистів</h4>
+    <p>У NUAM є <a href="#playlist-base">база плейлистів</a> (не нуамівських). Це плейлисти у Spotify, у яких міститься виключно українська музика. Плейлисти ці від різних медіа, кураторів і звичайні користувацькі. Зараз у базі 522 плейлисти і ще кілька сотень у черзі на занесення в базу. Спеціально розроблений скрипт раз на добу проходить по кожному плейлисту і дістає з них ID усіх артистів. Цей список ID звіряється з <a href="#artist-base">базою артистів NUAM</a>. Якщо серед них є нові ID — вони додаються в таблицю для подальшої перевірки.</p>
+    <h4>Парсинг сторінок пошуку за жанрами</h4>
+    <p>У Spotify є <span class="tooltip" data-tooltip="Приклад пошуку українського фолк-року за 2024 рік"><a href="https://open.spotify.com/search/genre%3Aukrainian_folk_rock%20year%3A2024/tracks" target="_blank">пошук за жанрами</a></span>. Серед жанрів є ті, в найменуванні яких є приставка «ukrainian». На даний момент виявлено 27 таких жанрів. Спеціально розроблений скрипт щодня здійснює пошук за треками, які належать до цих жанрів. У запиті використовується спеціальний тег, який дозволяє шукати треки тільки за поточний рік. ID артистів знайдених треків звіряються з базою NUAM, унікальні записуються в таблицю.</p>
+    <h4>Парсинг сторінок пошуку за унікальними символами</h4>
+    <p>Скрипт здійснює пошук за треками, альбомами та артистами, у найменуванні яких зустрічаються унікальні для української мови символи: «є», «ї», «ґ», «і». Під час пошуку використовуються спеціальні теги, які дають змогу знаходити релізи за поточний рік, з малим індексом популярності або, у разі треків і альбомів, з недавньою датою релізу.</p>
+    <h4 id="label-base">Парсинг сторінок пошуку за лейблами</h4>
+    <p>У NUAM є база лейблів. Що вважається «лейблом»? Під час додавання треку в базу з нього дістаються дані, зазначені під датою релізу в Spotify. Наприклад, «© 2025 pomitni».</p>
+    <img src="https://static.wixstatic.com/media/c77f36_4e438ef9e1cc45a0b4361ac90cbe0dbb~mv2.png" alt="Зазначення лейбла"><br><br>
+    <p>Там можуть зазначатися як лейбли, так і дистриб'ютори, студії звукозапису, продюсерські компанії, проєкти на кшталт «МУЛЬТИТРЕК» — тобто будь-що, під чиїм ім'ям випущено реліз. Лейблом вважається найменування, під яким вийшли релізи хоча б трьох різних артистів. У таблиці та <a href="https://nuam.club/base" target="_blank">NUAM Base</a> враховується ситуація з різним написанням лейблів: наприклад, «REIDLMUSIC, LLC», «REIDLMUSIC», «ReidlMusic Publishing» вважаються за один лейбл і приводяться до єдиного найменування у вигляді «ReidlMusic».
+<br><br>
+Спеціальний скрипт щодня здійснює <span class="tooltip" data-tooltip="Приклад пошуку треків від pomitni за 2025 рік"><a href="https://open.spotify.com/search/label%3Apomitni%20year%3A2025/tracks" target="_blank">пошук</a></span> за всіма лейблами з бази. Це дає змогу знайти нових артистів будь-якого лейбла і занести їх у базу.</p>
+    <h4>Парсинг Bandcamp</h4>
+    <p>У Bandcamp є <a href="https://bandcamp.com/discover?loc=690791&s=new" target="_blank">сторінка пошуку релізів</a> з можливістю вказати країну. Спеціальний скрипт щодня робить парсинг такої сторінки і дістає звідти свіжі релізи. У таблицю для перевірки потрапляють ті релізи, авторів яких ще немає в базі NUAM.</p>
+    <h4>Парсинг Soundcloud</h4>
+    <p>У Soundcloud є <a href="https://soundcloud.com/tags/Ukraine" target="_blank">пошук за тегами</a>. У тегах часто вказують приналежність до країни. Скрипт щодня парсить сторінки пошуку за тегами «Ukraine», «UA» і «Україна». Перед додаванням результатів у таблицю з них фільтруються подкасти та аудіокниги, а також перевіряється код країни артиста. Нові артисти, яких немає в базі NUAM, додаються в таблицю.</p>
+    <h4>Парсинг Chartmetric</h4>
+    <p>Chartmetric надає можливість відфільтрувати всіх артистів за зазначеною країною і впорядкувати отриманий список за датою крайнього релізу. Скрипт щодня парсить ці дані для знаходження артистів, яких ще немає в базі NUAM. Незважаючи на, здавалося б, потужний сервіс, це найбільш неефективний спосіб знаходження нових артистів. У Chartmetric далеко не всі артисти, які є на стрімінгових сервісах, ще менше — з України, а ті, що вказані як українські, можуть бути хоч російськими, хоч малайзійськими — якими завгодно. Але пару нових артистів за місяць парсинг приносить.</p>
+    
+    <h3>Що ще можна зробити</h3>
+    <h4>Перебір ISRC</h4>
+    <p>Структура ISRC дозволяє проводити перебір кодів у пошуках нових треків. Наприклад, у Best Music перший трек, що вийшов цього року, має ISRC UABM12500001, де UABM1 — код лейбла, 25 — рік релізу, а 00001 — порядковий номер, який можна перебирати. Замінивши 00001 на 00002 отримаємо інший трек від Best Music. Структура ISRC, де простежується якась логіка, є не у всіх лейблів. До того ж трекам не завжди присвоюється порядковий номер, наступний за попереднім. Потрібно знайти коди всіх лейблів, визначити діапазони ID і занести в скрипт. Сам скрипт уже частково готовий.</p>
+    <h4>Пошук нових артистів серед схожих</h4>
+    <p>Парсинг схожих артистів <a href="#related-base">уже є</a>. Потрібно придумати систему фільтрації, адже якщо прибрати з цього списку тих артистів, що вже є в базі, більша частина тих, що залишаться, будуть іноземними артистами. Можна паралельно перевіряти код країни через Chartmetric, зробити фільтрацію за унікальними літерами з різних мов — тут ще потрібно думати.</p>
+    <h4>Форма додавання артиста в базу</h4>
+    <p>Форма <a href="https://www.nuam.club/add" target="_blank">вже є</a>. Але оскільки середня кількість сенсів сайту NUAM на добу ~100-150, я отримую 0-5 заявок за тиждень. Якщо якось пропушити цю форму, вважаю, це принесе плоди у вигляді нових артистів. Тому що якщо в артиста англомовне найменування імені та релізу, якщо трек не випущено під лейблом із бази, його немає в жодному плейлисті з бази, у жанрі немає «ukrainian», а також немає релізу на Bandcamp або Soundcloud, то такого артиста просто технічно неможливо буде знайти жодним парсингом. Думаю, таких дуже багато.</p>
+    
+    <br><h2>Історія прослуховувань треків</h2>
+    <p>У NUAM є <a href="https://docs.google.com/spreadsheets/d/1BdmxO9KaPdZbdImkYQ3GvGbExvguGNnhyLbXbPTFP9E/edit?usp=sharing" target="_blank">база даних</a> з кількістю прослуховувань кожного українського треку за кожну добу. Ці дані можна використовувати для побудови графіків з динамікою зростання прослуховувань будь-якого треку/артиста/лейбла/жанру.
+  <br><br>
+  Дані збираються з 19 вересня 2024 року. Відстеження прослуховувань треку починається з моменту його додавання в базу. Якщо артист є в базі, його треки будуть додані в базу в день релізу. Якщо це новий знайдений артист, його треки за поточний рік додаються в базу і відстеження починається в цей же день.</p>
+    
+    <h3>Методологія збору даних</h3>
+    <p>Для початку потрібні треки, які будуть відстежуватися. Для цього їх потрібно знайти і зібрати. Докладніше про це <a href="#track-base">тут</a>.
+<br><br>
+Для вилучення даних про прослуховування використовується спеціально написаний скрипт, який автоматично щодня запускається. Spotify не надає дані про прослуховування через свій API. Але ці дані є в коді Spotify. Скрипт парсить технічний плейлист з усіма треками, витягуючи посилання на артистів і треки, а також кількість прослуховувань. Ці дані заносяться в тимчасову таблицю. Далі з цієї таблиці дані переносяться в основну таблицю (база). Під час перенесення відбувається порівняння: якщо трек уже є в базі, просто оновлюємо кількість прослуховувань, зберігаючи значення за попередню добу. Якщо треку немає — він додається в базу. У результаті маємо таблицю з усіма треками і кількістю прослуховувань за кожну добу.
+<br><br>
+Наразі в базі є всі треки, випущені у 2024 і 2025 роках. Але без треків за 2024 рік від артистів, які були додані в базу з 1 січня 2025 року. Є план з додавання в базу відстежуваних треків абсолютно всі треки від усіх артистів за весь час (це довго, боляче, але реально).</p>
+    
+    <br><h2 id="artist-base">База артистів</h2>
+    <p>База артистів — основа всього NUAM. Технічно це звичайна <a href="https://docs.google.com/spreadsheets/d/1_PavIrMhHpUHXG7uDrT83yznb2nrJfSd-9G8Hnm9ywM/edit?usp=sharing" target="_blank">Google Таблиця</a>, яка працює в напівавтоматичному режимі. Достатньо вставити посилання на артиста на Spotify, а всі інші дані, крім жанру, підтягнуться автоматично.</p>
+    <h3>Наразі по кожному артисту є такі дані:</h3>
+    <ul>
+        <li>жанр (визначається вухами)</li>
+        <li>Instagram (якщо вказано)</li>
+        <li>фото артиста</li>
+        <li>дата крайнього релізу</li>
+        <li>мітка про наявність або відсутність релізів за останній рік
+        <li>мітка про наявність більше одного релізу</li>
+        <li>кількість слухачів за місяць у Spotify (є дані за кожен місяць, починаючи з квітня 2024 року)</li>
+        <li>рідне місто артиста</li>
+        <li>опис артиста</li>
+        <li id="related-base">список схожих артистів</li>
+        <li>лейбли, на яких випускалися їхні релізи</li>
+        <li>свіжі релізи за поточний рік та історія їхніх прослуховувань (в іншій таблиці)</li>
+    </ul>
+    <h3>Що ще можна парсити:</h3>
+    <ul>
+        <li><span class="tooltip" data-tooltip="Ключові місця з високою музичною активністю, де популярність треків швидко поширюється і впливає на глобальні тренди">міста-тригери</span>, які вказані в картці Spotify</li>
+        <li>посилання на Facebook, Twitter і Wikipedia</li>
+        <li>кількість слухачів за місяць у Spotify можна парсити частіше, ніж раз на місяць, щоб мати більш деталізовану статистику</li>
+        <li>кількість підписників на Spotify</li>
+        <li>оцінка популярності Spotify (алгоритм сервісу, який ставить оцінку артисту від 0 до 100)</li>
+        <li>більше фотографій артистів, які вказані в картках Spotify</li>
+        <li>абсолютно всі релізи за весь час</li>
+        <li>плейлисти, в яких перебуває артист (не тільки ті, що вказані в картці, а й ті, що є в базі плейлистів NUAM)</li>
+        <li>будь-які інші дані з YouTube Music. Але з цим є складність: доведеться якось знайти всі посилання на всіх артистів із бази. Є поки що непропрацьована ідея щодо автоматизації цього процесу, але в будь-якому разі попереду багато ручної роботи.</li>
+    </ul>
+    
+    <br><h2 id="playlist-base">База плейлистів</h2>
+    <p>У NUAM є база плейлистів, яка потрібна для парсингу треків і виявлення там нових артистів для бази. Це плейлисти від муз. медіа/блогерів і користувацькі, в яких міститься виключно українська музика. Також на основі цієї бази зараз розробляється <a href="https://newuam.github.io/base/playlists.html" target="_blank">веб-додаток</a>, який виводить список усіх плейлистів з актуальною інформацією про них: кількість підписників і треків у них, дата останнього оновлення, опис, посилання на автора. У базі також містяться всі треки з усіх плейлистів — ці дані оновлюються щодня. Додаток дає змогу переглядати загальну статистику за всіма плейлистами: топ треків і артистів із найбільшою кількістю появ у плейлистах, а також топ треків і артистів із найвищою середньою позицією в плейлистах.
+<br><br>
+Також застосунок дає змогу проводити пошук за треками, альбомами або артистами і дивитися, в яких плейлистах і на яких позиціях перебувають треки, а також середню позицію треків у всіх плейлистах.</p>
+    <img src="https://static.wixstatic.com/media/c77f36_4abef2bef0954e05a91a3913ca68a8e0~mv2.png" alt="NUAM Playlists" width="800"><br><br>
+    <h3>Що ще можна з цим зробити:</h3>
+    <ul>
+        <li>У планах значно розширити базу плейлистів, провівши детальний ресерч і поставивши на автоматизацію виконання парсингу плейлистів із карток артистів на Spotify</li>
+        <li>Також можна зберігати в базі кількість підписників плейлистів за кожну добу, для, наприклад, можливості перегляду динаміки їхньої популярності</li>
+    </ul>
+    
+    <br><h2 id="track-base">База треків</h2>
+    <p>Якоїсь єдиної бази треків зараз немає, оскільки різні дані про треки знаходяться в різних таблицях. Але зробити таку базу займе кілька годин, оскільки всі дані вже є.
+<br><br>
+      Я розробив свій внутрішній софт <span class="tooltip" data-tooltip="Пароль: Parol362222"><a href="https://www.nuam.club/radar-admin" target="_blank">NUAM Radar Release</a></span>, який щодня витягує нові треки всіх артистів із бази NUAM. Програма проходиться по кожному артисту і показує всі треки, випущені за вказаний період, фільтруючи раніше знайдені і вже оброблені треки.
+<br><br>
+      Самі треки знаходяться в так званих технічних плейлистах. Це приватні плейлисти на Spotify, у найменуванні яких вказані жанри, теми і мова виконання.<br><br>
+      <img src="https://static.wixstatic.com/media/c77f36_0e891a0e2c874be597e8eaf2f4c62511~mv2.png" alt="techPL" width="600"><br><br>
+Логіка проста: кількість треків, наприклад, у плейлисті «rock», це кількість усіх треків у жанрі rock, випущених у поточному році. Кілька разів на добу ці плейлисти парсяться спеціальним скриптом, оновлюючи дані в таблицях.
+<br><br>
+Плейлист «<a href="https://open.spotify.com/playlist/0zzGsO7UHRd0xagM1jQ7UZ" target="_blank">all</a>» містить у собі абсолютно всі треки, що вийшли, що дає змогу за кілька секунд спарсити актуальну кількість прослуховувань кожного треку і будь-які інші дані.
+<br><br>
+Треки в ці плейлисти заносяться вручну під час відслуховування треків. Цей процес неможливо автоматизувати з причин:</p>
+        <li>Наразі жоден софт не може нормально визначити жанр музики. А дані про жанри, які віддають стримінгові сервіси, дуже часто не відповідають дійсності (funk замість phonk у фонкерів), неакутальні (russian pop у MONATIK), надто загальні (просто pop замість фактичного indie pop або electropop, rock замість ska punk). До того ж жанри можуть стосуватися самого артиста, а не конкретного релізу (випущений Дантесом рок буде позначений як поп, тому що Дантес загалом поп-артист).</li>
+        <li>Під час відслуховування необхідно перевіряти, чи справді треки належать зазначеним артистам. Трапляються ситуації, коли в картці артиста на Spotify з'являються треки іноземних артистів із таким самим іменем.</li>
+        <li>Додатково потрібно перевіряти вміст LP та EP — у них можуть міститися треки, які раніше випускалися синглами. Ця перевірка здійснюється в один клік спеціально розробленим софтом NUAM.</li>
+      <img src="https://static.wixstatic.com/media/c77f36_52056c6563b54efaab4b57738aad447c~mv2.png" alt="copy" width="600"><br><br>
+  
+    <h3>Що зараз збирається за треками:</h3>
+    <ul>
+        <li>загальна інформація про реліз: найменування артиста, альбому і треків у ньому, обкладинка, посилання на все це, тривалість і кількість треків у релізі</li>
+        <li>тип релізу (сингл, LP, EP, компіляція)</li>
+        <li>дата релізу</li>
+        <li>30-секундне прев'ю треку в mp3</li>
+        <li>жанр (визначається вухами)</li>
+        <li>мова виконання (визначається вухами)</li>
+        <li>лейбл</li>
+        <li>обкладинка релізу</li>
+        <li>кількість прослуховувань на Spotify</li>
+    </ul>
+    <h3>Що ще можна парсити:</h3>
+    <ul>
+        <li>ISRC, UPC</li>
+        <li>оцінку популярності Spotify (алгоритм сервісу, який ставить оцінку треку або альбому від 0 до 100 — зараз використовується для побудови <a href="https://www.nuam.club/chart" target="_blank">чарту NUAM</a>)</li>
+        <li>кількість прослуховувань на YouTube Music. Складнувато, але можна реалізувати. Складність полягає в тому, що потрібно знайти всі треки на YT Music і додати їх до плейлистів, які потім будуть парситься. Знайти їх можна тільки за допомогою ISRC, тому що пошук по YT Music працює жахливо. Додати знайдені треки в плейлисти можна тільки за допомогою дуже кривого API YouTube (у самого YT Music API немає). У цього API неадекватні квоти, тому додати, наприклад, 7784 треки, що вже вийшли цього року, буде проблематично. Але, знову ж таки, це можна реалізувати.</li>
+        <li>схожі релізи (ті, які Spotify пропонує на сторінці треку)</li>
+        <li>різні акустичні властивості треків: BPM, гучність у дБ, лад (мінор або мажор), тональність, тактовий розмір та інші. Ці дані ще недавно можна було легко дістати через API Spotify, але тепер ці точки доступу закриті. Однак вони залишилися у сторонніх застосунків, які раніше працювали з цими даними. Наприклад, <a href="https://skiley.net/" target="_blank">Skiley</a> дає змогу створити csv-файл плейлиста, де будуть усі ці дані, — це якраз те, що потрібно, оскільки всі треки всіх артистів перебувають у технічних плейлистах. Але цей процес не автоматизувати, доведеться щоразу завантажувати актуальний csv. Втім, робити це, наприклад, раз на тиждень, не складе труднощів.</li>
+        <li>автори текстів і музики, продюсери зазначені в даних про трек у Spotify. Можна реалізувати окрему базу даних на основі цієї інформації.</li>
+    </ul>
+    
+    <br><h2>У підсумку</h2>
+    <ul>
+        <li>У мене є база артистів і методи знаходження нових артистів</li>
+        <li>Є безліч даних про цих артистів і можливість збирати додаткові дані</li>
+        <li>Є треки всіх артистів, дані про ці треки і можливість збирати додаткові дані</li>
+        <li>Є база плейлистів і дані цих плейлистів</li>
+        <li>Є купа коду, який підтримує все це в актуальному стані та наповнює бази</li>
+    </ul>
+    <p>Усі ці дані можна як завгодно міксувати, фільтрувати, сортувати, об'єднувати, будувати графіки будь-якої складності тощо. На основі цих баз даних зроблено <a href="https://www.nuam.club/base" target="_blank">NUAM Base</a> (база артистів), <a href="https://www.nuam.club/echo" target="_blank">NUAM Echo</a> (радар релізів), <a href="https://www.nuam.club/chart" target="_blank">чарт NUAM</a>, розділ <a href="https://www.nuam.club/stat" target="_blank">статистики</a>, відстеження <a href="https://www.nuam.club/debut" target="_blank">нових артистів</a> і понад <a href="https://www.nuam.club/all" target="_blank">сотню унікальних плейлистів</a>, багато з яких просто неможливо зробити без усього перерахованого вище.</p>
+    
+    <br><h2>У планах:</h2>
+    <ul>
+        <li>Уже згаданий <a href="#playlist-base">застосунок</a> із каталогом плейлистів</li>
+        <li>NUAM Index — база треків з усіма даними про ці треки і можливістю пошуку і фільтрації за типом NUAM Base</li>
+        <li>З'їсти морозиво</li>
+        <li><a href="https://www.nuam.club/albums-beta" target="_blank">Каталог альбомів</a>. Поки сире, але за тиждень-два можна довести до релізу. Веб-додаток для детального дослідження і відстеження всіх українських LP і EP. Є сортування, фільтрація за жанрами, мовами і типом релізу. Можна виключати зі списку певні лейбли або артистів. Вказуються актуальні дані про кількість прослуховувань. Можна слухати уривки треків і відзначати альбоми як прослухані. Після релізу застосунок не вимагатиме жодних оновлень — усі дані підтягуються з баз даних NUAM і завжди актуальні.</li>
+        <li>Базу даних за авторами (композитори, продюсери, автори текстів)</li>
+        <li>Зібрати посилання на інші стрім. сервіси музикантів крім Spotify</li>
+        <li>Почати рахувати прослуховування треків на YT Music</li>
+        <li>У планах немає, але можна подумати в цьому напрямку: система рекомендацій треків/альбомів/артистів. Є списки схожих артистів, жанри, дані про популярність (кількість прослуховувань, оцінка популярності від Spotify), акустичні дані треків. На основі цих та інших даних можна побудувати алгоритм рекомендацій. Поки незрозуміло, від чого відштовхуватися: дати можливість користувачеві вказати артиста/трек/плейлист, щоб на основі цього рекомендувати щось або ж якось інакше. Потрібно думати.</li>
+    </ul>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <img src="https://static.wixstatic.com/media/c77f36_5a746c3785554747963dfe382512b8fc~mv2.png" alt="THE END" class="centered-image">
+  
+    <button id="back-to-previous" style="position: fixed; bottom: 20px; right: 20px; display: none; padding: 10px 15px; font-size: 14px; background-color: #84AAFB; color: #383838; border: none; border-radius: 7px; cursor: pointer;">Назад</button>
+  
     <script>
-        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBBdGBuVtrsd_Cb1vpAjAH3jm6ndeg4HqKsPpeqMR-B9eBGbau55BuInBteCIoQYIIlzorSk1CEsLP/pub?output=csv";
+    let previousLink = null;
 
-        Papa.parse(csvUrl, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                console.log("CSV Parsing Complete", results);
-                const data = results.data;
-                const parsedDates = data.map(row => {
-                    const date = row["date"];
-                    const count = parseInt(row["count"], 10);
-                    if (date && !isNaN(count)) {
-                        const parsedDate = moment(date, 'YYYY-MM-DD').toDate();
-                        if (parsedDate.getFullYear() === 2024) {
-                            console.log(`Parsed date: ${date}, count: ${count}`);
-                            return {
-                                date: parsedDate,
-                                count: count
-                            };
-                        }
-                    }
-                    console.warn(`Invalid row: ${JSON.stringify(row)}`);
-                    return null;
-                }).filter(item => item && item.date instanceof Date && !isNaN(item.date));
-                
-                if (parsedDates.length === 0) {
-                    console.error("No valid data found to create the chart");
-                    return;
-                }
-                createCharts(parsedDates);
-            },
-            error: function(error) {
-                console.error("Error parsing CSV: ", error);
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(event) {
+        event.preventDefault();
+        let targetId = this.getAttribute("href").substring(1);
+        let targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+        }
+
+        if (previousLink) {
+            previousLink.classList.remove("highlighted");
+        }
+        previousLink = this;
+        sessionStorage.setItem("previousScroll", window.scrollY);
+        document.getElementById("back-to-previous").style.display = "block";
+    });
+});
+
+    document.getElementById("back-to-previous").addEventListener("click", function() {
+        let storedPosition = sessionStorage.getItem("previousScroll");
+
+        if (storedPosition) {
+            window.scrollTo({ top: storedPosition, behavior: "smooth" });
+            document.getElementById("back-to-previous").style.display = "none";
+
+            if (previousLink) {
+                previousLink.classList.add("highlighted");
+                setTimeout(() => {
+                    previousLink.classList.remove("highlighted");
+                }, 2000);
+            }
+        }
+    });
+      
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("a[href]").forEach(link => {
+            if (link.hostname !== window.location.hostname) {
+                link.classList.add("external-link");
+                link.setAttribute("target", "_blank");
             }
         });
-
-        function createCharts(data) {
-            const monthCounts = {};
-            const quarterCounts = {};
-            const halfYearCounts = {};
-
-            data.forEach(({ date, count }) => {
-                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                monthCounts[monthKey] = (monthCounts[monthKey] || 0) + count;
-
-                const quarter = Math.floor(date.getMonth() / 3) + 1;
-                const quarterKey = `${date.getFullYear()}-Q${quarter}`;
-                quarterCounts[quarterKey] = (quarterCounts[quarterKey] || 0) + count;
-
-                const halfYear = Math.floor(date.getMonth() / 6) + 1;
-                const halfYearKey = `${date.getFullYear()}-H${halfYear}`;
-                halfYearCounts[halfYearKey] = (halfYearCounts[halfYearKey] || 0) + count;
-            });
-
-            console.log("Month Counts: ", monthCounts);
-            console.log("Quarter Counts: ", quarterCounts);
-            console.log("Half Year Counts: ", halfYearCounts);
-
-            const sortedMonthCounts = Object.keys(monthCounts).sort().reduce((acc, key) => { acc[key] = monthCounts[key]; return acc; }, {});
-            const sortedQuarterCounts = Object.keys(quarterCounts).sort().reduce((acc, key) => { acc[key] = quarterCounts[key]; return acc; }, {});
-            const sortedHalfYearCounts = Object.keys(halfYearCounts).sort().reduce((acc, key) => { acc[key] = halfYearCounts[key]; return acc; }, {});
-
-            createBarChart('trackChartMonth', 'Tracks per Month', sortedMonthCounts, 'rgba(153, 102, 255, 1)');
-            createBarChart('trackChartQuarter', 'Tracks per Quarter', sortedQuarterCounts, 'rgba(255, 159, 64, 1)');
-            createBarChart('trackChartHalfYear', 'Tracks per Half Year', sortedHalfYearCounts, 'rgba(54, 162, 235, 1)');
-        }
-
-        function createBarChart(canvasId, label, dataCounts, borderColor) {
-            const labels = Object.keys(dataCounts);
-            const data = Object.values(dataCounts);
-
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: label,
-                            data: data,
-                            backgroundColor: borderColor,
-                            borderColor: borderColor,
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'category',
-                            ticks: {
-                                maxRotation: 45,
-                                minRotation: 0
-                            }
-                        },
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-    </script>
+    });
+</script>
 </body>
 </html>
