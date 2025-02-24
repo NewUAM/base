@@ -139,7 +139,15 @@
     </style>
 </head>
 <body>
-    <h1>Як працює NUAM</h1>
+    <h1 style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+    Як працює NUAM
+    <span style="width: 1px; height: 24px; background-color: #84AAFB;"></span>
+    <button onclick="window.open('https://static.wixstatic.com/media/c77f36_ae1d4fbb51ee4aec84a261ac737b491a~mv2.png', '_blank')" 
+        style="padding: 8px 12px; font-size: 14px; background-color: #84AAFB; color: #383838; border: none; border-radius: 7px; cursor: pointer;">
+        Відкрити схему
+    </button>
+</h1>
+
     <p>Технічно весь NUAM — це кілька баз даних (артисти, треки, лейбли, плейлисти тощо). Усі вони пов'язані одна з одною та обмінюються інформацією. Бази являють собою звичайні Google Таблиці зі скриптами, написаними на Google Apps Script (JavaScript з API Google). Більша частина скриптів запускається автоматично у встановлений час для запуску парсингу або обміну інформацією між базами. Дані з таблиць передаються на сайт у вигляді csv-файлів.
 <br><br>
 Для парсингу рідко використовується офіційний API сервісів. Перевага віддається парсингу JSON-відповідей, з яких зазвичай можна дістати більше даних, використовувати недокументовані параметри в запиті, а також збільшити швидкість отримання даних і уникнути різних квот.</p>
@@ -339,5 +347,5 @@
         });
     });
 </script>
-</body>
+</body> 
 </html>
