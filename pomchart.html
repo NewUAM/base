@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Динаміка частки українських, російських і всіх інших артистів у чарті Spotify</title>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,10 +43,11 @@
     <button class="filter-btn" data-range="50">Перші 50</button>
     <button class="filter-btn" data-range="20">Перші 20</button>
     <button class="filter-btn" data-range="10">Перші 10</button>
+    
   </div>
 
   <div id="chartContainer"></div>
-
+ 
   <script>
     const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbZHqkE7P5D8t6yFgypGcJQgjMYPJzbrjCDZN4kNFmYSFjXY_mlIJjF4E251ijYOfgj-AAW1-Bqx5/pub?gid=0&single=true&output=csv";
     let currentRange = 200;
@@ -57,59 +59,62 @@
     }
 
     function adjustPercentages(percents) {
+      if (percents.every(p => p === 0)) return percents;
       let rounded = percents.map(Math.round);
       let sum = rounded.reduce((a, b) => a + b, 0);
       let diff = 100 - sum;
-
       if (diff !== 0) {
         let errors = percents.map((original, i) => ({
           index: i,
           error: original - rounded[i]
         }));
-
         errors.sort((a, b) => Math.abs(b.error) - Math.abs(a.error));
-
         for (let i = 0; i < Math.abs(diff); i++) {
-          rounded[errors[i].index] += Math.sign(diff);
+          let idx = errors[i % errors.length].index;
+          if (diff > 0) {
+            rounded[idx] += 1;
+          } else {
+            rounded[idx] = Math.max(0, rounded[idx] - 1);
+          }
         }
       }
-
       return rounded;
     }
 
     function parseCSV(csv, range) {
-      const rows = csv.split("\n").map(row => row.split(","));
+      const rows = d3.csvParseRows(csv);
       const weeks = rows[0].slice(1);
-      const data = rows.slice(1, range + 1); 
-
+      const dataRows = rows.slice(1);
       let categoryCounts = {}, totalCounts = {};
-      weeks.forEach((week, index) => {
+      weeks.forEach(week => {
         categoryCounts[week] = { rus: 0, ukr: 0, etc: 0 };
         totalCounts[week] = 0;
-        data.forEach(row => {
-          const cell = row[index + 1];
+      });
+
+      dataRows.slice(0, range).forEach(row => {
+        weeks.forEach((week, i) => {
+          const cell = row[i + 1];
           if (cell) {
-            const matches = cell.match(/\((rus|ukr|etc)\)/g);
+            const matches = cell.match(/\((rus|ukr|etc)\)/gi);
             if (matches) {
-              matches.forEach(match => {
-                let category = match.replace(/[()]/g, "");
+              let uniqueCategories = new Set(matches.map(m => m.replace(/[()]/g, "").toLowerCase()));
+              uniqueCategories.forEach(category => {
                 categoryCounts[week][category]++;
-                totalCounts[week]++;
               });
+              totalCounts[week]++;
             }
           }
         });
       });
 
       let adjustedData = weeks.map(week => {
-        let rawPercents = totalCounts[week] 
+        let rawPercents = totalCounts[week]
           ? [
               (categoryCounts[week].rus / totalCounts[week]) * 100,
               (categoryCounts[week].ukr / totalCounts[week]) * 100,
               (categoryCounts[week].etc / totalCounts[week]) * 100
             ]
           : [0, 0, 0];
-
         return adjustPercentages(rawPercents);
       });
 
