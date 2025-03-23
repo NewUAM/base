@@ -19,6 +19,14 @@
       height: 500px;
       margin: auto;
     }
+    #avgContainer {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #383838;
+      border-radius: 5px;
+    }
     .filter-buttons {
       margin-bottom: 20px;
     }
@@ -40,13 +48,13 @@
   
   <div class="filter-buttons">
     <button class="filter-btn active" data-range="200">ТОП 200</button>
-    <button class="filter-btn" data-range="50">Перші 50</button>
-    <button class="filter-btn" data-range="20">Перші 20</button>
     <button class="filter-btn" data-range="10">Перші 10</button>
-    
+    <button class="filter-btn" data-range="20">Перші 20</button>
+    <button class="filter-btn" data-range="50">Перші 50</button>
   </div>
 
   <div id="chartContainer"></div>
+  <div id="avgContainer"></div>
  
   <script>
     const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbZHqkE7P5D8t6yFgypGcJQgjMYPJzbrjCDZN4kNFmYSFjXY_mlIJjF4E251ijYOfgj-AAW1-Bqx5/pub?gid=0&single=true&output=csv";
@@ -85,6 +93,7 @@
       const rows = d3.csvParseRows(csv);
       const weeks = rows[0].slice(1);
       const dataRows = rows.slice(1);
+
       let categoryCounts = {}, totalCounts = {};
       weeks.forEach(week => {
         categoryCounts[week] = { rus: 0, ukr: 0, etc: 0 };
@@ -124,6 +133,48 @@
         ukr: adjustedData.map(d => d[1]),
         etc: adjustedData.map(d => d[2])
       };
+    }
+
+    function computeAverages(data) {
+      const n = data.labels.length;
+      let sumRus = 0, sumUkr = 0, sumEtc = 0;
+      data.rus.forEach(v => sumRus += v);
+      data.ukr.forEach(v => sumUkr += v);
+      data.etc.forEach(v => sumEtc += v);
+      const avgAll = {
+        rus: (sumRus / n).toFixed(1),
+        ukr: (sumUkr / n).toFixed(1),
+        etc: (sumEtc / n).toFixed(1)
+      };
+
+      let sumRusAfter = 0, sumUkrAfter = 0, sumEtcAfter = 0, countAfter = 0;
+      let sumRusBefore = 0, sumUkrBefore = 0, sumEtcBefore = 0, countBefore = 0;
+      data.labels.forEach((label, i) => {
+        if (label >= "2022-02-24") {
+          sumRusAfter += data.rus[i];
+          sumUkrAfter += data.ukr[i];
+          sumEtcAfter += data.etc[i];
+          countAfter++;
+        } else {
+          sumRusBefore += data.rus[i];
+          sumUkrBefore += data.ukr[i];
+          sumEtcBefore += data.etc[i];
+          countBefore++;
+        }
+      });
+      const avgAfter = countAfter > 0 ? {
+        rus: (sumRusAfter / countAfter).toFixed(1),
+        ukr: (sumUkrAfter / countAfter).toFixed(1),
+        etc: (sumEtcAfter / countAfter).toFixed(1)
+      } : { rus: "N/A", ukr: "N/A", etc: "N/A" };
+
+      const avgBefore = countBefore > 0 ? {
+        rus: (sumRusBefore / countBefore).toFixed(1),
+        ukr: (sumUkrBefore / countBefore).toFixed(1),
+        etc: (sumEtcBefore / countBefore).toFixed(1)
+      } : { rus: "N/A", ukr: "N/A", etc: "N/A" };
+
+      return { avgAll, avgBefore, avgAfter };
     }
 
     async function drawChart(range) {
@@ -176,6 +227,13 @@
       };
 
       chart.setOption(options);
+
+      const { avgAll, avgBefore, avgAfter } = computeAverages(data);
+      document.getElementById("avgContainer").innerHTML = `
+        <div>Середній відсоток за весь період: російські: ${avgAll.rus}%, українські: ${avgAll.ukr}%, інші: ${avgAll.etc}%</div>
+        <div>Середній відсоток до 2022-02-24: російські: ${avgBefore.rus}%, українські: ${avgBefore.ukr}%, інші: ${avgBefore.etc}%</div>
+        <div>Середній відсоток з 2022-02-24: російські: ${avgAfter.rus}%, українські: ${avgAfter.ukr}%, інші: ${avgAfter.etc}%</div>
+      `;
     }
 
     document.querySelectorAll(".filter-btn").forEach(button => {
