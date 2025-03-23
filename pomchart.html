@@ -18,14 +18,38 @@
       height: 500px;
       margin: auto;
     }
+    .filter-buttons {
+      margin-bottom: 20px;
+    }
+    .filter-buttons button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    .filter-buttons button.active {
+      background-color: #888;
+    }
   </style>
 </head>
 <body>
   <h2>Динаміка частки українських, російських і всіх інших артистів у чарті Spotify</h2>
+  
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-range="200">ТОП 200</button>
+    <button class="filter-btn" data-range="50">Перші 50</button>
+    <button class="filter-btn" data-range="20">Перші 20</button>
+    <button class="filter-btn" data-range="10">Перші 10</button>
+  </div>
+
   <div id="chartContainer"></div>
 
   <script>
     const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbZHqkE7P5D8t6yFgypGcJQgjMYPJzbrjCDZN4kNFmYSFjXY_mlIJjF4E251ijYOfgj-AAW1-Bqx5/pub?gid=0&single=true&output=csv";
+    let currentRange = 200;
+    let chart;
 
     async function fetchCSV(url) {
       const response = await fetch(url);
@@ -53,10 +77,10 @@
       return rounded;
     }
 
-    function parseCSV(csv) {
+    function parseCSV(csv, range) {
       const rows = csv.split("\n").map(row => row.split(","));
       const weeks = rows[0].slice(1);
-      const data = rows.slice(1);
+      const data = rows.slice(1, range + 1); 
 
       let categoryCounts = {}, totalCounts = {};
       weeks.forEach((week, index) => {
@@ -97,11 +121,14 @@
       };
     }
 
-    async function drawChart() {
+    async function drawChart(range) {
       const csvData = await fetchCSV(csvUrl);
-      const data = parseCSV(csvData);
-      const chartDom = document.getElementById("chartContainer");
-      const chart = echarts.init(chartDom);
+      const data = parseCSV(csvData, range);
+      
+      if (!chart) {
+        const chartDom = document.getElementById("chartContainer");
+        chart = echarts.init(chartDom);
+      }
 
       const options = {
         backgroundColor: "#282626",
@@ -146,7 +173,16 @@
       chart.setOption(options);
     }
 
-    drawChart();
+    document.querySelectorAll(".filter-btn").forEach(button => {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
+        currentRange = parseInt(this.getAttribute("data-range"));
+        drawChart(currentRange);
+      });
+    });
+
+    drawChart(currentRange);
   </script>
 </body>
 </html>
