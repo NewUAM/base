@@ -7,12 +7,88 @@
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
   <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    @font-face {
+            font-family: 'CustomFont';
+            src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+        }
+        body {
+      font-family: 'CustomFont', Arial;
       text-align: center;
       background-color: #282626;
       color: #f3f3f3;
     }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #d7da8b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #84AAFB;
+      cursor: grab;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #c6c979;
+    }
+    h2 {
+      font-size: 22px;
+    }
+    #pageHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    padding: 0 20px;
+    background-color: #383838;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+    .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+    .header-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 1px;
+    height: 40px;
+    background-color: #bababa;
+}
+    .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+    .header-logo a {
+    display: block;
+    height: 40px;
+}
+.header-logo img {
+    height: 100%;
+    width: auto;
+  user-select: none;
+}
+.header-title {
+    margin: 0;
+    font-size: 13px;
+    color: #f3f3f3;
+    font-weight: normal;
+    text-align: left;
+  line-height: 1;
+  user-select: none;
+}
+    #content {
+        padding-top: 80px;
+  }
     #chartContainer {
       width: 90%;
       max-width: 1200px;
@@ -41,9 +117,58 @@
     .filter-buttons button.active {
       background-color: #888;
     }
+
+    @media (max-width: 768px) {
+      #pageHeader {
+    height: 60px;
+    padding: 0 10px;
+}
+      .header-separator {
+    height: 30px;
+}
+      .header-logo {
+    gap: 5px;
+  }
+    .header-logo a {
+    height: 20px;
+}
+.header-title {
+    font-size: 10px;
+}
+      #content {
+        padding-top: 60px;
+  }
+      h2 {
+      font-size: 16px;
+      }
+      #chartContainer {
+        height: 320px;
+      }
+      #avgContainer {
+        font-size: 12px;
+        padding: 5px;
+      }
+      .filter-buttons button {
+        padding: 5px;
+        margin: 4px;
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
+  <header id="pageHeader">
+  <div class="header-logo">
+    <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">
+      <img src="https://static.wixstatic.com/shapes/c77f36_74a77409cfed4bb4b069509d564822ff.svg" alt="Логотип" />
+    </a>
+    <div class="header-separator"></div>
+    <h1 class="header-title">
+    НОВА<br>УКРАЇНСЬКА<br>МУЗИКА
+</h1>
+  </div>
+    </header>
+  <div id="content">
   <h2>Динаміка частки українських, російських і всіх інших артистів у чарті Spotify</h2>
   
   <div class="filter-buttons">
@@ -55,7 +180,7 @@
 
   <div id="chartContainer"></div>
   <div id="avgContainer"></div>
- 
+  </div>
   <script>
     const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbZHqkE7P5D8t6yFgypGcJQgjMYPJzbrjCDZN4kNFmYSFjXY_mlIJjF4E251ijYOfgj-AAW1-Bqx5/pub?gid=0&single=true&output=csv";
     let currentRange = 200;
@@ -243,6 +368,12 @@
         currentRange = parseInt(this.getAttribute("data-range"));
         drawChart(currentRange);
       });
+    });
+
+    window.addEventListener("resize", () => {
+      if (chart) {
+        chart.resize();
+      }
     });
 
     drawChart(currentRange);
