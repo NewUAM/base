@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ua">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Динаміка частки українських, російських і всіх інших артистів у чарті Spotify</title>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-  <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     @font-face {
-            font-family: 'CustomFont';
-            src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
-        }
-        body {
+      font-family: 'CustomFont';
+      src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+    }
+    body {
       font-family: 'CustomFont', Arial;
       text-align: center;
       background-color: #282626;
@@ -35,81 +35,109 @@
       font-size: 22px;
     }
     #pageHeader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    padding: 0 20px;
-    background-color: #383838;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-}
-    .header-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-    .header-separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 1px;
-    height: 40px;
-    background-color: #bababa;
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      padding: 0 20px;
+      background-color: #383838;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
     .header-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .header-logo a {
-    display: block;
-    height: 40px;
-}
-.header-logo img {
-    height: 100%;
-    width: auto;
-  user-select: none;
-}
-.header-title {
-    margin: 0;
-    font-size: 13px;
-    color: #f3f3f3;
-    font-weight: normal;
-    text-align: left;
-  line-height: 1;
-  user-select: none;
-}
+      display: block;
+      height: 40px;
+    }
+    .header-logo img {
+      height: 100%;
+      width: auto;
+      user-select: none;
+    }
+    .header-separator {
+      width: 1px;
+      height: 40px;
+      background-color: #bababa;
+    }
+    .header-title {
+      margin: 0;
+      font-size: 13px;
+      color: #f3f3f3;
+      font-weight: normal;
+      text-align: left;
+      line-height: 1;
+      user-select: none;
+    }
     #content {
-        padding-top: 80px;
-  }
+      padding-top: 80px;
+    }
     #chartContainer {
       width: 90%;
-      max-width: 1200px;
+      max-width: none;
       height: 500px;
       margin: auto;
     }
     #avgContainer {
-      width: 90%;
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 10px;
-      background-color: #383838;
-      border-radius: 5px;
+  display: inline-block;
+  max-width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #383838;
+  border-radius: 7px;
+  text-align: center;
+}
+    #tracksTable {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    margin-top: 0 !important;
+  padding-top: 0 !important;
+      margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0;
+}
+    #tracksTable svg {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+  height: auto !important;
+  min-height: 1px;
+}
+    .tracksColumn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .squaresContainer {
+      display: flex;
+      flex-direction: column;
+    }
+    .trackSquare {
+      width: 4px;
+      height: 4px;
+      box-sizing: border-box;
     }
     .filter-buttons {
       margin-bottom: 20px;
     }
     .filter-buttons button {
-      background-color: #444;
-      color: white;
-      border: none;
+      background-color: #383838;
+      color: #f3f3f3;
+      border: 1px;
+      border-color: #f3f3f3;
+      border-radius: 7px;
       padding: 10px;
       margin: 5px;
       cursor: pointer;
@@ -117,29 +145,88 @@
     .filter-buttons button.active {
       background-color: #888;
     }
+#legendContainer {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  align-items: center;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.legend-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-family: 'CustomFont', Arial;
+  cursor: pointer;
+  gap: 5px;
+}
+.legend-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.legend-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
 
-    @media (max-width: 768px) {
+.legend-box.rus { background-color: #ff7e7e; }
+.legend-box.ukr { background-color: #7ea9ff; }
+.legend-box.etc { background-color: #beff7e; }
+
+.legend-checkbox:checked + .legend-box::after {
+  content: "✔";
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+}
+.legend-checkbox:not(:checked) + .legend-box {
+  opacity: 0.5;
+} 
+    #heatmapHeader {
+  text-align: center;
+  margin-bottom: 10px;
+}
+#heatmapHeader h3 {
+  font-size: 22px;
+  color: #f3f3f3;
+  margin: 0;
+  margin-top: 40px;
+}
+#heatmapHeader p {
+  font-size: 14px;
+  color: #bbb;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+    
+    @media (max-width: 320px) {
       #pageHeader {
-    height: 60px;
-    padding: 0 10px;
-}
+        height: 60px;
+        padding: 0 10px;
+      }
       .header-separator {
-    height: 30px;
-}
-      .header-logo {
-    gap: 5px;
-  }
-    .header-logo a {
-    height: 20px;
-}
-.header-title {
-    font-size: 10px;
-}
+        height: 30px;
+      }
+      .header-logo a {
+        height: 20px;
+      }
+      .header-title {
+        font-size: 10px;
+      }
       #content {
         padding-top: 60px;
-  }
+      }
       h2 {
-      font-size: 16px;
+        font-size: 16px;
       }
       #chartContainer {
         height: 320px;
@@ -153,44 +240,70 @@
         margin: 4px;
         font-size: 12px;
       }
+      #tracksSection {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
   <header id="pageHeader">
-  <div class="header-logo">
-    <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">
-      <img src="https://static.wixstatic.com/shapes/c77f36_74a77409cfed4bb4b069509d564822ff.svg" alt="Логотип" />
-    </a>
-    <div class="header-separator"></div>
-    <h1 class="header-title">
-    НОВА<br>УКРАЇНСЬКА<br>МУЗИКА
-</h1>
-  </div>
-    </header>
+    <div class="header-logo">
+      <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">
+        <img src="https://static.wixstatic.com/shapes/c77f36_74a77409cfed4bb4b069509d564822ff.svg" alt="Логотип">
+      </a>
+      <div class="header-separator"></div>
+      <h1 class="header-title">
+        НОВА<br>УКРАЇНСЬКА<br>МУЗИКА
+      </h1>
+    </div>
+  </header>
   <div id="content">
-  <h2>Динаміка частки українських, російських і всіх інших артистів у чарті Spotify</h2>
-  
-  <div class="filter-buttons">
-    <button class="filter-btn active" data-range="200">ТОП 200</button>
-    <button class="filter-btn" data-range="50">Перші 50</button>
-    <button class="filter-btn" data-range="20">Перші 20</button>
-    <button class="filter-btn" data-range="10">Перші 10</button>
-  </div>
+    <h2>Динаміка частки українських, російських і всіх інших артистів у чарті Spotify</h2>
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-range="200">ТОП 200</button>
+      <button class="filter-btn" data-range="50">Перші 50</button>
+      <button class="filter-btn" data-range="20">Перші 20</button>
+      <button class="filter-btn" data-range="10">Перші 10</button>
+    </div>
+    <div id="chartContainer"></div>
+    <div id="avgContainer"></div>
+    <div id="tableHeaderContainer" style="display:flex; width:100%; margin:auto;"></div>
 
-  <div id="chartContainer"></div>
-  <div id="avgContainer"></div>
+<div id="tracksSection">
+  <div id="heatmapHeader">
+    <h3>Теплова карта чарту</h3>
+    <p>Кожен вертикальний ряд — 200 треків у чарті за кожен тиждень.</p>
+</div>
+
+    <div id="legendContainer">
+        <label class="legend-label">
+            <input type="checkbox" class="legend-checkbox" data-country="rus" checked>
+            <span class="legend-box rus"></span> російські
+        </label>
+        <label class="legend-label">
+            <input type="checkbox" class="legend-checkbox" data-country="ukr" checked>
+            <span class="legend-box ukr"></span> українські
+        </label>
+        <label class="legend-label">
+            <input type="checkbox" class="legend-checkbox" data-country="etc" checked>
+            <span class="legend-box etc"></span> інші
+        </label>
+    </div>
+
+    <div id="tracksTable"></div>
+</div>
   </div>
   <script>
     const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbZHqkE7P5D8t6yFgypGcJQgjMYPJzbrjCDZN4kNFmYSFjXY_mlIJjF4E251ijYOfgj-AAW1-Bqx5/pub?gid=0&single=true&output=csv";
     let currentRange = 200;
     let chart;
-
+    
     async function fetchCSV(url) {
       const response = await fetch(url);
       return await response.text();
     }
-
+    
     function adjustPercentages(percents) {
       if (percents.every(p => p === 0)) return percents;
       let rounded = percents.map(Math.round);
@@ -213,53 +326,49 @@
       }
       return rounded;
     }
-
+    
     function parseCSV(csv, range) {
       const rows = d3.csvParseRows(csv);
-      const weeks = rows[0].slice(1);
-      const dataRows = rows.slice(1);
-
+      const dates = rows[0].slice(1);
+      const dataRows = rows.slice(1, range + 1);
       let categoryCounts = {}, totalCounts = {};
-      weeks.forEach(week => {
-        categoryCounts[week] = { rus: 0, ukr: 0, etc: 0 };
-        totalCounts[week] = 0;
+      dates.forEach(date => {
+        categoryCounts[date] = { rus: 0, ukr: 0, etc: 0 };
+        totalCounts[date] = 0;
       });
-
-      dataRows.slice(0, range).forEach(row => {
-        weeks.forEach((week, i) => {
+      dataRows.forEach(row => {
+        dates.forEach((date, i) => {
           const cell = row[i + 1];
           if (cell) {
             const matches = cell.match(/\((rus|ukr|etc)\)/gi);
             if (matches) {
               let uniqueCategories = new Set(matches.map(m => m.replace(/[()]/g, "").toLowerCase()));
               uniqueCategories.forEach(category => {
-                categoryCounts[week][category]++;
+                categoryCounts[date][category]++;
               });
-              totalCounts[week]++;
+              totalCounts[date]++;
             }
           }
         });
       });
-
-      let adjustedData = weeks.map(week => {
-        let rawPercents = totalCounts[week]
+      let adjustedData = dates.map(date => {
+        let rawPercents = totalCounts[date]
           ? [
-              (categoryCounts[week].rus / totalCounts[week]) * 100,
-              (categoryCounts[week].ukr / totalCounts[week]) * 100,
-              (categoryCounts[week].etc / totalCounts[week]) * 100
+              (categoryCounts[date].rus / totalCounts[date]) * 100,
+              (categoryCounts[date].ukr / totalCounts[date]) * 100,
+              (categoryCounts[date].etc / totalCounts[date]) * 100
             ]
           : [0, 0, 0];
         return adjustPercentages(rawPercents);
       });
-
       return {
-        labels: weeks,
+        labels: dates,
         rus: adjustedData.map(d => d[0]),
         ukr: adjustedData.map(d => d[1]),
         etc: adjustedData.map(d => d[2])
       };
     }
-
+    
     function computeAverages(data) {
       const n = data.labels.length;
       let sumRus = 0, sumUkr = 0, sumEtc = 0;
@@ -271,7 +380,7 @@
         ukr: (sumUkr / n).toFixed(1),
         etc: (sumEtc / n).toFixed(1)
       };
-
+    
       let sumRusAfter = 0, sumUkrAfter = 0, sumEtcAfter = 0, countAfter = 0;
       let sumRusBefore = 0, sumUkrBefore = 0, sumEtcBefore = 0, countBefore = 0;
       data.labels.forEach((label, i) => {
@@ -292,90 +401,317 @@
         ukr: (sumUkrAfter / countAfter).toFixed(1),
         etc: (sumEtcAfter / countAfter).toFixed(1)
       } : { rus: "N/A", ukr: "N/A", etc: "N/A" };
-
+    
       const avgBefore = countBefore > 0 ? {
         rus: (sumRusBefore / countBefore).toFixed(1),
         ukr: (sumUkrBefore / countBefore).toFixed(1),
         etc: (sumEtcBefore / countBefore).toFixed(1)
       } : { rus: "N/A", ukr: "N/A", etc: "N/A" };
-
+    
       return { avgAll, avgBefore, avgAfter };
     }
-
-    async function drawChart(range) {
-      const csvData = await fetchCSV(csvUrl);
-      const data = parseCSV(csvData, range);
-      
-      if (!chart) {
-        const chartDom = document.getElementById("chartContainer");
-        chart = echarts.init(chartDom);
+    
+    function getCountries(text) {
+      const matches = text.match(/\((rus|ukr|etc)\)/gi);
+      if (matches) {
+        return [...new Set(matches.map(m => m.replace(/[()]/g, "").toLowerCase()))];
       }
-
-      const options = {
-        backgroundColor: "#282626",
-        tooltip: {
-          trigger: "axis",
-          backgroundColor: "#383838",
-          textStyle: { color: "#f3f3f3" },
-          formatter: function (params) {
-            let tooltipText = params[0].axisValue + "<br/>";
-            params.forEach(param => {
-              tooltipText += param.marker + param.seriesName + ": " + param.value + "%<br/>";
-            });
-            return tooltipText;
-          }
-        },
-        legend: { 
-          data: ["російські", "українські", "інші"],
-          textStyle: { color: "#f3f3f3" }
-        },
-        xAxis: { 
-          type: "category", 
-          data: data.labels,
-          axisLabel: { color: "#f3f3f3" }
-        },
-        yAxis: { 
-          type: "value", 
-          min: 0, 
-          max: 100,
-          axisLabel: { color: "#f3f3f3" }
-        },
-        dataZoom: [
-          { type: "inside", xAxisIndex: 0 },
-          { type: "slider", xAxisIndex: 0 }
-        ],
-        series: [
-          { name: "російські", type: "line", data: data.rus, color: "#ff7e7e" },
-          { name: "українські", type: "line", data: data.ukr, color: "#7ea9ff" },
-          { name: "інші", type: "line", data: data.etc, color: "#beff7e" }
-        ]
-      };
-
-      chart.setOption(options);
-
-      const { avgAll, avgBefore, avgAfter } = computeAverages(data);
-      document.getElementById("avgContainer").innerHTML = `
-        <div>Середній відсоток за весь період: російські: ${avgAll.rus}%, українські: ${avgAll.ukr}%, інші: ${avgAll.etc}%</div>
-        <div>Середній відсоток до 2022-02-24: російські: ${avgBefore.rus}%, українські: ${avgBefore.ukr}%, інші: ${avgBefore.etc}%</div>
-        <div>Середній відсоток з 2022-02-24: російські: ${avgAfter.rus}%, українські: ${avgAfter.ukr}%, інші: ${avgAfter.etc}%</div>
-      `;
+      return [];
+    }
+    
+    function getColorForCountry(country) {
+      if (country === "rus") return "#ff7e7e";
+      if (country === "ukr") return "#7ea9ff";
+      if (country === "etc") return "#beff7e";
+      return "#cccccc";
     }
 
-    document.querySelectorAll(".filter-btn").forEach(button => {
-      button.addEventListener("click", function () {
-        document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-        this.classList.add("active");
-        currentRange = parseInt(this.getAttribute("data-range"));
-        drawChart(currentRange);
-      });
+    let activeCountries = { rus: true, ukr: true, etc: true };
+
+document.querySelectorAll(".legend-checkbox").forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+        const country = this.getAttribute("data-country");
+        activeCountries[country] = this.checked;
+        drawHeatmap(lastCsvData, currentRange);
     });
+});
+    
+  function drawHeatmap(csv, range) {
+    lastCsvData = csv;
+    
+    const rows = d3.csvParseRows(csv);
+    const dates = rows[0].slice(1);
+    const dataRows = rows.slice(1, range + 1);
+
+    if (dataRows.length === 0) return;
+
+    const cellSize = 5;
+    const margin = { top: 120, right: 30, bottom: 20, left: 70 };
+    const width = dates.length * cellSize + margin.left + margin.right;
+    const height = range * cellSize + margin.top + margin.bottom;
+
+    d3.select("#tracksTable").html("");
+
+    const svg = d3.select("#tracksTable")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .style("display", "block")
+        .style("margin", "0")
+        .style("padding", "0")
+        .style("overflow", "hidden");
+
+    const chartGroup = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const firstDatesEachMonth = [];
+    const seenMonths = new Set();
+
+    dates.forEach(date => {
+        const yearMonth = date.slice(0, 7);
+        if (!seenMonths.has(yearMonth)) {
+            firstDatesEachMonth.push(date);
+            seenMonths.add(yearMonth);
+        }
+    });
+
+    const xScale = d3.scaleBand()
+        .domain(firstDatesEachMonth)
+        .range([0, dates.length * cellSize]);
+
+    const xAxis = d3.axisTop(xScale)
+        .tickSize(0)
+        .tickFormat(d => d.slice(0, 7));
+
+    const xAxisGroup = chartGroup.append("g")
+        .attr("transform", `translate(${cellSize / 2}, -40)`)
+        .call(xAxis);
+
+    xAxisGroup.selectAll("text")
+        .style("fill", "#f3f3f3")
+        .style("font-size", "12px")
+        .style("text-anchor", "middle")
+        .style("alignment-baseline", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("dy", "-10px");
+
+    xAxisGroup.select("path").remove();
+
+    chartGroup.append("text")
+        .attr("x", width / 2 - margin.left)
+        .attr("y", -70)
+        .text("Місяць чарту")
+        .style("fill", "#f3f3f3")
+        .style("font-size", "12px")
+        .style("text-anchor", "middle");
+
+    const yPositions = d3.range(1, range + 1, 20);
+
+    const yScale = d3.scaleLinear()
+    .domain([1, range])
+    .range([0, range * cellSize])
+    .nice();
+
+const yAxis = d3.axisLeft(yScale)
+    .tickValues([1, ...d3.range(20, range + 1, 20)])
+    .tickFormat(d => d)
+    .tickSize(5);
+
+    chartGroup.append("g")
+        .call(yAxis)
+        .selectAll("text")
+        .style("fill", "#f3f3f3")
+        .style("font-size", "12px");
+
+    chartGroup.append("text")
+        .attr("transform", `rotate(-90)`)
+        .attr("x", -height / 2 + margin.top)
+        .attr("y", -50)
+        .text("Позиція у чарті")
+        .style("fill", "#f3f3f3")
+        .style("font-size", "12px")
+        .style("text-anchor", "middle");
+
+    function extractTrackName(value) {
+        if (!value) return "";
+        const lastColon = value.lastIndexOf(":");
+        if (lastColon !== -1) {
+            value = value.slice(lastColon + 1).trim();
+        }
+        value = value.replace(/^\S+\s*/, "").trim();
+        return value.replace(/^\(|\)$/g, "").trim();
+    }
+
+    const filteredData = dataRows.flatMap((row, rowIndex) =>
+        dates.map((date, colIndex) => {
+            const value = row[colIndex + 1];
+            const countries = getCountries(value).filter(c => activeCountries[c]);
+            return {
+                x: colIndex * cellSize,
+                y: yScale(rowIndex + 1),
+                value,
+                trackName: extractTrackName(value),
+                link: value ? `https://open.spotify.com/track/${value.split(":").pop().split(" ")[0]}` : null,
+                countries
+            };
+        }).filter(d => d.countries.length > 0)
+    );
+
+    chartGroup.selectAll("g.track-group")
+        .data(filteredData)
+        .enter()
+        .append("g")
+        .attr("class", "track-group")
+        .attr("transform", d => `translate(${d.x},${d.y})`)
+        .each(function (d) {
+            const group = d3.select(this);
+
+            if (d.countries.length === 1) {
+                group.append("rect")
+                    .attr("width", cellSize)
+                    .attr("height", cellSize)
+                    .attr("fill", getColorForCountry(d.countries[0]));
+            } else if (d.countries.length === 2) {
+                group.append("rect")
+                    .attr("width", cellSize / 2)
+                    .attr("height", cellSize)
+                    .attr("fill", getColorForCountry(d.countries[0]));
+
+                group.append("rect")
+                    .attr("x", cellSize / 2)
+                    .attr("width", cellSize / 2)
+                    .attr("height", cellSize)
+                    .attr("fill", getColorForCountry(d.countries[1]));
+            } else if (d.countries.length === 3) {
+                group.append("rect")
+                    .attr("width", cellSize / 3)
+                    .attr("height", cellSize)
+                    .attr("fill", getColorForCountry(d.countries[0]));
+
+                group.append("rect")
+                    .attr("x", cellSize / 3)
+                    .attr("width", cellSize / 3)
+                    .attr("height", cellSize)
+                    .attr("fill", getColorForCountry(d.countries[1]));
+
+                group.append("rect")
+                    .attr("x", (cellSize / 3) * 2)
+                    .attr("width", cellSize / 3)
+                    .attr("height", cellSize)
+                    .attr("fill", getColorForCountry(d.countries[2]));
+            }
+
+            group.style("cursor", d.link ? "pointer" : "default")
+                .on("click", (event, d) => {
+                    if (d.link) window.open(d.link, "_blank");
+                })
+                .append("title")
+                .text(d => d.trackName);
+        });
+}
+
+   async function drawChart(range) {
+  const csvData = await fetchCSV(csvUrl);
+  const data = parseCSV(csvData, range);
+
+  if (!chart) {
+    const chartDom = document.getElementById("chartContainer");
+    chart = echarts.init(chartDom);
+  }
+
+  const options = {
+  backgroundColor: "#282626",
+  tooltip: {
+    trigger: "axis",
+    backgroundColor: "#383838",
+    textStyle: { color: "#f3f3f3" },
+    formatter: function (params) {
+      let tooltipText = params[0].axisValue + "<br/>";
+      params.forEach(param => {
+        tooltipText += param.marker + param.seriesName + ": " + param.value + "%<br/>";
+      });
+      return tooltipText;
+    }
+  },
+  legend: { data: ["російські", "українські", "інші"], textStyle: { color: "#f3f3f3" } },
+  xAxis: {
+    type: "category",
+    data: data.labels,
+    axisLabel: { color: "#f3f3f3" },
+    name: "Тиждень чарту",
+    nameLocation: "center",
+    nameTextStyle: { color: "#f3f3f3", fontSize: 12 },
+    nameGap: 25
+  },
+  yAxis: {
+    type: "value",
+    min: 0,
+    max: 100,
+    axisLabel: {
+      color: "#f3f3f3",
+      formatter: value => value + "%"
+    },
+    name: "Частка у чарті (%)",
+    nameLocation: "center",
+    nameTextStyle: { color: "#f3f3f3", fontSize: 12 },
+    nameGap: 45,
+    nameRotate: 90
+  },
+  grid: {
+    left: "0%",
+    right: "5%",
+    bottom: 90,
+    containLabel: true
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "slider", xAxisIndex: 0, bottom: 10 }
+  ],
+  series: [
+    { name: "російські", type: "line", data: data.rus, color: "#ff7e7e" },
+    { name: "українські", type: "line", data: data.ukr, color: "#7ea9ff" },
+    { name: "інші", type: "line", data: data.etc, color: "#beff7e" }
+  ]
+};
+
+  chart.setOption(options);
+  
+  const { avgAll, avgBefore, avgAfter } = computeAverages(data);
+  document.getElementById("avgContainer").innerHTML = `
+    <div>Середній відсоток за весь період: російські: ${avgAll.rus}%, українські: ${avgAll.ukr}%, інші: ${avgAll.etc}%</div>
+    <div>Середній відсоток до 2022-02-24: російські: ${avgBefore.rus}%, українські: ${avgBefore.ukr}%, інші: ${avgBefore.etc}%</div>
+    <div>Середній відсоток з 2022-02-24: російські: ${avgAfter.rus}%, українські: ${avgAfter.ukr}%, інші: ${avgAfter.etc}%</div>
+  `;
+}
+    
+    document.querySelectorAll(".filter-btn").forEach(button => {
+  button.addEventListener("click", function() {
+    document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+    this.classList.add("active");
+    currentRange = parseInt(this.getAttribute("data-range"));
+    drawChart(currentRange);
+  });
+});
+
+    function drawTracksTable(csv) {
+  lastCsvData = csv;
+  drawHeatmap(csv, 200); 
+}
+
+    async function init() {
+  const csvData = await fetchCSV(csvUrl);
+  drawTracksTable(csvData);
+  drawChart(currentRange);
+}
+
+init();
 
     window.addEventListener("resize", () => {
       if (chart) {
         chart.resize();
       }
     });
-
+    
     drawChart(currentRange);
   </script>
 </body>
