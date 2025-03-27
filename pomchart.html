@@ -28,9 +28,6 @@
       background-color: #84AAFB;
       cursor: grab;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: #c6c979;
-    }
     h2 {
       font-size: 22px;
     }
@@ -214,6 +211,32 @@
   margin-bottom: 20px;
 }
     
+    .loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  color: #f3f3f3;
+  font-size: 14px;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #84AAFB;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+     }
+    
     @media (max-width: 320px) {
       #pageHeader {
         height: 60px;
@@ -235,8 +258,8 @@
         font-size: 16px;
       }
       #content p {
-  font-size: 12px;
-}
+       font-size: 12px;
+      }
       #chartContainer {
         height: 320px;
       }
@@ -272,10 +295,15 @@
     <p>Чарт оновлюється щотижня і складається з 200 треків</p>
     <div class="filter-buttons">
       <button class="filter-btn active" data-range="200">ТОП 200</button>
-      <button class="filter-btn" data-range="50">Перші 50</button>
-      <button class="filter-btn" data-range="20">Перші 20</button>
-      <button class="filter-btn" data-range="10">Перші 10</button>
+      <button class="filter-btn" data-range="50">ТОП 50</button>
+      <button class="filter-btn" data-range="20">ТОП 20</button>
+      <button class="filter-btn" data-range="10">ТОП 10</button>
     </div>
+    <div id="chartLoader" class="loader-container">
+  <div class="loader"></div>
+  <p>Завантаження графіка...</p>
+</div>
+
     <div id="chartContainer"></div>
     <div id="avgContainer"></div>
     <div id="tableHeaderContainer" style="display:flex; width:100%; margin:auto;"></div>
@@ -300,10 +328,23 @@
             <span class="legend-box etc"></span> інші
         </label>
     </div>
+  
+<div id="tableLoader" class="loader-container" style="margin-top: 30px;">
+  <div class="loader"></div>
+  <p>Завантаження теплової карти...</p>
+</div>
 
     <div id="tracksTable"></div>
 </div>
   </div>
+  
+  <footer style="width: 100%; border-top: 1px solid #bababa; margin-top: 40px; padding-top: 10px; text-align: center; font-size: 12px; color: #bababa;">
+  Джерело даних: 244 сторінки чарту Spotify Weekly Top Songs Ukraine (від 
+  <a href="https://charts.spotify.com/charts/view/regional-ua-weekly/2020-07-16" style="color: #84AAFB;" target="_blank">https://charts.spotify.com/charts/view/regional-ua-weekly/2020-07-16</a> 
+  до 
+  <a href="https://charts.spotify.com/charts/view/regional-ua-weekly/2025-03-13" style="color: #84AAFB;" target="_blank">https://charts.spotify.com/charts/view/regional-ua-weekly/2025-03-13</a>)
+</footer>
+
   <script>
   const state = {
     rows: null,
@@ -601,77 +642,84 @@
     }
 
     const options = {
-      backgroundColor: "#282626",
-      tooltip: {
-        trigger: "axis",
-        backgroundColor: "#383838",
-        textStyle: { color: "#f3f3f3" },
-        formatter: function(params) {
-          let tooltipText = params[0].axisValue + "<br/>";
-          params.forEach(param => {
-            tooltipText += param.marker + param.seriesName + ": " + param.value + "%<br/>";
-          });
-          return tooltipText;
-        }
-      },
-      legend: {
-        data: ["російські", "українські", "інші"],
-        textStyle: { color: "#f3f3f3" }
-      },
-      xAxis: {
-        type: "category",
-        data: data.map(d => d.date),
-        axisLabel: { color: "#f3f3f3" },
-        name: "Тиждень чарту",
-        nameLocation: "center",
-        nameTextStyle: { color: "#f3f3f3", fontSize: 12 },
-        nameGap: 25
-      },
-      yAxis: {
-        type: "value",
-        min: 0,
-        max: 100,
-        axisLabel: {
-          color: "#f3f3f3",
-          formatter: value => value + "%"
-        },
-        name: "Частка у чарті (%)",
-        nameLocation: "center",
-        nameTextStyle: { color: "#f3f3f3", fontSize: 12 },
-        nameGap: 45,
-        nameRotate: 90
-      },
-      grid: {
-        left: "0%",
-        right: "5%",
-        bottom: 90,
-        containLabel: true
-      },
-      dataZoom: [
-        { type: "inside", xAxisIndex: 0 },
-        { type: "slider", xAxisIndex: 0, bottom: 10 }
-      ],
-      series: [
-        {
-          name: "російські",
-          type: "line",
-          data: data.map(d => d.rus),
-          color: "#ff7e7e"
-        },
-        {
-          name: "українські",
-          type: "line",
-          data: data.map(d => d.ukr),
-          color: "#7ea9ff"
-        },
-        {
-          name: "інші",
-          type: "line",
-          data: data.map(d => d.etc),
-          color: "#beff7e"
-        }
-      ]
-    };
+  backgroundColor: "#282626",
+  tooltip: {
+    trigger: "axis",
+    backgroundColor: "#383838",
+    textStyle: { color: "#f3f3f3" },
+    borderRadius: 7,
+    formatter: function(params) {
+      let tooltipText = params[0].axisValue + "<br/>";
+      params.forEach(param => {
+        tooltipText += param.marker + param.seriesName + ": " + param.value + "%<br/>";
+      });
+      return tooltipText;
+    }
+  },
+  legend: {
+    data: ["російські", "українські", "інші"],
+    textStyle: { color: "#f3f3f3" }
+  },
+  xAxis: {
+    type: "category",
+    data: data.map(d => d.date),
+    axisLabel: { color: "#f3f3f3" },
+    name: "Тиждень чарту",
+    nameLocation: "center",
+    nameTextStyle: { color: "#f3f3f3", fontSize: 12 },
+    nameGap: 25
+  },
+  yAxis: {
+    type: "value",
+    min: 0,
+    max: 100,
+    axisLabel: {
+      color: "#f3f3f3",
+      formatter: value => value + "%"
+    },
+    name: "Частка у чарті (%)",
+    nameLocation: "center",
+    nameTextStyle: { color: "#f3f3f3", fontSize: 12 },
+    nameGap: 45,
+    nameRotate: 90
+  },
+  grid: {
+    left: "0%",
+    right: "5%",
+    bottom: 90,
+    containLabel: true
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "slider", xAxisIndex: 0, bottom: 10 }
+  ],
+  series: [
+    {
+      name: "російські",
+      type: "line",
+      data: data.map(d => d.rus),
+      color: "#ff7e7e",
+      showSymbol: false,
+      emphasis: { showSymbol: true }
+    },
+    {
+      name: "українські",
+      type: "line",
+      data: data.map(d => d.ukr),
+      color: "#7ea9ff",
+      showSymbol: false,
+      emphasis: { showSymbol: true }
+    },
+    {
+      name: "інші",
+      type: "line",
+      data: data.map(d => d.etc),
+      color: "#beff7e",
+      showSymbol: false,
+      emphasis: { showSymbol: true }
+    }
+  ]
+};
 
     state.chart.setOption(options);
 
@@ -688,12 +736,18 @@
   }
 
   async function init() {
-    const csvData = await fetchCSV(state.csvUrl);
-    state.rows = d3.csvParseRows(csvData);
+  document.getElementById("chartLoader").style.display = "flex";
+  document.getElementById("tableLoader").style.display = "flex";
 
-    drawTracksTable(state);
-    drawChart(state, state.currentRange);
-  }
+  const csvData = await fetchCSV(state.csvUrl);
+  state.rows = d3.csvParseRows(csvData);
+
+  drawTracksTable(state);
+  drawChart(state, state.currentRange);
+
+  document.getElementById("chartLoader").style.display = "none";
+  document.getElementById("tableLoader").style.display = "none";
+}
 
   document.querySelectorAll(".legend-checkbox").forEach(checkbox => {
     checkbox.addEventListener("change", function() {
@@ -720,6 +774,5 @@
 
   init();
 </script>
-
 </body>
 </html>
