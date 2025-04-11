@@ -3389,7 +3389,7 @@ async function fetchArtists() {
 
     try {
         const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=0&single=true&output=csv');
-        if (!response.ok) throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
+        if (!response.ok) throw new Error(`Помилка завантаження даних: ${response.statusText}`);
 
         const csvData = await response.text();
 
@@ -3481,7 +3481,7 @@ async function fetchTracksData() {
         const csvData2024 = await fetchCachedCSV(csv2024URL, cacheKey2024);
 
         const response2025 = await fetch(csv2025URL);
-        if (!response2025.ok) throw new Error("Ошибка при загрузке tracksDataCSV2025");
+        if (!response2025.ok) throw new Error("Помилка завантаження tracksDataCSV2025");
         const csvData2025 = await response2025.text();
 
         const parsedData2024 = Papa.parse(csvData2024, { header: true, skipEmptyLines: true }).data;
@@ -3521,7 +3521,7 @@ async function fetchTracksData() {
             preview: row.preview
         }));
     } catch (error) {
-        console.error("Ошибка обработки CSV:", error);
+        console.error("Помилка обробки CSV:", error);
     }
 }
 
@@ -5865,13 +5865,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const observer = new MutationObserver(() => {
-    updateGenreCounts();
+const genreContainer = document.getElementById('genres-container');
+
+const observer = new MutationObserver((mutations, obs) => {
+  obs.disconnect();
+  updateGenreCounts();
+
+  obs.observe(genreContainer, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    characterData: true
+  });
 });
 
-const genreContainer = document.getElementById('genres-container');
 if (genreContainer) {
-    observer.observe(genreContainer, { childList: true, subtree: true });
+  observer.observe(genreContainer, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    characterData: true
+  });
 }
  
   document.addEventListener('DOMContentLoaded', function() {
