@@ -2971,108 +2971,129 @@ let cityCombinations = {};
 let initialCityCombinations = {};
 
 function initializeGenreCombinations(artists) {
-    genreCombinations = {};
-    labelCombinations = {};
-    cityCombinations = {};
-    let genreCounts = {};
-    let filteredGenreCounts = {};
-    let labelCounts = {};
-    let filteredLabelCounts = {};
-    let cityCounts = {};
-    let filteredCityCounts = {};
+  genreCombinations = {};
+  labelCombinations = {};
+  cityCombinations = {};
 
-    artists.forEach(artist => {
-        const artistGenres = artist['Жанр'].split(', ');
-        const artistLabels = [artist['Label'], artist['Label2'], artist['Label3'], artist['Label4'], artist['Label5'], artist['Label6']].filter(Boolean);
-        const artistCity = artist['City'];
+  const genreCounts = {};
+  const filteredGenreCounts = {};
+  const labelCounts = {};
+  const cityCounts = {};
+  const filteredCityCounts = {};
 
-        const passesFilters = (!hideRussian || artist['RuLang'] === '') &&
-                              (!filterYearRel || artist['YearRel'] === '+') &&
-                              (!filterMultiRel || artist['MultiRel'] === '+') &&
-                              (!filterDebut || artist['Debut'] === '+');
+  const removedGenresSet = new Set(removedGenres || []);
+  const removedLabelsSet = new Set(removedLabels || []);
+  const removedCitiesSet = new Set(removedCities || []);
+  const selectedLabelsSet = new Set(selectedLabels || []);
+  const selectedCitiesSet = new Set(selectedCities || []);
+  const selectedGenresSet = new Set(selectedGenres || []);
 
-        if (!passesFilters || artistGenres.some(genre => removedGenres.includes(genre)) || 
-            artistLabels.some(label => removedLabels.includes(label)) || 
-            removedCities.includes(artistCity)) {
-            return;
-        }
+  for (let i = 0, len = artists.length; i < len; i++) {
+    const artist = artists[i];
+    const genresStr = artist['Жанр'];
+    if (!genresStr) continue;
+    const artistGenres = genresStr.split(', ');
 
-        if ((selectedLabels.length === 0 || selectedLabels.some(label => artistLabels.includes(label))) &&
-            (selectedCities.length === 0 || selectedCities.includes(artistCity))) {
-            artistGenres.forEach(genre => {
-                genreCounts[genre] = (genreCounts[genre] || 0) + 1;
-            });
+    const artistLabels = [];
+    for (let j = 1; j <= 6; j++) {
+      const key = 'Label' + (j === 1 ? '' : j);
+      if (artist[key]) artistLabels.push(artist[key]);
+    }
+    const artistCity = artist['City'];
 
-            const genreCount = artistGenres.length;
-            if (matchAllGenres) {
-                for (let i = 1; i < (1 << genreCount); i++) {
-                    let combination = [];
-                    for (let j = 0; j < genreCount; j++) {
-                        if (i & (1 << j)) {
-                            combination.push(artistGenres[j]);
-                        }
-                    }
-                    const key = combination.sort().join(',');
-                    filteredGenreCounts[key] = (filteredGenreCounts[key] || 0) + 1;
-                }
+    if (
+      (hideRussian && artist['RuLang'] !== '') ||
+      (filterYearRel && artist['YearRel'] !== '+') ||
+      (filterMultiRel && artist['MultiRel'] !== '+') ||
+      (filterDebut && artist['Debut'] !== '+')
+    ) {
+      continue;
+    }
+
+    if (artistGenres.some(genre => removedGenresSet.has(genre))) continue;
+    if (artistLabels.some(label => removedLabelsSet.has(label))) continue;
+    if (removedCitiesSet.has(artistCity)) continue;
+
+    let countGenres = true, countLabels = true, countCities = true;
+
+    if (selectedLabels && selectedLabels.length) {
+      countGenres = artistLabels.some(label => selectedLabelsSet.has(label));
+    }
+    if (selectedCities && selectedCities.length) {
+      countGenres = countGenres && selectedCitiesSet.has(artistCity);
+    }
+    if (selectedGenres && selectedGenres.length) {
+      const allGenresSelected = artistGenres.every(genre => selectedGenresSet.has(genre));
+      countLabels = allGenresSelected;
+      countCities = allGenresSelected;
+    }
+    if (selectedCities && selectedCities.length) {
+      countLabels = countLabels && selectedCitiesSet.has(artistCity);
+    }
+    if (selectedLabels && selectedLabels.length) {
+      countCities = countCities && artistLabels.some(label => selectedLabelsSet.has(label));
+    }
+
+    if (countGenres) {
+      for (let k = 0, gLen = artistGenres.length; k < gLen; k++) {
+        const genre = artistGenres[k];
+        genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+      }
+      if (matchAllGenres) {
+        const sortedGenres = artistGenres.slice().sort();
+        const n = sortedGenres.length;
+        const max = 1 << n;
+        for (let bit = 1; bit < max; bit++) {
+          const combo = [];
+          for (let j = 0; j < n; j++) {
+            if (bit & (1 << j)) {
+              combo.push(sortedGenres[j]);
             }
+          }
+          const key = combo.join(',');
+          filteredGenreCounts[key] = (filteredGenreCounts[key] || 0) + 1;
         }
-
-        if ((selectedGenres.length === 0 || selectedGenres.every(genre => artistGenres.includes(genre))) &&
-            (selectedCities.length === 0 || selectedCities.includes(artistCity))) {
-            artistLabels.forEach(label => {
-                labelCounts[label] = (labelCounts[label] || 0) + 1;
-            });
-
-            artistLabels.forEach(label => {
-                const key = label;
-                filteredLabelCounts[key] = (filteredLabelCounts[key] || 0) + 1;
-            });
-        }
-
-        if ((selectedGenres.length === 0 || selectedGenres.every(genre => artistGenres.includes(genre))) &&
-            (selectedLabels.length === 0 || selectedLabels.some(label => artistLabels.includes(label)))) {
-            cityCounts[artistCity] = (cityCounts[artistCity] || 0) + 1;
-            filteredCityCounts[artistCity] = (filteredCityCounts[artistCity] || 0) + 1;
-        }
-    });
-
-    for (let genre in genreCounts) {
-        if (genreCounts.hasOwnProperty(genre)) {
-            genreCombinations[genre] = { count: genreCounts[genre], filterCount: genreCounts[genre] };
-        }
+      }
     }
 
-    if (matchAllGenres) {
-        for (let combination in filteredGenreCounts) {
-            if (filteredGenreCounts.hasOwnProperty(combination)) {
-                if (!genreCombinations[combination]) {
-                    genreCombinations[combination] = { count: 0, filterCount: filteredGenreCounts[combination] };
-                } else {
-                    genreCombinations[combination].filterCount = filteredGenreCounts[combination];
-                }
-            }
-        }
+    if (countLabels) {
+      for (let k = 0, aLen = artistLabels.length; k < aLen; k++) {
+        const label = artistLabels[k];
+        labelCounts[label] = (labelCounts[label] || 0) + 1;
+      }
     }
 
-    for (let label in labelCounts) {
-        if (labelCounts.hasOwnProperty(label)) {
-            labelCombinations[label] = { count: labelCounts[label], filterCount: labelCounts[label] };
-        }
+    if (countCities) {
+      cityCounts[artistCity] = (cityCounts[artistCity] || 0) + 1;
+      filteredCityCounts[artistCity] = (filteredCityCounts[artistCity] || 0) + 1;
     }
+  }
 
-    for (let city in cityCounts) {
-        if (cityCounts.hasOwnProperty(city)) {
-            cityCombinations[city] = { 
-                count: cityCounts[city], 
-                filterCount: filteredCityCounts[city] !== undefined ? filteredCityCounts[city] : cityCounts[city] 
-            };
-        }
+  for (const genre in genreCounts) {
+    genreCombinations[genre] = { count: genreCounts[genre], filterCount: genreCounts[genre] };
+  }
+  if (matchAllGenres) {
+    for (const key in filteredGenreCounts) {
+      if (!genreCombinations.hasOwnProperty(key)) {
+        genreCombinations[key] = { count: 0, filterCount: filteredGenreCounts[key] };
+      } else {
+        genreCombinations[key].filterCount = filteredGenreCounts[key];
+      }
     }
+  }
+  for (const label in labelCounts) {
+    labelCombinations[label] = { count: labelCounts[label], filterCount: labelCounts[label] };
+  }
+  for (const city in cityCounts) {
+    cityCombinations[city] = {
+      count: cityCounts[city],
+      filterCount: (filteredCityCounts[city] !== undefined) ? filteredCityCounts[city] : cityCounts[city]
+    };
+  }
 
-    initialGenreCombinations = JSON.parse(JSON.stringify(genreCombinations));
-    initialLabelCombinations = JSON.parse(JSON.stringify(labelCombinations));
-    initialCityCombinations = JSON.parse(JSON.stringify(cityCombinations));
+  initialGenreCombinations = Object.assign({}, genreCombinations);
+  initialLabelCombinations = Object.assign({}, labelCombinations);
+  initialCityCombinations = Object.assign({}, cityCombinations);
 }
 
   function extractAndDisplayLabels(artists) {
