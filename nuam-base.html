@@ -598,7 +598,7 @@
     overflow-y: auto;
     font-size: 14px;
     word-wrap: break-word;
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .related-artists-container a.related-artist-link {
@@ -1663,68 +1663,6 @@ background: #282626;
     transform: translateX(-38.75px);
   }
 }
-       
-      [data-tooltip] {
-  position: relative;
-}
-
-[data-tooltip]::after {
-  font-family: 'CustomFont', Arial, sans-serif;
-  content: attr(data-tooltip);
-  visibility: hidden;
-  background-color: #383838;
-  color: #f3f3f3;
-  font-size: 12px;
-  font-weight: normal;
-  text-align: center;
-  padding: 5px;
-  border-radius: 7px;
-  border: 1px solid #282626;
-  width: 130px;
-  max-width: 90vw;
-  position: absolute;
-  z-index: 1001;
-  right: -137px;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  white-space: normal;
-}
-
-[data-tooltip]:hover::after {
-  visibility: visible;
-  opacity: 1;
-} 
-      
-.listeners-tooltip[data-tooltip]::after {
-    right: -110px;
-}
-      
-      .difference-tooltip[data-tooltip]::after {
-        right: -90px;
-}
-      
-      .match-all-genres-tooltip[data-tooltip]::after {
-    white-space: pre-line;
-        width: 250px;
-    top: 30px;
-    left: 175px;
-        transition: opacity 0.3s 0.3s, visibility 0s 0.3s;
-}
-
-      .date-release [data-tooltip]::after {
-    top: -75px;
-    left: 42px;
-    line-height: 1.2;
-    width: 110px;
-}
-      
-      .date-added [data-tooltip]::after {
-    top: -55px;
-    left: 42px;
-    line-height: 1.2;
-    width: 110px;
-}
       
       .date-added span::after {
   top: -60px; 
@@ -1751,41 +1689,6 @@ background: #282626;
   gap: 10px;
   z-index: 1000;
 }
-      
-      .year-rel-icon i[data-tooltip]:hover::after,
-.multi-rel-icon i[data-tooltip]:hover::after,
-.russian-tag i[data-tooltip]:hover::after {
-  visibility: visible;
-  opacity: 1;
-}
-      
-.year-rel-icon i[data-tooltip]::after {
-  top: 30px;
-  left: -32px;
-  width: 90px;
-  height: 24px;
-}
-
-.multi-rel-icon i[data-tooltip]::after {
-    top: 30px;
-    width: 100px;
-    left: -35px;
-    height: 24px;
-}
-
-.russian-tag i[data-tooltip]::after {
-  top: 30px;
-    width: 120px;
-    left: -45px;
-    height: 24px;
-}
-      
-      .debut-icon i[data-tooltip]::after {
-  top: 30px;
-    width: 120px;
-    left: -47px;
-    height: 24px;
-}  
 
       .mobile-label {
   display: none;
@@ -1822,6 +1725,26 @@ background: #282626;
       .mobile-only {
     display: none;
 }
+      
+      #global-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background-color: #383838;
+  color: #f3f3f3;
+  padding: 5px;
+  border-radius: 7px;
+  border: 1px solid #282626;
+  font-size: 12px;
+  z-index: 10000;
+  white-space: pre-wrap;
+  max-width: 600px;
+  width: auto;
+  display: none;
+}
+      
+      .city-text-mobile {
+        display: none;
+      }
       
       @media (min-width: 769px) {
     .date-added-mobile {
@@ -1920,6 +1843,7 @@ background: #282626;
     align-items: center;
     justify-content: space-between;
       padding-top: 10px;
+    flex-wrap: nowrap;
   }
 
   #logo {
@@ -1949,22 +1873,51 @@ background: #282626;
     font-size: 10px;
     font-weight: bold;
     border: 1px solid #f3f3f3;
-    padding: 10px 7px 10px 7px;
+    padding: 5px 3px 5px 3px;
     cursor: pointer;
     border-radius: 7px 7px 0 0;
     z-index: 200;
   }
     
-    #city-button, #label-button, #genres-sort, .genres-sort-label {
-    display: none;
+    #genres-sort, .genres-sort-label {
+    
+    }
+    
+    #genres-sort, #labels-sort, #cities-sort {
+    margin-left: 5px;
+    }
+    
+    .custom-dropdown {
+    width: 180px;
+}
+    
+    .genres-sort-label, .labels-sort-label, .cities-sort-label, .dropdown-toggle, .dropdown-menu li {
+       font-size: 12px;
+    }
+    
+    .cities-sort-label {
+       margin-left: 0;
+    }
+    
+    #labels-section.expanded, #cities-section.expanded {
+       padding: 10px;
     }
     
     .custom-checkbox {
     font-size: 12px;
+    margin-bottom: 5px;
     }
     
     .custom-checkbox .checkbox-text {
         width: 270px;
+    }
+    
+    #labels-container, #cities-container {
+        gap: 5px;
+    }
+    
+    #labels-container .genre-button, #cities-container .genre-button {
+       width: calc(100% - 5px);
     }
     
     #genre-button:hover, #sort-button:hover, #filters-button:hover, #city-button:hover, #label-button:hover {
@@ -1985,6 +1938,7 @@ background: #282626;
     
 .genre-button {
     width: 150px;
+  height: 25px;
     }
     
     .genre-button .remove-genre {
@@ -1994,6 +1948,7 @@ background: #282626;
         margin-left: 5px;
         transform: none;
         background-color: #e74c3c8c;
+        height: 25px;
     }
     
     #genres-container {
@@ -2002,11 +1957,16 @@ background: #282626;
         justify-content: space-between;
         transition: none !important;
         padding-right: 5px;
+        gap: 5px;
     }
     
     #genres-section {
       max-height: 320px;
         overflow-y: auto;
+    }
+    
+    .genres-header {
+      display: block;
     }
     
     #genres-section::-webkit-scrollbar {
@@ -2019,6 +1979,10 @@ background: #282626;
         background-color: #383838;
         border-radius: 7px;
         border: 2px solid #282626;
+    }
+    
+    .label-info-text {
+      display: none;
     }
     
     #settings-popup {
@@ -2067,6 +2031,10 @@ background: #282626;
     .genre-button.red-shadow {
     box-shadow: none !important;
 }
+    
+    .labels-sort-label {
+      font-size: 12px;
+    }
     
     #sort-menu {
     font-size: 12px;
@@ -2132,7 +2100,7 @@ font-size: 14px;
       display: inline;
       cursor: pointer;
         z-index: 1001;
-        margin-right: 5px;
+        margin-left: 5px;
     }
 
     #clear-search {
@@ -2141,7 +2109,7 @@ font-size: 14px;
         right: 55px;
         top: -5px;
         cursor: pointer;
-        z-index: 1002;
+        z-index: 1003;
         font-size: 24px;
     }
 
@@ -2348,7 +2316,7 @@ background: #282626;
 }
     
     .genre-link {
-      font-size: 14px;
+      font-size: 12px;
       border: none;
       padding: 0;
       margin: 0 5px 0 0;
@@ -2402,6 +2370,7 @@ background: #282626;
     .listeners-element {
         display: flex;
         align-items: center;
+        margin-bottom: 0px;
     }
 
     .related-artists-button {
@@ -2610,7 +2579,39 @@ background: #282626;
     #main-container {
     flex-direction: column;
   }
+    
+    .artist .date-release {
+    bottom: 0 !important;
+  }
+  .artist.has-related .date-release {
+    bottom: 30px !important;
+  }
+    
+    .artist:not(.has-related) .date-release {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: auto !important;
+    border-radius: 0 0 7px 0px !important;
+  }
+    
+    .artist:not(.has-related) img {
+    border-bottom-right-radius: 7px;
+  }
+    
+    .city-label-top {
+  display: none !important;
+}
 
+.city-text-mobile {
+  display: block;
+  font-size: 12px;
+  color: #f3f3f3;
+}
+    
+    .artist .genres-container {
+    margin-bottom: 0px;
+}
+    
   #buttons-wrapper { order: 1; }
   #search-container { order: 2; }
   .line { display: none; }
@@ -2900,6 +2901,7 @@ let isSortActive = false;
 let tokenExpiryTime = 0;
 let selectedCities = [];
 let removedCities = [];
+let validArtistIDs = new Set();
 
 async function getAccessToken() {
     const clientId = 'b5ff50f2075e4a15a6820f06a8269c80';
@@ -3420,6 +3422,13 @@ async function fetchArtists() {
             complete: function(results) {
                 listenerColumns = findListenerColumns(results.meta.fields);
                 artistsData = results.data.slice(1).filter(artist => !artist['Empty']);
+validArtistIDs = new Set(
+  artistsData
+    .map(a => a.URL1)
+    .filter(Boolean)
+    .map(url => url.split('/').pop())
+);
+
                 artistsData.forEach(artist => {
                     if (artist['Related']) {
                         artist.relatedArtists = artist['Related'].split(',').map(id => id.trim());
@@ -4039,6 +4048,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function displayArtists(artists, reset = false) {
     const container = document.querySelector('.artist-container');
+
     if (reset) {
         container.innerHTML = '';
         displayOffset = 0;
@@ -4058,124 +4068,149 @@ function displayArtists(artists, reset = false) {
         const imgContainer = document.createElement('div');
         imgContainer.style.position = 'relative';
 
+        const cityName = artist['City'] ? artist['City'].split(',')[0] : '';
+        let rawDesc   = '';
+        let infoIcon  = null;
+
+        if (artist['Опис'] && artist['Опис'] !== '-') {
+            rawDesc = artist['Опис'].replace(/<a\s+[^>]*>(.*?)<\/a>/g, '$1');
+
+            infoIcon = document.createElement('i');
+            infoIcon.className = 'fa fa-info-circle';
+
+            if (window.innerWidth > 768) {
+                infoIcon.setAttribute('data-tooltip', rawDesc);
+            }
+
+            Object.assign(infoIcon.style, {
+                position:        'absolute',
+                top:             '5px',
+                left:            '5px',
+                color:           '#f3f3f3',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                borderRadius:    '7px 12px 12px 12px',
+                padding:         '5px',
+                cursor:          'pointer',
+                zIndex:          '1000'
+            });
+
+            if (window.innerWidth <= 768) {
+                Object.assign(infoIcon.style, {
+                    fontSize:     '14px',
+                    top:          '0px',
+                    left:         '0px',
+                    borderRadius: '0px 12px 12px 12px',
+                });
+            }
+            imgContainer.appendChild(infoIcon);
+        }
+
+        if (cityName) {
+            const cityLabel = document.createElement('span');
+            cityLabel.classList.add('city-label-top');
+            cityLabel.textContent = cityName;
+            Object.assign(cityLabel.style, {
+                position:        'absolute',
+                top:             '5px',
+                left:            (artist['Опис'] && artist['Опис'] !== '-') ? '36px' : '5px',
+                color:           '#f3f3f3',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                padding:         '3px 8px',
+                borderRadius:    '4px',
+                fontSize:        '12px',
+                zIndex:          '1000',
+                maxWidth:        '200px',
+                overflow:        'hidden',
+                whiteSpace:      'nowrap',
+                textOverflow:    'ellipsis',
+                display:         'flex',
+                alignItems:      'center',
+                height:          '20px',
+                lineHeight:      '20px',
+                userSelect:      'none'
+            });
+            imgContainer.appendChild(cityLabel);
+        }
+
         const imgElement = document.createElement('img');
         imgElement.src = artist['IMG'] || 'https://static.wixstatic.com/media/c77f36_18ba153c351744bc9cb5eecb39ca6d90~mv2.png';
         if (artist['URL1']) {
             imgElement.setAttribute('data-spotify-id', artist['URL1'].split('/').pop().split('?')[0]);
-            imgElement.addEventListener('click', function() {
+            imgElement.addEventListener('click', function () {
                 playTrackPreview(this.getAttribute('data-spotify-id'));
             });
         }
-
         imgContainer.appendChild(imgElement);
 
         const playIcon = document.createElement('div');
         playIcon.className = 'play-icon';
         playIcon.innerHTML = '<i class="fas fa-circle-play"></i>';
-        playIcon.addEventListener('click', function(event) {
+        playIcon.addEventListener('click', function (event) {
             event.stopPropagation();
             playTrackPreview(imgElement.getAttribute('data-spotify-id'));
         });
         imgContainer.appendChild(playIcon);
 
-        const noTracksMessage = document.createElement('div');
-        noTracksMessage.className = 'no-tracks-message';
-        noTracksMessage.textContent = 'Відсутні треки для відтворення';
-        noTracksMessage.style.display = 'none';
-        imgContainer.appendChild(noTracksMessage);
-      
+        const noTracksMessage      = document.createElement('div');
         const noRecentTracksMessage = document.createElement('div');
+        noTracksMessage.className       = 'no-tracks-message';
         noRecentTracksMessage.className = 'no-recent-tracks-message';
+        noTracksMessage.textContent       = 'Відсутні треки для відтворення';
         noRecentTracksMessage.textContent = 'У артиста немає треків у поточному році. Грають найпопулярніші.';
+        noTracksMessage.style.display       = 'none';
         noRecentTracksMessage.style.display = 'none';
+        imgContainer.appendChild(noTracksMessage);
         imgContainer.appendChild(noRecentTracksMessage);
-
-        const relatedArtistsButton = document.createElement('button');
-        relatedArtistsButton.className = 'related-artists-button';
-        relatedArtistsButton.textContent = 'Схожі артисти';
-        relatedArtistsButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            toggleRelatedArtists(artistElement, imgElement.getAttribute('data-spotify-id'));
-        });
-
-        imgContainer.appendChild(relatedArtistsButton);
-
-        const relatedArtistsContainer = document.createElement('div');
-        relatedArtistsContainer.className = 'related-artists-container';
-        imgContainer.appendChild(relatedArtistsContainer);
 
         const iconContainer = document.createElement('div');
         iconContainer.className = 'icon-container';
-
         if (artist['YearRel'] !== '+') {
-            const yearRelIcon = document.createElement('div');
-            yearRelIcon.className = 'year-rel-icon';
-            yearRelIcon.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Немає релізів понад рік"></i>';
-            yearRelIcon.style.color = '#fb8484';
-            yearRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
-            iconContainer.appendChild(yearRelIcon);
+            const ico = document.createElement('div');
+            ico.className = 'year-rel-icon';
+            ico.innerHTML = '<i class="fa fa-calendar-minus" data-tooltip="Немає релізів понад рік"></i>';
+            ico.style.color = '#fb8484';
+            ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(ico);
         }
-
-        const multiRelIcon = document.createElement('div');
-        multiRelIcon.className = 'multi-rel-icon';
         if (artist['MultiRel'] !== '+') {
-            multiRelIcon.innerHTML = '<i class="fa fa-solid fa-leaf" data-tooltip="У артиста лише один реліз"></i>';
-            multiRelIcon.style.color = '#fb8484';
-            multiRelIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
-            iconContainer.appendChild(multiRelIcon);
+            const ico = document.createElement('div');
+            ico.className = 'multi-rel-icon';
+            ico.innerHTML = '<i class="fa fa-solid fa-leaf" data-tooltip="У артиста лише&#10;один реліз"></i>';
+            ico.style.color = '#fb8484';
+            ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(ico);
         }
-
         if (artist['RuLang']) {
-            const tagElement = document.createElement('div');
-            tagElement.className = 'russian-tag';
-            tagElement.innerHTML = '<i class="fa fa-thumbs-down" data-tooltip="Є пісні російською з 2024 року"></i>';
-            tagElement.style.color = '#fb8484';
-            tagElement.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
-            iconContainer.appendChild(tagElement);
+            const ico = document.createElement('div');
+            ico.className = 'russian-tag';
+            ico.innerHTML = '<i class="fa fa-thumbs-down" data-tooltip="Є пісні російською&#10;з 2024 року"></i>';
+            ico.style.color = '#fb8484';
+            ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(ico);
         }
-
         if (artist['Debut'] === '+') {
-            const debutIcon = document.createElement('div');
-            debutIcon.className = 'debut-icon';
-            debutIcon.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував у 2025 році"></i>';
-            debutIcon.style.color = '#d5da8d';
-            debutIcon.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
-            iconContainer.appendChild(debutIcon);
+            const ico = document.createElement('div');
+            ico.className = 'debut-icon';
+            ico.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував&#10;у 2025 році"></i>';
+            ico.style.color = '#d5da8d';
+            ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
+            iconContainer.appendChild(ico);
         }
-
-        if (iconContainer.children.length > 0) {
-            imgContainer.appendChild(iconContainer);
-        }
+        if (iconContainer.children.length) imgContainer.appendChild(iconContainer);
 
         if (artist['Дата додавання']) {
-            const dateElement = document.createElement('div');
-            dateElement.className = 'date-added';
-            dateElement.innerHTML = `<i class="fa fa-database"></i> <span data-tooltip="Дата додавання артиста до бази" style="font-family: CustomFont, Arial, sans-serif;">${artist['Дата додавання']}</span>`;
-            imgContainer.appendChild(dateElement);
-
-            if (!artist['LastRelDate']) {
-                dateElement.style.borderRadius = '0 7px 7px 0';
-                dateElement.style.borderBottom = '1px solid #282626';
-            }
+            const el = document.createElement('div');
+            el.className = 'date-added';
+            el.innerHTML = `<i class="fa fa-database"></i> <span data-tooltip="Дата додавання&#10;артиста до бази" style="font-family: CustomFont, Arial, sans-serif;">${artist['Дата додавання']}</span>`;
+            imgContainer.appendChild(el);
+            if (!artist['LastRelDate']) { el.style.borderRadius = '0 7px 7px 0'; el.style.borderBottom = '1px solid #282626'; }
         }
-
         if (artist['LastRelDate']) {
-            const datereleaseElement = document.createElement('div');
-            datereleaseElement.className = 'date-release';
-            datereleaseElement.innerHTML = `<i class="fa fa-compact-disc"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
-            imgContainer.appendChild(datereleaseElement);
-
-            if (!artist['Дата додавання']) {
-                datereleaseElement.style.borderRadius = '0 7px 0 7px';
-                datereleaseElement.style.borderTop = '1px solid #282626';
-            }
-        }
-
-        if (!artist['Дата додавання'] && artist['LastRelDate']) {
-            const dateReleaseElement = imgContainer.querySelector('.date-release');
-            if (dateReleaseElement) {
-                dateReleaseElement.style.borderRadius = '0 7px 0 7px';
-            }
+            const el = document.createElement('div');
+            el.className = 'date-release';
+            el.innerHTML = `<i class="fa fa-compact-disc"></i> <span data-tooltip="Дата крайнього релізу" style="font-family: CustomFont, Arial, sans-serif;">${artist['LastRelDate']}</span>`;
+            imgContainer.appendChild(el);
+            if (!artist['Дата додавання']) { el.style.borderRadius = '0 7px 0 7px'; el.style.borderTop = '1px solid #282626'; }
         }
 
         const infoContainer = document.createElement('div');
@@ -4184,79 +4219,158 @@ function displayArtists(artists, reset = false) {
         const nameElement = document.createElement('a');
         nameElement.href = artist['URL1'] || '#';
         nameElement.textContent = artist['Артист'];
-        nameElement.target = "_blank";
+        nameElement.target = '_blank';
         nameElement.className = 'track-artist-name';
         infoContainer.appendChild(nameElement);
 
         const listenersElement = document.createElement('div');
         listenersElement.className = 'listeners-element';
-
         const listenersIcon = document.createElement('i');
         listenersIcon.className = 'fa fa-users';
         listenersElement.appendChild(listenersIcon);
-
-        const currentListeners = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
-        const previousListeners = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
-
-        const currentListenersSpan = document.createElement('span');
-        currentListenersSpan.textContent = formatNumber(currentListeners);
-        currentListenersSpan.setAttribute('data-tooltip', 'Слухачів на місяць');
-        listenersElement.appendChild(currentListenersSpan);
-
-        if (!isNaN(currentListeners) && !isNaN(previousListeners) && previousListeners !== 0) {
-    const difference = currentListeners - previousListeners;
-    if (difference !== 0) {
-        const differenceText = difference > 0 ? `↑${formatNumber(difference)}` : `↓${formatNumber(Math.abs(difference))}`;
-        const differenceColor = difference > 0 ? '#84fb8f' : '#fb8484';
-        const differenceSpan = document.createElement('span');
-        differenceSpan.className = 'difference';
-        differenceSpan.style.color = differenceColor;
-        differenceSpan.textContent = `(${differenceText})`;
-        differenceSpan.setAttribute('data-tooltip', 'Різниця порівняно з попереднім місяцем');
-        listenersElement.appendChild(differenceSpan);
-    }
-}
-
-        if (artist['Instagram']) {
-            listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+        const current = parseInt(artist[Object.keys(artist)[listenerColumns.currentMonthIndex]]) || 0;
+        const previous = parseInt(artist[Object.keys(artist)[listenerColumns.previousMonthIndex]]);
+        const curSpan  = document.createElement('span');
+        curSpan.textContent = formatNumber(current);
+        curSpan.setAttribute('data-tooltip','Слухачів на місяць');
+        listenersElement.appendChild(curSpan);
+        if (!isNaN(previous) && previous !== 0) {
+            const diff = current - previous;
+            if (diff !== 0) {
+                const txt = diff > 0 ? `↑${formatNumber(diff)}` : `↓${formatNumber(Math.abs(diff))}`;
+                const color = diff > 0 ? '#84fb8f' : '#fb8484';
+                const span = document.createElement('span');
+                span.className = 'difference';
+                span.style.color = color;
+                span.textContent = `(${txt})`;
+                span.setAttribute('data-tooltip','Різниця порівняно\nз попереднім місяцем');
+                listenersElement.appendChild(span);
+            }
         }
-
+        if (artist['Instagram'])
+            listenersElement.innerHTML += ` <span class="separator">|</span> <a href="${artist['Instagram']}" target="_blank"><i class="fab fa-instagram"></i></a>`;
         infoContainer.appendChild(listenersElement);
 
         const genresElement = document.createElement('div');
         genresElement.className = 'genres-container';
         if (artist['Жанр']) {
             artist['Жанр'].split(', ').forEach(genre => {
-                const genreSpan = document.createElement('span');
-                genreSpan.textContent = genre;
-                genreSpan.className = 'genre-link';
-                genreSpan.onclick = () => {
-                    document.getElementById('artist-search').value = '';
-                  
-                    updateFilterTags();
-                    updateArtistsDisplay();
-                    toggleGenreSelection(genre, artist['Артист']);
-                    updateGenreCounts();
-                  
+                const span = document.createElement('span');
+                span.textContent = genre;
+                span.className  = 'genre-link';
+                span.onclick = () => {
+                    document.getElementById('artist-search').value='';
+                    updateFilterTags();toggleGenreSelection(genre,artist['Артист']);
+                    updateArtistsDisplay();updateGenreCounts();
                 };
-                genresElement.appendChild(genreSpan);
+                genresElement.appendChild(span);
                 genresElement.appendChild(document.createTextNode(' '));
             });
         }
         infoContainer.appendChild(genresElement);
 
+        const mobileCityText = document.createElement('div');
+        mobileCityText.className = 'city-text-mobile';
+        mobileCityText.textContent = cityName;
+        infoContainer.appendChild(mobileCityText);
+
         if (artist['Дата додавання']) {
-            const dateElementMobile = document.createElement('div');
-            dateElementMobile.className = 'date-added-mobile';
-            dateElementMobile.textContent = `Додано до бази: ${artist['Дата додавання']}`;
-            infoContainer.appendChild(dateElementMobile);
+            const el = document.createElement('div');
+            el.className = 'date-added-mobile';
+            el.textContent = `Додано до бази: ${artist['Дата додавання']}`;
+            infoContainer.appendChild(el);
         }
 
-        infoContainer.appendChild(relatedArtistsContainer);
+        let relatedArtistsContainer = null;
+        let relatedArtistsButton    = null;
+
+        const validRelated = (artist.relatedArtists || []).filter(id => validArtistIDs.has(id));
+        if (validRelated.length) {
+            artistElement.classList.add('has-related');
+
+            relatedArtistsButton = document.createElement('button');
+            relatedArtistsButton.className = 'related-artists-button';
+            relatedArtistsButton.textContent = 'Схожі артисти';
+            imgContainer.appendChild(relatedArtistsButton);
+
+            relatedArtistsContainer = document.createElement('div');
+            relatedArtistsContainer.className = 'related-artists-container';
+            if (window.innerWidth <= 768) relatedArtistsContainer.style.display = 'none';
+            infoContainer.appendChild(relatedArtistsContainer);
+        }
+
+        let mobileDescContainer = null;
+        if (window.innerWidth <= 768 && rawDesc) {
+            mobileDescContainer = document.createElement('div');
+            mobileDescContainer.className = 'mobile-desc-container related-artists-container';
+            mobileDescContainer.style.display = 'none';
+            mobileDescContainer.textContent = rawDesc;
+          mobileDescContainer.style.textAlign = 'left';
+          if (validRelated.length === 0) mobileDescContainer.style.height = '90px';
+            infoContainer.appendChild(mobileDescContainer);
+        }
+
+        if (window.innerWidth <= 768) {
+            const closeAllMobileWindows = () => {
+                document.querySelectorAll('.mobile-desc-container').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.related-artists-container').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.related-artists-button').forEach(el => el.textContent = 'Схожі артисти');
+                document.querySelectorAll('.fa-times').forEach(el => el.className = 'fa fa-info-circle');
+            };
+
+            if (infoIcon && mobileDescContainer) {
+                infoIcon.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = mobileDescContainer.style.display === 'block';
+    closeAllMobileWindows();
+
+    if (isOpen) {
+        mobileDescContainer.style.display = 'none';
+        infoIcon.className = 'fa fa-info-circle';
+    } else {
+        mobileDescContainer.style.display = 'block';
+        infoIcon.className = 'fa fa-times';
+infoIcon.style.width = '14px';
+infoIcon.style.height = '14px';
+infoIcon.style.display = 'flex';
+infoIcon.style.alignItems = 'center';
+infoIcon.style.justifyContent = 'center';
+
+    }
+});
+            }
+
+            if (relatedArtistsButton && relatedArtistsContainer) {
+                relatedArtistsButton.addEventListener('click', e => {
+                    e.stopPropagation();
+
+                    const isOpen = relatedArtistsContainer.style.display === 'block';
+   closeAllMobileWindows();
+
+   if (!relatedArtistsContainer.dataset.filled) {
+       toggleRelatedArtists(artistElement, imgElement.dataset.spotifyId);
+       relatedArtistsContainer.dataset.filled = '1';
+   }
+   if (isOpen) {
+       relatedArtistsContainer.style.display = 'none';
+       relatedArtistsButton.textContent      = 'Схожі артисти';
+   } else {
+       relatedArtistsContainer.style.display = 'block';
+       relatedArtistsButton.textContent      = 'Закрити';
+   }
+                });
+            }
+        } else {
+            if (relatedArtistsButton && relatedArtistsContainer) {
+                relatedArtistsButton.addEventListener('click', e => {
+                    e.stopPropagation();
+                    toggleRelatedArtists(artistElement, imgElement.getAttribute('data-spotify-id'));
+                });
+            }
+        }
 
         artistElement.appendChild(imgContainer);
         artistElement.appendChild(infoContainer);
-
         container.appendChild(artistElement);
     });
 }
@@ -6420,6 +6534,72 @@ document.addEventListener('click', (event) => {
   }
 });
 
+const tooltipEl = document.createElement('div');
+tooltipEl.id = 'global-tooltip';
+document.body.appendChild(tooltipEl);
+
+document.body.addEventListener('mouseover', e => {
+  const t = e.target.closest('[data-tooltip]');
+  if (t) {
+    tooltipEl.textContent = t.getAttribute('data-tooltip');
+    tooltipEl.style.display = 'block';
+  }
+});
+document.body.addEventListener('mousemove', e => {
+  if (tooltipEl.style.display === 'block') {
+    let x = e.clientX + 10;
+    let y = e.clientY + 10;
+    const rect = tooltipEl.getBoundingClientRect();
+    if (x + rect.width > window.innerWidth) {
+      x = e.clientX - rect.width - 10;
+    }
+    if (y + rect.height > window.innerHeight) {
+      y = e.clientY - rect.height - 10;
+    }
+    if (y < 10) {
+      y = 10;
+    }
+    tooltipEl.style.left = x + 'px';
+    tooltipEl.style.top  = y + 'px';
+  }
+});
+
+document.body.addEventListener('mouseout', e => {
+  const t = e.target.closest('[data-tooltip]');
+  if (t) tooltipEl.style.display = 'none';
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  const searchContainer = document.getElementById('search-container');
+  const buttonsWrapper = document.getElementById('buttons-wrapper');
+
+  const handleToggle = () => {
+    if (window.innerWidth <= 768) {
+      if (searchContainer.classList.contains('active')) {
+        buttonsWrapper.style.display = 'none';
+      } else {
+        buttonsWrapper.style.display = 'flex';
+      }
+    } else {
+      buttonsWrapper.style.display = '';
+    }
+  };
+
+  const observer = new MutationObserver(handleToggle);
+  observer.observe(searchContainer, { attributes: true, attributeFilter: ['class'] });
+
+  window.addEventListener('resize', handleToggle);
+});
+  
+  document.addEventListener('DOMContentLoaded', function () {
+  if (window.innerWidth <= 768) {
+    const label = document.querySelector('.custom-checkbox.match-all-genres-tooltip');
+    if (label) {
+      label.removeAttribute('data-tooltip');
+    }
+  }
+});
+  
 </script>
 </body>
 </html>
