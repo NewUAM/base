@@ -6,7 +6,6 @@
   <title>NUAM Albums</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>
-  
   <style>
     @font-face {
       font-family: 'CustomFont';
@@ -50,13 +49,11 @@
       display: none;
     }
 
-    /* -------------------- merged duplicates -------------------- */
     body.no-scroll {
       position: fixed;
       width: 100%;
       overflow-y: scroll;
     }
-    /* ----------------------------------------------------------- */
 
     .checkbox-container::-webkit-scrollbar {
       width: 14px;
@@ -149,6 +146,7 @@
       flex-direction: row;
       gap: 20px;
       width: 100%;
+      align-items: flex-start;
     }
     .filter-group .checkbox-container {
       flex: 1;
@@ -209,8 +207,8 @@
     .sort-section,
     .hide-listened-section {
       display: flex;
-      flex-direction: column;
       gap: 6px;
+      align-items: center;
     }
     #sort-order {
   cursor: pointer;
@@ -218,8 +216,15 @@
     .sort-section select {
       width: 100%;
     }
+    .sort-section label {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.sort-section .custom-select {
+  flex-grow: 1;
+}
     .hide-listened-section label {
-      display: flex;
       align-items: center;
       gap: 8px;
     }
@@ -263,8 +268,13 @@
     }
 
     .blacklist-section {
-      margin: 20px 0;
+      
     }
+.blacklist-artists::-webkit-scrollbar-thumb,
+.blacklist-labels::-webkit-scrollbar-thumb {
+  border: 3px solid #282626 !important;
+  background-color: #383838;
+}
 
     .listened-albums-container {
       max-height: 300px;
@@ -342,23 +352,34 @@
 }
 
 .custom-select.open {
-  border-radius: 7px 7px 0 0; /* ←←← скругляем только верхние углы */
+  border-radius: 7px 7px 0 0;
+}
+
+    .custom-select,
+.custom-select .options-container {
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .custom-select .selected {
   padding: 5px;
   cursor: pointer;
   color: #f3f3f3;
+  font-size: 14px;
 }
 
 .custom-select .options-container {
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  left: -1px;
+  width: calc(100% + 2px);
   background-color: #383838;
-  border: 1px solid #84AAFB;
+  border-top: none;
+  border-left: 1px solid #84AAFB;
+  border-right: 1px solid #84AAFB;
+  border-bottom: 1px solid #84AAFB;
   border-radius: 0 0 7px 7px;
+  font-size: 14px;
   display: none;
   flex-direction: column;
   z-index: 10;
@@ -374,7 +395,21 @@
   background-color: #282626;
 }
     
+.custom-select,
+.custom-select .options-container {
+  box-sizing: border-box;
+}
 
+    .custom-select,
+.custom-select .options-container {
+  box-sizing: border-box;
+}
+
+    .custom-select .option:last-child:hover {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+    
     button {
       padding: 10px 20px;
       background-color: #84AAFB;
@@ -389,32 +424,26 @@
     }
 
     #albums-container {
-  margin-left: 480px;
-  padding: 25px 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 20px;
-  user-select: none !important;
-}
-
-
+      margin-left: 480px;
+      padding: 25px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 20px;
+      user-select: none !important;
+      align-items: start;
+    }
 
     .album {
-  background-color: #383838;
-  border-radius: 7px;
-  overflow: visible;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 500px;
-  min-width: 400px;
-  box-sizing: border-box;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-
+      background-color: #383838;
+      border-radius: 7px;
+      overflow: visible;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 400px;
+      max-width: 500px;
+    }
     .album img {
       width: 100%;
       height: auto;
@@ -422,11 +451,10 @@
       transition: transform 0.3s ease, z-index 0.3s ease;
       border-radius: 7px;
     }
-    .album:not(.album-listened) img:hover {
-  transform: scale(1.02);
-  z-index: 10;
-}
-
+    .album img:hover {
+      transform: scale(1.02);
+      z-index: 10;
+    }
 
     .album-details {
       padding: 15px;
@@ -456,14 +484,16 @@
       gap: 10px;
       margin-top: auto;
       padding: 0 15px 15px;
+      align-items: flex-start;
     }
 
-    /* -------------------- merged duplicates -------------------- */
     .track-circle {
       width: 40px;
       height: 40px;
-      background-color: #eee;
+      color: #f3f3f3;
+      background-color: transparent;
       border-radius: 50%;
+      border: 1px solid #84AAFB;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -472,9 +502,9 @@
       transition: background-color 0.3s ease;
       position: relative;
     }
-    /* ----------------------------------------------------------- */
+
     .track-circle:hover {
-      background-color: #ddd;
+      background-color: #282626;
     }
     .track-circle i {
       font-size: 20px;
@@ -508,6 +538,8 @@
     }
     .album-listened img:hover {
       background-color: rgba(40, 38, 38, 0.7);
+      transform: none !important;
+  z-index: auto !important;
     }
 
     .mark-listened-btn {
@@ -596,6 +628,7 @@
       font-size: 28px;
       font-weight: bold;
       cursor: pointer;
+      transition: color 0.3s ease;
     }
     .close:hover,
     .close:focus {
@@ -631,15 +664,32 @@
     }
 
     textarea {
-      width: 100%;
-      height: 150px;
-      padding: 10px;
-      border: 1px solid #f3f3f3;
+  width: 500px;
+  height: 200px;
+  padding: 10px;
+  background-color: #282626;
       border-radius: 7px;
-      background-color: #282626;
-      resize: none;
-      color: #f3f3f3;
-    }
+  border: 1px solid #84AAFB;
+  resize: none;
+  color: #f3f3f3;
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+textarea::-webkit-scrollbar {
+  width: 14px;
+}
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+textarea::-webkit-scrollbar-thumb {
+  background-color: #383838;
+  border-radius: 7px;
+  border: 3px solid #282626;
+}
+textarea:focus {
+  outline: none;
+}
+
     #export-data,
     #import-data {
       margin-top: 10px;
@@ -647,7 +697,7 @@
       font-size: 14px;
       cursor: pointer;
       background-color: #4CAF50;
-      color: white;
+      color: #f3f3f3;
       border: none;
       border-radius: 5px;
     }
@@ -780,9 +830,6 @@
     .alb-artist {
       font-weight: bold;
     }
-    .alb-artist a:hover {
-  text-decoration: underline;
-}
     .alb-sep {
       border: 0;
       border-top: 1px solid #555;
@@ -809,7 +856,6 @@
     .alb-listens svg,
     .alb-meta svg {
       flex-shrink: 0;
-
       display: block;
     }
 
@@ -834,7 +880,6 @@
   object-fit: cover;
   display: block;
 }
-
     
     @media (max-width: 768px) {
       .controls {
@@ -870,12 +915,21 @@
     <label class="section-title">Мови:</label>
     <div class="checkbox-grid" id="language-checkboxes"></div>
   </div>
-  <div class="checkbox-container">
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+  <div class="checkbox-container" style="max-height: none; overflow-y: visible;">
     <label class="section-title">Тип релізу:</label>
     <div class="checkbox-grid" id="release-type-checkboxes"></div>
   </div>
-</div>
 
+  <div class="hide-listened-section">
+    <label for="nuam-recommended-checkbox">
+      <input type="checkbox" id="nuam-recommended-checkbox">
+      Рекомендовані NUAM
+    </label>
+  </div>
+</div>
+</div>
+      
     </div>
     <div class="sort-and-blacklist">
       <div class="sort-section">
@@ -890,6 +944,32 @@
   </div>
 </div>
 
+      <div class="sort-section">
+  <label for="duration-filter">Тривалість:</label>
+  <div class="custom-select" id="duration-filter">
+    <div class="selected">Будь-яка тривалість</div>
+    <div class="options-container">
+      <div class="option" data-value="">Будь-яка тривалість</div>
+      <div class="option" data-value="short">До 30 хвилин</div>
+      <div class="option" data-value="medium">30-60 хвилин</div>
+      <div class="option" data-value="long">60-120 хвилин</div>
+      <div class="option" data-value="very-long">Понад 120 хвилин</div>
+    </div>
+  </div>
+</div>
+
+<div class="sort-section">
+  <label for="track-count-filter">Кількість треків:</label>
+  <div class="custom-select" id="track-count-filter">
+    <div class="selected">Будь-яка кількість</div>
+    <div class="options-container">
+      <div class="option" data-value="">Будь-яка кількість</div>
+      <div class="option" data-value="5">5 і більше треків</div>
+      <div class="option" data-value="12">12 і більше треків</div>
+    </div>
+  </div>
+</div>
+      
       <div class="hide-listened-section">
         <label for="hide-listened">
           <input type="checkbox" id="hide-listened"> Приховати <span id="show-listened-albums" style="cursor: pointer; text-decoration: underline;">прослухані альбоми</span>
@@ -915,11 +995,11 @@
       </div>
       <div id="blacklist-content" class="tabcontent active">
         <div class="blacklist-container">
-          <div class="blacklist-artists">
+          <div class="blacklist-artists checkbox-container">
             <h4>Артисти</h4>
             <ul id="blacklisted-artists"></ul>
           </div>
-          <div class="blacklist-labels">
+          <div class="blacklist-labels checkbox-container">
             <h4>Лейбли</h4>
             <ul id="blacklisted-labels"></ul>
           </div>
@@ -931,19 +1011,19 @@
         </div>
       </div>
       <div id="export-content" class="tabcontent">
-        <div class="export-import-container">
-          <div class="export-section">
-            <label for="data-textarea">Дані для експорту:</label>
-            <textarea id="data-textarea" readonly></textarea>
-          </div>
-          <div class="import-section">
-            <label for="import-textarea">Вставте сюди дані для імпорту:</label>
-            <textarea id="import-textarea" placeholder="Вставте сюди дані"></textarea>
-          </div>
-        </div>
-        <button id="export-data">Копіювати дані</button>
-        <button id="import-data">Завантажити дані</button>
-      </div>
+  <div class="export-import-container">
+    <div class="export-section">
+      <label for="data-textarea">Дані для експорту:</label>
+      <textarea id="data-textarea" readonly></textarea>
+      <button id="export-data" style="margin-top: 10px;">Копіювати дані</button>
+    </div>
+    <div class="import-section">
+      <label for="import-textarea">Вставте сюди дані для імпорту:</label>
+      <textarea id="import-textarea" placeholder="Вставте сюди дані"></textarea>
+      <button id="import-data" style="margin-top: 10px;">Завантажити дані</button>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 
@@ -970,8 +1050,6 @@
     <path d="M12 4l-8 8h6v8h4v-8h6z"/>
   </svg>
 </div>
-
-
   
   <script>
     const newSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRGgPDeRNQcSe5tV2h3zu-rtMr-i7ph-4hU6HKglhXKdaAB5UFXUrdWLZKb8hwGyWgDxL5LDfnmrqe/pub?gid=1559781011&single=true&output=csv";
@@ -982,24 +1060,19 @@
     let hideListened = false;
     let audioActivated = false;
     let filteredAlbums = [];
-    let loadingBlocked = false;
+    let isFiltering = false;
 
-
-    // Чёрный список:
     let blacklistedArtists = new Set(JSON.parse(localStorage.getItem('blacklistedArtists')) || []);
     let blacklistedLabels = new Set(JSON.parse(localStorage.getItem('blacklistedLabels')) || []);
 
-    // SVG-іконки типу релізу
 function releaseIcon(t){
   if (t==='compilation') return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#84aafb" stroke-width="8"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
   if (t==='album')      return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#84aafb" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">LP</text></svg>`;
   return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#84aafb" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">EP</text></svg>`;
 }
 
-    // Прослушанные альбомы:
     const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
 
-    // Языки для отображения:
     const languageLabels = {
       'ukr': 'українська',
       'eng': 'англійська',
@@ -1007,13 +1080,10 @@ function releaseIcon(t){
       'other lang': 'інші мови'
     };
 
-    // Сколько альбомов подгружать за раз:
-    const batchSize = 10;
+    const batchSize = 20;
 
-    // Инициализация:
     init();
 
-    // Главная функция инициализации:
     function init() {
       Papa.parse(newSheetUrl, {
         download: true,
@@ -1024,7 +1094,6 @@ function releaseIcon(t){
           populateFilters();
           attachGlobalEventListeners();
 
-          // Если есть сохранённые фильтры, загружаем:
           const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
           if (albumFilters) {
             loadFiltersAfterRender();
@@ -1038,7 +1107,6 @@ function releaseIcon(t){
       });
     }
 
-    // ▸ КОРОТКАЯ ПОДПИСЬ ДЛЯ ОСОБОГО ЖАНРА
 function friendlyGenreLabel(g) {
   if (g === 'producing work for international') return 'intl prod';
   if (g === 'ai') return 'AI';
@@ -1047,33 +1115,27 @@ function friendlyGenreLabel(g) {
 }
 
     function formatListens(num) {
-  if (num === 0) return 'менше 1000';
   if (num >= 10000) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   }
   return num;
 }
 
-
-
-    // Преобразуем данные CSV в структуру альбомов:
     function processAlbumData(rawData) {
       rawData.forEach(item => {
         if (!item.alName || !item.Type) return;
 if (item.excluded && item.excluded.trim() === '+') return;
 
-        // Формируем единый объект альбома:
         const album = {
           nameAlbum: item.alName,
-          albumID: item.alURL, // это Spotify ID
+          albumID: item.alURL,
           date: item.Date,
-          type: item.Type.toLowerCase(), // album / EP / compilation
+          type: item.Type.toLowerCase(),
           cover: item.Cover,
           genres: (() => {
   let baseGenres = item.Genres ? item.Genres.split(', ').map(g => g.trim()).filter(g => g) : [];
   let addGenres = item.addGenre ? item.addGenre.split(',').map(g => g.trim()).filter(g => g) : [];
 
-  // Удаление жанров с минусом
   addGenres.forEach(g => {
     if (g.startsWith('-')) {
       const genreToRemove = g.slice(1).trim();
@@ -1081,7 +1143,6 @@ if (item.excluded && item.excluded.trim() === '+') return;
     }
   });
 
-  // Добавление новых жанров
   addGenres.forEach(g => {
     if (!g.startsWith('-')) {
       if (!baseGenres.includes(g)) {
@@ -1101,7 +1162,6 @@ if (item.excluded && item.excluded.trim() === '+') return;
     ? item.addLang.split(',').map(l => (l.trim().toLowerCase() === 'no voice' ? 'без голосу' : l.trim())).filter(l => l)
     : [];
 
-  // Удаление языков с минусом
   addLangs.forEach(l => {
     if (l.startsWith('-')) {
       const langToRemove = l.slice(1).trim();
@@ -1109,7 +1169,6 @@ if (item.excluded && item.excluded.trim() === '+') return;
     }
   });
 
-  // Добавление новых языков
   addLangs.forEach(l => {
     if (!l.startsWith('-')) {
       if (!baseLangs.includes(l)) {
@@ -1121,26 +1180,21 @@ if (item.excluded && item.excluded.trim() === '+') return;
   return baseLangs;
 })(),
 
-
           listens: parseInt(item.Listens) || 0,
           label: item.Label || '',
           duration: item.Duration || '',
           tracksIDs: item.Tracks ? item.Tracks.split(',') : [],
           tracksMP3: item.MP3 ? item.MP3.split(',') : [],
           good: (item.Good && item.Good.trim() === '+'),
-          // Артисты:
           artistNames: item.artName ? item.artName.split(',,').map(a => a.trim()) : [],
           artistIDs: item.artID ? item.artID.split(',') : [],
-          // Признак прослушанности:
           listened: !!listenedAlbums[item.alURL]
         };
 
-        // Сохраняем:
         albumsData.push(album);
       });
     }
 
-    // Создаём чекбоксы фильтров (жанры, языки, тип релиза):
     function populateFilters() {
       const genreContainer = document.getElementById('genre-checkboxes');
       const languageContainer = document.getElementById('language-checkboxes');
@@ -1148,17 +1202,12 @@ if (item.excluded && item.excluded.trim() === '+') return;
 
       const genresCountMap = new Map();
       const languagesCountMap = new Map();
-
-      // Собираем все типы релиза (у нас обычно album, EP, compilation)
       const releaseTypesSet = new Set();
 
-      // Считаем кол-во каждого жанра / языка:
       albumsData.forEach(album => {
-        // Наполняем жанры:
         album.genres.forEach(genre => {
           genresCountMap.set(genre, (genresCountMap.get(genre) || 0) + 1);
         });
-        // Наполняем языки:
         if (album.languages.length === 0) {
   languagesCountMap.set('без голосу', (languagesCountMap.get('без голосу') || 0) + 1);
 } else {
@@ -1168,11 +1217,9 @@ if (item.excluded && item.excluded.trim() === '+') return;
   });
 }
 
-        // Тип релиза:
         releaseTypesSet.add(album.type);
       });
 
-      // Сортируем жанры (по кол-ву убывание)
       const desiredGenreOrder = [
   'pop/indie', 'rock', 'hip-hop', 'electronic', 'metal', 'post-punk', 'trap', 'phonk',
   'folk', 'jazz', 'worship', 'instrumental', 'instrumental rock', 'piano', 'synthwave',
@@ -1191,8 +1238,6 @@ const sortedGenres = [
     .sort((a, b) => a[0].localeCompare(b[0]))
 ];
 
-
-      // Генерируем чекбоксы жанров:
       genreContainer.innerHTML = '';
       const genreFrag = document.createDocumentFragment();
       sortedGenres.forEach(([genre, count]) => {
@@ -1212,11 +1257,9 @@ const sortedGenres = [
 genreName.classList.add('genre-name');
 genreName.textContent = friendlyGenreLabel(genre);
 
-// тултип только для этого жанра
 if (genre === 'producing work for international'){
   attachTooltip(genreName,'Музика наших музикантів для іноземних артистів');
 }
-
 
         const genreCount = document.createElement('span');
         genreCount.classList.add('genre-count');
@@ -1238,12 +1281,11 @@ if (genre === 'producing work for international'){
       });
       genreContainer.appendChild(genreFrag);
 
-      // Для языков упорядочим по желаемой очередности:
       const defaultLangOrder = ['ukr', 'eng', 'rus', 'other lang', 'без голосу'];
       languageContainer.innerHTML = '';
       const languageFrag = document.createDocumentFragment();
       defaultLangOrder.forEach(langKey => {
-        // Если этого языка вообще нет в Map, мы покажем 0
+
         const count = languagesCountMap.get(langKey) || 0;
         if (count > 0 || langKey === 'без голосу') {
           const div = document.createElement('div');
@@ -1283,7 +1325,6 @@ if (genre === 'producing work for international'){
       });
       languageContainer.appendChild(languageFrag);
 
-      // Формируем чекбоксы типа релиза:
       releaseTypeContainer.innerHTML = '';
       const releaseTypeLabels = {
         'album': 'LP',
@@ -1299,7 +1340,7 @@ if (genre === 'producing work for international'){
         checkbox.value = rType;
         checkbox.id = `release-type-${rType}`;
         checkbox.classList.add('release-type-checkbox');
-        checkbox.checked = true; // по умолчанию включено
+        checkbox.checked = true;
 
         const label = document.createElement('label');
         label.htmlFor = checkbox.id;
@@ -1311,12 +1352,10 @@ if (genre === 'producing work for international'){
       });
     }
 
-    // После отрисовки чекбоксов подтягиваем сохранённые фильтры (если есть):
     function loadFiltersAfterRender() {
       const filterData = JSON.parse(localStorage.getItem('albumFilters'));
       if (!filterData) return;
 
-      // Жанры:
       document.querySelectorAll('.genre-checkbox').forEach(ch => {
         ch.checked = false; ch.disabled = false;
         const lb = ch.nextElementSibling;
@@ -1344,7 +1383,6 @@ if (genre === 'producing work for international'){
         });
       }
 
-      // Языки:
       document.querySelectorAll('.language-checkbox').forEach(ch => {
         ch.checked = false; ch.disabled = false;
         const lb = ch.nextElementSibling;
@@ -1372,7 +1410,6 @@ if (genre === 'producing work for international'){
         });
       }
 
-      // Тип релиза:
       document.querySelectorAll('.release-type-checkbox').forEach(ch => {
         ch.checked = false;
       });
@@ -1383,7 +1420,6 @@ if (genre === 'producing work for international'){
         });
       }
 
-      // Сортировка:
       if (filterData.sortOrder) {
   const select = document.getElementById('sort-order');
   const selected = select.querySelector('.selected');
@@ -1392,23 +1428,40 @@ if (genre === 'producing work for international'){
   const foundOption = Array.from(options).find(opt => opt.dataset.value === filterData.sortOrder);
   if (foundOption) {
   selected.textContent = foundOption.textContent;
-  selected.dataset.value = foundOption.dataset.value; // ← ← ← ОБЯЗАТЕЛЬНО ЗАПОЛНИТЬ!!!
+  selected.dataset.value = foundOption.dataset.value;
   sortOrder = filterData.sortOrder;
 }
 }
 
-
-      // Прятать прослушанные:
       if (typeof filterData.hideListened === 'boolean') {
         document.getElementById('hide-listened').checked = filterData.hideListened;
         hideListened = filterData.hideListened;
-      }
+        if (typeof filterData.nuamRecommended === 'boolean') {
+  document.getElementById('nuam-recommended-checkbox').checked = filterData.nuamRecommended;
+}
 
-      // Применяем:
+        const durationSelect = document.getElementById('duration-filter');
+const trackCountSelect = document.getElementById('track-count-filter');
+
+if (filterData.duration) {
+  const opt = durationSelect.querySelector(`.option[data-value="${filterData.duration}"]`);
+  if (opt) {
+    durationSelect.querySelector('.selected').textContent = opt.textContent;
+    durationSelect.querySelector('.selected').dataset.value = opt.dataset.value;
+  }
+}
+
+if (filterData.trackCount) {
+  const opt = trackCountSelect.querySelector(`.option[data-value="${filterData.trackCount}"]`);
+  if (opt) {
+    trackCountSelect.querySelector('.selected').textContent = opt.textContent;
+    trackCountSelect.querySelector('.selected').dataset.value = opt.dataset.value;
+  }
+}
+      }
       applyFilters();
     }
 
-    // Сохраняем текущее состояние фильтров:
     function saveFiltersToCache() {
       const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
       const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
@@ -1428,17 +1481,19 @@ if (genre === 'producing work for international'){
         excludedLanguages,
         selectedReleaseTypes,
         sortOrder,
-        hideListened
+        hideListened,
+        duration: document.getElementById('duration-filter')?.querySelector('.selected')?.dataset?.value || '',
+        trackCount: document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset?.value || '',
+        nuamRecommended: document.getElementById('nuam-recommended-checkbox').checked,
       };
       localStorage.setItem('albumFilters', JSON.stringify(filterData));
     }
 
-    // Вешаем события на чекбоксы и прочее:
     function attachGlobalEventListeners() {
-      // Жанры:
       document.getElementById('genre-checkboxes').addEventListener('change', (e) => {
         if (e.target.classList.contains('genre-checkbox')) {
-          smoothApplyFilters();
+          preserveScroll(() => smoothApplyFilters());
+
 saveFiltersToCache();
 
         }
@@ -1453,10 +1508,10 @@ saveFiltersToCache();
         }
       });
 
-      // Языки:
       document.getElementById('language-checkboxes').addEventListener('change', (e) => {
         if (e.target.classList.contains('language-checkbox')) {
-          smoothApplyFilters();
+          preserveScroll(() => smoothApplyFilters());
+
 saveFiltersToCache();
 
         }
@@ -1471,67 +1526,61 @@ saveFiltersToCache();
         }
       });
 
-      // Тип релиза:
       document.getElementById('release-type-checkboxes').addEventListener('change', (e) => {
         if (e.target.classList.contains('release-type-checkbox')) {
-          smoothApplyFilters();
+          preserveScroll(() => smoothApplyFilters());
 saveFiltersToCache();
-
         }
       });
 
-
-
-      // Прятать прослушанные:
-      document.getElementById('hide-listened').addEventListener('change', (e) => {
-  hideListened = e.target.checked;
-  loadingBlocked = true;
-
-  const scrollY = window.scrollY;
-
-  smoothApplyFilters(() => {
-    loadingBlocked = false;
-    window.scrollTo(0, scrollY);
-  });
-
+      document.getElementById('nuam-recommended-checkbox').addEventListener('change', () => {
+  preserveScroll(() => smoothApplyFilters());
+  saveFiltersToCache();
+});
+      
+document.getElementById('duration-filter').addEventListener('change', () => {
+  preserveScroll(() => smoothApplyFilters());
   saveFiltersToCache();
 });
 
+document.getElementById('track-count-filter').addEventListener('change', () => {
+  preserveScroll(() => smoothApplyFilters());
+  saveFiltersToCache();
+});
 
+      document.getElementById('hide-listened').addEventListener('change', (e) => {
+        hideListened = e.target.checked;
+        preserveScroll(() => smoothApplyFilters());
+saveFiltersToCache();
+      });
 
-
-      // Кнопки "Выбрать все/Снять все" для жанров:
       document.getElementById('select-all-genres').addEventListener('click', () => {
         document.querySelectorAll('.genre-checkbox').forEach(cb => {
           if (!cb.disabled) cb.checked = true;
         });
-        smoothApplyFilters();
+        preserveScroll(() => smoothApplyFilters());
 saveFiltersToCache();
-
       });
+      
       document.getElementById('deselect-all-genres').addEventListener('click', () => {
         document.querySelectorAll('.genre-checkbox').forEach(cb => {
           if (!cb.disabled) cb.checked = false;
         });
-        smoothApplyFilters();
+        preserveScroll(() => smoothApplyFilters());
 saveFiltersToCache();
-
       });
 
-      // Кнопка чёрного списка:
       document.getElementById('blacklist-button').addEventListener('click', function() {
         showBlacklist(true);
       });
-      // Ссылка на прослушанные альбомы:
+
       document.getElementById('show-listened-albums').addEventListener('click', function(event) {
         event.preventDefault();
         showBlacklist(false);
       });
 
-      // Подгрузка при скролле:
       window.addEventListener('scroll', throttle(handleScroll, 200));
 
-      // Экспорт / импорт:
       document.getElementById('export-data').addEventListener('click', () => {
         const dataTextarea = document.getElementById('data-textarea');
         dataTextarea.select();
@@ -1569,7 +1618,6 @@ saveFiltersToCache();
         }
       });
       
-      // Показати/сховати кнопку прокрутки вгору
 window.addEventListener('scroll', () => {
   const scrollTopButton = document.getElementById('scrollTopButton');
   if (window.scrollY > 200) {
@@ -1585,18 +1633,14 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Скролити вгору при кліку
 document.getElementById('scrollTopButton').addEventListener('click', () => {
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
-});
-
-      
+}); 
     }
 
-    // Функция переключения "исключить жанр" (или вернуть обратно):
     function toggleExcludeGenre(genre, checkbox, label, genreCross) {
       if (checkbox.disabled) {
         checkbox.disabled = false;
@@ -1611,10 +1655,10 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         label.style.textDecoration = 'line-through';
         label.style.color = 'gray';
       }
-      smoothApplyFilters();
+      preserveScroll(() => smoothApplyFilters());
+
     }
 
-    // Функция переключения "исключить язык" (или вернуть обратно):
     function toggleExcludeLanguage(language, checkbox, label, langCross) {
       if (checkbox.disabled) {
         checkbox.disabled = false;
@@ -1629,19 +1673,47 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         label.style.textDecoration = 'line-through';
         label.style.color = 'gray';
       }
-      smoothApplyFilters();
+      preserveScroll(() => smoothApplyFilters());
     }
 
-    // Применяем фильтры к данным:
-    function applyFilters(reset = false) {
-  loadingBlocked = true;
-  setTimeout(() => { loadingBlocked = false; }, 500);
+    function getFilteredAlbums() {
+  const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
+  const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
+  const selectedLangs = Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value);
+  const excludedLangs = Array.from(document.querySelectorAll('.language-checkbox:disabled')).map(cb => cb.value);
+  const selectedReleaseTypes = Array.from(document.querySelectorAll('.release-type-checkbox:checked')).map(cb => cb.value);
 
-  if (reset) currentIndex = 0;
+  return albumsData.filter(al => {
+    if (hideListened && al.listened) return false;
 
-  filteredAlbums = [...albumsData];
+    const matchGenres = selectedGenres.length === 0 || al.genres.some(g => selectedGenres.includes(g));
+    const notExcludedGenres = excludedGenres.length === 0 || !al.genres.some(g => excludedGenres.includes(g));
 
-      // Выбранные жанры:
+    const matchLangs = selectedLangs.length === 0 || (
+      al.languages.length === 0
+        ? selectedLangs.includes('без голосу')
+        : al.languages.some(l => selectedLangs.includes(l))
+    );
+    const notExcludedLangs = excludedLangs.length === 0 || (
+      al.languages.length === 0
+        ? !excludedLangs.includes('без голосу')
+        : !al.languages.some(l => excludedLangs.includes(l))
+    );
+
+    const matchRelease = selectedReleaseTypes.length === 0 || selectedReleaseTypes.includes(al.type);
+    const notBlacklistedArtist = !al.artistNames.some(artist => blacklistedArtists.has(artist));
+    const notBlacklistedLabel = !blacklistedLabels.has(al.label);
+
+    return matchGenres && notExcludedGenres &&
+           matchLangs && notExcludedLangs &&
+           matchRelease &&
+           notBlacklistedArtist && notBlacklistedLabel;
+  });
+}
+
+    function applyFilters(renderImmediately = false) {
+      filteredAlbums = [...albumsData];
+
       const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
       if (selectedGenres.length > 0) {
         filteredAlbums = filteredAlbums.filter(al => {
@@ -1649,7 +1721,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         });
       }
 
-      // Исключённые жанры:
       const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
       if (excludedGenres.length > 0) {
         filteredAlbums = filteredAlbums.filter(al => {
@@ -1657,12 +1728,10 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         });
       }
 
-      // Выбранные языки:
       const selectedLangs = Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value);
       if (selectedLangs.length > 0) {
         filteredAlbums = filteredAlbums.filter(al => {
           if (al.languages.length === 0) {
-            // "без голосу"
             return selectedLangs.includes('без голосу');
           } else {
             return al.languages.some(l => selectedLangs.includes(l));
@@ -1670,12 +1739,10 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         });
       }
 
-      // Исключённые языки:
       const excludedLangs = Array.from(document.querySelectorAll('.language-checkbox:disabled')).map(cb => cb.value);
       if (excludedLangs.length > 0) {
         filteredAlbums = filteredAlbums.filter(al => {
           if (al.languages.length === 0) {
-            // "без голосу"
             return !excludedLangs.includes('без голосу');
           } else {
             return !al.languages.some(l => excludedLangs.includes(l));
@@ -1683,28 +1750,28 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         });
       }
 
-      // Тип релиза:
       const selectedReleaseTypes = Array.from(document.querySelectorAll('.release-type-checkbox:checked')).map(cb => cb.value);
       if (selectedReleaseTypes.length > 0) {
         filteredAlbums = filteredAlbums.filter(al => selectedReleaseTypes.includes(al.type));
       }
 
-      // Черный список артистов:
+      const onlyRecommended = document.getElementById('nuam-recommended-checkbox').checked;
+if (onlyRecommended) {
+  filteredAlbums = filteredAlbums.filter(al => al.good);
+}
+      
       filteredAlbums = filteredAlbums.filter(al => {
-        // Если хотя бы один из artistNames в blacklistedArtists — убрать
         return !al.artistNames.some(artist => blacklistedArtists.has(artist));
       });
-      // Черный список лейблов:
+
       filteredAlbums = filteredAlbums.filter(al => {
         return !blacklistedLabels.has(al.label);
       });
 
-      // Скрывать прослушанные:
       if (hideListened) {
         filteredAlbums = filteredAlbums.filter(al => !al.listened);
       }
 
-      // Сортировка:
       if (sortOrder === 'listens-desc') {
         filteredAlbums.sort((a, b) => b.listens - a.listens);
       } else {
@@ -1715,20 +1782,71 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         });
       }
 
+const selectedDuration = document.getElementById('duration-filter')?.querySelector('.selected')?.dataset?.value || '';
+if (selectedDuration) {
+  filteredAlbums = filteredAlbums.filter(al => {
+    const parts = (al.duration || '00:00:00').split(':').map(p => parseInt(p) || 0);
+    const totalMinutes = parts[0] * 60 + parts[1];
+    if (selectedDuration === 'short') return totalMinutes < 30;
+    if (selectedDuration === 'medium') return totalMinutes >= 30 && totalMinutes < 60;
+    if (selectedDuration === 'long') return totalMinutes >= 60 && totalMinutes < 120;
+    if (selectedDuration === 'very-long') return totalMinutes >= 120;
+    return true;
+  });
+}
+
+const selectedTrackCount = document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset?.value || '';
+if (selectedTrackCount) {
+  const minTracks = parseInt(selectedTrackCount, 10);
+  filteredAlbums = filteredAlbums.filter(al => al.tracksIDs.length >= minTracks);
+}
+
       currentIndex = 0;
-      renderAlbums(filteredAlbums, true);
+      if (renderImmediately) {
+  renderAlbums(filteredAlbums, true, true);
+} else {
+  renderAlbums(filteredAlbums, true);
+}
+
       document.getElementById('album-count').textContent = filteredAlbums.length;
     }
 
-    // "Ленивая" подгрузка при прокрутке:
+    function updateRenderedAlbums(filteredAlbums) {
+  const container = document.getElementById('albums-container');
+  const filteredIDs = new Set(filteredAlbums.map(a => a.albumID));
+
+  document.querySelectorAll('.album').forEach(albumDiv => {
+    const id = albumDiv.dataset.albumId;
+    if (!filteredIDs.has(id)) {
+      albumDiv.style.transition = 'opacity 0.3s';
+      albumDiv.style.opacity = '0';
+      setTimeout(() => albumDiv.remove(), 300);
+    }
+  });
+
+  currentIndex = [...container.querySelectorAll('.album')].length;
+}
+
     function handleScroll() {
-  if (document.body.classList.contains('filtering')) return;
+  if (isFiltering) return;
+
   if ((window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) && currentIndex < filteredAlbums.length) {
     renderAlbums(filteredAlbums);
   }
 }
 
+    function forceLazyLoadCheck() {
+  const container = document.getElementById('albums-container');
 
+  const containerBottom = container.getBoundingClientRect().bottom;
+  const viewportHeight = window.innerHeight;
+
+  if (containerBottom <= viewportHeight + 100 && currentIndex < filteredAlbums.length) {
+    renderAlbums(filteredAlbums);
+  } else if (currentIndex >= filteredAlbums.length) {
+    document.getElementById('lazy-loading').textContent = 'Більше немає альбомів для завантаження';
+  }
+}
 
     function throttle(func, limit) {
       let lastFunc;
@@ -1750,12 +1868,12 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
       };
     }
 
-    // Рендерим альбомы:
-    function renderAlbums(data, reset = false) {
+    function renderAlbums(data, reset = false, forceAll = false) {
   const container = document.getElementById('albums-container');
   if (reset) container.innerHTML = '';
 
-  const endIndex = Math.min(currentIndex + batchSize, data.length);
+  const endIndex = forceAll ? data.length : Math.min(currentIndex + batchSize, data.length);
+
   for (let i = currentIndex; i < endIndex; i++) {
     const album    = data[i];
     const albumDiv = document.createElement('div');
@@ -1763,7 +1881,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
     albumDiv.dataset.albumId = album.albumID;
     if (album.listened) albumDiv.classList.add('album-listened');
 
-    // ── базові дані ────────────────────────────────────────────────────────────
     const coverUrl   = `https://i.scdn.co/image/ab67616d0000b273${album.cover}`;
     const albumLink  = `https://open.spotify.com/album/${album.albumID}`;
     const langText   = album.languages.length === 0
@@ -1773,7 +1890,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
       ? album.genres.map(g => friendlyGenreLabel(g)).join(', ')
       : 'Немає даних';
 
-    // ── HTML ──────────────────────────────────────────────────────────────────
     albumDiv.innerHTML = `
       <div class="album-overlay"></div>
       <div class="album-cover-wrapper">
@@ -1790,7 +1906,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
           </div>
         </div>
 
-
         <hr class="alb-sep">
 
         <div class="alb-meta">
@@ -1804,7 +1919,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
     <span id="label-cross-${i}" class="blacklist-cross" data-type="label" data-name="${album.label}" style="cursor:pointer;">✖</span>
   </span>
 </p>
-
 
           <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48"><defs><mask id="ipSTime0"><g fill="none" stroke-linejoin="round" stroke-width="4"><path fill="#fff" stroke="#fff" d="M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4S4 12.954 4 24s8.954 20 20 20Z"/><path stroke="#000" stroke-linecap="round" d="M24.008 12v12.01l8.479 8.48"/></g></mask></defs><path fill="#f3f3f3" d="M0 0h48v48H0z" mask="url(#ipSTime0)"/></svg> ${album.duration}</p>
         </div>
@@ -1821,7 +1935,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
       <div class="tracks" id="tracks-${i}"></div>
     `;
 
-    // ── «зірочка» NUAM recommendation ─────────────────────────────────────────
     if (album.good) {
       const starBox = document.createElement('div');
       starBox.style.position   = 'absolute';
@@ -1834,9 +1947,17 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
       albumDiv.appendChild(starBox);
     }
 
-    container.appendChild(albumDiv);
+    const nextAlbum = [...container.children].find(div => {
+  const idx = filteredAlbums.findIndex(a => a.albumID === div.dataset.albumId);
+  return idx > i;
+});
 
-    // ── збільшення обкладинки ────────────────────────────────────────────────
+if (nextAlbum) {
+  container.insertBefore(albumDiv, nextAlbum);
+} else {
+  container.appendChild(albumDiv);
+}
+
     albumDiv.querySelector('img').addEventListener('click', function () {
       const imgSrc        = this.src;
       const enlargedPrev  = document.querySelector('.enlarged-img');
@@ -1870,7 +1991,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
       modalOverlay.addEventListener('click', closeImg);
     });
 
-    // ── кола треків ───────────────────────────────────────────────────────────
     const tracksContainer = document.getElementById(`tracks-${i}`);
     album.tracksIDs.forEach((trackID, idx) => {
       const mp3hash = album.tracksMP3[idx] || '';
@@ -1892,11 +2012,13 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
       tracksContainer.appendChild(circle);
     });
 
-    // ── тултипи на прослуховування ────────────────────────────────────────────
-    attachTooltip(document.getElementById(`listens-${i}`),
-                  'Загальна кількість прослуховувань всіх треків релізу');
+   const listensEl = document.getElementById(`listens-${i}`);
+if (album.listens === 0) {
+  attachTooltip(listensEl, 'Жоден трек не набрав понад 1000 прослуховувань');
+} else {
+  attachTooltip(listensEl, 'Загальна кількість прослуховувань всіх треків релізу');
+}
 
-    // ── ✖ лейбла ─────────────────────────────────────────────────────────────
     const labelCrossEl = document.getElementById(`label-cross-${i}`);
 if (labelCrossEl) {
   attachTooltip(labelCrossEl, 'Не показувати альбоми цього лейбла');
@@ -1909,11 +2031,10 @@ if (labelCrossEl) {
         hideAlbum(alb.albumID);
       }
     });
+    forceLazyLoadCheck();
   });
 }
 
-
-    // ── ✖ артистів ────────────────────────────────────────────────────────────
     albumDiv.querySelectorAll('.blacklist-cross[data-type="artist"]').forEach(cross => {
   attachTooltip(cross, 'Не показувати альбоми цього артиста');
   cross.addEventListener('click', () => {
@@ -1926,9 +2047,9 @@ if (labelCrossEl) {
         hideAlbum(album.albumID);
       }
     });
+    forceLazyLoadCheck();
   });
 });
-
   }
 
   currentIndex = endIndex;
@@ -1938,7 +2059,6 @@ if (labelCrossEl) {
       : 'Завантаження альбомів...';
 }
 
-    // Рендерим имена артистов + крестики для чёрного списка:
     function renderArtists(index, album) {
   const fragment = document.createDocumentFragment();
 
@@ -1946,10 +2066,8 @@ if (labelCrossEl) {
     const wrapper = document.createElement('span');
     wrapper.style.whiteSpace = 'nowrap';
 
-    const link = document.createElement('a');
-    link.textContent = artist;
-    link.href = `https://open.spotify.com/artist/${album.artistIDs[i]}`;
-    link.target = '_blank';
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = artist;
 
     const crossSpan = document.createElement('span');
     crossSpan.id = `artist-cross-${index}-${i}`;
@@ -1959,8 +2077,9 @@ if (labelCrossEl) {
     crossSpan.style.cursor = 'pointer';
     crossSpan.textContent = ' ✖';
 
-    wrapper.appendChild(link);
+    wrapper.appendChild(nameSpan);
     wrapper.appendChild(crossSpan);
+
     fragment.appendChild(wrapper);
 
     if (i < album.artistNames.length - 1) {
@@ -1972,37 +2091,25 @@ if (labelCrossEl) {
 
   const div = document.createElement('div');
   div.appendChild(fragment);
-  return div.innerHTML.trim();
-
+  return div.innerHTML;
 }
-
-
-
 
     function hideAlbum(albumID) {
   const albumDiv = document.querySelector(`.album[data-album-id="${albumID}"]`);
   if (albumDiv) {
     albumDiv.style.transition = 'opacity 0.3s';
     albumDiv.style.opacity = '0';
-    albumDiv.style.pointerEvents = 'none';
-
-    loadingBlocked = true;
-    setTimeout(() => { loadingBlocked = false; }, 500);
-
     setTimeout(() => {
       albumDiv.remove();
-      applyFilters(true); // ← добавлено: пересчёт + перерисовка
     }, 300);
   }
 }
-
-
 
 function showAlbum(album) {
   const container = document.getElementById('albums-container');
   const albumDiv = document.createElement('div');
   albumDiv.classList.add('album');
-  albumDiv.style.opacity = '0'; // Начальное состояние прозрачное
+  albumDiv.style.opacity = '0';
   albumDiv.dataset.albumId = album.albumID;
   albumDiv.innerHTML = `
     <div class="album-overlay"></div>
@@ -2024,21 +2131,14 @@ function showAlbum(album) {
       </div>
     </div>
   `;
-  loadingBlocked = true;
-setTimeout(() => { loadingBlocked = false; }, 500);
-
   container.appendChild(albumDiv);
 
-  // Плавно показать
   requestAnimationFrame(() => {
     albumDiv.style.transition = 'opacity 0.3s';
     albumDiv.style.opacity = '1';
   });
 }
 
-
-    
-    // Преобразовать тип релиза:
     function renderReleaseType(t) {
       if (t === 'album') return 'повноформатний альбом';
       if (t === 'ep') return 'міні-альбом';
@@ -2046,7 +2146,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       return t;
     }
 
-    // На трек-кружке: при первом наведении показывать подсказку, далее проигрывать:
     function attachTrackBehavior(circle, audio, album, albumDiv) {
       let tooltipShown = false;
       const tipText = 'Натисніть для відтворення уривка. Далі просто наводьте курсор на треки.';
@@ -2078,21 +2177,16 @@ setTimeout(() => { loadingBlocked = false; }, 500);
           audio.play();
         }
       });
-      // Когда заканчивается пауза трека:
+
       audio.addEventListener('pause', () => {
       });
     }
 
-    // Удаляем подсказку перед удалением элемента:
     function removeTooltip(element) {
       element.dispatchEvent(new Event('mouseleave'));
     }
 
-    // Пометка альбома как прослушанного / не прослушанного:
     function markAlbumAsListened(albumID, albumElement, fromModal = false) {
-  loadingBlocked = true;
-  setTimeout(() => { loadingBlocked = false; }, 500);
-
   const album = albumsData.find(a => a.albumID === albumID);
   if (!album) return;
 
@@ -2101,48 +2195,68 @@ setTimeout(() => { loadingBlocked = false; }, 500);
     album.listened = false;
   } else {
     album.listened = !album.listened;
-    if (!album.listened) {
-      delete listenedAlbums[albumID];
-    } else {
+    if (album.listened) {
       listenedAlbums[albumID] = true;
+    } else {
+      delete listenedAlbums[albumID];
     }
   }
+
   saveListenedAlbums();
+  updateListenedAlbumsModal();
 
   if (albumElement) {
     const markButton = albumElement.querySelector('.mark-listened-btn');
     markButton.textContent = album.listened
       ? 'Позначити як не прослуханий'
-      : 'Позначити як прослуханий';
+      : 'Позначити як прослуханний';
 
-    if (album.listened) {
-      albumElement.classList.add('album-listened');
-    } else {
-      albumElement.classList.remove('album-listened');
+    albumElement.classList.toggle('album-listened', album.listened);
+
+    if (hideListened && album.listened) {
+      albumElement.style.transition = 'opacity 0.3s';
+      albumElement.style.opacity = '0';
+      setTimeout(() => {
+        albumElement.remove();
+        forceLazyLoadCheck();
+      }, 300);
+    } else if (!album.listened && hideListened) {
+
+      const reFiltered = getFilteredAlbums();
+      const index = reFiltered.findIndex(a => a.albumID === albumID);
+      if (index === -1) return;
+
+      if (sortOrder === 'listens-desc') {
+        reFiltered.sort((a, b) => b.listens - a.listens);
+      } else {
+        reFiltered.sort((a, b) => {
+          const da = new Date(a.date);
+          const db = new Date(b.date);
+          return sortOrder === 'asc' ? da - db : db - da;
+        });
+      }
+
+      const container = document.getElementById('albums-container');
+      const allDom = [...container.querySelectorAll('.album')];
+      const nextDom = allDom.find(div => {
+        const idx = reFiltered.findIndex(a => a.albumID === div.dataset.albumId);
+        return idx > index;
+      });
+
+      const dummy = document.createElement('div');
+      container.insertBefore(dummy, nextDom || null);
+      const prevIndex = currentIndex;
+      currentIndex = index;
+      renderAlbums(reFiltered.slice(index, index + 1), false);
+      dummy.remove();
+      currentIndex = prevIndex;
     }
-
-    if (hideListened) {
-  loadingBlocked = true;
-  setTimeout(() => { loadingBlocked = false; }, 500);
-
-  albumElement.style.transition = 'opacity 0.3s';
-  albumElement.style.opacity = '0';
-  setTimeout(() => {
-    albumElement.remove();
-    document.getElementById('album-count').textContent = filteredAlbums.filter(al => !al.listened).length;
-  }, 300);
-}
-
+    return;
   }
-
-  updateListenedAlbumsModal();
+  preserveScroll(() => applyFilters());
 }
 
-
-
-    // Сохраняем прослушанные альбомы:
     function saveListenedAlbums() {
-      // Удаляем те, что false
       for (const key in listenedAlbums) {
         if (!listenedAlbums[key]) {
           delete listenedAlbums[key];
@@ -2151,7 +2265,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       localStorage.setItem('listenedAlbums', JSON.stringify(listenedAlbums));
     }
 
-    // Модалка чёрного списка (или прослушанных):
     function showBlacklist(isBlacklist = true) {
       const modal = document.getElementById('blacklist-modal');
       const closeBtn = modal.querySelector('.close');
@@ -2188,7 +2301,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       }
     }
 
-    // Обновляем чёрный список:
     function updateBlacklist() {
   const artistsList = document.getElementById('blacklisted-artists');
   const labelsList = document.getElementById('blacklisted-labels');
@@ -2212,25 +2324,14 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       removeIcon.textContent = '✖';
       removeIcon.classList.add('blacklist-cross');
       removeIcon.addEventListener('click', () => {
-  blacklistedArtists.delete(artist);
-  localStorage.setItem('blacklistedArtists', JSON.stringify(Array.from(blacklistedArtists)));
-  li.remove();
+        blacklistedArtists.delete(artist);
+        localStorage.setItem('blacklistedArtists', JSON.stringify(Array.from(blacklistedArtists)));
+        li.remove();
 
-  const albumsContainer = document.getElementById('albums-container');
-  albumsContainer.style.transition = 'opacity 0.3s';
-  albumsContainer.style.opacity = '0.5';
-
-  document.body.classList.add('filtering');
-
-  setTimeout(() => {
-    applyFilters(true);
-    albumsContainer.style.opacity = '1';
-    setTimeout(() => {
-      document.body.classList.remove('filtering');
-    }, 300);
-  }, 100);
-});
-
+        const albumsContainer = document.getElementById('albums-container');
+        smoothApplyFilters();
+         forceLazyLoadCheck();
+      });
 
       li.appendChild(sp);
       li.appendChild(removeIcon);
@@ -2255,25 +2356,14 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       removeIcon.textContent = '✖';
       removeIcon.classList.add('blacklist-cross');
       removeIcon.addEventListener('click', () => {
-  blacklistedLabels.delete(label);
-  localStorage.setItem('blacklistedLabels', JSON.stringify(Array.from(blacklistedLabels)));
-  li.remove();
+        blacklistedLabels.delete(label);
+        localStorage.setItem('blacklistedLabels', JSON.stringify(Array.from(blacklistedLabels)));
+        li.remove();
 
-  const albumsContainer = document.getElementById('albums-container');
-  albumsContainer.style.transition = 'opacity 0.3s';
-  albumsContainer.style.opacity = '0.5';
-
-  document.body.classList.add('filtering');
-
-  setTimeout(() => {
-    applyFilters(true);
-    albumsContainer.style.opacity = '1';
-    setTimeout(() => {
-      document.body.classList.remove('filtering');
-    }, 300);
-  }, 100);
-});
-
+        const albumsContainer = document.getElementById('albums-container');
+        smoothApplyFilters();
+        forceLazyLoadCheck();
+      });
 
       li.appendChild(sp);
       li.appendChild(removeIcon);
@@ -2282,8 +2372,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
   }
 }
 
-
-    // Обновляем список прослушанных альбомов:
     function updateListenedAlbumsModal() {
       const list = document.getElementById('listened-albums-list');
       list.innerHTML = '';
@@ -2313,6 +2401,7 @@ setTimeout(() => { loadingBlocked = false; }, 500);
           removeIcon.addEventListener('click', () => {
             markAlbumAsListened(al.albumID, null, true);
             li.remove();
+            forceLazyLoadCheck();
           });
 
           li.appendChild(a);
@@ -2322,7 +2411,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       }
     }
 
-    // Генерируем JSON для экспорта:
     function generateExportData() {
       const obj = {
         blacklistArtists: Array.from(blacklistedArtists),
@@ -2333,7 +2421,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       return JSON.stringify(obj, null, 2);
     }
 
-    // Небольшая тултип-функция (универсальная):
     function attachTooltip(element, text) {
       const tip = document.createElement('div');
       tip.classList.add('tooltip');
@@ -2374,7 +2461,6 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       tip.style.left = `${tx}px`;
     }
 
-    // Простейшая подсказка для трек-кружков (при первом клике):
     let simpleTooltip = null;
     function showSimpleTooltip(x, y, text) {
       if (!simpleTooltip) {
@@ -2406,73 +2492,85 @@ setTimeout(() => { loadingBlocked = false; }, 500);
       }
     }
     
-    function smoothApplyFilters(callback) {
-  document.body.classList.add('filtering');
+    function preserveScroll(callback) {
+  const container = document.getElementById('albums-container');
+  const anchor = [...container.children].find(el => el.getBoundingClientRect().top >= 0);
+  const anchorId = anchor?.dataset?.albumId;
+  const offset = anchor?.getBoundingClientRect().top || 0;
 
-  const scrollY = window.scrollY;
-  const albumsContainer = document.getElementById('albums-container');
+  callback();
 
-  albumsContainer.style.transition = 'opacity 0.3s';
-  albumsContainer.style.opacity = '0.5';
+  requestAnimationFrame(() => {
+    if (anchorId) {
+      const newAnchor = container.querySelector(`[data-album-id="${anchorId}"]`);
+      if (newAnchor) {
+        const newOffset = newAnchor.getBoundingClientRect().top;
+        const scrollY = window.scrollY + (newOffset - offset);
+        window.scrollTo(0, scrollY);
+      }
+    }
+  });
+}
+   
+    function smoothApplyFilters() {
+  isFiltering = true;
+  const container = document.getElementById('albums-container');
 
-  // Сброс scroll временно
-  document.body.style.position = 'fixed';
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.width = '100%';
+  window.removeEventListener('scroll', handleScroll);
+  container.style.transition = 'opacity 0.2s';
+  container.style.opacity = '0.3';
 
   setTimeout(() => {
-    applyFilters();
+    preserveScroll(() => applyFilters());
 
     requestAnimationFrame(() => {
-      albumsContainer.style.opacity = '1';
-      document.body.classList.remove('filtering');
-
-      // Восстановление scroll
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollY);
-
-      if (typeof callback === 'function') callback();
+      container.style.opacity = '1';
+      isFiltering = false;
+      window.addEventListener('scroll', throttle(handleScroll, 200));
     });
-  }, 100);
+  }, 50);
 }
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
-  const select = document.getElementById('sort-order');
-  const selected = select.querySelector('.selected');
-  const optionsContainer = select.querySelector('.options-container');
-  const optionsList = optionsContainer.querySelectorAll('.option');
+  const selects = document.querySelectorAll('.custom-select');
 
-  selected.addEventListener('click', () => {
-  const isOpen = optionsContainer.style.display === 'flex';
-  optionsContainer.style.display = isOpen ? 'none' : 'flex';
-  select.classList.toggle('open', !isOpen); // ←←← добавить/удалить класс .open
-});
+  selects.forEach(select => {
+    const selected = select.querySelector('.selected');
+    const optionsContainer = select.querySelector('.options-container');
+    const optionsList = optionsContainer.querySelectorAll('.option');
 
+    selected.addEventListener('click', () => {
+      const isOpen = optionsContainer.style.display === 'flex';
+      optionsContainer.style.display = isOpen ? 'none' : 'flex';
+      select.classList.toggle('open', !isOpen);
+    });
 
-  optionsList.forEach(option => {
-    option.addEventListener('click', () => {
-  selected.textContent = option.textContent;
-  selected.dataset.value = option.dataset.value; // ← ← ← ДОБАВИТЬ ЭТУ СТРОКУ!!!
-  optionsContainer.style.display = 'none';
+    optionsList.forEach(option => {
+      option.addEventListener('click', () => {
+        selected.textContent = option.textContent;
+        selected.dataset.value = option.dataset.value;
+        optionsContainer.style.display = 'none';
+        select.classList.remove('open');
 
-  sortOrder = option.dataset.value;
-  smoothApplyFilters();
-  saveFiltersToCache();
-});
+        if (select.id === 'sort-order') {
+          sortOrder = option.dataset.value;
+        }
+
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      });
+    });
   });
 
-  // Закрытие, если клик вне select
   document.addEventListener('click', function(event) {
-  if (!select.contains(event.target)) {
-    optionsContainer.style.display = 'none';
-    select.classList.remove('open'); /* ←←← добавляем удаление класса open */
-  }
-});
+    document.querySelectorAll('.custom-select').forEach(select => {
+      const optionsContainer = select.querySelector('.options-container');
+      if (!select.contains(event.target)) {
+        optionsContainer.style.display = 'none';
+        select.classList.remove('open');
+      }
+    });
+  });
 });
 
   </script>
