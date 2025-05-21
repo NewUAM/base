@@ -109,7 +109,7 @@
       min-width: 260px;
       height: 100vh;
       padding: 20px 10px 20px;
-      gap: 24px;
+      gap: 20px;
       overflow-y: auto;
       position: fixed;
       top: 0;
@@ -137,7 +137,7 @@
     .filter-section {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
       width: 100%;
     }
 
@@ -189,7 +189,6 @@
     .genre-name,
     .language-name,
     .release-type-filter-item {
-      font-weight: bold;
       font-size: 14px;
     }
     .genre-count,
@@ -201,11 +200,10 @@
     .sort-and-blacklist {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 12px;
       width: 100%;
     }
-    .sort-section,
-    .hide-listened-section {
+    .sort-section {
       display: flex;
       gap: 6px;
       align-items: center;
@@ -224,10 +222,73 @@
 .sort-section .custom-select {
   flex-grow: 1;
 }
+    .hide-listened-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background-color: #383838;
+  border-radius: 7px;
+  justify-content: flex-start;
+}
+
     .hide-listened-section label {
       align-items: center;
       gap: 8px;
     }
+
+.blacklist-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.blacklist-row .blacklist-section {
+  flex: none;
+}
+
+.blacklist-row .hide-listened-section {
+  flex: 1;
+  height: 37px;
+  background-color: #383838;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 7px;
+  gap: 8px;
+}
+
+.blacklist-row #show-listened-albums {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.filter-group {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.release-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.release-column .checkbox-container {
+  flex: none;
+}
+
+.release-column .hide-listened-section {
+  margin-top: auto;
+  height: 37px;
+  background-color: #383838;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 7px;
+  gap: 8px;
+}
 
     .blacklist-container {
       display: flex;
@@ -450,9 +511,12 @@
       cursor: pointer;
       transition: transform 0.3s ease, z-index 0.3s ease;
       border-radius: 7px;
+      backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
     }
     .album img:hover {
-      transform: scale(1.02);
+      transform: scale(1.01);
       z-index: 10;
     }
 
@@ -566,7 +630,13 @@
       z-index: 1000;
       cursor: pointer;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    }
+      user-select: none !important;
+    opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.enlarged-img.shown {
+  opacity: 1;
+}
 
     .modal-overlay,
     .modal {
@@ -692,7 +762,7 @@ textarea:focus {
 
     #export-data,
     #import-data {
-      margin-top: 10px;
+      margin-top: 0;
       padding: 10px 20px;
       font-size: 14px;
       cursor: pointer;
@@ -700,12 +770,39 @@ textarea:focus {
       color: #f3f3f3;
       border: none;
       border-radius: 5px;
+      width: fit-content;
+      vertical-align: middle;
+      transition: background-color 0.3s;
     }
     #export-data:hover,
     #import-data:hover {
       background-color: #388e3c;
     }
 
+    #export-message,
+#import-message {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+    #export-message.success,
+#import-message.success {
+  color: #7dc77d;
+}
+
+#export-message.error,
+#import-message.error {
+  color: #e74c3c;
+}
+    
+    .button-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+    
     .exclude-genre,
     .exclude-language {
       cursor: pointer;
@@ -830,6 +927,10 @@ textarea:focus {
     .alb-artist {
       font-weight: bold;
     }
+.alb-artist a:hover {
+  text-decoration: underline !important;
+}
+
     .alb-sep {
       border: 0;
       border-top: 1px solid #555;
@@ -881,6 +982,13 @@ textarea:focus {
   display: block;
 }
     
+    .controls,
+.modal-content,
+.controls * ,
+.modal-content * {
+  overscroll-behavior: none;
+}
+
     @media (max-width: 768px) {
       .controls {
         flex-direction: column;
@@ -915,16 +1023,14 @@ textarea:focus {
     <label class="section-title">Мови:</label>
     <div class="checkbox-grid" id="language-checkboxes"></div>
   </div>
-  <div style="display: flex; flex-direction: column; gap: 10px;">
+  <div class="release-column">
   <div class="checkbox-container" style="max-height: none; overflow-y: visible;">
     <label class="section-title">Тип релізу:</label>
     <div class="checkbox-grid" id="release-type-checkboxes"></div>
   </div>
-
   <div class="hide-listened-section">
     <label for="nuam-recommended-checkbox">
-      <input type="checkbox" id="nuam-recommended-checkbox">
-      Рекомендовані NUAM
+      <input type="checkbox" id="nuam-recommended-checkbox">Рекомендовані NUAM
     </label>
   </div>
 </div>
@@ -970,14 +1076,17 @@ textarea:focus {
   </div>
 </div>
       
-      <div class="hide-listened-section">
-        <label for="hide-listened">
-          <input type="checkbox" id="hide-listened"> Приховати <span id="show-listened-albums" style="cursor: pointer; text-decoration: underline;">прослухані альбоми</span>
-        </label>
-      </div>
-      <div class="blacklist-section">
-        <button id="blacklist-button">Чорний список</button>
-      </div>
+      <div class="blacklist-row">
+  <div class="blacklist-section">
+    <button id="blacklist-button">Чорний список</button>
+  </div>
+  <div class="hide-listened-section">
+    <label for="hide-listened">
+      <input type="checkbox" id="hide-listened">Приховати <span id="show-listened-albums">прослухані альбоми</span>
+    </label>
+  </div>
+</div>
+
       <label>Альбомів з урахуванням фільтрів: <span id="album-count">0</span></label>
     </div>
   </div>
@@ -1012,17 +1121,23 @@ textarea:focus {
       </div>
       <div id="export-content" class="tabcontent">
   <div class="export-import-container">
-    <div class="export-section">
-      <label for="data-textarea">Дані для експорту:</label>
-      <textarea id="data-textarea" readonly></textarea>
-      <button id="export-data" style="margin-top: 10px;">Копіювати дані</button>
-    </div>
-    <div class="import-section">
-      <label for="import-textarea">Вставте сюди дані для імпорту:</label>
-      <textarea id="import-textarea" placeholder="Вставте сюди дані"></textarea>
-      <button id="import-data" style="margin-top: 10px;">Завантажити дані</button>
-    </div>
+  <div class="export-section" style="display: flex; flex-direction: column; gap: 10px;">
+    <label for="data-textarea">Дані для експорту:</label>
+    <textarea id="data-textarea" readonly></textarea>
+    <div class="button-line">
+  <button id="export-data">Копіювати дані</button>
+  <span id="export-message"> </span>
+</div>
   </div>
+  <div class="import-section" style="display: flex; flex-direction: column; gap: 10px;">
+    <label for="import-textarea">Вставте сюди дані для імпорту:</label>
+    <textarea id="import-textarea" placeholder="Вставте сюди дані"></textarea>
+    <div class="button-line">
+  <button id="import-data">Завантажити дані</button>
+  <span id="import-message"> </span>
+</div>
+  </div>
+</div>
 </div>
     </div>
   </div>
@@ -1066,9 +1181,9 @@ textarea:focus {
     let blacklistedLabels = new Set(JSON.parse(localStorage.getItem('blacklistedLabels')) || []);
 
 function releaseIcon(t){
-  if (t==='compilation') return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#84aafb" stroke-width="8"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
-  if (t==='album')      return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#84aafb" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">LP</text></svg>`;
-  return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#84aafb" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">EP</text></svg>`;
+  if (t==='compilation') return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
+  if (t==='album')      return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">LP</text></svg>`;
+  return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">EP</text></svg>`;
 }
 
     const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
@@ -1331,25 +1446,30 @@ if (genre === 'producing work for international'){
         'ep': 'EP',
         'compilation': 'Компіляції'
       };
-      releaseTypesSet.forEach(rType => {
-        const div = document.createElement('div');
-        div.classList.add('release-type-filter-item');
+      const releaseTypeCounts = {};
+albumsData.forEach(album => {
+  releaseTypeCounts[album.type] = (releaseTypeCounts[album.type] || 0) + 1;
+});
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = rType;
-        checkbox.id = `release-type-${rType}`;
-        checkbox.classList.add('release-type-checkbox');
-        checkbox.checked = true;
+releaseTypesSet.forEach(rType => {
+  const div = document.createElement('div');
+  div.classList.add('release-type-filter-item');
 
-        const label = document.createElement('label');
-        label.htmlFor = checkbox.id;
-        label.textContent = releaseTypeLabels[rType] || rType;
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.value = rType;
+  checkbox.id = `release-type-${rType}`;
+  checkbox.classList.add('release-type-checkbox');
+  checkbox.checked = true;
 
-        div.appendChild(checkbox);
-        div.appendChild(label);
-        releaseTypeContainer.appendChild(div);
-      });
+  const label = document.createElement('label');
+  label.htmlFor = checkbox.id;
+  label.innerHTML = `${releaseTypeLabels[rType] || rType} <span class="genre-count">(${releaseTypeCounts[rType] || 0})</span>`;
+
+  div.appendChild(checkbox);
+  div.appendChild(label);
+  releaseTypeContainer.appendChild(div);
+});
     }
 
     function loadFiltersAfterRender() {
@@ -1582,41 +1702,55 @@ saveFiltersToCache();
       window.addEventListener('scroll', throttle(handleScroll, 200));
 
       document.getElementById('export-data').addEventListener('click', () => {
-        const dataTextarea = document.getElementById('data-textarea');
-        dataTextarea.select();
-        navigator.clipboard.writeText(dataTextarea.value).then(() => {
-          alert('Дані скопійовані в буфер обміну.');
-        }).catch(err => {
-          console.error('Помилка копіювання даних: ', err);
-          alert('Помилка при копіюванні даних.');
-        });
-      });
-      document.getElementById('import-data').addEventListener('click', () => {
-        const importTextarea = document.getElementById('import-textarea');
-        const importDataString = importTextarea.value.trim();
-        if (!importDataString) {
-          alert('Введіть дані для завантаження.');
-          return;
-        }
-        try {
-          const importData = JSON.parse(importDataString);
-          if (importData.blacklistArtists) {
-            localStorage.setItem('blacklistedArtists', JSON.stringify(importData.blacklistArtists));
-          }
-          if (importData.blacklistLabels) {
-            localStorage.setItem('blacklistedLabels', JSON.stringify(importData.blacklistLabels));
-          }
-          if (importData.listenedAlbums) {
-            localStorage.setItem('listenedAlbums', JSON.stringify(importData.listenedAlbums));
-          }
-          if (importData.albumFilters) {
-            localStorage.setItem('albumFilters', JSON.stringify(importData.albumFilters));
-          }
-          alert('Дані успішно завантажені. Оновіть сторінку для застосування змін.');
-        } catch (error) {
-          alert('Помилка при завантаженні даних. Перевірте формат JSON.');
-        }
-      });
+  const dataTextarea = document.getElementById('data-textarea');
+  const msg = document.getElementById('export-message');
+  dataTextarea.select();
+  navigator.clipboard.writeText(dataTextarea.value).then(() => {
+    msg.textContent = 'Скопійовано!';
+    msg.className = 'success';
+    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 2000);
+  }).catch(err => {
+    console.error('Помилка копіювання даних: ', err);
+    msg.textContent = 'Помилка при копіюванні даних.';
+    msg.className = 'error';
+    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
+  });
+});
+
+document.getElementById('import-data').addEventListener('click', () => {
+  const importTextarea = document.getElementById('import-textarea');
+  const msg = document.getElementById('import-message');
+  const importDataString = importTextarea.value.trim();
+  if (!importDataString) {
+    msg.textContent = 'Введіть дані для завантаження.';
+    msg.className = 'error';
+    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
+    return;
+  }
+  try {
+    const importData = JSON.parse(importDataString);
+    if (importData.blacklistArtists) {
+      localStorage.setItem('blacklistedArtists', JSON.stringify(importData.blacklistArtists));
+    }
+    if (importData.blacklistLabels) {
+      localStorage.setItem('blacklistedLabels', JSON.stringify(importData.blacklistLabels));
+    }
+    if (importData.listenedAlbums) {
+      localStorage.setItem('listenedAlbums', JSON.stringify(importData.listenedAlbums));
+    }
+    if (importData.albumFilters) {
+      localStorage.setItem('albumFilters', JSON.stringify(importData.albumFilters));
+    }
+    msg.textContent = 'Дані завантажені. Перезавантажте сторінку.';
+    msg.className = 'success';
+    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 5000);
+  } catch (error) {
+    msg.textContent = 'Помилка при завантаженні. Формат JSON некоректний.';
+    msg.className = 'error';
+    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
+  }
+});
+
       
 window.addEventListener('scroll', () => {
   const scrollTopButton = document.getElementById('scrollTopButton');
@@ -1975,6 +2109,7 @@ if (nextAlbum) {
       enlargedImg.src = imgSrc;
       enlargedImg.classList.add('enlarged-img');
       document.body.appendChild(enlargedImg);
+      requestAnimationFrame(() => enlargedImg.classList.add('shown'));
 
       modalOverlay.style.display = 'block';
       document.body.classList.add('no-scroll');
@@ -2066,8 +2201,13 @@ if (labelCrossEl) {
     const wrapper = document.createElement('span');
     wrapper.style.whiteSpace = 'nowrap';
 
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = artist;
+    const artistLink = document.createElement('a');
+    artistLink.textContent = artist;
+    artistLink.href = `https://open.spotify.com/artist/${album.artistIDs[i] || ''}`;
+    artistLink.target = '_blank';
+    artistLink.style.color = '#f3f3f3';
+    artistLink.style.textDecoration = 'none';
+    artistLink.style.fontWeight = 'bold';
 
     const crossSpan = document.createElement('span');
     crossSpan.id = `artist-cross-${index}-${i}`;
@@ -2077,7 +2217,7 @@ if (labelCrossEl) {
     crossSpan.style.cursor = 'pointer';
     crossSpan.textContent = ' ✖';
 
-    wrapper.appendChild(nameSpan);
+    wrapper.appendChild(artist === 'Various Artists' ? document.createTextNode(artist) : artistLink);
     wrapper.appendChild(crossSpan);
 
     fragment.appendChild(wrapper);
@@ -2317,7 +2457,19 @@ function showAlbum(album) {
     blacklistedArtists.forEach(artist => {
       const li = document.createElement('li');
       const sp = document.createElement('span');
-      sp.textContent = artist;
+      if (artist !== 'Various Artists') {
+  const link = document.createElement('a');
+  link.href = `https://open.spotify.com/artist/${albumsData.find(a => a.artistNames.includes(artist))?.artistIDs[albumsData.find(a => a.artistNames.includes(artist))?.artistNames.indexOf(artist)] || ''}`;
+  link.target = '_blank';
+  link.textContent = artist;
+  link.style.color = '#f3f3f3';
+  link.style.textDecoration = 'none';
+  link.addEventListener('mouseover', () => link.style.textDecoration = 'underline');
+  link.addEventListener('mouseout', () => link.style.textDecoration = 'none');
+  sp.appendChild(link);
+} else {
+  sp.textContent = artist;
+}
       sp.style.color = '#f3f3f3';
 
       const removeIcon = document.createElement('span');
@@ -2572,7 +2724,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-
   </script>
 </body>
 </html>
