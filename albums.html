@@ -42,9 +42,7 @@
       border-radius: 7px;
       border: 2px solid #282626;
     }
-    body::-webkit-scrollbar-thumb:hover {
-      background-color: #383838;
-    }
+
     body::-webkit-scrollbar-button {
       display: none;
     }
@@ -72,14 +70,18 @@
       height: 20px;
       cursor: pointer;
       appearance: none;
-      border: 1px solid #84AAFB;
+      border: 1px solid rgba(132, 170, 251, 0.5);
       border-radius: 4px;
       background-color: #383838;
       display: inline-block;
       position: relative;
       vertical-align: middle;
       margin-right: 8px;
+      transition: border-color 0.3s ease;
     }
+    input[type="checkbox"]:hover {
+  border-color: rgba(132, 170, 251, 1);
+}
     input[type="checkbox"]:checked {
       background-color: #84AAFB;
       border-color: #84AAFB;
@@ -94,6 +96,27 @@
       left: 50%;
       transform: translate(-50%, -50%);
     }
+
+    #albums-container .separator {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  margin: 20px 0 20px;
+  box-sizing: border-box;
+}
+
+#albums-container .separator .line {
+  flex: 1;
+  height: 2px;
+  background-color: #383636;
+  border: none;
+}
+
+#albums-container .separator .sep-text {
+  margin: 0 10px;
+  color: #f3f3f3;
+  white-space: nowrap;
+}
 
     #genre-checkboxes {
       display: grid;
@@ -129,9 +152,6 @@
       background: #383838;
       border-radius: 7px;
       border: 2px solid #282626;
-    }
-    .controls::-webkit-scrollbar-thumb:hover {
-      background: #444;
     }
 
     .filter-section {
@@ -222,6 +242,17 @@
 .sort-section .custom-select {
   flex-grow: 1;
 }
+    
+.custom-select.upward .options-container {
+  top: auto;
+  bottom: 100%;
+  border-radius: 7px 7px 0 0;
+  width: calc(100% + 2px);
+}
+.custom-select.upward.open {
+  border-radius: 0 0 7px 7px;
+}
+
     .hide-listened-section {
   display: flex;
   align-items: center;
@@ -337,6 +368,60 @@
   background-color: #383838;
 }
 
+    .favorites-section {
+
+}
+
+.favorite-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 11;
+  cursor: pointer;
+  padding: 5px;
+  background-color: #282626;
+  border-radius: 7px;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.1s ease, border-color 0.3s ease;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.favorite-button:hover {
+border-color: rgba(132, 170, 251, 1);
+}
+
+.album:hover .favorite-button {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.favorite-button.clicked .favorite-icon {
+  transform: scale(1.15);
+}
+
+.favorite-checkmark {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #282626;
+  font-weight: bold;
+  display: none;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.favorite-button svg {
+  width: 100%;
+  height: 100%;
+}
+
     .listened-albums-container {
       max-height: 300px;
       overflow-y: auto;
@@ -346,7 +431,7 @@
     }
     .listened-albums-container ul {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       list-style-type: none;
       padding: 0;
@@ -357,7 +442,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 5px 10px;
+      padding: 10px 10px;
       background-color: #282626;
       border-radius: 5px;
     }
@@ -406,14 +491,19 @@
   position: relative;
   width: 100%;
   background-color: #383838;
-  border: 1px solid #84AAFB;
+  border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 7px;
   font-family: 'CustomFont', Arial, sans-serif;
   user-select: none;
+  transition: border-color 0.3s ease;
 }
-
+.custom-select:hover {
+  border-color: rgba(132, 170, 251, 1);
+}
+    
 .custom-select.open {
   border-radius: 7px 7px 0 0;
+  border: 1px solid rgba(132, 170, 251, 1);
 }
 
     .custom-select,
@@ -436,18 +526,18 @@
   width: calc(100% + 2px);
   background-color: #383838;
   border-top: none;
-  border-left: 1px solid #84AAFB;
-  border-right: 1px solid #84AAFB;
-  border-bottom: 1px solid #84AAFB;
+  border-left: 1px solid rgba(132, 170, 251, 1);
+  border-right: 1px solid rgba(132, 170, 251, 1);
+  border-bottom: 1px solid rgba(132, 170, 251, 1);
   border-radius: 0 0 7px 7px;
   font-size: 14px;
   display: none;
   flex-direction: column;
   z-index: 10;
 }
-
+    
 .custom-select .option {
-  padding: 5px;
+  padding: 4px;
   cursor: pointer;
   color: #f3f3f3;
 }
@@ -542,6 +632,113 @@
       text-decoration: underline;
     }
 
+    .album .album-links {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.album:hover .album-links {
+  opacity: 1;
+}
+
+.album .album-links a {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.album .album-links .icon-default,
+.album .album-links .icon-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.album .album-links .icon-hover {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.album .album-links a:hover .icon-hover {
+  opacity: 1;
+}
+
+.album .album-links a:hover .icon-default {
+  opacity: 0;
+}
+
+    .spotify-icon {
+  flex-shrink: 0;
+}
+    
+.album a .spotify-icon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.album:hover a .spotify-icon {
+  opacity: 1;
+}
+
+.album a .spotify-icon .icon-default,
+.album a .spotify-icon .icon-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.album a .spotify-icon .icon-hover {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.album a .spotify-icon:hover .icon-hover {
+  opacity: 1;
+}
+
+.album a .spotify-icon:hover .icon-default {
+  opacity: 0;
+}
+
+    .favorite-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transition: transform 0.15s ease;
+}
+
+    .favorite-icon-wrapper {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 24px;
+  z-index: 11;
+  display: none;
+}
+
+.album:hover .favorite-icon-wrapper {
+  display: block;
+}
+
+.favorite-icon-wrapper svg {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
     .tracks {
       display: flex;
       flex-wrap: wrap;
@@ -557,18 +754,19 @@
       color: #f3f3f3;
       background-color: transparent;
       border-radius: 50%;
-      border: 1px solid #84AAFB;
+      border: 1px solid rgba(132, 170, 251, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
       position: relative;
     }
 
     .track-circle:hover {
       background-color: #282626;
+      border-color: rgba(132, 170, 251, 1);
     }
     .track-circle i {
       font-size: 20px;
@@ -660,6 +858,8 @@
     }
     .modal-content h3 {
       color: #f3f3f3;
+     margin-top: 0;
+    margin-bottom: 10px;
     }
 
     .tabcontent {
@@ -739,11 +939,15 @@
   padding: 10px;
   background-color: #282626;
       border-radius: 7px;
-  border: 1px solid #84AAFB;
+  border: 1px solid rgba(132, 170, 251, 0.5);
   resize: none;
   color: #f3f3f3;
   scrollbar-width: auto;
   scrollbar-color: auto;
+      transition: border-color 0.3s ease;
+}
+    textarea:hover {
+  border-color: rgba(132, 170, 251, 1);
 }
 textarea::-webkit-scrollbar {
   width: 14px;
@@ -796,6 +1000,26 @@ textarea:focus {
   color: #e74c3c;
 }
     
+    #favorites-albums-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#favorites-albums-list li img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+    
+#favorites-albums-list a {
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+#favorites-albums-list a:hover {
+  text-decoration: underline;
+}
+ 
     .button-line {
   display: flex;
   align-items: center;
@@ -989,6 +1213,96 @@ textarea:focus {
   overscroll-behavior: none;
 }
 
+    #label-select .options-container {
+  max-height: 500px;
+  display: none;
+  flex-direction: column-reverse;
+  border-left: 1px solid #84AAFB;
+      border-right: 1px solid #84AAFB;
+      border-top: 1px solid #84AAFB;
+      border-bottom: none;
+  background: #383838;
+  position: absolute;
+  width: calc(100% + 2px);
+  z-index: 99;
+}
+
+    #label-select .options-container {
+  overflow: hidden;
+}
+
+#label-select .option-list {
+  overflow-y: auto;
+}
+
+#label-select .option-fixed {
+  flex-shrink: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background: #383838;
+  border-top: 1px solid #84AAFB;
+  display: flex;
+  flex-direction: column;
+}
+
+#label-select .option-search {
+  padding: 8px;
+  background: #282626;
+  color: #f3f3f3;
+  border-top: 1px solid rgba(132, 170, 251, 0.5);
+  border-bottom: 1px solid rgba(132, 170, 251, 0.5);
+  border-left: none;
+  border-right: none;
+  transition: border 0.3s ease;
+}
+    
+    #label-select .option-search:hover {
+  border-top: 1px solid rgba(132, 170, 251, 1);
+  border-bottom: 1px solid rgba(132, 170, 251, 1);
+}
+
+    #label-select .option-search:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+#label-select .option-list {
+  overflow-y: auto;
+  max-height: 460px;
+
+}
+
+#label-select .option-list .option:first-child {
+  border-top-left-radius: 7px;
+}
+
+#label-select .option-list .option:last-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#label-select .option-list::-webkit-scrollbar {
+  width: 14px;
+}
+
+#label-select .option-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#label-select .option-list::-webkit-scrollbar-thumb,
+#label-select .option-list::-webkit-scrollbar-thumb:hover,
+#label-select .option-list::-webkit-scrollbar-thumb:active {
+  background: #282626 !important;
+  border: 3px solid #383838 !important;
+  border-radius: 7px !important;
+  background-clip: content-box !important;
+}
+
+#label-select .option-list::-webkit-scrollbar-button {
+  display: none;
+  width: 0; height: 0;
+}
+
     @media (max-width: 768px) {
       .controls {
         flex-direction: column;
@@ -1046,6 +1360,7 @@ textarea:focus {
       <div class="option" data-value="desc">Спочатку нові</div>
       <div class="option" data-value="asc">Спочатку старі</div>
       <div class="option" data-value="listens-desc">Більше прослуховувань</div>
+      <div class="option" data-value="popularity-growth">Активне зростання слухачів</div>
     </div>
   </div>
 </div>
@@ -1076,6 +1391,16 @@ textarea:focus {
   </div>
 </div>
       
+      <div class="sort-section">
+  <label for="track-count-filter">Лейбл альбому:</label>
+      <div class="custom-select upward" id="label-select">
+  <div class="selected">Усі лейбли</div>
+  <div class="options-container">
+    <div class="option" data-value="">Усі лейбли</div>
+  </div>
+</div>
+        </div>
+      
       <div class="blacklist-row">
   <div class="blacklist-section">
     <button id="blacklist-button">Чорний список</button>
@@ -1085,6 +1410,11 @@ textarea:focus {
       <input type="checkbox" id="hide-listened">Приховати <span id="show-listened-albums">прослухані альбоми</span>
     </label>
   </div>
+</div>
+
+      <div class="favorites-section">
+  <button id="favorites-button">Обрані альбоми</button>
+
 </div>
 
       <label>Альбомів з урахуванням фільтрів: <span id="album-count">0</span></label>
@@ -1144,6 +1474,18 @@ textarea:focus {
 
   <div class="modal-overlay"></div>
  
+  <div id="favorites-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-favorites-modal">&times;</span>
+    <div class="tabs">
+      <h3>Обрані альбоми</h3>
+    </div>
+    <div class="listened-albums-container">
+      <ul id="favorites-albums-list"></ul>
+    </div>
+  </div>
+</div>
+
   <div id="scrollTopButton" style="
   position: fixed;
   bottom: 30px;
@@ -1179,6 +1521,7 @@ textarea:focus {
 
     let blacklistedArtists = new Set(JSON.parse(localStorage.getItem('blacklistedArtists')) || []);
     let blacklistedLabels = new Set(JSON.parse(localStorage.getItem('blacklistedLabels')) || []);
+    let labelFilter = '';
 
 function releaseIcon(t){
   if (t==='compilation') return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
@@ -1187,6 +1530,7 @@ function releaseIcon(t){
 }
 
     const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
+    const favoriteAlbums = JSON.parse(localStorage.getItem('favoriteAlbums')) || {};
 
     const languageLabels = {
       'ukr': 'українська',
@@ -1200,27 +1544,65 @@ function releaseIcon(t){
     init();
 
     function init() {
-      Papa.parse(newSheetUrl, {
-        download: true,
-        header: true,
-        complete: function(results) {
-          const rawData = results.data;
-          processAlbumData(rawData);
-          populateFilters();
-          attachGlobalEventListeners();
-
-          const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
-          if (albumFilters) {
-            loadFiltersAfterRender();
-          } else {
-            applyFilters();
-          }
-        },
-        error: function(error) {
-          console.error('Ошибка при загрузке CSV:', error);
-        }
-      });
+  Papa.parse(newSheetUrl, {
+    download: true,
+    header: true,
+    complete: function(results) {
+      const rawData = results.data;
+      processAlbumData(rawData);
+      populateFilters();
+      populateLabelOptions();
+      initBasicCustomSelect(document.getElementById('sort-order'));
+      initBasicCustomSelect(document.getElementById('duration-filter'));
+      initBasicCustomSelect(document.getElementById('track-count-filter'));
+      attachGlobalEventListeners();
+      const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
+      if (albumFilters) {
+        loadFiltersAfterRender();
+      } else {
+        applyFilters();
+      }
+    },
+    error: function(error) {
+      console.error('Помилка під час завантаження CSV:', error);
     }
+  });
+}
+
+function initBasicCustomSelect(select) {
+  const selected = select.querySelector('.selected');
+  const optionsContainer = select.querySelector('.options-container');
+  selected.addEventListener('click', e => {
+  e.stopPropagation();
+
+  document.querySelectorAll('.custom-select').forEach(otherSelect => {
+    if (otherSelect !== select) {
+      otherSelect.querySelector('.options-container').style.display = 'none';
+      otherSelect.classList.remove('open');
+    }
+  });
+  const isOpen = optionsContainer.style.display === 'flex';
+  optionsContainer.style.display = isOpen ? 'none' : 'flex';
+  select.classList.toggle('open', !isOpen);
+});
+  optionsContainer.querySelectorAll('.option').forEach(option => {
+    option.addEventListener('click', () => {
+      selected.textContent = option.textContent;
+      selected.dataset.value = option.dataset.value;
+      optionsContainer.style.display = 'none';
+      select.classList.remove('open');
+      if (select.id === 'sort-order') sortOrder = option.dataset.value;
+      preserveScroll(() => smoothApplyFilters());
+      saveFiltersToCache();
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!select.contains(e.target)) {
+      optionsContainer.style.display = 'none';
+      select.classList.remove('open');
+    }
+  });
+}
 
 function friendlyGenreLabel(g) {
   if (g === 'producing work for international') return 'intl prod';
@@ -1303,10 +1685,33 @@ if (item.excluded && item.excluded.trim() === '+') return;
           good: (item.Good && item.Good.trim() === '+'),
           artistNames: item.artName ? item.artName.split(',,').map(a => a.trim()) : [],
           artistIDs: item.artID ? item.artID.split(',') : [],
-          listened: !!listenedAlbums[item.alURL]
+          listened: !!listenedAlbums[item.alURL],
+          growthScore: 0
         };
 
         albumsData.push(album);
+        
+if (item.Listens) {
+  const history = item.Listens
+    .split(',')
+    .map(x => parseInt(x.trim(), 10))
+    .filter(n => !isNaN(n));
+
+  if (history.length >= 2) {
+    const recent = history.slice(0, 8);
+    const deltas = [];
+    for (let i = 0; i < recent.length - 1; i++) {
+      deltas.push(recent[i] - recent[i + 1]);
+    }
+
+    const avgDelta = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+    album.growthScore = avgDelta;
+  } else {
+    album.growthScore = -Infinity;
+  }
+} else {
+  album.growthScore = -Infinity;
+}
       });
     }
 
@@ -1472,6 +1877,97 @@ releaseTypesSet.forEach(rType => {
 });
     }
 
+function populateLabelOptions() {
+  const map = {};
+  albumsData.forEach(al => {
+    if (!al.label || al.artistNames.length === 0) return;
+    const artist = al.artistNames[0];
+    if (artist === al.label) return;
+    if (!map[al.label]) map[al.label] = new Set();
+    map[al.label].add(artist);
+  });
+  const labels = Object.entries(map)
+    .filter(([, artists]) => artists.size >= 3)
+    .map(([lbl]) => lbl)
+    .sort((a, b) => a.localeCompare(b));
+
+  const select = document.getElementById('label-select');
+  const optsContainer = select.querySelector('.options-container');
+  optsContainer.innerHTML = `
+    
+    <div class="option-fixed">
+      <div class="option" data-value="">Усі лейбли</div>
+      <input type="text" class="option-search" placeholder="Пошук...">
+    </div>
+    <div class="option-list"></div>
+  `;
+
+  const listContainer = optsContainer.querySelector('.option-list');
+  labels.forEach(lbl => {
+    const o = document.createElement('div');
+    o.className = 'option';
+    o.dataset.value = lbl;
+    o.textContent = lbl;
+    listContainer.appendChild(o);
+  });
+
+  initCustomSelect(select);
+}
+
+function initCustomSelect(select) {
+  const selected        = select.querySelector('.selected');
+  const optionsContainer = select.querySelector('.options-container');
+  const listContainer   = optionsContainer.querySelector('.option-list');
+  const fixedContainer  = optionsContainer.querySelector('.option-fixed');
+  const searchInput     = fixedContainer.querySelector('.option-search');
+
+  selected.addEventListener('click', e => {
+  e.stopPropagation();
+
+  document.querySelectorAll('.custom-select').forEach(otherSelect => {
+    if (otherSelect !== select) {
+      otherSelect.querySelector('.options-container').style.display = 'none';
+      otherSelect.classList.remove('open');
+    }
+  });
+  const isOpen = optionsContainer.style.display === 'flex';
+  optionsContainer.style.display = isOpen ? 'none' : 'flex';
+  select.classList.toggle('open', !isOpen);
+});
+
+  optionsContainer.querySelectorAll('.option').forEach(option => {
+    option.addEventListener('click', () => {
+      selected.textContent = option.textContent;
+      selected.dataset.value = option.dataset.value;
+      optionsContainer.style.display = 'none';
+      select.classList.remove('open');
+
+      if (select.id === 'label-select') {
+        labelFilter = option.dataset.value;
+      } else if (select.id === 'sort-order') {
+        sortOrder = option.dataset.value;
+      }
+
+      preserveScroll(() => smoothApplyFilters());
+      saveFiltersToCache();
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (!select.contains(e.target)) {
+      optionsContainer.style.display = 'none';
+      select.classList.remove('open');
+    }
+  });
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    listContainer.querySelectorAll('.option').forEach(opt => {
+      opt.style.display = opt.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+}
+
     function loadFiltersAfterRender() {
       const filterData = JSON.parse(localStorage.getItem('albumFilters'));
       if (!filterData) return;
@@ -1613,11 +2109,10 @@ if (filterData.trackCount) {
       document.getElementById('genre-checkboxes').addEventListener('change', (e) => {
         if (e.target.classList.contains('genre-checkbox')) {
           preserveScroll(() => smoothApplyFilters());
-
 saveFiltersToCache();
-
         }
       });
+      
       document.getElementById('genre-checkboxes').addEventListener('click', (e) => {
         if (e.target.classList.contains('exclude-genre')) {
           const genre = e.target.getAttribute('data-genre');
@@ -1631,11 +2126,10 @@ saveFiltersToCache();
       document.getElementById('language-checkboxes').addEventListener('change', (e) => {
         if (e.target.classList.contains('language-checkbox')) {
           preserveScroll(() => smoothApplyFilters());
-
 saveFiltersToCache();
-
         }
       });
+      
       document.getElementById('language-checkboxes').addEventListener('click', (e) => {
         if (e.target.classList.contains('exclude-language')) {
           const lang = e.target.getAttribute('data-language');
@@ -1750,8 +2244,7 @@ document.getElementById('import-data').addEventListener('click', () => {
     setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
   }
 });
-
-      
+  
 window.addEventListener('scroll', () => {
   const scrollTopButton = document.getElementById('scrollTopButton');
   if (window.scrollY > 200) {
@@ -1767,12 +2260,29 @@ window.addEventListener('scroll', () => {
   }
 });
 
+      document.getElementById('favorites-button').addEventListener('click', () => {
+  const modal = document.getElementById('favorites-modal');
+  modal.style.display = 'block';
+  updateFavoritesModal();
+});
+      
+document.getElementById('close-favorites-modal').addEventListener('click', () => {
+  document.getElementById('favorites-modal').style.display = 'none';
+});
+
+      window.addEventListener('click', (event) => {
+  const modal = document.getElementById('favorites-modal');
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+      
 document.getElementById('scrollTopButton').addEventListener('click', () => {
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
-}); 
+});  
     }
 
     function toggleExcludeGenre(genre, checkbox, label, genreCross) {
@@ -1835,7 +2345,7 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
     );
 
     const matchRelease = selectedReleaseTypes.length === 0 || selectedReleaseTypes.includes(al.type);
-    const notBlacklistedArtist = !al.artistNames.some(artist => blacklistedArtists.has(artist));
+    const notBlacklistedArtist = !al.artistIDs.some(id => blacklistedArtists.has(id));
     const notBlacklistedLabel = !blacklistedLabels.has(al.label);
 
     return matchGenres && notExcludedGenres &&
@@ -1895,8 +2405,8 @@ if (onlyRecommended) {
 }
       
       filteredAlbums = filteredAlbums.filter(al => {
-        return !al.artistNames.some(artist => blacklistedArtists.has(artist));
-      });
+  return !al.artistIDs.some(id => blacklistedArtists.has(id));
+});
 
       filteredAlbums = filteredAlbums.filter(al => {
         return !blacklistedLabels.has(al.label);
@@ -1907,14 +2417,16 @@ if (onlyRecommended) {
       }
 
       if (sortOrder === 'listens-desc') {
-        filteredAlbums.sort((a, b) => b.listens - a.listens);
-      } else {
-        filteredAlbums.sort((a, b) => {
-          const da = new Date(a.date);
-          const db = new Date(b.date);
-          return sortOrder === 'asc' ? da - db : db - da;
-        });
-      }
+  filteredAlbums.sort((a, b) => b.listens - a.listens);
+} else if (sortOrder === 'popularity-growth') {
+  filteredAlbums.sort((a, b) => b.growthScore - a.growthScore);
+} else {
+  filteredAlbums.sort((a, b) => {
+    const da = new Date(a.date);
+    const db = new Date(b.date);
+    return sortOrder === 'asc' ? da - db : db - da;
+  });
+}
 
 const selectedDuration = document.getElementById('duration-filter')?.querySelector('.selected')?.dataset?.value || '';
 if (selectedDuration) {
@@ -1935,14 +2447,54 @@ if (selectedTrackCount) {
   filteredAlbums = filteredAlbums.filter(al => al.tracksIDs.length >= minTracks);
 }
 
-      currentIndex = 0;
-      if (renderImmediately) {
-  renderAlbums(filteredAlbums, true, true);
-} else {
-  renderAlbums(filteredAlbums, true);
+      if (labelFilter) {
+  filteredAlbums = filteredAlbums.filter(al => al.label === labelFilter);
+}
+    
+if (labelFilter) {
+  const totalByLabel  = albumsData.filter(a => a.label === labelFilter);
+  const hiddenByLabel = totalByLabel.filter(a => !filteredAlbums.includes(a));
+
+  if (sortOrder === 'listens-desc') {
+    hiddenByLabel.sort((a,b) => b.listens - a.listens);
+  } else if (sortOrder === 'popularity-growth') {
+    hiddenByLabel.sort((a,b) => b.growthScore - a.growthScore);
+  } else {
+    hiddenByLabel.sort((a,b) => {
+      const da = new Date(a.date), db = new Date(b.date);
+      return sortOrder === 'asc' ? da - db : db - da;
+    });
+  }
+
+  if (hiddenByLabel.length) {
+    filteredAlbums.push({ __separator: true });
+    filteredAlbums.push(...hiddenByLabel);
+  }
 }
 
+const forceAll = Boolean(labelFilter) || renderImmediately;
+currentIndex = 0;
+renderAlbums(filteredAlbums, true, forceAll);
+
       document.getElementById('album-count').textContent = filteredAlbums.length;
+      
+      const lazyMsg = document.getElementById('lazy-loading');
+
+if (labelFilter) {
+  const totalByLabel   = albumsData.filter(a => a.label === labelFilter);
+  const hiddenByLabel  = totalByLabel.filter(a => !filteredAlbums.includes(a));
+
+  if (hiddenByLabel.length) {
+    filteredAlbums.push({ __separator: true });
+    filteredAlbums.push(...hiddenByLabel);
+  }
+
+  lazyMsg.textContent = '';
+} else {
+  lazyMsg.textContent = filteredAlbums.length === 0
+          ? 'Більше немає альбомів для завантаження'
+          : '';
+}
     }
 
     function updateRenderedAlbums(filteredAlbums) {
@@ -2010,11 +2562,29 @@ if (selectedTrackCount) {
 
   for (let i = currentIndex; i < endIndex; i++) {
     const album    = data[i];
+    
+  if (album.__separator) {
+  const sep = document.createElement('div');
+  sep.classList.add('separator');
+
+  const l1 = document.createElement('div');
+  l1.classList.add('line');
+  const txt = document.createElement('div');
+  txt.classList.add('sep-text');
+  txt.textContent = 'Альбоми лейбла, що не відповідають обраним вами фільтрам';
+  const l2 = document.createElement('div');
+  l2.classList.add('line');
+
+  sep.append(l1, txt, l2);
+  container.appendChild(sep);
+  continue;
+}
+
     const albumDiv = document.createElement('div');
     albumDiv.classList.add('album');
     albumDiv.dataset.albumId = album.albumID;
     if (album.listened) albumDiv.classList.add('album-listened');
-
+    
     const coverUrl   = `https://i.scdn.co/image/ab67616d0000b273${album.cover}`;
     const albumLink  = `https://open.spotify.com/album/${album.albumID}`;
     const langText   = album.languages.length === 0
@@ -2034,7 +2604,65 @@ if (selectedTrackCount) {
         <div class="alb-head">
           ${releaseIcon(album.type)}
           <div class="alb-head-txt">
-            <h3><a href="${albumLink}" target="_blank">${album.nameAlbum}</a></h3>
+            <h3 style="display: flex; align-items: center; gap: 6px;">
+  <a href="${albumLink}" target="_blank" style="display: flex; align-items: center; gap: 6px;">
+    ${album.nameAlbum}
+    <span class="spotify-icon">
+      <span class="icon-default">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <circle cx="24" cy="24" r="21.5" stroke="#f3f3f3" stroke-width="2"/>
+          <path d="M33.86 33.51c-.39.63-1.21.83-1.84.44-5.05-3.08-11.4-3.78-18.89-2.07-.72.16-1.44-.29-1.6-1.01-.17-.72.29-1.44 1.01-1.6 8.19-1.87 15.21-1.07 20.88 2.4.63.39.83 1.21.44 1.84Zm2.63-5.85c-.49.79-1.52 1.04-2.31.55-5.78-3.55-14.59-4.58-21.42-2.51-.89.27-1.82-.23-2.09-1.12-.27-.89.23-1.82 1.12-2.09 7.81-2.37 17.52-1.22 24.15 2.86.79.49 1.04 1.52.55 2.3Zm.23-6.1c-6.93-4.12-18.36-4.49-24.98-2.49-1.06.32-2.19-.28-2.51-1.34-.32-1.06.28-2.19 1.34-2.51 7.59-2.31 20.22-1.86 28.2 2.88.96.57 1.27 1.8.7 2.76-.56.96-1.8 1.27-2.75.7Z" fill="#f3f3f3"/>
+        </svg>
+      </span>
+      <span class="icon-hover">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#00DA5A" d="M238.16,481.36 C230.48,476.8 217.64,476.32 210.32,478.6 C209.12,478.96 207.92,478.24 207.56,477.16 C207.2,475.96 207.92,474.76 209,474.4 C217.52,471.88 231.56,472.36 240.44,477.64 C241.52,478.24 241.88,479.68 241.28,480.76 C240.68,481.6 239.24,481.96 238.16,481.36 M237.92,488.08 C237.32,488.92 236.24,489.28 235.4,488.68 C228.92,484.72 219.08,483.52 211.52,485.92 C210.56,486.16 209.48,485.68 209.24,484.72 C209,483.76 209.48,482.68 210.44,482.44 C219.2,479.8 230,481.12 237.44,485.68 C238.16,486.04 238.52,487.24 237.92,488.08 M235.04,494.68 C234.56,495.4 233.72,495.64 233,495.16 C227.36,491.68 220.28,490.96 211.88,492.88 C211.04,493.12 210.32,492.52 210.08,491.8 C209.84,490.96 210.44,490.24 211.16,490 C220.28,487.96 228.2,488.8 234.44,492.64 C235.28,493 235.4,493.96 235.04,494.68 M224,460 C210.8,460 200,470.8 200,484 C200,497.2 210.8,508 224,508 C237.2,508 248,497.2 248,484 C248,470.8 237.32,460 224,460" transform="translate(-200 -460)"/>
+      </svg>
+      </span>
+    </span>
+  </a>
+
+  <span class="album-links">
+    <a href="https://music.youtube.com/search?q=${encodeURIComponent(album.artistNames.join(', ') + ' - ' + album.nameAlbum)}" target="_blank" class="yt-icon">
+      <span class="icon-default">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <circle cx="24" cy="24" r="14" stroke="#f3f3f3" stroke-width="2"/>
+  <circle cx="24" cy="24" r="21.5" stroke="#f3f3f3" stroke-width="2"/>
+  <path d="M31,24L19,31V17Z" fill="#f3f3f3"/>
+</svg>
+      </span>
+      <span class="icon-hover">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#FF0000" d="M50,2.5C23.766,2.5,2.5,23.823,2.5,50.126c2.502,63.175,92.507,63.157,95-0.001C97.5,23.823,76.233,2.5,50,2.5z
+            M50,77.399c-15.036,0-27.27-12.233-27.27-27.27c0.74-18.662,14.654-27.134,27.269-27.134c0.001,0,0.001,0,0.002,0
+            c12.616,0.001,26.531,8.473,27.267,27.073C77.27,65.167,65.036,77.399,50,77.399z"/>
+          <path fill="#FF0000" d="M50.002,26.103c-15.946-0.001-23.704,12.486-24.165,24.088C25.838,63.453,36.677,74.292,50,74.292
+            S74.162,63.453,74.162,50.13C73.705,38.591,65.948,26.105,50.002,26.103z"/>
+          <path fill="#FFFFFF" d="M41.055,52.528c-0.001,2.575,0.001,7.867,0,10.46c0,0,21.802-13.417,21.802-13.417L41.055,37.272V52.528z"/>
+        </svg>
+      </span>
+    </a>
+
+    <a href="https://music.apple.com/ua/search?term=${encodeURIComponent(album.artistNames.join(', ') + ' - ' + album.nameAlbum)}" target="_blank" class="apple-icon">
+      <span class="icon-default">
+        <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <path stroke="#f3f3f3" stroke-width="12" d="m68 60 80-14M68 60v91m0-91V40.722a8 8 0 0 1 6.621-7.88l64-11.2c4.895-.857 9.379 2.91 9.379 7.88V46m0 0v89m-98.477.234-8.48 1.483A15.761 15.761 0 0 0 28 152.242c0 9.791 8.833 17.212 18.477 15.524l8.48-1.483A15.761 15.761 0 0 0 68 150.758c0-9.791-8.833-17.212-18.477-15.524Zm80-16-8.479 1.483A15.761 15.761 0 0 0 108 136.242c0 9.791 8.833 17.212 18.477 15.524l8.479-1.483A15.761 15.761 0 0 0 148 134.758c0-9.791-8.833-17.212-18.477-15.524Z"/>
+</svg>
+      </span>
+      <span class="icon-hover">
+        <svg xmlns="http://www.w3.org/2000/svg" aria-label="Apple Music" role="img" viewBox="0 0 512 512" fill="#000000">
+          <rect width="512" height="512" rx="15%" fill="url(#g)"></rect>
+          <linearGradient id="g" x1=".5" y1=".99" x2=".5" y2=".02">
+            <stop offset="0" stop-color="#FA233B"></stop>
+            <stop offset="1" stop-color="#FB5C74"></stop>
+          </linearGradient>
+          <path fill="#ffffff" d="M199 359V199q0-9 10-11l138-28q11-2 12 10v122q0 15-45 20c-57 9-48 105 30 79 30-11 35-40 35-69V88s0-20-17-15l-170 35s-13 2-13 18v203q0 15-45 20c-57 9-48 105 30 79 30-11 35-40 35-69"/>
+        </svg>
+      </span>
+    </a>
+  </span>
+</h3>
+
             <p class="alb-artist">${renderArtists(i, album)}</p>
             <p class="alb-genres">${joinedGenres}</p>
           </div>
@@ -2069,6 +2697,60 @@ if (selectedTrackCount) {
       <div class="tracks" id="tracks-${i}"></div>
     `;
 
+    const favButton = document.createElement('div');
+favButton.classList.add('favorite-button');
+favButton.innerHTML = `
+  <div class="favorite-icon">
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+      <path fill="#84AAFB" d="M34,9c-4.2,0-7.9,2.1-10,5.4C21.9,11.1,18.2,9,14,9C7.4,9,2,14.4,2,21c0,11.9,22,24,22,24s22-12,22-24C46,14.4,40.6,9,34,9z"/>
+    </svg>
+  </div>
+`;
+    
+    const checkmark = document.createElement('div');
+checkmark.classList.add('favorite-checkmark');
+checkmark.textContent = '✓';
+checkmark.style.display = favoriteAlbums[album.albumID] ? 'block' : 'none';
+favButton.appendChild(checkmark);
+    
+attachTooltip(favButton, favoriteAlbums[album.albumID]
+  ? 'Прибрати альбом з обраного'
+  : 'Додати альбом в обране', '180px');
+
+favButton.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  favButton.classList.add('clicked');
+  setTimeout(() => favButton.classList.remove('clicked'), 150);
+
+  if (favoriteAlbums[album.albumID]) {
+    delete favoriteAlbums[album.albumID];
+    checkmark.style.display = 'none';
+  } else {
+    favoriteAlbums[album.albumID] = true;
+    checkmark.style.display = 'block';
+  }
+
+  localStorage.setItem('favoriteAlbums', JSON.stringify(favoriteAlbums));
+  updateFavoritesModal();
+
+  removeTooltip(favButton);
+  attachTooltip(favButton, favoriteAlbums[album.albumID]
+    ? 'Прибрати альбом з обраного'
+    : 'Додати альбом в обране');
+});
+
+albumDiv.appendChild(favButton);
+    
+    const spotifyIcon = albumDiv.querySelector('.spotify-icon');
+if (spotifyIcon) attachTooltip(spotifyIcon, 'Відкрити в Spotify', '160px');
+
+const ytIcon = albumDiv.querySelector('.yt-icon');
+if (ytIcon) attachTooltip(ytIcon, 'Шукати в YouTube Music', '160px');
+
+const appleIcon = albumDiv.querySelector('.apple-icon');
+if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music', '160px');
+    
     if (album.good) {
       const starBox = document.createElement('div');
       starBox.style.position   = 'absolute';
@@ -2175,12 +2857,12 @@ if (labelCrossEl) {
   cross.addEventListener('click', () => {
     const name = cross.dataset.name;
     removeTooltip(cross);
-    blacklistedArtists.add(name);
+    blacklistedArtists.add(cross.dataset.name);
     localStorage.setItem('blacklistedArtists', JSON.stringify([...blacklistedArtists]));
     albumsData.forEach(album => {
-      if (album.artistNames.includes(name)) {
-        hideAlbum(album.albumID);
-      }
+      if (album.artistIDs.includes(name)) {
+  hideAlbum(album.albumID);
+}
     });
     forceLazyLoadCheck();
   });
@@ -2213,7 +2895,7 @@ if (labelCrossEl) {
     crossSpan.id = `artist-cross-${index}-${i}`;
     crossSpan.classList.add('blacklist-cross');
     crossSpan.dataset.type = 'artist';
-    crossSpan.dataset.name = artist;
+    crossSpan.dataset.name = album.artistIDs[i];
     crossSpan.style.cursor = 'pointer';
     crossSpan.textContent = ' ✖';
 
@@ -2294,21 +2976,30 @@ function showAlbum(album) {
         if (!audioActivated) {
           showSimpleTooltip(e.clientX, e.clientY, tipText);
         } else {
-          audio.play();
+          audio.play().catch(err => {
+  if (err.name !== 'AbortError') {
+    console.error('Audio play error:', err);
+  }
+});
         }
       });
+      
       circle.addEventListener('mousemove', (e) => {
         if (!audioActivated) {
           moveSimpleTooltip(e.clientX, e.clientY);
         }
       });
+      
       circle.addEventListener('mouseleave', () => {
         hideSimpleTooltip();
         if (audioActivated) {
-          audio.pause();
-          audio.currentTime = 0;
+          if (!audio.paused) {
+  audio.pause();
+  audio.currentTime = 0;
+}
         }
       });
+      
       circle.addEventListener('click', (evt) => {
         if (!audioActivated) {
           evt.preventDefault();
@@ -2454,21 +3145,23 @@ function showAlbum(album) {
     msg.style.color = '#f3f3f3';
     artistsList.appendChild(msg);
   } else {
-    blacklistedArtists.forEach(artist => {
+    blacklistedArtists.forEach(artistID => {
+  const artistName = albumsData.find(a => a.artistIDs?.includes(artistID))?.artistNames?.[albumsData.find(a => a.artistIDs?.includes(artistID))?.artistIDs.indexOf(artistID)] || 'Unknown Artist';
+
       const li = document.createElement('li');
       const sp = document.createElement('span');
-      if (artist !== 'Various Artists') {
+      if (artistName !== 'Various Artists') {
   const link = document.createElement('a');
-  link.href = `https://open.spotify.com/artist/${albumsData.find(a => a.artistNames.includes(artist))?.artistIDs[albumsData.find(a => a.artistNames.includes(artist))?.artistNames.indexOf(artist)] || ''}`;
+  link.href = `https://open.spotify.com/artist/${artistID}`;
   link.target = '_blank';
-  link.textContent = artist;
+  link.textContent = artistName;
   link.style.color = '#f3f3f3';
   link.style.textDecoration = 'none';
   link.addEventListener('mouseover', () => link.style.textDecoration = 'underline');
   link.addEventListener('mouseout', () => link.style.textDecoration = 'none');
   sp.appendChild(link);
 } else {
-  sp.textContent = artist;
+  sp.textContent = artistName;
 }
       sp.style.color = '#f3f3f3';
 
@@ -2476,7 +3169,8 @@ function showAlbum(album) {
       removeIcon.textContent = '✖';
       removeIcon.classList.add('blacklist-cross');
       removeIcon.addEventListener('click', () => {
-        blacklistedArtists.delete(artist);
+        blacklistedArtists.delete(artistID);
+
         localStorage.setItem('blacklistedArtists', JSON.stringify(Array.from(blacklistedArtists)));
         li.remove();
 
@@ -2568,12 +3262,17 @@ function showAlbum(album) {
         blacklistArtists: Array.from(blacklistedArtists),
         blacklistLabels: Array.from(blacklistedLabels),
         listenedAlbums: JSON.parse(localStorage.getItem('listenedAlbums')) || {},
+        favoriteAlbums: JSON.parse(localStorage.getItem('favoriteAlbums')) || {},
         albumFilters: JSON.parse(localStorage.getItem('albumFilters')) || {}
       };
       return JSON.stringify(obj, null, 2);
     }
 
-    function attachTooltip(element, text) {
+    function attachTooltip(element, text, width = '120px') {
+  element._tooltip = null;
+
+  element.addEventListener('mouseenter', (ev) => {
+    if (!element._tooltip) {
       const tip = document.createElement('div');
       tip.classList.add('tooltip');
       tip.textContent = text;
@@ -2583,23 +3282,33 @@ function showAlbum(album) {
       tip.style.padding = '5px 10px';
       tip.style.borderRadius = '7px';
       tip.style.fontSize = '12px';
-      tip.style.visibility = 'hidden';
       tip.style.whiteSpace = 'normal';
-      tip.style.maxWidth = '120px';
+      tip.style.maxWidth = width;
       tip.style.zIndex = '9999';
       document.body.appendChild(tip);
-
-      element.addEventListener('mouseenter', (ev) => {
-        tip.style.visibility = 'visible';
-        positionTooltip(ev.clientX, ev.clientY, tip);
-      });
-      element.addEventListener('mousemove', (ev) => {
-        positionTooltip(ev.clientX, ev.clientY, tip);
-      });
-      element.addEventListener('mouseleave', () => {
-        tip.style.visibility = 'hidden';
-      });
+      element._tooltip = tip;
     }
+
+    const tip = element._tooltip;
+    tip.style.visibility = 'visible';
+    positionTooltip(ev.clientX, ev.clientY, tip);
+  });
+
+  element.addEventListener('mousemove', (ev) => {
+    const tip = element._tooltip;
+    if (tip && tip.style.visibility === 'visible') {
+      positionTooltip(ev.clientX, ev.clientY, tip);
+    }
+  });
+
+  element.addEventListener('mouseleave', () => {
+    const tip = element._tooltip;
+    if (tip) {
+      tip.remove();
+      element._tooltip = null;
+    }
+  });
+}
 
     function positionTooltip(x, y, tip) {
       const rect = tip.getBoundingClientRect();
@@ -2683,47 +3392,49 @@ function showAlbum(album) {
   }, 50);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const selects = document.querySelectorAll('.custom-select');
+    function updateFavoritesModal() {
+  const list = document.getElementById('favorites-albums-list');
+  list.innerHTML = '';
+  const favArr = albumsData.filter(al => favoriteAlbums[al.albumID]);
+  if (favArr.length === 0) {
+    const msg = document.createElement('p');
+    msg.textContent = 'Тут буде список ваших улюблених альбомів.';
+    msg.style.textAlign = 'center';
+    msg.style.color = '#f3f3f3';
+    list.appendChild(msg);
+  } else {
+    favArr.forEach(al => {
+      const li = document.createElement('li');
 
-  selects.forEach(select => {
-    const selected = select.querySelector('.selected');
-    const optionsContainer = select.querySelector('.options-container');
-    const optionsList = optionsContainer.querySelectorAll('.option');
+      const img = document.createElement('img');
+      img.src = `https://i.scdn.co/image/ab67616d0000b273${al.cover}`;
+      img.alt = al.nameAlbum;
 
-    selected.addEventListener('click', () => {
-      const isOpen = optionsContainer.style.display === 'flex';
-      optionsContainer.style.display = isOpen ? 'none' : 'flex';
-      select.classList.toggle('open', !isOpen);
-    });
-
-    optionsList.forEach(option => {
-      option.addEventListener('click', () => {
-        selected.textContent = option.textContent;
-        selected.dataset.value = option.dataset.value;
-        optionsContainer.style.display = 'none';
-        select.classList.remove('open');
-
-        if (select.id === 'sort-order') {
-          sortOrder = option.dataset.value;
-        }
-
-        preserveScroll(() => smoothApplyFilters());
-        saveFiltersToCache();
+      const a = document.createElement('a');
+      a.href = `https://open.spotify.com/album/${al.albumID}`;
+      a.target = '_blank';
+      a.textContent = `${al.artistNames.join(', ')} – ${al.nameAlbum}`;
+      a.style.color = '#f3f3f3';
+     
+      const removeIcon = document.createElement('span');
+      removeIcon.textContent = '✖';
+      removeIcon.classList.add('blacklist-cross');
+      removeIcon.style.cursor = 'pointer';
+      removeIcon.style.marginLeft = 'auto';
+      removeIcon.addEventListener('click', () => {
+        delete favoriteAlbums[al.albumID];
+        localStorage.setItem('favoriteAlbums', JSON.stringify(favoriteAlbums));
+        updateFavoritesModal();
       });
-    });
-  });
 
-  document.addEventListener('click', function(event) {
-    document.querySelectorAll('.custom-select').forEach(select => {
-      const optionsContainer = select.querySelector('.options-container');
-      if (!select.contains(event.target)) {
-        optionsContainer.style.display = 'none';
-        select.classList.remove('open');
-      }
+      li.appendChild(img);
+      li.appendChild(a);
+      li.appendChild(removeIcon);
+      list.appendChild(li);
     });
-  });
-});
+  }
+}
+    
   </script>
 </body>
 </html>
