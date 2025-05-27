@@ -53,6 +53,144 @@
       overflow-y: scroll;
     }
 
+    :root{
+  --nuam-logo-url:url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
+}
+
+.logo-wrapper{
+  position:relative;
+  display:inline-block;
+  background:#383838;
+  border-radius:7px;
+  padding:10px;
+  margin-bottom:10px;
+}
+.logo-wrapper:hover {
+  border-radius:7px 7px 0 0;
+    }
+
+.logo-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  line-height:35px;
+}
+.logo-row img {
+  height:35px;
+  width:auto;
+  display:block;
+    }
+.logo-row a {
+  display:flex;
+  font-size: 14px;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  color:#f3f3f3;
+    }
+.logo-row a:hover {
+  text-decoration:none;
+    }
+
+.vertical-sep{
+  width:1px;height:20px;background:#383838;
+}
+
+#app-logo {
+  background-image:var(--nuam-logo-url);
+  background-repeat:no-repeat;
+  background-size:contain;
+    }
+
+.logo-dropdown {
+  position:absolute;
+  top:100%;
+  left:0;
+  width: 100%;
+  box-sizing: border-box;
+  background:#383838;
+  border-radius:0 0 7px 7px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  transform:translateY(-10px);
+  transition:max-height .3s ease,opacity .3s ease,transform .3s ease;
+  z-index:100;
+  padding:0 10px 10px;
+  box-shadow: 0px 4px 5px 0px rgba(0,0,0,.2);
+}
+.logo-wrapper:hover .logo-dropdown {
+  max-height:200px;
+  opacity:1;transform:translateY(0);
+}
+
+.logo-row a {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-row a img {
+  position: relative;
+  z-index: 1;
+}
+
+.logo-row a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  background: linear-gradient(135deg, #84AAFB, #90EE90);
+  /* маска по форме лого, выравнена слева */
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: left center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+}
+
+.logo-row a:hover::after {
+  opacity: 1;
+}
+
+.logo-row:first-child a::after {
+  mask-image: url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
+  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
+  background: linear-gradient(1deg, #cdd28d, #89bfd0);
+}
+
+.logo-dropdown .logo-row:nth-child(1) a::after {
+  mask-image: url("https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png");
+  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png");
+  background: linear-gradient(1deg, #cdd28d, #89bfd0);
+}
+
+.logo-dropdown .logo-row:nth-child(2) a::after {
+  mask-image: url("https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png");
+  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png");
+  background: linear-gradient(1deg, #cdd28d, #89bfd0);
+}
+
+.logo-dropdown .logo-row:nth-child(3) a::after {
+  mask-image: url("https://static.wixstatic.com/media/c77f36_09ede4c28e284822b304eab05c1f8d99~mv2.png");
+  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_09ede4c28e284822b304eab05c1f8d99~mv2.png");
+  background: linear-gradient(1deg, #cdd28d, #89bfd0);
+}
+
+.logo-row a img {
+  transition: opacity 0.3s ease;
+}
+
+.logo-row a:hover img {
+  opacity: 0;
+}
+   
     #loading-screen {
   position: fixed;
   top: 0; left: 0;
@@ -115,7 +253,7 @@
 }
 
 .loading-text {
-  color: #f1f1f1;
+  color: #f3f3f3;
   font-size: 18px;
   margin-top: 20px;
   font-family: 'CustomFont', sans-serif;
@@ -144,7 +282,7 @@
       display: inline-block;
       position: relative;
       vertical-align: middle;
-      margin-right: 8px;
+      margin-right: 10px;
       transition: border-color 0.3s ease;
     }
     input[type="checkbox"]:hover {
@@ -189,7 +327,6 @@
     #genre-checkboxes {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      padding-bottom: 10px;
     }
 
     .controls {
@@ -199,14 +336,13 @@
       width: 460px;
       min-width: 260px;
       height: 100vh;
-      padding: 20px 10px 20px;
-      gap: 20px;
+      padding: 10px 10px 20px;
       overflow-y: auto;
       position: fixed;
       top: 0;
       left: 0;
       background: #282626;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, .25);
+      box-shadow: 3px 0px 5px 2px rgba(0,0,0,.2);
       z-index: 1000;
       user-select: none !important;
     }
@@ -225,16 +361,18 @@
     .filter-section {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 10px;
       width: 100%;
+      margin-bottom: 20px;
     }
 
     .filter-group {
       display: flex;
       flex-direction: row;
-      gap: 20px;
+      gap: 10px;
       width: 100%;
-      align-items: flex-start;
+ 
+  align-items: stretch;
     }
     .filter-group .checkbox-container {
       flex: 1;
@@ -293,7 +431,7 @@
     }
     .sort-section {
       display: flex;
-      gap: 6px;
+      gap: 10px;
       align-items: center;
     }
     #sort-order {
@@ -360,12 +498,6 @@
 .blacklist-row #show-listened-albums {
   cursor: pointer;
   text-decoration: underline;
-}
-
-.filter-group {
-  display: flex;
-  gap: 20px;
-  align-items: stretch;
 }
 
 .release-column {
@@ -490,6 +622,75 @@ border-color: rgba(132, 170, 251, 1);
   height: 100%;
 }
 
+    .search-wrapper {
+  display: flex;
+  flex-grow: 1;
+  align-items: stretch;
+}
+
+#search-button {
+  flex: 1 1 auto;
+  height: 55px;
+  background-color: transparent;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: 'CustomFont';
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#search-button:hover {
+  border-color: rgba(132, 170, 251, 1);
+}
+
+#search-container {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 11px 0px 23px 0px;
+}
+
+#search-input {
+  flex-grow: 1;
+  padding: 5px 5px 5px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  width: 100%;
+  font-family: 'CustomFont';
+  background: #282626;
+    color: #f3f3f3;
+  transition: border 0.3s ease;
+}
+ #search-input:focus {
+  outline: none;
+  box-shadow: none;
+}   
+#search-input:hover {
+    border: 1px solid rgba(132, 170, 251, 1);
+    }
+    
+#search-close {
+  padding: 5px;
+  border: none;
+  background: none;
+  color: #bababa;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+#search-close:hover {
+  color: #f3f3f3;
+}
+ 
     .listened-albums-container {
       max-height: 300px;
       overflow-y: auto;
@@ -581,7 +782,7 @@ border-color: rgba(132, 170, 251, 1);
 }
 
 .custom-select .selected {
-  padding: 5px;
+  padding: 5px 5px 5px 10px;
   cursor: pointer;
   color: #f3f3f3;
   font-size: 14px;
@@ -605,7 +806,7 @@ border-color: rgba(132, 170, 251, 1);
 }
     
 .custom-select .option {
-  padding: 4px;
+  padding: 5px 5px 5px 10px;
   cursor: pointer;
   color: #f3f3f3;
 }
@@ -656,7 +857,7 @@ border-color: rgba(132, 170, 251, 1);
       background-color: #383838;
       border-radius: 7px;
       overflow: visible;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 4px 5px 0px rgba(0,0,0,.2);
       position: relative;
       display: flex;
       flex-direction: column;
@@ -873,18 +1074,19 @@ border-color: rgba(132, 170, 251, 1);
     }
 
     .mark-listened-btn {
-      cursor: pointer;
-      padding: 5px 10px;
-      background-color: #84AAFB;
-      color: #282626;
-      border: 1px solid #84AAFB;
-      border-radius: 7px;
-      align-self: flex-start;
-      transition: border 0.3s ease;
-      z-index: 9;
-    }
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: #f3f3f3;
+    border: 1px solid rgba(132, 170, 251, 0.5);
+    border-radius: 7px;
+    align-self: flex-start;
+    transition: border 0.3s ease;
+    z-index: 9;
+      transition: border-color 0.3s ease;
+}
     .mark-listened-btn:hover {
-      border: 1px solid #f3f3f3;
+      border: 1px solid rgba(132, 170, 251, 1);
     }
 
     .enlarged-img {
@@ -1141,7 +1343,7 @@ textarea:focus {
       top: 0;
       z-index: 10;
       background-color: #282626;
-      padding: 8px 12px;
+      padding: 10px 10px;
       font-size: 16px;
       font-weight: bold;
       display: flex;
@@ -1151,7 +1353,7 @@ textarea:focus {
     }
 
     .genre-header {
-      padding: 10px 12px;
+      padding: 10px 10px;
       background-color: #282626;
       font-size: 18px;
     }
@@ -1160,17 +1362,17 @@ textarea:focus {
       gap: 5px;
     }
     .genre-buttons button {
-      padding: 4px 8px;
-      font-size: 12px;
-      border-radius: 5px;
-      background-color: #84AAFB;
-      color: #282626;
-      border: 1px solid #84AAFB;
-      cursor: pointer;
-      transition: border 0.3s ease;
-    }
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #f3f3f3;
+    border: 1px solid rgba(132, 170, 251, 0.5);
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
     .genre-buttons button:hover {
-      border: 1px solid #f3f3f3;
+      border: 1px solid rgba(132, 170, 251, 1);
     }
 
     .track-tooltip {
@@ -1314,19 +1516,21 @@ textarea:focus {
 }
 
 #label-select .option-search {
-  padding: 8px;
-  background: #282626;
-  color: #f3f3f3;
-  border-top: 1px solid rgba(132, 170, 251, 0.5);
-  border-bottom: 1px solid rgba(132, 170, 251, 0.5);
-  border-left: none;
-  border-right: none;
-  transition: border 0.3s ease;
+      padding: 5px 5px 5px 10px;
+    background: #282626;
+    color: #f3f3f3;
+    border: 1px solid rgba(132, 170, 251, 0.5);
+    transition: border 0.3s ease;
+    border-radius: 7px;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
     
     #label-select .option-search:hover {
-  border-top: 1px solid rgba(132, 170, 251, 1);
-  border-bottom: 1px solid rgba(132, 170, 251, 1);
+  border: 1px solid rgba(132, 170, 251, 1);
 }
 
     #label-select .option-search:focus {
@@ -1337,7 +1541,6 @@ textarea:focus {
 #label-select .option-list {
   overflow-y: auto;
   max-height: 460px;
-
 }
 
 #label-select .option-list .option:first-child {
@@ -1371,6 +1574,10 @@ textarea:focus {
   width: 0; height: 0;
 }
 
+    #favorites-albums-list a {
+  user-select: auto !important;
+}
+    
     @media (max-width: 768px) {
       .controls {
         flex-direction: column;
@@ -1399,6 +1606,53 @@ textarea:focus {
 </div>
   
   <div class="controls">
+
+  <div style="display: flex; align-items: stretch; gap: 10px; width: 100%;">
+  <div class="logo-wrapper">
+    <div class="logo-row">
+      <a href="https://nuam.club/albums">
+        <img id="app-logo"
+             src="https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png"
+             alt="NUAM Albums Logo">
+        <span class="vertical-sep"></span>
+        <span>Каталог альбомів України</span>
+      </a>
+    </div>
+
+    <div class="logo-dropdown">
+      <div class="logo-row">
+        <a href="https://nuam.club/base">
+          <img src="https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png" alt="NUAM Base Logo">
+          <span class="vertical-sep"></span>
+          <span>База артистів України</span>
+        </a>
+      </div>
+      <div class="logo-row">
+        <a href="https://nuam.club/echo">
+          <img src="https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png" alt="NUAM Echo Logo">
+          <span class="vertical-sep"></span>
+          <span>База треків України</span>
+        </a>
+      </div>
+      <div class="logo-row">
+        <a href="https://nuam.club">
+          <img src="https://static.wixstatic.com/media/c77f36_09ede4c28e284822b304eab05c1f8d99~mv2.png" alt="NUAM Logo">
+          <span class="vertical-sep"></span>
+          <span>Сайт проєкту</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrapper">
+    <button id="search-button" style="margin: 0;">Пошук</button>
+    <div id="search-container" style="display: none; align-items: center; gap: 5px;">
+      <input type="text" id="search-input" placeholder="Пошук альбомів…" />
+      <button id="search-close">✖</button>
+    </div>
+  </div>
+</div>
+
     <div class="filter-section">
       <div class="checkbox-container">
         <div class="section-title genre-header">
@@ -1471,7 +1725,7 @@ textarea:focus {
 </div>
       
       <div class="sort-section">
-  <label for="track-count-filter">Лейбл альбому:</label>
+  <label for="track-count-filter">Альбоми лейблу:</label>
       <div class="custom-select upward" id="label-select">
   <div class="selected">Усі лейбли</div>
   <div class="options-container">
@@ -1590,6 +1844,45 @@ textarea:focus {
   <script>
     const newSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRGgPDeRNQcSe5tV2h3zu-rtMr-i7ph-4hU6HKglhXKdaAB5UFXUrdWLZKb8hwGyWgDxL5LDfnmrqe/pub?gid=1559781011&single=true&output=csv";
 
+    let searchQuery = '';
+    
+    const loaderImg = document.querySelector('#loading-screen img');
+if (loaderImg) {
+  document.getElementById('app-logo').src = loaderImg.src;
+}
+    
+const artistsSheetId = '1_PavIrMhHpUHXG7uDrT83yznb2nrJfSd-9G8Hnm9ywM';
+const artistsGid     = '0';
+const allowedArtistIds = new Set();
+
+function loadAllowedArtists() {
+  return new Promise((resolve, reject) => {
+    const q = encodeURIComponent('select F,K');
+    const url = `https://docs.google.com/spreadsheets/d/${artistsSheetId}/gviz/tq?gid=${artistsGid}&tqx=out:csv&tq=${q}`;
+
+    Papa.parse(url, {
+      download: true,
+      header: false,
+      skipEmptyLines: true,
+      complete: results => {
+        results.data.forEach(row => {
+          row.forEach(cell => {
+            if (!cell) return;
+            const m = cell.match(/artist\/([^?]+)/);
+            if (m) allowedArtistIds.add(m[1]);
+          });
+        });
+        console.log('Allowed artist IDs:', allowedArtistIds);
+        resolve();
+      },
+      error: err => {
+        console.error('Ошибка при загрузке списка артистов:', err);
+        reject(err);
+      }
+    });
+  });
+}
+   
     let albumsData = [];
     let currentIndex = 0;
     let sortOrder = 'desc';
@@ -1620,30 +1913,37 @@ function releaseIcon(t){
 
     const batchSize = 20;
 
-    init();
+window.addEventListener('DOMContentLoaded', init);
 
-    function init() {
+async function init() {
+  try {
+    await loadAllowedArtists();
+  } catch (e) {
+    console.warn('Не удалось загрузить список артистов — показываем все альбомы');
+  }
+
   Papa.parse(newSheetUrl, {
     download: true,
     header: true,
     complete: function(results) {
-  const rawData = results.data;
-  processAlbumData(rawData);
+      const rawData = results.data;
+      processAlbumData(rawData);
 
-  const loading = document.getElementById('loading-screen');
-if (loading) {
-  loading.classList.add('hidden');
-  loading.addEventListener('transitionend', () => {
-    loading.remove();
-  }, { once: true });
-}
+      const loading = document.getElementById('loading-screen');
+      if (loading) {
+        loading.classList.add('hidden');
+        loading.addEventListener('transitionend', () => {
+          loading.remove();
+        }, { once: true });
+      }
 
-  populateFilters();
-  populateLabelOptions();
+      populateFilters();
+      populateLabelOptions();
       initBasicCustomSelect(document.getElementById('sort-order'));
       initBasicCustomSelect(document.getElementById('duration-filter'));
       initBasicCustomSelect(document.getElementById('track-count-filter'));
       attachGlobalEventListeners();
+
       const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
       if (albumFilters) {
         loadFiltersAfterRender();
@@ -1707,101 +2007,123 @@ function friendlyGenreLabel(g) {
 }
 
     function processAlbumData(rawData) {
-      rawData.forEach(item => {
-        if (!item.alName || !item.Type) return;
-if (item.excluded && item.excluded.trim() === '+') return;
+  albumsData.length = 0;
 
-        const album = {
-          nameAlbum: item.alName,
-          albumID: item.alURL,
-          date: item.Date,
-          type: item.Type.toLowerCase(),
-          cover: item.Cover,
-          genres: (() => {
-  let baseGenres = item.Genres ? item.Genres.split(', ').map(g => g.trim()).filter(g => g) : [];
-  let addGenres = item.addGenre ? item.addGenre.split(',').map(g => g.trim()).filter(g => g) : [];
+  const seenAlbumIDs = new Set();
 
-  addGenres.forEach(g => {
-    if (g.startsWith('-')) {
-      const genreToRemove = g.slice(1).trim();
-      baseGenres = baseGenres.filter(bg => bg !== genreToRemove);
+  rawData.forEach(item => {
+    if (!item.alName || !item.Type) return;
+    if (item.excluded && item.excluded.trim() === '+') return;
+
+    const type = item.Type.toLowerCase();
+
+    const artistIDs = item.artID
+      ? item.artID.split(',')
+          .map(id => id.trim())
+          .filter(id => id)
+      : [];
+
+    if (
+      allowedArtistIds.size > 0 &&
+      type !== 'compilation' &&
+      !artistIDs.some(id => allowedArtistIds.has(id))
+    ) {
+      return;
     }
-  });
 
-  addGenres.forEach(g => {
-    if (!g.startsWith('-')) {
-      if (!baseGenres.includes(g)) {
-        baseGenres.push(g);
+    const albumID = item.alURL;
+
+    if (seenAlbumIDs.has(albumID)) return;
+    seenAlbumIDs.add(albumID);
+
+    const album = {
+      nameAlbum: item.alName,
+      albumID,
+      date: item.Date,
+      type,
+      cover: item.Cover,
+      genres: (() => {
+        let base = item.Genres
+          ? item.Genres.split(', ').map(g => g.trim()).filter(g => g)
+          : [];
+        let extra = item.addGenre
+          ? item.addGenre.split(',').map(g => g.trim()).filter(g => g)
+          : [];
+
+        extra.forEach(g => {
+          if (g.startsWith('-')) {
+            base = base.filter(bg => bg !== g.slice(1).trim());
+          }
+        });
+        extra.forEach(g => {
+          if (!g.startsWith('-') && !base.includes(g)) {
+            base.push(g);
+          }
+        });
+        return base;
+      })(),
+      languages: (() => {
+        let base = item.Lang
+          ? item.Lang.split(', ').map(l => {
+              const t = l.trim().toLowerCase() === 'no voice' ? 'без голосу' : l.trim();
+              return t;
+            }).filter(l => l)
+          : [];
+        let extra = item.addLang
+          ? item.addLang.split(',').map(l => {
+              const t = l.trim().toLowerCase() === 'no voice' ? 'без голосу' : l.trim();
+              return t;
+            }).filter(l => l)
+          : [];
+
+        extra.forEach(l => {
+          if (l.startsWith('-')) {
+            base = base.filter(bl => bl !== l.slice(1).trim());
+          }
+        });
+        extra.forEach(l => {
+          if (!l.startsWith('-') && !base.includes(l)) {
+            base.push(l);
+          }
+        });
+        return base;
+      })(),
+      listens: parseInt(item.Listens, 10) || 0,
+      label: item.Label || '',
+      duration: item.Duration || '',
+      tracksIDs: item.Tracks
+        ? item.Tracks.split(',').map(t => t.trim()).filter(t => t)
+        : [],
+      tracksMP3: item.MP3
+        ? item.MP3.split(',').map(m => m.trim()).filter(m => m)
+        : [],
+      good: item.Good && item.Good.trim() === '+',
+      artistNames: item.artName
+        ? item.artName.split(',,').map(a => a.trim()).filter(a => a)
+        : [],
+      artistIDs,
+      listened: !!listenedAlbums[item.alURL],
+      growthScore: -Infinity
+    };
+
+    if (item.Listens) {
+      const history = item.Listens
+        .split(',')
+        .map(x => parseInt(x.trim(), 10))
+        .filter(n => !isNaN(n));
+      if (history.length >= 2) {
+        const recent = history.slice(0, 8);
+        const deltas = [];
+        for (let i = 0; i < recent.length - 1; i++) {
+          deltas.push(recent[i] - recent[i + 1]);
+        }
+        album.growthScore = deltas.reduce((a, b) => a + b, 0) / deltas.length;
       }
     }
+
+    albumsData.push(album);
   });
-
-  return baseGenres;
-})(),
-
-          languages: (() => {
-  let baseLangs = item.Lang
-    ? item.Lang.split(', ').map(l => (l.trim().toLowerCase() === 'no voice' ? 'без голосу' : l.trim())).filter(l => l)
-    : [];
-  let addLangs = item.addLang
-    ? item.addLang.split(',').map(l => (l.trim().toLowerCase() === 'no voice' ? 'без голосу' : l.trim())).filter(l => l)
-    : [];
-
-  addLangs.forEach(l => {
-    if (l.startsWith('-')) {
-      const langToRemove = l.slice(1).trim();
-      baseLangs = baseLangs.filter(bl => bl !== langToRemove);
-    }
-  });
-
-  addLangs.forEach(l => {
-    if (!l.startsWith('-')) {
-      if (!baseLangs.includes(l)) {
-        baseLangs.push(l);
-      }
-    }
-  });
-
-  return baseLangs;
-})(),
-
-          listens: parseInt(item.Listens) || 0,
-          label: item.Label || '',
-          duration: item.Duration || '',
-          tracksIDs: item.Tracks ? item.Tracks.split(',') : [],
-          tracksMP3: item.MP3 ? item.MP3.split(',') : [],
-          good: (item.Good && item.Good.trim() === '+'),
-          artistNames: item.artName ? item.artName.split(',,').map(a => a.trim()) : [],
-          artistIDs: item.artID ? item.artID.split(',') : [],
-          listened: !!listenedAlbums[item.alURL],
-          growthScore: 0
-        };
-
-        albumsData.push(album);
-        
-if (item.Listens) {
-  const history = item.Listens
-    .split(',')
-    .map(x => parseInt(x.trim(), 10))
-    .filter(n => !isNaN(n));
-
-  if (history.length >= 2) {
-    const recent = history.slice(0, 8);
-    const deltas = [];
-    for (let i = 0; i < recent.length - 1; i++) {
-      deltas.push(recent[i] - recent[i + 1]);
-    }
-
-    const avgDelta = deltas.reduce((a, b) => a + b, 0) / deltas.length;
-    album.growthScore = avgDelta;
-  } else {
-    album.growthScore = -Infinity;
-  }
-} else {
-  album.growthScore = -Infinity;
 }
-      });
-    }
 
     function populateFilters() {
       const genreContainer = document.getElementById('genre-checkboxes');
@@ -1824,7 +2146,6 @@ if (item.Listens) {
     languagesCountMap.set(mappedLang, (languagesCountMap.get(mappedLang) || 0) + 1);
   });
 }
-
         releaseTypesSet.add(album.type);
       });
 
@@ -1866,7 +2187,7 @@ genreName.classList.add('genre-name');
 genreName.textContent = friendlyGenreLabel(genre);
 
 if (genre === 'producing work for international'){
-  attachTooltip(genreName,'Музика наших музикантів для іноземних артистів');
+  attachTooltip(genreName,'Музика наших продюсерів для іноземних артистів', '180px');
 }
 
         const genreCount = document.createElement('span');
@@ -1985,7 +2306,7 @@ function populateLabelOptions() {
     
     <div class="option-fixed">
       <div class="option" data-value="">Усі лейбли</div>
-      <input type="text" class="option-search" placeholder="Пошук...">
+      <input type="text" class="option-search" placeholder="Пошук лейблів...">
     </div>
     <div class="option-list"></div>
   `;
@@ -2371,6 +2692,29 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
     behavior: 'smooth'
   });
 });  
+      
+      const logoWrapper = document.querySelector('.logo-wrapper');
+
+document.getElementById('search-button').addEventListener('click', () => {
+  logoWrapper.style.display = 'none';
+  document.getElementById('search-button').style.display = 'none';
+  document.getElementById('search-container').style.display = 'flex';
+  document.getElementById('search-input').focus();
+});
+
+document.getElementById('search-close').addEventListener('click', () => {
+  logoWrapper.style.display = 'inline-block';
+  document.getElementById('search-button').style.display = 'inline-block';
+  document.getElementById('search-container').style.display = 'none';
+  searchQuery = '';
+  document.getElementById('search-input').value = '';
+  smoothApplyFilters();
+});
+
+document.getElementById('search-input').addEventListener('input', e => {
+  searchQuery = e.target.value.trim().toLowerCase();
+  smoothApplyFilters();
+});
     }
 
     function toggleExcludeGenre(genre, checkbox, label, genreCross) {
@@ -2388,7 +2732,6 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
         label.style.color = 'gray';
       }
       preserveScroll(() => smoothApplyFilters());
-
     }
 
     function toggleExcludeLanguage(language, checkbox, label, langCross) {
@@ -2535,6 +2878,24 @@ if (selectedTrackCount) {
   filteredAlbums = filteredAlbums.filter(al => al.tracksIDs.length >= minTracks);
 }
 
+const preSearch = filteredAlbums.slice();
+
+if (searchQuery) {
+  const searchMatches = albumsData.filter(al =>
+    al.nameAlbum.toLowerCase().includes(searchQuery) ||
+    al.artistNames.some(n => n.toLowerCase().includes(searchQuery))
+  );
+
+  const primary = filteredAlbums.filter(al => searchMatches.includes(al));
+  const hiddenByFilters = searchMatches.filter(al => !primary.includes(al));
+  if (hiddenByFilters.length) {
+    primary.push({ __separatorType: 'search' });
+    primary.push(...hiddenByFilters);
+  }
+
+  filteredAlbums = primary;
+}
+
       if (labelFilter) {
   filteredAlbums = filteredAlbums.filter(al => al.label === labelFilter);
 }
@@ -2555,15 +2916,19 @@ if (labelFilter) {
   }
 
   if (hiddenByLabel.length) {
-    filteredAlbums.push({ __separator: true });
+    filteredAlbums.push({ __separatorType: 'label' });
+
     filteredAlbums.push(...hiddenByLabel);
   }
 }
 
 const forceAll = Boolean(labelFilter) || renderImmediately;
 currentIndex = 0;
+      
 renderAlbums(filteredAlbums, true, forceAll);
 
+      updateAlbumCount();
+      
       document.getElementById('album-count').textContent = filteredAlbums.length;
       
       const lazyMsg = document.getElementById('lazy-loading');
@@ -2573,7 +2938,8 @@ if (labelFilter) {
   const hiddenByLabel  = totalByLabel.filter(a => !filteredAlbums.includes(a));
 
   if (hiddenByLabel.length) {
-    filteredAlbums.push({ __separator: true });
+    filteredAlbums.push({ __separatorType: 'label' });
+
     filteredAlbums.push(...hiddenByLabel);
   }
 
@@ -2646,27 +3012,34 @@ if (labelFilter) {
   const container = document.getElementById('albums-container');
   if (reset) container.innerHTML = '';
 
-  const endIndex = forceAll ? data.length : Math.min(currentIndex + batchSize, data.length);
+  const endIndex = forceAll
+    ? data.length
+    : Math.min(currentIndex + batchSize, data.length);
 
   for (let i = currentIndex; i < endIndex; i++) {
-    const album    = data[i];
-    
-  if (album.__separator) {
-  const sep = document.createElement('div');
-  sep.classList.add('separator');
+    const album = data[i];
 
-  const l1 = document.createElement('div');
-  l1.classList.add('line');
-  const txt = document.createElement('div');
-  txt.classList.add('sep-text');
-  txt.textContent = 'Альбоми лейбла, що не відповідають обраним вами фільтрам';
-  const l2 = document.createElement('div');
-  l2.classList.add('line');
+    if (album.__separatorType) {
+      const sepText = album.__separatorType === 'label'
+        ? 'Альбоми лейбла, що не відповідають обраним вами фільтрами'
+        : 'Знайдені альбоми, що не відповідають обраним вами фільтрами';
+      const sep = document.createElement('div');
+      sep.classList.add('separator');
 
-  sep.append(l1, txt, l2);
-  container.appendChild(sep);
-  continue;
-}
+      const line1 = document.createElement('div');
+      line1.classList.add('line');
+
+      const text = document.createElement('div');
+      text.classList.add('sep-text');
+      text.textContent = sepText;
+
+      const line2 = document.createElement('div');
+      line2.classList.add('line');
+
+      sep.append(line1, text, line2);
+      container.appendChild(sep);
+      continue;
+    }
 
     const albumDiv = document.createElement('div');
     albumDiv.classList.add('album');
@@ -2847,7 +3220,7 @@ if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music', '160px');
       starBox.style.fontSize   = '24px';
       starBox.style.zIndex     = '11';
       starBox.innerHTML        = '<i class="fas fa-star star-icon" style="color:gold;"></i>';
-      attachTooltip(starBox, 'NUAM рекомендує цей альбом для прослуховування');
+      attachTooltip(starBox, 'NUAM рекомендує цей альбом для прослуховування', '180px');
       albumDiv.appendChild(starBox);
     }
 
@@ -2902,7 +3275,7 @@ if (nextAlbum) {
       if (!trackID || !mp3hash) return;
       const trackLink    = `https://open.spotify.com/track/${trackID}`;
       const trackPreview = `https://p.scdn.co/mp3-preview/${mp3hash}`;
-
+      
       const circle = document.createElement('a');
       circle.classList.add('track-circle');
       circle.href   = trackLink;
@@ -2919,40 +3292,30 @@ if (nextAlbum) {
 
    const listensEl = document.getElementById(`listens-${i}`);
 if (album.listens === 0) {
-  attachTooltip(listensEl, 'Жоден трек не набрав понад 1000 прослуховувань');
+  attachTooltip(listensEl, 'Жоден трек не набрав понад 1000 прослуховувань', '170px');
 } else {
-  attachTooltip(listensEl, 'Загальна кількість прослуховувань всіх треків релізу');
+  attachTooltip(listensEl, 'Загальна кількість прослуховувань всіх треків релізу', '160px');
 }
 
-    const labelCrossEl = document.getElementById(`label-cross-${i}`);
+const labelCrossEl = document.getElementById(`label-cross-${i}`);
 if (labelCrossEl) {
-  attachTooltip(labelCrossEl, 'Не показувати альбоми цього лейбла');
+  attachTooltip(labelCrossEl, 'Не показувати альбоми цього лейбла', '160px');
   labelCrossEl.addEventListener('click', function() {
     removeTooltip(labelCrossEl);
     blacklistedLabels.add(album.label);
     localStorage.setItem('blacklistedLabels', JSON.stringify([...blacklistedLabels]));
-    albumsData.forEach(alb => {
-      if (alb.label === album.label) {
-        hideAlbum(alb.albumID);
-      }
-    });
-    forceLazyLoadCheck();
+    smoothApplyFilters();
   });
 }
 
-    albumDiv.querySelectorAll('.blacklist-cross[data-type="artist"]').forEach(cross => {
-  attachTooltip(cross, 'Не показувати альбоми цього артиста');
+albumDiv.querySelectorAll('.blacklist-cross[data-type="artist"]').forEach(cross => {
+  attachTooltip(cross, 'Не показувати альбоми цього артиста', '160px');
   cross.addEventListener('click', () => {
-    const name = cross.dataset.name;
+    const artistId = cross.dataset.name;
     removeTooltip(cross);
-    blacklistedArtists.add(cross.dataset.name);
+    blacklistedArtists.add(artistId);
     localStorage.setItem('blacklistedArtists', JSON.stringify([...blacklistedArtists]));
-    albumsData.forEach(album => {
-      if (album.artistIDs.includes(name)) {
-  hideAlbum(album.albumID);
-}
-    });
-    forceLazyLoadCheck();
+    smoothApplyFilters();
   });
 });
   }
@@ -2971,24 +3334,27 @@ if (labelCrossEl) {
     const wrapper = document.createElement('span');
     wrapper.style.whiteSpace = 'nowrap';
 
-    const artistLink = document.createElement('a');
-    artistLink.textContent = artist;
-    artistLink.href = `https://open.spotify.com/artist/${album.artistIDs[i] || ''}`;
-    artistLink.target = '_blank';
-    artistLink.style.color = '#f3f3f3';
-    artistLink.style.textDecoration = 'none';
-    artistLink.style.fontWeight = 'bold';
+    if (artist === 'Various Artists') {
+      wrapper.appendChild(document.createTextNode(artist));
+    } else {
+      const artistLink = document.createElement('a');
+      artistLink.textContent = artist;
+      artistLink.href = `https://open.spotify.com/artist/${album.artistIDs[i] || ''}`;
+      artistLink.target = '_blank';
+      artistLink.style.color = '#f3f3f3';
+      artistLink.style.textDecoration = 'none';
+      artistLink.style.fontWeight = 'bold';
+      wrapper.appendChild(artistLink);
 
-    const crossSpan = document.createElement('span');
-    crossSpan.id = `artist-cross-${index}-${i}`;
-    crossSpan.classList.add('blacklist-cross');
-    crossSpan.dataset.type = 'artist';
-    crossSpan.dataset.name = album.artistIDs[i];
-    crossSpan.style.cursor = 'pointer';
-    crossSpan.textContent = ' ✖';
-
-    wrapper.appendChild(artist === 'Various Artists' ? document.createTextNode(artist) : artistLink);
-    wrapper.appendChild(crossSpan);
+      const crossSpan = document.createElement('span');
+      crossSpan.id = `artist-cross-${index}-${i}`;
+      crossSpan.classList.add('blacklist-cross');
+      crossSpan.dataset.type = 'artist';
+      crossSpan.dataset.name = album.artistIDs[i];
+      crossSpan.style.cursor = 'pointer';
+      crossSpan.textContent = ' ✖';
+      wrapper.appendChild(crossSpan);
+    }
 
     fragment.appendChild(wrapper);
 
@@ -3011,6 +3377,7 @@ if (labelCrossEl) {
     albumDiv.style.opacity = '0';
     setTimeout(() => {
       albumDiv.remove();
+      updateAlbumCount();
     }, 300);
   }
 }
@@ -3356,46 +3723,55 @@ function showAlbum(album) {
       return JSON.stringify(obj, null, 2);
     }
 
-    function attachTooltip(element, text, width = '120px') {
-  element._tooltip = null;
+    function attachTooltip(el, text, width) {
+  el._tooltipText = text;
 
-  element.addEventListener('mouseenter', (ev) => {
-    if (!element._tooltip) {
+  if (width !== undefined) {
+    el._tooltipWidth = width;
+  }
+
+  if (el._tooltipInited) return;
+  el._tooltipInited = true;
+  el.addEventListener('mouseenter', ev => {
+
+    if (!el._tooltip) {
       const tip = document.createElement('div');
       tip.classList.add('tooltip');
-      tip.textContent = text;
-      tip.style.position = 'fixed';
+      tip.style.position      = 'fixed';
       tip.style.backgroundColor = '#333';
-      tip.style.color = '#f3f3f3';
-      tip.style.padding = '5px 10px';
-      tip.style.borderRadius = '7px';
-      tip.style.fontSize = '12px';
-      tip.style.whiteSpace = 'normal';
-      tip.style.maxWidth = width;
-      tip.style.zIndex = '9999';
+      tip.style.color         = '#f3f3f3';
+      tip.style.padding       = '5px 10px';
+      tip.style.borderRadius  = '7px';
+      tip.style.fontSize      = '12px';
+      tip.style.zIndex        = '9999';
       document.body.appendChild(tip);
-      element._tooltip = tip;
+      el._tooltip = tip;
     }
 
-    const tip = element._tooltip;
+    const tip = el._tooltip;
+    tip.textContent      = el._tooltipText;
+    tip.style.maxWidth   = el._tooltipWidth;
     tip.style.visibility = 'visible';
     positionTooltip(ev.clientX, ev.clientY, tip);
   });
 
-  element.addEventListener('mousemove', (ev) => {
-    const tip = element._tooltip;
+  el.addEventListener('mousemove', ev => {
+    const tip = el._tooltip;
     if (tip && tip.style.visibility === 'visible') {
       positionTooltip(ev.clientX, ev.clientY, tip);
     }
   });
 
-  element.addEventListener('mouseleave', () => {
-    const tip = element._tooltip;
-    if (tip) {
-      tip.remove();
-      element._tooltip = null;
+  el.addEventListener('mouseleave', () => {
+    if (el._tooltip) {
+      el._tooltip.remove();
+      el._tooltip = null;
     }
   });
+}
+
+function removeTooltip(el) {
+  el.dispatchEvent(new Event('mouseleave'));
 }
 
     function positionTooltip(x, y, tip) {
@@ -3521,6 +3897,10 @@ function showAlbum(album) {
       list.appendChild(li);
     });
   }
+}
+
+    function updateAlbumCount() {
+  document.getElementById('album-count').textContent = filteredAlbums.length;
 }
 
   </script>
