@@ -804,6 +804,18 @@ border-color: rgba(132, 170, 251, 1);
   flex-direction: column;
   z-index: 10;
 }
+
+.custom-select.upward .options-container {
+  top: auto;
+  bottom: 100%;
+  border-top: 1px solid rgba(132, 170, 251, 1);
+  border-bottom: none;
+  border-left: 1px solid rgba(132, 170, 251, 1);
+  border-right: 1px solid rgba(132, 170, 251, 1);
+  border-radius: 7px 7px 0 0;
+  width: calc(100% + 2px);
+}
+
     
 .custom-select .option {
   padding: 5px 5px 5px 10px;
@@ -825,10 +837,7 @@ border-color: rgba(132, 170, 251, 1);
   box-sizing: border-box;
 }
 
-    .custom-select .option:last-child:hover {
-  border-bottom-left-radius: 7px;
-  border-bottom-right-radius: 7px;
-}
+
     
     button {
       padding: 10px 20px;
@@ -1496,8 +1505,7 @@ textarea:focus {
   width: calc(100% + 2px);
   z-index: 99;
 }
-
-    #label-select .options-container {
+ .options-container {
   overflow: hidden;
 }
 
@@ -1693,7 +1701,9 @@ textarea:focus {
       <div class="option" data-value="desc">Спочатку нові</div>
       <div class="option" data-value="asc">Спочатку старі</div>
       <div class="option" data-value="listens-desc">Більше прослуховувань</div>
-      <div class="option" data-value="popularity-growth">Активне зростання слухачів</div>
+<div class="option" data-value="listens-asc">Менше прослуховувань</div>
+<div class="option" data-value="popularity-growth">Активне зростання слухачів</div>
+<div class="option" data-value="random">Випадковий порядок</div>
     </div>
   </div>
 </div>
@@ -1720,6 +1730,43 @@ textarea:focus {
       <div class="option" data-value="">Будь-яка кількість</div>
       <div class="option" data-value="5">5 і більше треків</div>
       <div class="option" data-value="12">12 і більше треків</div>
+    </div>
+  </div>
+</div>
+      
+<div class="sort-section">
+  <label for="release-period-filter">Період релізу:</label>
+  <div class="custom-select" id="release-period-filter">
+    <div class="selected">За будь-який час</div>
+    <div class="options-container">
+      <div class="option" data-value="">За будь-який час</div>
+      <div class="option" data-value="7">За останній тиждень</div>
+      <div class="option" data-value="14">За останні два тижні</div>
+      <div class="option" data-value="30">За останній місяць</div>
+      <div class="option" data-value="90">За останні три місяці</div>
+      <div class="option" data-value="182">За останні півроку</div>
+      <div class="option" data-value="365">За останній рік</div>
+    </div>
+  </div>
+</div>
+
+      <div class="sort-section">
+  <label for="listen-count-filter">Кількість прослуховувань:</label>
+  <div class="custom-select" id="listen-count-filter">
+    <div class="selected">Будь-яка кількість</div>
+    <div class="options-container">
+      <div class="option" data-value="">Будь-яка кількість</div>
+      <div class="option" data-value="0-1000">До 1000</div>
+      <div class="option" data-value="1000-2500">Від 1000 до 2500</div>
+      <div class="option" data-value="2500-5000">Від 2500 до 5000</div>
+      <div class="option" data-value="5000-10000">Від 5000 до 10 000</div>
+      <div class="option" data-value="10000-25000">Від 10 000 до 25 000</div>
+      <div class="option" data-value="25000-50000">Від 25 000 до 50 000</div>
+      <div class="option" data-value="50000-100000">Від 50 000 до 100 000</div>
+      <div class="option" data-value="100000-250000">Від 100 000 до 250 000</div>
+      <div class="option" data-value="250000-500000">Від 250 000 до 500 000</div>
+      <div class="option" data-value="500000-1000000">Від 500 000 до 1 000 000</div>
+      <div class="option" data-value="1000000-">Від 1 000 000</div>
     </div>
   </div>
 </div>
@@ -1942,6 +1989,8 @@ async function init() {
       initBasicCustomSelect(document.getElementById('sort-order'));
       initBasicCustomSelect(document.getElementById('duration-filter'));
       initBasicCustomSelect(document.getElementById('track-count-filter'));
+      initBasicCustomSelect(document.getElementById('release-period-filter'));
+      initBasicCustomSelect(document.getElementById('listen-count-filter'));
       attachGlobalEventListeners();
 
       const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
@@ -1970,8 +2019,17 @@ function initBasicCustomSelect(select) {
     }
   });
   const isOpen = optionsContainer.style.display === 'flex';
-  optionsContainer.style.display = isOpen ? 'none' : 'flex';
-  select.classList.toggle('open', !isOpen);
+if (!isOpen) {
+  const r = select.getBoundingClientRect();
+  optionsContainer.style.display = 'flex';
+  const h = optionsContainer.scrollHeight;
+  optionsContainer.style.display = 'none';
+  if (r.bottom + h > window.innerHeight) select.classList.add('upward');
+  else select.classList.remove('upward');
+}
+optionsContainer.style.display = isOpen ? 'none' : 'flex';
+select.classList.toggle('open', !isOpen);
+
 });
   optionsContainer.querySelectorAll('.option').forEach(option => {
     option.addEventListener('click', () => {
@@ -2340,8 +2398,17 @@ function initCustomSelect(select) {
     }
   });
   const isOpen = optionsContainer.style.display === 'flex';
-  optionsContainer.style.display = isOpen ? 'none' : 'flex';
-  select.classList.toggle('open', !isOpen);
+if (!isOpen) {
+  const r = select.getBoundingClientRect();
+  optionsContainer.style.display = 'flex';
+  const h = optionsContainer.scrollHeight;
+  optionsContainer.style.display = 'none';
+  if (r.bottom + h > window.innerHeight) select.classList.add('upward');
+  else select.classList.remove('upward');
+}
+optionsContainer.style.display = isOpen ? 'none' : 'flex';
+select.classList.toggle('open', !isOpen);
+
 });
 
   optionsContainer.querySelectorAll('.option').forEach(option => {
@@ -2483,6 +2550,24 @@ if (filterData.trackCount) {
     trackCountSelect.querySelector('.selected').dataset.value = opt.dataset.value;
   }
 }
+        const periodSelect = document.getElementById('release-period-filter');
+if (filterData.period) {
+  const optP = periodSelect.querySelector(`.option[data-value="${filterData.period}"]`);
+  if (optP) {
+    periodSelect.querySelector('.selected').textContent = optP.textContent;
+    periodSelect.querySelector('.selected').dataset.value = optP.dataset.value;
+  }
+}
+
+        const listenSelect = document.getElementById('listen-count-filter');
+if (filterData.listenCount) {
+  const o = listenSelect.querySelector(`.option[data-value="${filterData.listenCount}"]`);
+  if (o) {
+    listenSelect.querySelector('.selected').textContent = o.textContent;
+    listenSelect.querySelector('.selected').dataset.value = o.dataset.value;
+  }
+}
+
       }
       applyFilters();
     }
@@ -2509,6 +2594,8 @@ if (filterData.trackCount) {
         hideListened,
         duration: document.getElementById('duration-filter')?.querySelector('.selected')?.dataset?.value || '',
         trackCount: document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset?.value || '',
+        period: document.getElementById('release-period-filter')?.querySelector('.selected')?.dataset?.value || '',
+        listenCount: document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset?.value || '',
         nuamRecommended: document.getElementById('nuam-recommended-checkbox').checked,
       };
       localStorage.setItem('albumFilters', JSON.stringify(filterData));
@@ -2571,6 +2658,16 @@ document.getElementById('track-count-filter').addEventListener('change', () => {
   saveFiltersToCache();
 });
 
+      document.getElementById('release-period-filter').addEventListener('change', () => {
+  preserveScroll(() => smoothApplyFilters());
+  saveFiltersToCache();
+});
+      
+      document.getElementById('listen-count-filter').addEventListener('change', () => {
+  preserveScroll(() => smoothApplyFilters());
+  saveFiltersToCache();
+});
+      
       document.getElementById('hide-listened').addEventListener('change', (e) => {
         hideListened = e.target.checked;
         preserveScroll(() => smoothApplyFilters());
@@ -2849,8 +2946,15 @@ if (onlyRecommended) {
 
       if (sortOrder === 'listens-desc') {
   filteredAlbums.sort((a, b) => b.listens - a.listens);
+} else if (sortOrder === 'listens-asc') {
+  filteredAlbums.sort((a, b) => a.listens - b.listens);
 } else if (sortOrder === 'popularity-growth') {
   filteredAlbums.sort((a, b) => b.growthScore - a.growthScore);
+} else if (sortOrder === 'random') {
+  for (let i = filteredAlbums.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filteredAlbums[i], filteredAlbums[j]] = [filteredAlbums[j], filteredAlbums[i]];
+  }
 } else {
   filteredAlbums.sort((a, b) => {
     const da = new Date(a.date);
@@ -2878,6 +2982,24 @@ if (selectedTrackCount) {
   filteredAlbums = filteredAlbums.filter(al => al.tracksIDs.length >= minTracks);
 }
 
+      const selectedPeriod = document.getElementById('release-period-filter')?.querySelector('.selected')?.dataset?.value;
+if (selectedPeriod) {
+  const days = parseInt(selectedPeriod, 10);
+  const now = new Date();
+  const threshold = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+  filteredAlbums = filteredAlbums.filter(al => new Date(al.date) >= threshold);
+}
+      
+      const selListen = document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset?.value;
+if (selListen) {
+  const [minStr, maxStr] = selListen.split('-');
+  const min = minStr ? parseInt(minStr, 10) : 0;
+  const max = maxStr ? parseInt(maxStr, 10) : Infinity;
+  filteredAlbums = filteredAlbums.filter(al =>
+    al.listens >= min && al.listens <= max
+  );
+}
+      
 const preSearch = filteredAlbums.slice();
 
 if (searchQuery) {
