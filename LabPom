@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ua">
+<head>
+  <meta charset="UTF-8">
+  <title>Аналітика лейблів</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 4px; text-align: left; }
+    th {
+      cursor: pointer;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    td.label-cell { cursor: pointer; color: #0066cc; }
+    tr.artist-row td { background: #f9f9f9; }
+    /* колонки */
+    /* Лейбл */
+    #labelTable th:nth-child(1),
+    #labelTable td:nth-child(1) { background: #e0f7fa; }
+    /* Артисти */
+    #labelTable th:nth-child(2),
+    #labelTable td:nth-child(2),
+    #labelTable th:nth-child(3),
+    #labelTable td:nth-child(3),
+    #labelTable th:nth-child(4),
+    #labelTable td:nth-child(4),
+    #labelTable th:nth-child(5),
+    #labelTable td:nth-child(5) { background: #e8f5e9; }
+    /* Прослуховування */
+    #labelTable th:nth-child(6),
+    #labelTable td:nth-child(6),
+    #labelTable th:nth-child(7),
+    #labelTable td:nth-child(7),
+    #labelTable th:nth-child(8),
+    #labelTable td:nth-child(8),
+    #labelTable th:nth-child(9),
+    #labelTable td:nth-child(9) { background: #fff3e0; }
+  </style>
+</head>
+<body>
+  <table id="labelTable">
+    <thead><tr></tr></thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      var csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=1784883917&single=true&output=csv';
+      var mappingArtists = {};
+      Papa.parse(csvUrl, {
+        download: true,
+        complete: function(r) {
+          var d = r.data;
+          var labels = d[0];
+          var monthly = d[2].map(function(s){
+            return (s||'').split(',').map(function(n){ return parseInt(n,10)||0; });
+          });
+          d.slice(3).forEach(function(row){
+            row.forEach(function(cell,i){
+              if (!cell) return;
+              var parts = cell.split(',,');
+              var name = parts[0];
+              var dateStr = (parts[1]||'').slice(1,-1);
+              var id = parts[2]||'';
+              var p = dateStr.split('.');
+              var date = new Date(+p[2], p[1]-1, +p[0]);
+              (mappingArtists[labels[i]] = mappingArtists[labels[i]]||[]).push({ name:name,id:id,date:date });
+            });
+          });
+          var now=new Date(),t3=new Date(now),t6=new Date(now),t12=new Date(now);
+          t3.setMonth(now.getMonth()-3);
+          t6.setMonth(now.getMonth()-6);
+          t12.setMonth(now.getMonth()-12);
+          var tbl=document.getElementById('labelTable'),head=tbl.querySelector('thead tr'),body=tbl.querySelector('tbody');
+          var cols=[
+            'Лейбл',
+            'Кількість артистів',
+            'Артисти 3 місяці тому',
+            'Артисти 6 місяців тому',
+            'Артисти 12 місяців тому',
+            'Поточні прослуховування',
+            'Прослуховування 3 місяці тому',
+            'Прослуховування 6 місяців тому',
+            'Прослуховування 12 місяців тому'
+          ];
+          cols.forEach(function(t,i){
+            var th=document.createElement('th');
+            th.textContent=t;
+            if(i>=6) th.title='Загальна кількість прослуховувань (різниця цих прослуховувань із поточними показниками)';
+            th.addEventListener('click',function(){sortTableByCol(tbl,i,this.asc=!this.asc)});
+            head.appendChild(th);
+          });
+          labels.forEach(function(lbl){
+            var arr=mappingArtists[lbl]||[];
+            if(arr.length<3) return;
+            var iLbl=labels.indexOf(lbl);
+            var totalArtists=arr.length;
+            var c3=arr.filter(a=>a.date<=t3).length;
+            var c6=arr.filter(a=>a.date<=t6).length;
+            var c12=arr.filter(a=>a.date<=t12).length;
+            var ml=monthly[iLbl]||[];
+            var cur=ml[0]||0,m3=ml[2]||0,m6=ml[5]||0,m12=ml[11]||0;
+            var d3=m3? (cur-m3):0, d6=m6?(cur-m6):0, d12=m12?(cur-m12):0;
+            var delta3=m3+' ('+(d3>=0? '+'+d3:d3)+')';
+            var delta6=m6+' ('+(d6>=0? '+'+d6:d6)+')';
+            var delta12=m12+' ('+(d12>=0? '+'+d12:d12)+')';
+            var tr=document.createElement('tr');
+            var tdLabel=document.createElement('td');
+            tdLabel.textContent=lbl;
+            tdLabel.classList.add('label-cell');
+            tdLabel.addEventListener('click',function(){toggleArtists(tr,lbl,cols.length)});
+            tr.appendChild(tdLabel);
+            [totalArtists,c3,c6,c12,cur,delta3,delta6,delta12].forEach(function(v){
+              var td=document.createElement('td');
+              td.textContent=v;
+              tr.appendChild(td);
+            });
+            body.appendChild(tr);
+          });
+        }
+      });
+      function toggleArtists(row,lbl,colspan){
+        var next=row.nextSibling;
+        if(next&&next.classList.contains('artist-row')){next.remove();}
+        else{
+          var artistRow=document.createElement('tr');
+          artistRow.classList.add('artist-row');
+          var td=document.createElement('td');
+          td.colSpan=colspan;
+          td.innerHTML=(mappingArtists[lbl]||[]).map(function(a){
+            return '<a href="https://open.spotify.com/artist/'+a.id+'" target="_blank">'+a.name+'</a>';
+          }).join(', ');
+          artistRow.appendChild(td);
+          row.parentNode.insertBefore(artistRow,row.nextSibling);
+        }
+      }
+      function sortTableByCol(table,col,asc){
+        var dir=asc?1:-1;
+        var rows=Array.from(table.tBodies[0].rows).filter(r=>!r.classList.contains('artist-row'));
+        rows.sort(function(a,b){
+          var x=a.cells[col].textContent,y=b.cells[col].textContent;
+          var nx=parseFloat(x),ny=parseFloat(y);
+          if(!isNaN(nx)&&!isNaN(ny)){x=nx;y=ny;}
+          return x>y?dir:x<y?-dir:0;
+        });
+        rows.forEach(r=>table.tBodies[0].appendChild(r));
+      }
+    });
+  </script>
+</body>
+</html>
