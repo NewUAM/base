@@ -8,123 +8,130 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>
   <style>
     @font-face {
-      font-family: 'CustomFont';
-      src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
-    }
-
-    html,
-    body {
-      font-family: 'CustomFont', Arial, sans-serif;
-      background-color: #282626;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      margin-top: 20px;
-      color: #f3f3f3;
-    }
-
-    h4 {
-      text-align: center;
-      margin-top: 20px;
-      color: #f3f3f3;
-    }
-
-    body::-webkit-scrollbar {
-      width: 10px;
-    }
-    body::-webkit-scrollbar-track {
-      background: #282626;
-    }
-    body::-webkit-scrollbar-thumb {
-      background-color: #383838;
-      border-radius: 7px;
-      border: 2px solid #282626;
-    }
-
-    body::-webkit-scrollbar-button {
-      display: none;
-    }
-
-    body.no-scroll {
-      position: fixed;
-      width: 100%;
-      overflow-y: scroll;
-    }
-
-    :root{
-  --nuam-logo-url:url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
+  font-family: "CustomFont";
+  src: url("https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2")
+    format("woff2");
 }
 
-.logo-wrapper{
-  position:relative;
-  display:inline-block;
-  background:#383838;
-  border-radius:7px;
-  padding:10px;
-  margin-bottom:10px;
+html,
+body {
+  font-family: "CustomFont", Arial, sans-serif;
+  background-color: #282626;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 20px;
+  color: #f3f3f3;
+}
+
+h4 {
+  text-align: center;
+  margin-top: 20px;
+  color: #f3f3f3;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background: #282626;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #383838;
+  border-radius: 7px;
+  border: 2px solid #282626;
+}
+
+body::-webkit-scrollbar-button {
+  display: none;
+}
+
+body.no-scroll {
+  position: fixed;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+:root {
+  --nuam-logo-url: url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
+}
+
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+  background: #383838;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 .logo-wrapper:hover {
-  border-radius:7px 7px 0 0;
-    }
+  border-radius: 7px 7px 0 0;
+}
 
-.logo-row{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  line-height:35px;
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 35px;
 }
 .logo-row img {
-  height:35px;
-  width:auto;
-  display:block;
-    }
+  height: 35px;
+  width: auto;
+  display: block;
+}
 .logo-row a {
-  display:flex;
+  display: flex;
   font-size: 14px;
-  align-items:center;
-  gap:8px;
-  text-decoration:none;
-  color:#f3f3f3;
-    }
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #f3f3f3;
+}
 .logo-row a:hover {
-  text-decoration:none;
-    }
+  text-decoration: none;
+}
 
-.vertical-sep{
-  width:1px;height:20px;background:#383838;
+.vertical-sep {
+  width: 1px;
+  height: 20px;
+  background: #383838;
 }
 
 #app-logo {
-  background-image:var(--nuam-logo-url);
-  background-repeat:no-repeat;
-  background-size:contain;
-    }
+  background-image: var(--nuam-logo-url);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 
 .logo-dropdown {
-  position:absolute;
-  top:100%;
-  left:0;
+  position: absolute;
+  top: 100%;
+  left: 0;
   width: 100%;
   box-sizing: border-box;
-  background:#383838;
-  border-radius:0 0 7px 7px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  overflow:hidden;
-  max-height:0;
-  opacity:0;
-  transform:translateY(-10px);
-  transition:max-height .3s ease,opacity .3s ease,transform .3s ease;
-  z-index:100;
-  padding:0 10px 10px;
-  box-shadow: 0px 4px 5px 0px rgba(0,0,0,.2);
+  background: #383838;
+  border-radius: 0 0 7px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  z-index: 100;
+  padding: 0 10px 10px;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
 }
 .logo-wrapper:hover .logo-dropdown {
-  max-height:200px;
-  opacity:1;transform:translateY(0);
+  max-height: 200px;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .logo-row a {
@@ -135,6 +142,7 @@
 .logo-row a img {
   position: relative;
   z-index: 1;
+  transition: opacity 0.3s ease;
 }
 
 .logo-row a::after {
@@ -145,8 +153,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
-  background: linear-gradient(135deg, #84AAFB, #90EE90);
-  /* маска по форме лого, выравнена слева */
+  background: linear-gradient(135deg, #84aafb, #90ee90);
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: left center;
@@ -183,18 +190,16 @@
   background: linear-gradient(1deg, #cdd28d, #89bfd0);
 }
 
-.logo-row a img {
-  transition: opacity 0.3s ease;
-}
-
 .logo-row a:hover img {
   opacity: 0;
 }
-   
-    #loading-screen {
+
+#loading-screen {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: #282626;
   display: flex;
   flex-direction: column;
@@ -210,12 +215,12 @@
   pointer-events: none;
 }
 
-    #loading-screen img {
+#loading-screen img {
   max-width: 50%;
   margin-bottom: 20px;
 }
-    
-.load-wrapp { 
+
+.load-wrapp {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -227,7 +232,7 @@
   justify-content: flex-start;
 }
 
-.bar { 
+.bar {
   width: 15px;
   height: 6px;
   border-radius: 2px;
@@ -256,54 +261,54 @@
   color: #f3f3f3;
   font-size: 18px;
   margin-top: 20px;
-  font-family: 'CustomFont', sans-serif;
+  font-family: "CustomFont", sans-serif;
 }
 
-    .checkbox-container::-webkit-scrollbar {
-      width: 14px;
-    }
-    .checkbox-container::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .checkbox-container::-webkit-scrollbar-thumb {
-      background-color: #282626;
-      border-radius: 7px;
-      border: 3px solid #383838;
-    }
+.checkbox-container::-webkit-scrollbar {
+  width: 14px;
+}
+.checkbox-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.checkbox-container::-webkit-scrollbar-thumb {
+  background-color: #282626;
+  border-radius: 7px;
+  border: 3px solid #383838;
+}
 
-    input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      appearance: none;
-      border: 1px solid rgba(132, 170, 251, 0.5);
-      border-radius: 4px;
-      background-color: #383838;
-      display: inline-block;
-      position: relative;
-      vertical-align: middle;
-      margin-right: 10px;
-      transition: border-color 0.3s ease;
-    }
-    input[type="checkbox"]:hover {
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  appearance: none;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 4px;
+  background-color: #383838;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin-right: 10px;
+  transition: border-color 0.3s ease;
+}
+input[type="checkbox"]:hover {
   border-color: rgba(132, 170, 251, 1);
 }
-    input[type="checkbox"]:checked {
-      background-color: #84AAFB;
-      border-color: #84AAFB;
-    }
-    input[type="checkbox"]:checked::after {
-      content: '\2713';
-      color: #282626;
-      font-size: 12px;
-      font-weight: bold;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+input[type="checkbox"]:checked {
+  background-color: #84aafb;
+  border-color: #84aafb;
+}
+input[type="checkbox"]:checked::after {
+  content: "\2713";
+  color: #282626;
+  font-size: 12px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-    #albums-container .separator {
+#albums-container .separator {
   grid-column: 1 / -1;
   display: flex;
   align-items: center;
@@ -324,123 +329,123 @@
   white-space: nowrap;
 }
 
-    #genre-checkboxes {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
+#genre-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 
-    .controls {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 460px;
-      min-width: 260px;
-      height: 100vh;
-      padding: 10px 10px 20px;
-      overflow-y: auto;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background: #282626;
-      box-shadow: 3px 0px 5px 2px rgba(0,0,0,.2);
-      z-index: 1000;
-      user-select: none !important;
-    }
-    .controls::-webkit-scrollbar {
-      width: 10px;
-    }
-    .controls::-webkit-scrollbar-track {
-      background: #282626;
-    }
-    .controls::-webkit-scrollbar-thumb {
-      background: #383838;
-      border-radius: 7px;
-      border: 2px solid #282626;
-    }
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 460px;
+  min-width: 260px;
+  min-width: 0;
+  height: 100vh;
+  padding: 20px 10px 20px;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #282626;
+  box-shadow: 3px 0px 5px 2px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  user-select: none !important;
+}
+.controls::-webkit-scrollbar {
+  width: 10px;
+}
+.controls::-webkit-scrollbar-track {
+  background: #282626;
+}
+.controls::-webkit-scrollbar-thumb {
+  background: #383838;
+  border-radius: 7px;
+  border: 2px solid #282626;
+}
 
-    .filter-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      margin-bottom: 20px;
-    }
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+}
 
-    .filter-group {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-      width: 100%;
- 
+.filter-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+
   align-items: stretch;
-    }
-    .filter-group .checkbox-container {
-      flex: 1;
-      min-width: 0;
-    }
+}
+.filter-group .checkbox-container {
+  flex: 1;
+  min-width: 0;
+}
 
-    .checkbox-container {
-      background: #383838;
-      border-radius: 7px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 200px;
-      overflow-y: auto;
-      position: relative;
-    }
-    .checkbox-container label {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      color: #f3f3f3;
-    }
-    .checkbox-container .section-title {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: #282626;
-      border-bottom: 1px solid #383838;
-      font-size: 16px;
-      text-align: left;
-      color: #f3f3f3;
-      border-radius: 7px;
-    }
-    .checkbox-grid {
-      display: flex;
-      flex-direction: column;
-    }
+.checkbox-container {
+  background: #383838;
+  border-radius: 7px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: relative;
+}
+.checkbox-container label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #f3f3f3;
+}
+.checkbox-container .section-title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #282626;
+  font-size: 16px;
+  text-align: left;
+  color: #f3f3f3;
+  border-radius: 7px;
+}
+.checkbox-grid {
+  display: flex;
+  flex-direction: column;
+}
 
-    .genre-name,
-    .language-name,
-    .release-type-filter-item {
-      font-size: 14px;
-    }
-    .genre-count,
-    .language-count {
-      color: gray;
-      font-size: 12px;
-    }
+.genre-name,
+.language-name,
+.release-type-filter-item {
+  font-size: 14px;
+}
+.genre-count,
+.language-count {
+  color: gray;
+  font-size: 12px;
+}
 
-    .sort-and-blacklist {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      width: 100%;
-    }
-    .sort-section {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    #sort-order {
+.sort-and-blacklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.sort-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#sort-order {
   cursor: pointer;
 }
-    .sort-section select {
-      width: 100%;
-    }
-    .sort-section label {
+.sort-section select {
+  width: 100%;
+}
+.sort-section label {
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -448,7 +453,7 @@
 .sort-section .custom-select {
   flex-grow: 1;
 }
-    
+
 .custom-select.upward .options-container {
   top: auto;
   bottom: 100%;
@@ -459,7 +464,7 @@
   border-radius: 0 0 7px 7px;
 }
 
-    .hide-listened-section {
+.hide-listened-section {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -469,10 +474,10 @@
   justify-content: flex-start;
 }
 
-    .hide-listened-section label {
-      align-items: center;
-      gap: 8px;
-    }
+.hide-listened-section label {
+  align-items: center;
+  gap: 8px;
+}
 
 .blacklist-row {
   display: flex;
@@ -521,55 +526,53 @@
   gap: 8px;
 }
 
-    .blacklist-container {
-      display: flex;
-      gap: 20px;
-    }
-    .blacklist-artists,
-    .blacklist-labels {
-      flex: 1;
-      max-height: 300px;
-      overflow-y: auto;
-      background-color: #282626;
-      padding: 10px;
-      border-radius: 7px;
-    }
-    .blacklist-artists h4,
-    .blacklist-labels h4 {
-      position: sticky;
-      top: 0;
-      background-color: #383838;
-      padding: 10px;
-      margin: 0;
-      border-radius: 7px;
-      z-index: 1;
-    }
-    .blacklist-artists ul,
-    .blacklist-labels ul {
-      list-style-type: none;
-      padding: 0;
-      margin-top: 20px;
-      color: #f3f3f3;
-    }
-    .blacklist-artists li,
-    .blacklist-labels li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 5px 0;
-    }
+.blacklist-container {
+  display: flex;
+  gap: 20px;
+}
+.blacklist-artists,
+.blacklist-labels {
+  flex: 1;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #282626;
+  padding: 10px;
+  border-radius: 7px;
+}
+.blacklist-artists h4,
+.blacklist-labels h4 {
+  position: sticky;
+  top: 0;
+  background-color: #383838;
+  padding: 10px;
+  margin: 0;
+  border-radius: 7px;
+  z-index: 1;
+}
+.blacklist-artists ul,
+.blacklist-labels ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  color: #f3f3f3;
+}
+.blacklist-artists li,
+.blacklist-labels li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
 
-    .blacklist-section {
-      
-    }
+.blacklist-section {
+}
 .blacklist-artists::-webkit-scrollbar-thumb,
 .blacklist-labels::-webkit-scrollbar-thumb {
   border: 3px solid #282626 !important;
   background-color: #383838;
 }
 
-    .favorites-section {
-
+.favorites-section {
 }
 
 .favorite-button {
@@ -582,16 +585,19 @@
   background-color: #282626;
   border-radius: 7px;
   border: 1px solid rgba(132, 170, 251, 0.5);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   opacity: 0;
-  transition: opacity 0.3s ease, transform 0.1s ease, border-color 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.1s ease,
+    border-color 0.3s ease;
   pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .favorite-button:hover {
-border-color: rgba(132, 170, 251, 1);
+  border-color: rgba(132, 170, 251, 1);
 }
 
 .album:hover .favorite-button {
@@ -622,31 +628,40 @@ border-color: rgba(132, 170, 251, 1);
   height: 100%;
 }
 
-    .search-wrapper {
+.search-wrapper {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
   flex-grow: 1;
-  align-items: stretch;
+  min-width: 0;
 }
 
-#search-button {
-  flex: 1 1 auto;
-  height: 55px;
+.search-buttons-column {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+}
+
+.search-buttons-column button {
+  width: 100%;
+  height: 23px;
   background-color: transparent;
   color: #f3f3f3;
   border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 7px;
   font-size: 14px;
-  font-family: 'CustomFont';
+  font-family: "CustomFont";
   cursor: pointer;
   transition: border-color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
   box-sizing: border-box;
+  padding: 0;
 }
 
-#search-button:hover {
+.search-buttons-column button:hover {
   border-color: rgba(132, 170, 251, 1);
 }
 
@@ -655,28 +670,31 @@ border-color: rgba(132, 170, 251, 1);
   align-items: center;
   gap: 5px;
   width: 100%;
-  padding: 11px 0px 23px 0px;
+  padding: 0px 0px 15px 0px;
 }
 
-#search-input {
+#search-input, #preset-name-input, #edit-name-input {
   flex-grow: 1;
-  padding: 5px 5px 5px 10px;
+  padding: 10px 5px 10px 10px;
   border-radius: 7px;
   border: 1px solid rgba(132, 170, 251, 0.5);
   width: 100%;
-  font-family: 'CustomFont';
+  font-family: "CustomFont";
   background: #282626;
-    color: #f3f3f3;
+  color: #f3f3f3;
   transition: border 0.3s ease;
 }
- #search-input:focus {
+    #preset-name-input, #edit-name-input {
+      width: 180px;
+    }
+#search-input:focus, #preset-name-input:focus {
   outline: none;
   box-shadow: none;
-}   
-#search-input:hover {
-    border: 1px solid rgba(132, 170, 251, 1);
-    }
-    
+}
+#search-input:hover, #preset-name-input:hover {
+  border: 1px solid rgba(132, 170, 251, 1);
+}
+
 #search-close {
   padding: 5px;
   border: none;
@@ -690,92 +708,245 @@ border-color: rgba(132, 170, 251, 1);
 #search-close:hover {
   color: #f3f3f3;
 }
- 
-    .listened-albums-container {
-      max-height: 300px;
-      overflow-y: auto;
-      background-color: #383838;
-      padding: 10px;
-      border-radius: 7px;
-    }
-    .listened-albums-container ul {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      color: #f3f3f3;
-    }
-    .listened-albums-container li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 10px;
-      background-color: #282626;
-      border-radius: 5px;
-    }
-    .listened-albums-container a {
-      color: #f3f3f3;
-      text-decoration: none;
-    }
-    .listened-albums-container a:hover {
-      text-decoration: underline;
-    }
-    .listened-albums-container .blacklist-cross {
-      cursor: pointer;
-      color: #c0392b;
-      font-size: 16px;
-    }
-    .listened-albums-container .blacklist-cross:hover {
-      color: #e74c3c;
-    }
-    .listened-albums-container::-webkit-scrollbar {
-      width: 10px;
-    }
-    .listened-albums-container::-webkit-scrollbar-track {
-      background: #383838;
-    }
-    .listened-albums-container::-webkit-scrollbar-thumb {
-      background: #282626;
-      border-radius: 7px;
-    }
 
-    label,
-    select,
-    button {
-      color: #f3f3f3;
-    }
+#filters-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 0 15px 0;
+  box-sizing: border-box;
+  position: relative;
+  min-width: 0;
+  overflow-x: hidden;
+}
 
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .button-group button {
-      flex: 1;
-    }
+#filters-container::-webkit-scrollbar {
+  height: 8px;
+}
+#filters-container::-webkit-scrollbar-thumb {
+  background: #383838;
+  border-radius: 7px;
+  border: 2px solid #282626;
+}
 
-    .custom-select {
+#filters-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100px;
+  width: 50px;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(40, 38, 38, 1) 0%,
+    rgba(40, 38, 38, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+#filters-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 28px;
+  width: 50px;
+  pointer-events: none;
+  background: linear-gradient(
+    to left,
+    rgba(40, 38, 38, 1) 0%,
+    rgba(40, 38, 38, 0) 100%
+  );
+  z-index: 10;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+#filters-container.scrolled-right::after {
+  opacity: 1;
+}
+
+#filters-container.scrolled::before {
+  opacity: 1;
+}
+
+.presets-wrapper {
+  display: flex;
+  gap: 10px;
+  padding-right: 16px;
+  white-space: nowrap;
+  overflow-x: auto;
+  flex: 1 1 0;
+  max-width: 340px !important;
+  min-width: 0;
+  position: relative;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+.presets-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.preset-item {
+  flex: 0 0 auto;
+}
+
+#filters-container .preset-item {
+  flex: 0 0 auto;
+  height: 40px;
+  padding: 0 15px;
+  background-color: transparent;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: "CustomFont", Arial, sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s ease;
+  white-space: nowrap;
+}
+#filters-container .preset-item:hover {
+  border-color: rgba(132, 170, 251, 1);
+}
+.preset-item.preset-active {
+  background-color: #84aafb;
+  color: #282626;
+  border-color: #84aafb;
+}
+
+#filters-container #add-preset {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: transparent;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 50%;
+  transition: border-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#filters-container #add-preset:hover {
+  border-color: rgba(132, 170, 251, 1);
+}
+
+#filters-close {
+  background: none;
+  border: none;
+  color: #bababa;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 5px;
+  padding: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#filters-close:hover {
+  color: #f3f3f3;
+}
+
+.listened-albums-container {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #383838;
+  padding: 10px;
+  border-radius: 7px;
+}
+.listened-albums-container ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #f3f3f3;
+}
+.listened-albums-container li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  background-color: #282626;
+  border-radius: 5px;
+}
+.listened-albums-container a {
+  color: #f3f3f3;
+  text-decoration: none;
+}
+.listened-albums-container a:hover {
+  text-decoration: underline;
+}
+.listened-albums-container .blacklist-cross {
+  cursor: pointer;
+  color: #c0392b;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+.listened-albums-container .blacklist-cross:hover {
+  color: #e74c3c;
+}
+.listened-albums-container::-webkit-scrollbar {
+  width: 10px;
+}
+.listened-albums-container::-webkit-scrollbar-track {
+  background: #383838;
+}
+.listened-albums-container::-webkit-scrollbar-thumb {
+  background: #282626;
+  border-radius: 7px;
+}
+
+label,
+select,
+button {
+  color: #f3f3f3;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.button-group button {
+  flex: 1;
+}
+
+.custom-select {
   position: relative;
   width: 100%;
   background-color: #383838;
   border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 7px;
-  font-family: 'CustomFont', Arial, sans-serif;
+  font-family: "CustomFont", Arial, sans-serif;
   user-select: none;
   transition: border-color 0.3s ease;
 }
 .custom-select:hover {
   border-color: rgba(132, 170, 251, 1);
 }
-    
+
 .custom-select.open {
   border-radius: 7px 7px 0 0;
   border: 1px solid rgba(132, 170, 251, 1);
 }
 
-    .custom-select,
+.custom-select,
 .custom-select .options-container {
   box-sizing: border-box;
   width: 100%;
@@ -816,7 +987,6 @@ border-color: rgba(132, 170, 251, 1);
   width: calc(100% + 2px);
 }
 
-    
 .custom-select .option {
   padding: 5px 5px 5px 10px;
   cursor: pointer;
@@ -826,91 +996,99 @@ border-color: rgba(132, 170, 251, 1);
 .custom-select .option:hover {
   background-color: #282626;
 }
+
+button {
+  padding: 10px 20px;
+  background-color: #84aafb;
+  color: #282626;
+  border: 1px solid #84aafb;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border 0.3s ease;
+}
+button:hover {
+  border: 1px solid #f3f3f3;
+}
     
-.custom-select,
-.custom-select .options-container {
-  box-sizing: border-box;
+    .modal-content #preset-save {
+    padding: 0 15px;
+    background-color: transparent;
+    color: #f3f3f3;
+    border: 1px solid rgba(132, 170, 251, 0.5);
+    font-size: 14px;
+
+}
+.modal-content #preset-save:hover {
+  border: 1px solid #f3f3f3;
 }
 
-    .custom-select,
-.custom-select .options-container {
-  box-sizing: border-box;
+#preset-save-message.error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-left: 10px;
+}
+    
+#albums-container {
+  margin-left: 480px;
+  padding: 25px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+  user-select: none !important;
+  align-items: start;
 }
 
-
-    
-    button {
-      padding: 10px 20px;
-      background-color: #84AAFB;
-      color: #282626;
-      border: 1px solid #84AAFB;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: border 0.3s ease;
-    }
-    button:hover {
-      border: 1px solid #f3f3f3;
-    }
-
-    #albums-container {
-      margin-left: 480px;
-      padding: 25px 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 20px;
-      user-select: none !important;
-      align-items: start;
-    }
-
-    .album {
-      background-color: #383838;
-      border-radius: 7px;
-      overflow: visible;
-      box-shadow: 0px 4px 5px 0px rgba(0,0,0,.2);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      min-width: 400px;
-      max-width: 500px;
-    }
-    .album img {
-      width: 100%;
-      height: auto;
-      cursor: pointer;
-      transition: transform 0.3s ease, z-index 0.3s ease;
-      border-radius: 7px;
-      backface-visibility: hidden;
+.album {
+  background-color: #383838;
+  border-radius: 7px;
+  overflow: visible;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  max-width: 500px;
+}
+.album img {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    z-index 0.3s ease;
+  border-radius: 7px;
+  backface-visibility: hidden;
   transform-style: preserve-3d;
   will-change: transform;
-    }
-    .album img:hover {
-      transform: scale(1.01);
-      z-index: 10;
-    }
+}
+.album img:hover {
+  transform: scale(1.01);
+  z-index: 10;
+}
 
-    .album-details {
-      padding: 15px;
-      flex-grow: 1;
-      background-color: #383838;
-    }
-    .album-details h3 {
-      margin: 0 0 10px 0;
-      color: #f3f3f3;
-    }
-    .album-details p {
-      margin: 5px 0;
-      color: #f3f3f3;
-    }
-    .album-details a {
-      color: #f3f3f3;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .album-details a:hover {
-      text-decoration: underline;
-    }
+.album-details {
+  padding: 15px;
+  flex-grow: 1;
+  background-color: #383838;
+}
+.album-details h3 {
+  margin: 0 0 10px 0;
+  color: #f3f3f3;
+}
+.album-details p {
+  margin: 5px 0;
+  color: #f3f3f3;
+}
+.album-details a {
+  color: #f3f3f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+.album-details a:hover {
+  text-decoration: underline;
+}
 
-    .album .album-links {
+.album .album-links {
   display: flex;
   gap: 6px;
   opacity: 0;
@@ -950,10 +1128,10 @@ border-color: rgba(132, 170, 251, 1);
   opacity: 0;
 }
 
-    .spotify-icon {
+.spotify-icon {
   flex-shrink: 0;
 }
-    
+
 .album a .spotify-icon {
   display: flex;
   width: 20px;
@@ -989,7 +1167,7 @@ border-color: rgba(132, 170, 251, 1);
   opacity: 0;
 }
 
-    .favorite-icon {
+.favorite-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -998,7 +1176,7 @@ border-color: rgba(132, 170, 251, 1);
   transition: transform 0.15s ease;
 }
 
-    .favorite-icon-wrapper {
+.favorite-icon-wrapper {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -1017,215 +1195,230 @@ border-color: rgba(132, 170, 251, 1);
   cursor: pointer;
 }
 
-    .tracks {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: auto;
-      padding: 0 15px 15px;
-      align-items: flex-start;
-    }
-
-    .track-circle {
-      width: 40px;
-      height: 40px;
-      color: #f3f3f3;
-      background-color: transparent;
-      border-radius: 50%;
-      border: 1px solid rgba(132, 170, 251, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-      position: relative;
-    }
-
-    .track-circle:hover {
-      background-color: #282626;
-      border-color: rgba(132, 170, 251, 1);
-    }
-    .track-circle i {
-      font-size: 20px;
-      color: #555;
-    }
-
-    .lazy-loading {
-      text-align: center;
-      margin: 20px 0;
-      color: #f3f3f3;
-      user-select: none !important;
-    }
-
-    audio {
-      display: none;
-    }
-
-    .album-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(40, 38, 38, 0.7);
-      display: none;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .album-listened .album-overlay {
-      display: block;
-    }
-    .album-listened img:hover {
-      background-color: rgba(40, 38, 38, 0.7);
-      transform: none !important;
-  z-index: auto !important;
-    }
-
-    .mark-listened-btn {
-    cursor: pointer;
-    padding: 5px 10px;
-    background-color: transparent;
-    color: #f3f3f3;
-    border: 1px solid rgba(132, 170, 251, 0.5);
-    border-radius: 7px;
-    align-self: flex-start;
-    transition: border 0.3s ease;
-    z-index: 9;
-      transition: border-color 0.3s ease;
+.tracks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding: 0 15px 15px;
+  align-items: flex-start;
 }
-    .mark-listened-btn:hover {
-      border: 1px solid rgba(132, 170, 251, 1);
-    }
 
-    .enlarged-img {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 640px;
-      z-index: 1000;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-      user-select: none !important;
-    opacity: 0;
+.track-circle {
+  width: 40px;
+  height: 40px;
+  color: #f3f3f3;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+  position: relative;
+}
+
+.track-circle:hover {
+  background-color: #282626;
+  border-color: rgba(132, 170, 251, 1);
+}
+.track-circle i {
+  font-size: 20px;
+  color: #555;
+}
+
+.lazy-loading {
+  text-align: center;
+  margin: 20px 0;
+  color: #f3f3f3;
+  user-select: none !important;
+}
+
+audio {
+  display: none;
+}
+
+.album-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(40, 38, 38, 0.7);
+  display: none;
+  pointer-events: none;
+  z-index: 1;
+}
+.album-listened .album-overlay {
+  display: block;
+}
+.album-listened img:hover {
+  background-color: rgba(40, 38, 38, 0.7);
+  transform: none !important;
+  z-index: auto !important;
+}
+
+.mark-listened-btn {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: transparent;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 7px;
+  align-self: flex-start;
+  transition: border 0.3s ease;
+  z-index: 9;
+  transition: border-color 0.3s ease;
+}
+.mark-listened-btn:hover {
+  border: 1px solid rgba(132, 170, 251, 1);
+}
+
+.enlarged-img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 640px;
+  z-index: 1000;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  user-select: none !important;
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 .enlarged-img.shown {
   opacity: 1;
 }
 
-    .modal-overlay,
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-    }
+.modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
 
-    .modal-content {
-      background-color: #383838;
-      margin: 15% auto;
-      padding: 20px;
-      border-radius: 7px;
-      width: 80%;
-      user-select: none !important;
-    }
-    .modal-content h3 {
-      color: #f3f3f3;
-     margin-top: 0;
-    margin-bottom: 10px;
-    }
+.modal.hidden{display:none;}
 
-    .tabcontent {
-      display: none;
-    }
-    .tabcontent.active {
-      display: block;
-    }
-    .tablink {
-      background-color: #282626;
-      color: #f3f3f3;
-      padding: 10px 20px;
-      border: 1px solid #f3f3f3;
-      cursor: pointer;
-      transition: border-color 0.3s ease, background-color 0.3s ease;
-      font-weight: bold;
-      margin-bottom: 20px;
-      margin-right: 10px;
-    }
-    .tablink.active {
-      background-color: #84AAFB;
-      border: 1px solid #84AAFB;
-      color: #282626;
-    }
-    .tablink.active:hover {
-      background-color: #84AAFB;
-    }
-    .tablink:hover {
-      background-color: #282626;
-      border: 1px solid #84AAFB;
-    }
+.modal-content {
+  background-color: #383838;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 7px;
+  width: 1064px;
+  user-select: none !important;
+}
 
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-    .close:hover,
-    .close:focus {
-      color: #f3f3f3;
-      text-decoration: none;
-      cursor: pointer;
-    }
+#preset-modal .modal-content {
+  width: 640px;
+      height: 73px;
+  font-size: 14px;
+}
+#preset-modal .modal-content > #preset-name-input,
+#preset-modal .modal-content > #preset-save {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+}
+#preset-modal .modal-content > #preset-name-input {
+  margin-right: 10px;
+}
 
-    .album-details .blacklist-cross {
-      display: none;
-    }
-    .album-details:hover .blacklist-cross {
-      display: inline;
-    }
-    .blacklist-cross {
-      cursor: pointer;
-      color: #c0392b;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .blacklist-cross:hover {
-      color: #e74c3c;
-    }
+.tabcontent {
+  display: none;
+}
+.tabcontent.active {
+  display: block;
+}
+.tablink {
+  background-color: #282626;
+  color: #f3f3f3;
+  padding: 10px 20px;
+  border: 1px solid #f3f3f3;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+.tablink.active {
+  background-color: #84aafb;
+  border: 1px solid #84aafb;
+  color: #282626;
+}
+.tablink.active:hover {
+  background-color: #84aafb;
+}
+.tablink:hover {
+  background-color: #282626;
+  border: 1px solid #84aafb;
+}
 
-    .export-import-container {
-      display: flex;
-      gap: 20px;
-      justify-content: space-between;
-    }
-    .export-section,
-    .import-section {
-      flex: 1;
-    }
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.close:hover,
+.close:focus {
+  color: #f3f3f3;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-    textarea {
+.album-details .blacklist-cross {
+  display: none;
+}
+.album-details:hover .blacklist-cross {
+  display: inline;
+}
+.blacklist-cross {
+  cursor: pointer;
+  color: #c0392b;
+  font-size: 12px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+.blacklist-cross:hover {
+  color: #e74c3c;
+}
+
+.export-import-container {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+.export-section,
+.import-section {
+  flex: 1;
+}
+
+textarea {
   width: 500px;
   height: 200px;
   padding: 10px;
   background-color: #282626;
-      border-radius: 7px;
+  border-radius: 7px;
   border: 1px solid rgba(132, 170, 251, 0.5);
   resize: none;
   color: #f3f3f3;
   scrollbar-width: auto;
   scrollbar-color: auto;
-      transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease;
 }
-    textarea:hover {
+textarea:hover {
   border-color: rgba(132, 170, 251, 1);
 }
 textarea::-webkit-scrollbar {
@@ -1243,33 +1436,33 @@ textarea:focus {
   outline: none;
 }
 
-    #export-data,
-    #import-data {
-      margin-top: 0;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: #f3f3f3;
-      border: none;
-      border-radius: 5px;
-      width: fit-content;
-      vertical-align: middle;
-      transition: background-color 0.3s;
-    }
-    #export-data:hover,
-    #import-data:hover {
-      background-color: #388e3c;
-    }
+#export-data,
+#import-data {
+  margin-top: 0;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 5px;
+  width: fit-content;
+  vertical-align: middle;
+  transition: background-color 0.3s;
+}
+#export-data:hover,
+#import-data:hover {
+  background-color: #388e3c;
+}
 
-    #export-message,
+#export-message,
 #import-message {
   font-size: 13px;
   display: flex;
   align-items: center;
 }
 
-    #export-message.success,
+#export-message.success,
 #import-message.success {
   color: #7dc77d;
 }
@@ -1278,8 +1471,8 @@ textarea:focus {
 #import-message.error {
   color: #e74c3c;
 }
-    
-    #favorites-albums-list li {
+
+#favorites-albums-list li {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1290,7 +1483,7 @@ textarea:focus {
   object-fit: cover;
   border-radius: 4px;
 }
-    
+
 #favorites-albums-list a {
   text-decoration: none;
   transition: text-decoration 0.2s;
@@ -1298,179 +1491,180 @@ textarea:focus {
 #favorites-albums-list a:hover {
   text-decoration: underline;
 }
- 
-    .button-line {
+
+.button-line {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-top: 10px;
 }
-    
-    .exclude-genre,
-    .exclude-language {
-      cursor: pointer;
-      color: #c0392b;
-      margin-left: 5px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .exclude-genre:hover,
-    .exclude-language:hover {
-      color: #e74c3c;
-    }
 
-    .genre-filter-item .exclude-genre {
-      visibility: hidden;
-    }
-    .genre-filter-item:hover .exclude-genre {
-      visibility: visible;
-    }
-    .language-filter-item .exclude-language {
-      display: none;
-    }
-    .language-filter-item:hover .exclude-language {
-      display: inline;
-    }
-    .repeat-symbol,
-    .language-repeat-symbol {
-      color: #7dc77d;
-    }
-    .repeat-symbol:hover,
-    .language-repeat-symbol:hover {
-      color: #90EE90;
-    }
-
-    .star-icon {
-      background-color: #282626;
-      border-radius: 7px;
-      padding: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
-    }
-
-    .section-title {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background-color: #282626;
-      padding: 10px 10px;
-      font-size: 16px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #383838;
-    }
-
-    .genre-header {
-      padding: 10px 10px;
-      background-color: #282626;
-      font-size: 18px;
-    }
-    .genre-buttons {
-      display: flex;
-      gap: 5px;
-    }
-    .genre-buttons button {
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 5px;
-    background-color: transparent;
-    color: #f3f3f3;
-    border: 1px solid rgba(132, 170, 251, 0.5);
-    cursor: pointer;
-    transition: border-color 0.3s ease;
+.exclude-genre,
+.exclude-language {
+  cursor: pointer;
+  color: #c0392b;
+  margin-left: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  transition: color 0.3s ease;
 }
-    .genre-buttons button:hover {
-      border: 1px solid rgba(132, 170, 251, 1);
-    }
+.exclude-genre:hover,
+.exclude-language:hover {
+  color: #e74c3c;
+}
 
-    .track-tooltip {
-      display: none;
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #333;
-      color: #f3f3f3;
-      padding: 5px 10px;
-      border-radius: 7px;
-      font-size: 12px;
-      white-space: normal;
-      min-width: 160px;
-      text-align: center;
-      z-index: 100;
-    }
+.genre-filter-item .exclude-genre {
+  visibility: hidden;
+}
+.genre-filter-item:hover .exclude-genre {
+  visibility: visible;
+}
+.language-filter-item .exclude-language {
+  display: none;
+}
+.language-filter-item:hover .exclude-language {
+  display: inline;
+}
+.repeat-symbol,
+.language-repeat-symbol {
+  color: #7dc77d;
+}
+.repeat-symbol:hover,
+.language-repeat-symbol:hover {
+  color: #90ee90;
+}
 
-    .alb-head {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 6px;
-    }
-    .rls-icon {
-      width: 45px;
-      height: 45px;
-      flex-shrink: 0;
-    }
-    .alb-head-txt h3 {
-      margin: 0;
-      color: #f3f3f3;
-      font-size: 18px;
-    }
-    .alb-head-txt .alb-artist,
-    .alb-head-txt {
-      margin: 2px 0 0;
-      color: #f3f3f3;
-      font-size: 14px;
-    }
-    .alb-genres {
-      font-size: 12px;
-      margin: 2px 0 0;
-      color: #f3f3f3;
-    }
-    .alb-artist {
-      font-weight: bold;
-    }
+.star-icon {
+  background-color: #282626;
+  border-radius: 7px;
+  padding: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #282626;
+  padding: 10px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #383838;
+}
+
+.genre-header {
+  padding: 10px 10px;
+  background-color: #282626;
+  font-size: 18px;
+}
+.genre-buttons {
+  display: flex;
+  gap: 5px;
+}
+.genre-buttons button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 5px;
+  background-color: transparent;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+.genre-buttons button:hover {
+  border: 1px solid rgba(132, 170, 251, 1);
+}
+
+.track-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #f3f3f3;
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  white-space: normal;
+  min-width: 160px;
+  text-align: center;
+  z-index: 100;
+}
+
+.alb-head {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.rls-icon {
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+}
+.alb-head-txt h3 {
+  margin: 0;
+  color: #f3f3f3;
+  font-size: 18px;
+}
+.alb-head-txt .alb-artist,
+.alb-head-txt {
+  margin: 2px 0 0;
+  color: #f3f3f3;
+  font-size: 14px;
+}
+.alb-genres {
+  font-size: 12px;
+  margin: 2px 0 0;
+  color: #f3f3f3;
+}
+.alb-artist {
+  font-weight: bold;
+}
 .alb-artist a:hover {
   text-decoration: underline !important;
 }
 
-    .alb-sep {
-      border: 0;
-      border-top: 1px solid #555;
-      margin: 10px 0;
-    }
+.alb-sep {
+  border: 0;
+  border-top: 1px solid #555;
+  margin: 10px 0;
+}
 
-    .alb-meta,
-    .alb-listens {
-      display: flex;
-      flex-wrap: wrap;
-      font-size: 14px;
-      color: #f3f3f3;
-    }
-    .alb-listens {
-      gap: 6px;
-    }
-    .alb-meta p {
-      width: 50%;
-      box-sizing: border-box;
-      display: flex;
-      gap: 6px;
-    }
-    .alb-meta p svg,
-    .alb-listens svg,
-    .alb-meta svg {
-      flex-shrink: 0;
-      display: block;
-    }
+.alb-meta,
+.alb-listens {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #f3f3f3;
+}
+.alb-listens {
+  gap: 6px;
+}
+.alb-meta p {
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
+  gap: 6px;
+}
+.alb-meta p svg,
+.alb-listens svg,
+.alb-meta svg {
+  flex-shrink: 0;
+  display: block;
+}
 
-    .alb-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-    } 
+.alb-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
 
-    .album-cover-wrapper {
+.album-cover-wrapper {
   width: 100%;
   aspect-ratio: 1 / 1;
   background-color: #333;
@@ -1484,28 +1678,28 @@ textarea:focus {
   object-fit: cover;
   display: block;
 }
-    
-    .controls,
+
+.controls,
 .modal-content,
-.controls * ,
+.controls *,
 .modal-content * {
   overscroll-behavior: none;
 }
 
-    #label-select .options-container {
+#label-select .options-container {
   max-height: 500px;
   display: none;
   flex-direction: column-reverse;
-  border-left: 1px solid #84AAFB;
-      border-right: 1px solid #84AAFB;
-      border-top: 1px solid #84AAFB;
-      border-bottom: none;
+  border-left: 1px solid #84aafb;
+  border-right: 1px solid #84aafb;
+  border-top: 1px solid #84aafb;
+  border-bottom: none;
   background: #383838;
   position: absolute;
   width: calc(100% + 2px);
   z-index: 99;
 }
- .options-container {
+.options-container {
   overflow: hidden;
 }
 
@@ -1518,30 +1712,30 @@ textarea:focus {
   padding-top: 4px;
   padding-bottom: 4px;
   background: #383838;
-  border-top: 1px solid #84AAFB;
+  border-top: 1px solid #84aafb;
   display: flex;
   flex-direction: column;
 }
 
 #label-select .option-search {
-      padding: 5px 5px 5px 10px;
-    background: #282626;
-    color: #f3f3f3;
-    border: 1px solid rgba(132, 170, 251, 0.5);
-    transition: border 0.3s ease;
-    border-radius: 7px;
-    justify-content: center;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+  padding: 5px 5px 5px 10px;
+  background: #282626;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  transition: border 0.3s ease;
+  border-radius: 7px;
+  justify-content: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-    
-    #label-select .option-search:hover {
+
+#label-select .option-search:hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
 
-    #label-select .option-search:focus {
+#label-select .option-search:focus {
   outline: none;
   box-shadow: none;
 }
@@ -1579,25 +1773,214 @@ textarea:focus {
 
 #label-select .option-list::-webkit-scrollbar-button {
   display: none;
-  width: 0; height: 0;
+  width: 0;
+  height: 0;
 }
 
-    #favorites-albums-list a {
+#favorites-albums-list a {
   user-select: auto !important;
 }
+
+    .range-wrapper {
+  position: relative;
+  height: 30px;
+  margin: 5px 10px;
+}
+.range-wrapper input[type="range"] {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  pointer-events: none;
+  background: transparent;
+  -webkit-appearance: none;
+}
+.range-wrapper input[type="range"]::-webkit-slider-thumb {
+  pointer-events: all;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #84aafb;
+  border: 2px solid #282626;
+  -webkit-appearance: none;
+}
+.range-tooltip {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: #333;
+  color: #f3f3f3;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+#toggle-edit-presets {
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+  border: 1px solid rgba(132,170,251,0.5);
+  border-radius: 50px;
+  background: transparent;
+  color: #f3f3f3;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s;
+}
+#toggle-edit-presets:hover {
+  border-color: rgba(132,170,251,1);
+}
+
+.presets-wrapper .preset-item .drag-handle {
+  display: none;
+}
+.presets-wrapper.editing .preset-item {
+  position: relative;
+}
+.presets-wrapper.editing .preset-item .drag-handle {
+  display: block;
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 4px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 2px;
+  cursor: grab;
+}
+
+    .presets-wrapper.editing .preset-item .drag-handle::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  left: -7px;
+  right: -7px;
+
+}
     
-    @media (max-width: 768px) {
-      .controls {
-        flex-direction: column;
-        align-items: center;
-      }
-      .controls button,
-      .controls select,
-      .controls label {
-        width: 100%;
-        max-width: 300px;
-      }
-    }
+.presets-wrapper .preset-item .delete-handle {
+  display: none;
+}
+.presets-wrapper.editing .preset-item .delete-handle {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 19px;
+  text-align: center;
+  background: #c0392b;
+  color: #fff;
+  border-radius: 0 7px 0 7px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+  .presets-wrapper.editing .preset-item .delete-handle:hover {
+  background: #e74c3c;
+  box-shadow: 0 0 5px #e74c3c;
+}
+    
+.presets-wrapper .preset-item .edit-name-handle {
+  display: none;
+}
+.presets-wrapper.editing .preset-item .edit-name-handle {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 19px;
+  text-align: center;
+  background: #596990;
+  color: #fff;
+  border-radius: 7px 0 7px 0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+    .presets-wrapper.editing .preset-item .edit-name-handle:hover {
+  background: #84aafb;
+  box-shadow: 0 0 5px #84aafb;
+}
+    
+.modal-content input {
+  flex-grow: 1;
+  padding: 10px 5px 10px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  width: 100%;
+  font-family: "CustomFont";
+  background: #282626;
+  color: #f3f3f3;
+  transition: border 0.3s ease;
+}
+.modal-content input:focus {
+  outline: none;
+  box-shadow: none;
+}
+.modal-content input:hover {
+  border: 1px solid rgba(132, 170, 251, 1);
+}
+
+.modal-content {
+  position: relative;
+}
+
+.modal-content h3 {
+  display:block; 
+  vertical-align: middle;
+  margin: 0 0 10px;
+  color: #f3f3f3;
+}
+
+.modal-content .close {
+  float: none !important;
+  position: absolute !important;
+  top: 20px;
+  right: 20px;
+  line-height: 1;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+#edit-name-modal .modal-content {
+  width: auto;
+  height: auto;
+}
+
+    .preview-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 1000;
+}
+.preview-overlay.hidden{
+  display:none;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  .controls button,
+  .controls select,
+  .controls label {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
   </style>
 
 </head>
@@ -1639,7 +2022,7 @@ textarea:focus {
         <a href="https://nuam.club/echo">
           <img src="https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png" alt="NUAM Echo Logo">
           <span class="vertical-sep"></span>
-          <span>База треків України</span>
+          <span>Радар релізів України</span>
         </a>
       </div>
       <div class="logo-row">
@@ -1653,14 +2036,56 @@ textarea:focus {
   </div>
 
   <div class="search-wrapper">
-    <button id="search-button" style="margin: 0;">Пошук</button>
+    <div class="search-buttons-column">
+      <button id="search-button">Пошук</button>
+      <button id="filters-button">Фільтри</button>
+    </div>
     <div id="search-container" style="display: none; align-items: center; gap: 5px;">
       <input type="text" id="search-input" placeholder="Пошук альбомів…" />
       <button id="search-close">✖</button>
     </div>
+
+<div id="filters-container" style="display: none; align-items: center; gap: 10px; width: 100%; padding: 0 0 15px 0;">
+
+  <button id="add-preset" class="add-preset-btn">+</button>
+  <button id="toggle-edit-presets" title="Редагувати пресети">
+  <i class="fas fa-pencil-alt"></i>
+</button>
+
+  <div class="presets-wrapper">
+    <button class="preset-item" data-preset-json='{"name":"Жанри","filters":{}}'>Жанри</button>
+    <button class="preset-item" data-preset-json='{"name":"Мови","filters":{}}'>Мови</button>
+    <button class="preset-item" data-preset-json='{"name":"Тип релізу","filters":{}}'>Тип релізу</button>
+    <button class="preset-item" data-preset-json='{"name":"Інше","filters":{}}'>Інше</button>
+
+  </div>
+
+  <button id="filters-close">✖</button>
+
+</div>
   </div>
 </div>
 
+  <div id="preset-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" id="preset-close">&times;</span>
+      <h3 style="color: #f3f3f3; margin-top: 0; margin-bottom: 10px;">
+        Ви зберігаєте поточні вибрані фільтри та сортування. Вкажіть назву.
+      </h3>
+      <input id="preset-name-input" placeholder="Назва пресету" style="margin-right:10px;"><button id="preset-save" style="height:40px;">Зберегти</button>
+      <span id="preset-save-message"></span>
+    </div>
+  </div>
+
+  <div id="edit-name-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" id="edit-name-close">&times;</span>
+      <h3>Редагування назви фільтра</h3>
+      <input id="edit-name-input" placeholder="Нова назва фільтра" style="margin-right:10px;"><button id="edit-name-save" style="height:40px;">Зберегти</button>
+      <span id="edit-name-message"></span>
+    </div>
+  </div>
+  
     <div class="filter-section">
       <div class="checkbox-container">
         <div class="section-title genre-header">
@@ -1746,6 +2171,13 @@ textarea:focus {
       <div class="option" data-value="90">За останні три місяці</div>
       <div class="option" data-value="182">За останні півроку</div>
       <div class="option" data-value="365">За останній рік</div>
+      
+          <div class="range-wrapper" id="release-period-range">
+      <input type="range" id="release-period-start" min="0" max="0" step="1">
+      <input type="range" id="release-period-end"   min="0" max="0" step="1">
+      <div class="range-tooltip" id="release-period-tooltip"></div>
+    </div>
+
     </div>
   </div>
 </div>
@@ -1802,9 +2234,11 @@ textarea:focus {
   </div>
 
   <div id="albums-container"></div>
+  <div id="preview-overlay" class="preview-overlay hidden"></div>
+
   <div class="lazy-loading" id="lazy-loading">Завантаження альбомів...</div>
 
-  <div id="blacklist-modal" class="modal">
+  <div id="blacklist-modal" class="modal hidden">
     <div class="modal-content">
       <span class="close">&times;</span>
       <div class="tabs">
@@ -1854,7 +2288,7 @@ textarea:focus {
 
   <div class="modal-overlay"></div>
  
-  <div id="favorites-modal" class="modal">
+  <div id="favorites-modal" class="modal hidden">
   <div class="modal-content">
     <span class="close" id="close-favorites-modal">&times;</span>
     <div class="tabs">
@@ -1889,6 +2323,8 @@ textarea:focus {
 </div>
   
   <script>
+let activePresetButton = null;
+
     const newSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRGgPDeRNQcSe5tV2h3zu-rtMr-i7ph-4hU6HKglhXKdaAB5UFXUrdWLZKb8hwGyWgDxL5LDfnmrqe/pub?gid=1559781011&single=true&output=csv";
 
     let searchQuery = '';
@@ -1937,7 +2373,6 @@ function loadAllowedArtists() {
     let audioActivated = false;
     let filteredAlbums = [];
     let isFiltering = false;
-
     let blacklistedArtists = new Set(JSON.parse(localStorage.getItem('blacklistedArtists')) || []);
     let blacklistedLabels = new Set(JSON.parse(localStorage.getItem('blacklistedLabels')) || []);
     let labelFilter = '';
@@ -1960,6 +2395,57 @@ function releaseIcon(t){
 
     const batchSize = 20;
 
+const PRESETS_KEY = 'albumPresets';
+
+function getStoredPresets() {
+  try {
+    const raw = localStorage.getItem(PRESETS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+function savePresetsToStorage(arr) {
+  localStorage.setItem(PRESETS_KEY, JSON.stringify(arr));
+}
+
+function loadPresetsFromStorage() {
+  const wrapper = document.querySelector('.presets-wrapper');
+  if (!wrapper) return;
+  wrapper.innerHTML = '';
+  getStoredPresets().forEach(preset => {
+    const btn = document.createElement('button');
+    btn.className = 'preset-item';
+    btn.textContent = preset.name;
+    btn.dataset.presetJson = JSON.stringify(preset);
+    btn.addEventListener('click', () => applyPreset(preset));
+    wrapper.appendChild(btn);
+  });
+}
+
+function clearActivePreset() {
+  if (activePresetButton) {
+    activePresetButton.classList.remove('preset-active');
+    activePresetButton = null;
+  }
+}
+
+function applyPreset(preset) {
+  if (!preset.filters) return;
+  localStorage.setItem('albumFilters', JSON.stringify(preset.filters));
+  loadFiltersAfterRender();
+  smoothApplyFilters();
+  clearActivePreset();
+  document.querySelectorAll('button.preset-item').forEach(b => b.classList.remove('preset-active'));
+  document.querySelectorAll('button.preset-item').forEach(b => {
+    if (b.textContent === preset.name) {
+      b.classList.add('preset-active');
+      activePresetButton = b;
+    }
+  });
+  document.getElementById('filters-close').click();
+}
+   
 window.addEventListener('DOMContentLoaded', init);
 
 async function init() {
@@ -1987,18 +2473,173 @@ async function init() {
       populateFilters();
       populateLabelOptions();
       initBasicCustomSelect(document.getElementById('sort-order'));
+      const sortSel = document.getElementById('sort-order')
+                       .querySelector('.selected');
+if (!sortSel.dataset.value) sortSel.dataset.value = 'desc';
       initBasicCustomSelect(document.getElementById('duration-filter'));
       initBasicCustomSelect(document.getElementById('track-count-filter'));
       initBasicCustomSelect(document.getElementById('release-period-filter'));
+      
+      ;(function initReleasePeriodSlider() {
+  const start = document.getElementById('release-period-start');
+  const end   = document.getElementById('release-period-end');
+  const tip   = document.getElementById('release-period-tooltip');
+  const dates   = albumsData.map(a => new Date(a.date));
+  const minDate = new Date(Math.min(...dates));
+  const now     = new Date();
+  const maxW    = Math.ceil((now - minDate) / (7*24*60*60*1000));
+
+        const weekOptions = [];
+for (let i = 0; i <= maxW; i++) {
+  const d = new Date(minDate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+  weekOptions.push(d.toISOString().slice(0,10));
+}
+        
+localStorage.setItem('release-week-options', JSON.stringify(weekOptions));
+        
+  start.min = end.min = 0;
+  start.max = end.max = maxW;
+  start.step = end.step = 1;
+  start.value = 0;
+  end.value   = maxW;
+
+  let debounce;
+  function updateTip() {
+    const s = +start.value, e = +end.value;
+    const d1 = new Date(minDate.getTime() + s*7*24*60*60*1000);
+    const d2 = new Date(minDate.getTime() + e*7*24*60*60*1000);
+    const sd = d1.toISOString().slice(0,10);
+    const td = d2.toISOString().slice(0,10);
+    tip.textContent = `${sd} – ${td}`;
+    tip.style.left = ((s+e)/(2*maxW))*100 + '%';
+    const sel = document.querySelector('#release-period-filter .selected');
+    if (s===0 && e===maxW) {
+      sel.textContent = 'За будь-який час';
+      delete sel.dataset.value;
+    } else {
+      sel.textContent = tip.textContent;
+      sel.dataset.value = 'range';
+    }
+    clearTimeout(debounce);
+  debounce = setTimeout(() => {
+    saveFiltersToCache();
+    smoothApplyFilters();
+  }, 500);
+  }
+
+  start.addEventListener('input', updateTip);
+  end  .addEventListener('input', updateTip);
+  updateTip();
+        window.updateReleaseRangeTip = updateTip;
+})();
+      
       initBasicCustomSelect(document.getElementById('listen-count-filter'));
       attachGlobalEventListeners();
+      loadPresetsFromStorage();
 
-      const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
-      if (albumFilters) {
-        loadFiltersAfterRender();
-      } else {
-        applyFilters();
+      const addBtn    = document.getElementById('add-preset');
+      const modal     = document.getElementById('preset-modal');
+      const closeX    = document.getElementById('preset-close');
+      const saveBtn   = document.getElementById('preset-save');
+      const inputName = document.getElementById('preset-name-input');
+
+      addBtn.addEventListener('click', () => {
+        inputName.value = '';
+        modal.style.display = 'flex';
+        inputName.focus();
+      });
+      closeX.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', e => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+
+const editNameModal  = document.getElementById('edit-name-modal');
+const editNameClose  = editNameModal.querySelector('.close');
+
+editNameClose.addEventListener('click', () => {
+  editNameModal.style.display = 'none';
+});
+
+editNameModal.addEventListener('click', e => {
+  if (e.target === editNameModal) {
+    editNameModal.style.display = 'none';
+  }
+});
+ 
+      const saveMsg = document.getElementById('preset-save-message');
+saveBtn.addEventListener('click', () => {
+  const name = inputName.value.trim();
+  if (!name) {
+    saveMsg.textContent = 'Вкажіть назву фільтра';
+    saveMsg.className = 'error';
+    setTimeout(() => {
+      saveMsg.textContent = '';
+      saveMsg.className = '';
+    }, 2000);
+    return;
+  }
+  saveMsg.textContent = '';
+  saveMsg.className = '';
+
+  saveFiltersToCache();
+  const arr = getStoredPresets();
+  const cf  = JSON.parse(localStorage.getItem('albumFilters') || '{}');
+  const presetObj = { name, filters: cf };
+  const idx = arr.findIndex(p => p.name === name);
+  if (idx >= 0) arr[idx] = presetObj;
+  else          arr.push(presetObj);
+  savePresetsToStorage(arr);
+  loadPresetsFromStorage();
+  modal.style.display = 'none';
+});
+
+      const wrap = document.querySelector('.presets-wrapper');
+      const fc   = document.getElementById('filters-container');
+      function updateFade() {
+        const mx = wrap.scrollWidth - wrap.clientWidth;
+        fc.classList.toggle('scrolled',       wrap.scrollLeft > 0);
+        fc.classList.toggle('scrolled-right', wrap.scrollLeft < mx);
       }
+      wrap.addEventListener('scroll', updateFade);
+      wrap.addEventListener('wheel', e => {
+        e.preventDefault();
+        wrap.scrollBy({ left: e.deltaY, behavior: 'smooth' });
+        updateFade();
+      });
+
+      
+      const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
+if (albumFilters) {
+  loadFiltersAfterRender();
+} else {
+  ['phonk','ai','producing work for international'].forEach(g=>{
+    const cb = document.getElementById(`genre-${encodeURIComponent(g)}`);
+    if (cb) {
+      cb.disabled = true;
+      const cross = cb.parentNode.querySelector('.exclude-genre');
+      cross.textContent = '↻';
+      cross.classList.add('repeat-symbol');
+      const lbl = cb.nextElementSibling;
+      lbl.style.textDecoration = 'line-through';
+      lbl.style.color = 'gray';
+    }
+  });
+  const cbL = document.getElementById('language-rus');
+  if (cbL) {
+    cbL.disabled = true;
+    const crossL = cbL.parentNode.querySelector('.exclude-language');
+    crossL.textContent = '↻';
+    crossL.classList.add('language-repeat-symbol');
+    const lblL = cbL.nextElementSibling;
+    lblL.style.textDecoration = 'line-through';
+    lblL.style.color = 'gray';
+  }
+  document.getElementById('hide-listened').checked = true;
+  hideListened = true;
+  applyFilters();
+  saveFiltersToCache();
+}
+
     },
     error: function(error) {
       console.error('Помилка під час завантаження CSV:', error);
@@ -2009,39 +2650,49 @@ async function init() {
 function initBasicCustomSelect(select) {
   const selected = select.querySelector('.selected');
   const optionsContainer = select.querySelector('.options-container');
+
   selected.addEventListener('click', e => {
-  e.stopPropagation();
-
-  document.querySelectorAll('.custom-select').forEach(otherSelect => {
-    if (otherSelect !== select) {
-      otherSelect.querySelector('.options-container').style.display = 'none';
-      otherSelect.classList.remove('open');
+    e.stopPropagation();
+    document.querySelectorAll('.custom-select').forEach(otherSelect => {
+      if (otherSelect !== select) {
+        otherSelect.querySelector('.options-container').style.display = 'none';
+        otherSelect.classList.remove('open');
+      }
+    });
+    const isOpen = optionsContainer.style.display === 'flex';
+    if (!isOpen) {
+      const r = select.getBoundingClientRect();
+      optionsContainer.style.display = 'flex';
+      const h = optionsContainer.scrollHeight;
+      optionsContainer.style.display = 'none';
+      if (r.bottom + h > window.innerHeight) select.classList.add('upward');
+      else select.classList.remove('upward');
     }
+    optionsContainer.style.display = isOpen ? 'none' : 'flex';
+    select.classList.toggle('open', !isOpen);
   });
-  const isOpen = optionsContainer.style.display === 'flex';
-if (!isOpen) {
-  const r = select.getBoundingClientRect();
-  optionsContainer.style.display = 'flex';
-  const h = optionsContainer.scrollHeight;
-  optionsContainer.style.display = 'none';
-  if (r.bottom + h > window.innerHeight) select.classList.add('upward');
-  else select.classList.remove('upward');
-}
-optionsContainer.style.display = isOpen ? 'none' : 'flex';
-select.classList.toggle('open', !isOpen);
 
-});
-  optionsContainer.querySelectorAll('.option').forEach(option => {
+    optionsContainer.querySelectorAll('.option').forEach(option => {
     option.addEventListener('click', () => {
       selected.textContent = option.textContent;
       selected.dataset.value = option.dataset.value;
       optionsContainer.style.display = 'none';
       select.classList.remove('open');
+
+      if (select.id === 'release-period-filter') {
+        const start = document.getElementById('release-period-start');
+        const end   = document.getElementById('release-period-end');
+        start.value = start.min;
+        end.value   = end.max;
+      }
+
       if (select.id === 'sort-order') sortOrder = option.dataset.value;
+
       preserveScroll(() => smoothApplyFilters());
       saveFiltersToCache();
     });
   });
+
   document.addEventListener('click', e => {
     if (!select.contains(e.target)) {
       optionsContainer.style.display = 'none';
@@ -2049,6 +2700,7 @@ select.classList.toggle('open', !isOpen);
     }
   });
 }
+
 
 function friendlyGenreLabel(g) {
   if (g === 'producing work for international') return 'intl prod';
@@ -2445,234 +3097,351 @@ select.classList.toggle('open', !isOpen);
 }
 
     function loadFiltersAfterRender() {
-      const filterData = JSON.parse(localStorage.getItem('albumFilters'));
-      if (!filterData) return;
+  const filterData = JSON.parse(localStorage.getItem('albumFilters'));
+  if (!filterData) return;
 
-      document.querySelectorAll('.genre-checkbox').forEach(ch => {
-        ch.checked = false; ch.disabled = false;
-        const lb = ch.nextElementSibling;
-        lb.style.textDecoration = 'none';
-        lb.style.color = '#f3f3f3';
-      });
-      if (Array.isArray(filterData.selectedGenres)) {
-        filterData.selectedGenres.forEach(g => {
-          const cb = document.getElementById(`genre-${encodeURIComponent(g)}`);
-          if (cb) cb.checked = true;
-        });
-      }
-      if (Array.isArray(filterData.excludedGenres)) {
-        filterData.excludedGenres.forEach(g => {
-          const cb = document.getElementById(`genre-${encodeURIComponent(g)}`);
-          if (cb) {
-            cb.disabled = true;
-            const cross = cb.parentNode.querySelector('.exclude-genre');
-            cross.textContent = '↻';
-            cross.classList.add('repeat-symbol');
-            const lb = cb.nextElementSibling;
-            lb.style.textDecoration = 'line-through';
-            lb.style.color = 'gray';
-          }
-        });
-      }
-
-      document.querySelectorAll('.language-checkbox').forEach(ch => {
-        ch.checked = false; ch.disabled = false;
-        const lb = ch.nextElementSibling;
-        lb.style.textDecoration = 'none';
-        lb.style.color = '#f3f3f3';
-      });
-      if (Array.isArray(filterData.selectedLanguages)) {
-        filterData.selectedLanguages.forEach(l => {
-          const cb = document.getElementById(`language-${encodeURIComponent(l)}`);
-          if (cb) cb.checked = true;
-        });
-      }
-      if (Array.isArray(filterData.excludedLanguages)) {
-        filterData.excludedLanguages.forEach(l => {
-          const cb = document.getElementById(`language-${encodeURIComponent(l)}`);
-          if (cb) {
-            cb.disabled = true;
-            const cross = cb.parentNode.querySelector('.exclude-language');
-            cross.textContent = '↻';
-            cross.classList.add('language-repeat-symbol');
-            const lb = cb.nextElementSibling;
-            lb.style.textDecoration = 'line-through';
-            lb.style.color = 'gray';
-          }
-        });
-      }
-
-      document.querySelectorAll('.release-type-checkbox').forEach(ch => {
-        ch.checked = false;
-      });
-      if (Array.isArray(filterData.selectedReleaseTypes)) {
-        filterData.selectedReleaseTypes.forEach(rt => {
-          const cb = document.getElementById(`release-type-${rt}`);
-          if (cb) cb.checked = true;
-        });
-      }
-
-      if (filterData.sortOrder) {
-  const select = document.getElementById('sort-order');
-  const selected = select.querySelector('.selected');
-  const options = select.querySelectorAll('.option');
-
-  const foundOption = Array.from(options).find(opt => opt.dataset.value === filterData.sortOrder);
-  if (foundOption) {
-  selected.textContent = foundOption.textContent;
-  selected.dataset.value = foundOption.dataset.value;
-  sortOrder = filterData.sortOrder;
-}
-}
-
-      if (typeof filterData.hideListened === 'boolean') {
-        document.getElementById('hide-listened').checked = filterData.hideListened;
-        hideListened = filterData.hideListened;
-        if (typeof filterData.nuamRecommended === 'boolean') {
-  document.getElementById('nuam-recommended-checkbox').checked = filterData.nuamRecommended;
-}
-
-        const durationSelect = document.getElementById('duration-filter');
-const trackCountSelect = document.getElementById('track-count-filter');
-
-if (filterData.duration) {
-  const opt = durationSelect.querySelector(`.option[data-value="${filterData.duration}"]`);
-  if (opt) {
-    durationSelect.querySelector('.selected').textContent = opt.textContent;
-    durationSelect.querySelector('.selected').dataset.value = opt.dataset.value;
+  document.querySelectorAll('.genre-checkbox').forEach(ch => {
+    ch.checked = false;
+    ch.disabled = false;
+    const lb = ch.nextElementSibling;
+    lb.style.textDecoration = 'none';
+    lb.style.color = '#f3f3f3';
+  });
+  if (Array.isArray(filterData.selectedGenres)) {
+    filterData.selectedGenres.forEach(g => {
+      const cb = document.getElementById(`genre-${encodeURIComponent(g)}`);
+      if (cb) cb.checked = true;
+    });
   }
-}
-
-if (filterData.trackCount) {
-  const opt = trackCountSelect.querySelector(`.option[data-value="${filterData.trackCount}"]`);
-  if (opt) {
-    trackCountSelect.querySelector('.selected').textContent = opt.textContent;
-    trackCountSelect.querySelector('.selected').dataset.value = opt.dataset.value;
-  }
-}
-        const periodSelect = document.getElementById('release-period-filter');
-if (filterData.period) {
-  const optP = periodSelect.querySelector(`.option[data-value="${filterData.period}"]`);
-  if (optP) {
-    periodSelect.querySelector('.selected').textContent = optP.textContent;
-    periodSelect.querySelector('.selected').dataset.value = optP.dataset.value;
-  }
-}
-
-        const listenSelect = document.getElementById('listen-count-filter');
-if (filterData.listenCount) {
-  const o = listenSelect.querySelector(`.option[data-value="${filterData.listenCount}"]`);
-  if (o) {
-    listenSelect.querySelector('.selected').textContent = o.textContent;
-    listenSelect.querySelector('.selected').dataset.value = o.dataset.value;
-  }
-}
-
+  if (Array.isArray(filterData.excludedGenres)) {
+    filterData.excludedGenres.forEach(g => {
+      const cb = document.getElementById(`genre-${encodeURIComponent(g)}`);
+      if (cb) {
+        cb.disabled = true;
+        const cross = cb.parentNode.querySelector('.exclude-genre');
+        cross.textContent = '↻';
+        cross.classList.add('repeat-symbol');
+        const lb = cb.nextElementSibling;
+        lb.style.textDecoration = 'line-through';
+        lb.style.color = 'gray';
       }
-      applyFilters();
+    });
+  }
+
+  document.querySelectorAll('.language-checkbox').forEach(ch => {
+    ch.checked = false;
+    ch.disabled = false;
+    const lb = ch.nextElementSibling;
+    lb.style.textDecoration = 'none';
+    lb.style.color = '#f3f3f3';
+  });
+  if (Array.isArray(filterData.selectedLanguages)) {
+    filterData.selectedLanguages.forEach(l => {
+      const cb = document.getElementById(`language-${encodeURIComponent(l)}`);
+      if (cb) cb.checked = true;
+    });
+  }
+  if (Array.isArray(filterData.excludedLanguages)) {
+    filterData.excludedLanguages.forEach(l => {
+      const cb = document.getElementById(`language-${encodeURIComponent(l)}`);
+      if (cb) {
+        cb.disabled = true;
+        const cross = cb.parentNode.querySelector('.exclude-language');
+        cross.textContent = '↻';
+        cross.classList.add('language-repeat-symbol');
+        const lb = cb.nextElementSibling;
+        lb.style.textDecoration = 'line-through';
+        lb.style.color = 'gray';
+      }
+    });
+  }
+
+  document.querySelectorAll('.release-type-checkbox').forEach(ch => {
+    ch.checked = false;
+  });
+  if (Array.isArray(filterData.selectedReleaseTypes)) {
+    filterData.selectedReleaseTypes.forEach(rt => {
+      const cb = document.getElementById(`release-type-${rt}`);
+      if (cb) cb.checked = true;
+    });
+  }
+
+  if (filterData.sortOrder) {
+    const select = document.getElementById('sort-order');
+    const selected = select.querySelector('.selected');
+    const options = select.querySelectorAll('.option');
+
+    const foundOption = Array.from(options).find(opt => opt.dataset.value === filterData.sortOrder);
+    if (foundOption) {
+      selected.textContent = foundOption.textContent;
+      selected.dataset.value = foundOption.dataset.value;
+      sortOrder = filterData.sortOrder;
     }
+  }
+
+  if (typeof filterData.hideListened === 'boolean') {
+    document.getElementById('hide-listened').checked = filterData.hideListened;
+    hideListened = filterData.hideListened;
+
+    if (typeof filterData.nuamRecommended === 'boolean') {
+      document.getElementById('nuam-recommended-checkbox').checked = filterData.nuamRecommended;
+    }
+
+    const durationSelect = document.getElementById('duration-filter');
+    let optDuration = durationSelect.querySelector(`.option[data-value="${filterData.duration}"]`);
+    if (optDuration) {
+      durationSelect.querySelector('.selected').textContent = optDuration.textContent;
+      durationSelect.querySelector('.selected').dataset.value = optDuration.dataset.value;
+    } else {
+      const defaultDuration = durationSelect.querySelector(`.option[data-value=""]`);
+      durationSelect.querySelector('.selected').textContent = defaultDuration.textContent;
+      durationSelect.querySelector('.selected').dataset.value = '';
+    }
+
+    const trackCountSelect = document.getElementById('track-count-filter');
+    let optTrack = trackCountSelect.querySelector(`.option[data-value="${filterData.trackCount}"]`);
+    if (optTrack) {
+      trackCountSelect.querySelector('.selected').textContent = optTrack.textContent;
+      trackCountSelect.querySelector('.selected').dataset.value = optTrack.dataset.value;
+    } else {
+      const defaultTrack = trackCountSelect.querySelector(`.option[data-value=""]`);
+      trackCountSelect.querySelector('.selected').textContent = defaultTrack.textContent;
+      trackCountSelect.querySelector('.selected').dataset.value = '';
+    }
+
+  const periodSelect = document.getElementById('release-period-filter');
+  const pSel         = periodSelect.querySelector('.selected');
+  const startSlider  = document.getElementById('release-period-start');
+  const endSlider    = document.getElementById('release-period-end');
+
+  if (filterData.period === 'range') {
+    const dates  = albumsData.map(a => new Date(a.date));
+   const minD   = new Date(Math.min(...dates));
+   const sDate  = new Date(filterData.periodStart);
+   const eDate  = new Date(filterData.periodEnd);
+   const maxW   = parseInt(startSlider.max, 10);
+   const ws     = Math.min(Math.max(Math.round((sDate  - minD)/(7*24*60*60*1000)), 0), maxW);
+   const we     = Math.min(Math.max(Math.round((eDate  - minD)/(7*24*60*60*1000)), 0), maxW);
+   startSlider.value = ws;
+   endSlider.value   = we;
+
+    if (typeof updateReleaseRangeTip === 'function') {
+      updateReleaseRangeTip();
+    } else {
+      const dates   = albumsData.map(a => new Date(a.date));
+      const minDate = new Date(Math.min(...dates));
+      const maxW    = +startSlider.max;
+      const s = +startSlider.value, e = +endSlider.value;
+      const d1 = new Date(minDate.getTime() + s*7*24*60*60*1000);
+      const d2 = new Date(minDate.getTime() + e*7*24*60*60*1000);
+      const tip = document.getElementById('release-period-tooltip');
+      tip.textContent = `${d1.toISOString().slice(0,10)} – ${d2.toISOString().slice(0,10)}`;
+      tip.style.left  = ((s+e)/(2*maxW))*100 + '%';
+      pSel.textContent   = tip.textContent;
+      pSel.dataset.value = 'range';
+    }
+
+  } else {
+    const opt = periodSelect.querySelector(
+      `.option[data-value="${filterData.period || ''}"]`
+    );
+    if (opt) {
+      pSel.textContent   = opt.textContent;
+      pSel.dataset.value = opt.dataset.value;
+      if (!opt.dataset.value) delete pSel.dataset.value;
+    }
+
+    startSlider.value = startSlider.min;
+    endSlider.value   = endSlider.max;
+
+    const dates   = albumsData.map(a => new Date(a.date));
+    const minDate = new Date(Math.min(...dates));
+    const maxW    = +startSlider.max;
+    const d1      = minDate;
+    const d2      = new Date(minDate.getTime() + maxW*7*24*60*60*1000);
+    const tip     = document.getElementById('release-period-tooltip');
+    tip.textContent = `${d1.toISOString().slice(0,10)} – ${d2.toISOString().slice(0,10)}`;
+    tip.style.left  = '50%';
+
+    delete pSel.dataset.value;
+  }
+
+    const listenSelect = document.getElementById('listen-count-filter');
+    let optListen = listenSelect.querySelector(`.option[data-value="${filterData.listenCount}"]`);
+    if (optListen) {
+      listenSelect.querySelector('.selected').textContent = optListen.textContent;
+      listenSelect.querySelector('.selected').dataset.value = optListen.dataset.value;
+    } else {
+      const defaultListen = listenSelect.querySelector(`.option[data-value=""]`);
+      listenSelect.querySelector('.selected').textContent = defaultListen.textContent;
+      listenSelect.querySelector('.selected').dataset.value = '';
+    }
+
+    if (filterData.labelFilter !== undefined) {
+      const selectLabel = document.getElementById('label-select');
+      const selectedLabelDiv = selectLabel.querySelector('.selected');
+      const optionsContainer = selectLabel.querySelector('.options-container');
+      const opt = optionsContainer.querySelector(`.option[data-value="${filterData.labelFilter}"]`);
+      if (opt) {
+        selectedLabelDiv.textContent = opt.textContent;
+        selectedLabelDiv.dataset.value = opt.dataset.value;
+        labelFilter = filterData.labelFilter;
+      } else {
+        selectedLabelDiv.textContent = 'Усі лейбли';
+        selectedLabelDiv.dataset.value = '';
+        labelFilter = '';
+      }
+    }
+  }
+
+  applyFilters();
+}
+
 
     function saveFiltersToCache() {
-      const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
-      const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
+  const selectedGenres   = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
+  const excludedGenres   = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
+  const selectedLanguages   = Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value);
+  const excludedLanguages   = Array.from(document.querySelectorAll('.language-checkbox:disabled')).map(cb => cb.value);
+  const selectedReleaseTypes = Array.from(document.querySelectorAll('.release-type-checkbox:checked')).map(cb => cb.value);
 
-      const selectedLanguages = Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value);
-      const excludedLanguages = Array.from(document.querySelectorAll('.language-checkbox:disabled')).map(cb => cb.value);
+  let sortOrder = document.getElementById('sort-order')
+                         .querySelector('.selected')
+                         .dataset.value;
 
-      const selectedReleaseTypes = Array.from(document.querySelectorAll('.release-type-checkbox:checked')).map(cb => cb.value);
+ if (!sortOrder) sortOrder = 'desc';
+  const hideListened    = document.getElementById('hide-listened').checked;
+  const nuamRecommended = document.getElementById('nuam-recommended-checkbox').checked;
+  const duration   = document.getElementById('duration-filter')?.querySelector('.selected')?.dataset.value || '';
+  const trackCount = document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset.value || '';
+  const listenCount= document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset.value || '';
+  const labelFilter= document.getElementById('label-select')?.querySelector('.selected')?.dataset.value || '';
 
-      const sortOrder = document.getElementById('sort-order').querySelector('.selected').dataset.value;
-      const hideListened = document.getElementById('hide-listened').checked;
+const sel = document.querySelector('#release-period-filter .selected');
+let period = '', periodStart = '', periodEnd = '';
+if (sel.dataset.value === 'range') {
+  period = 'range';
+  const weekOptions = JSON.parse(localStorage.getItem('release-week-options') || '[]');
+const startIndex = +document.getElementById('release-period-start').value;
+const endIndex   = +document.getElementById('release-period-end').value;
+periodStart = weekOptions[startIndex] || '';
+periodEnd   = weekOptions[endIndex]   || '';
 
-      const filterData = {
-        selectedGenres,
-        excludedGenres,
-        selectedLanguages,
-        excludedLanguages,
-        selectedReleaseTypes,
-        sortOrder,
-        hideListened,
-        duration: document.getElementById('duration-filter')?.querySelector('.selected')?.dataset?.value || '',
-        trackCount: document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset?.value || '',
-        period: document.getElementById('release-period-filter')?.querySelector('.selected')?.dataset?.value || '',
-        listenCount: document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset?.value || '',
-        nuamRecommended: document.getElementById('nuam-recommended-checkbox').checked,
-      };
-      localStorage.setItem('albumFilters', JSON.stringify(filterData));
-    }
+} else {
+  period = sel.dataset.value || '';
+}
+
+  const filterData = {
+    selectedGenres,
+    excludedGenres,
+    selectedLanguages,
+    excludedLanguages,
+    selectedReleaseTypes,
+    sortOrder,
+    hideListened,
+    duration,
+    trackCount,
+    period,
+    periodStart,
+    periodEnd,
+    listenCount,
+    nuamRecommended,
+    labelFilter,
+  };
+
+  localStorage.setItem('albumFilters', JSON.stringify(filterData));
+}
 
     function attachGlobalEventListeners() {
       document.getElementById('genre-checkboxes').addEventListener('change', (e) => {
-        if (e.target.classList.contains('genre-checkbox')) {
-          preserveScroll(() => smoothApplyFilters());
-saveFiltersToCache();
-        }
-      });
-      
+  if (e.target.classList.contains('genre-checkbox')) {
+    clearActivePreset();
+    preserveScroll(() => smoothApplyFilters());
+    saveFiltersToCache();
+  }
+});
+   
       document.getElementById('genre-checkboxes').addEventListener('click', (e) => {
-        if (e.target.classList.contains('exclude-genre')) {
-          const genre = e.target.getAttribute('data-genre');
-          const cb = document.getElementById(`genre-${encodeURIComponent(genre)}`);
-          const lb = cb.nextElementSibling;
-          toggleExcludeGenre(genre, cb, lb, e.target);
-          saveFiltersToCache();
-        }
-      });
+  if (e.target.classList.contains('exclude-genre')) {
+    clearActivePreset();
+    const genre = e.target.getAttribute('data-genre');
+    const cb = document.getElementById(`genre-${encodeURIComponent(genre)}`);
+    const lb = cb.nextElementSibling;
+    toggleExcludeGenre(genre, cb, lb, e.target);
+    saveFiltersToCache();
+  }
+});
 
       document.getElementById('language-checkboxes').addEventListener('change', (e) => {
-        if (e.target.classList.contains('language-checkbox')) {
-          preserveScroll(() => smoothApplyFilters());
-saveFiltersToCache();
-        }
-      });
-      
+  if (e.target.classList.contains('language-checkbox')) {
+    clearActivePreset();
+    preserveScroll(() => smoothApplyFilters());
+    saveFiltersToCache();
+  }
+});
+  
       document.getElementById('language-checkboxes').addEventListener('click', (e) => {
-        if (e.target.classList.contains('exclude-language')) {
-          const lang = e.target.getAttribute('data-language');
-          const cb = document.getElementById(`language-${encodeURIComponent(lang)}`);
-          const lb = cb.nextElementSibling;
-          toggleExcludeLanguage(lang, cb, lb, e.target);
-          saveFiltersToCache();
-        }
-      });
+  if (e.target.classList.contains('exclude-language')) {
+    clearActivePreset();
+    const lang = e.target.getAttribute('data-language');
+    const cb = document.getElementById(`language-${encodeURIComponent(lang)}`);
+    const lb = cb.nextElementSibling;
+    toggleExcludeLanguage(lang, cb, lb, e.target);
+    saveFiltersToCache();
+  }
+});
 
       document.getElementById('release-type-checkboxes').addEventListener('change', (e) => {
-        if (e.target.classList.contains('release-type-checkbox')) {
-          preserveScroll(() => smoothApplyFilters());
-saveFiltersToCache();
-        }
-      });
+  if (e.target.classList.contains('release-type-checkbox')) {
+    clearActivePreset();
+    preserveScroll(() => smoothApplyFilters());
+    saveFiltersToCache();
+  }
+});
 
       document.getElementById('nuam-recommended-checkbox').addEventListener('change', () => {
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
-});
-      
-document.getElementById('duration-filter').addEventListener('change', () => {
+  clearActivePreset();
   preserveScroll(() => smoothApplyFilters());
   saveFiltersToCache();
 });
 
+      
+document.getElementById('duration-filter').addEventListener('change', () => {
+  clearActivePreset();
+  preserveScroll(() => smoothApplyFilters());
+  saveFiltersToCache();
+});
+
+
 document.getElementById('track-count-filter').addEventListener('change', () => {
+  clearActivePreset();
   preserveScroll(() => smoothApplyFilters());
   saveFiltersToCache();
 });
 
       document.getElementById('release-period-filter').addEventListener('change', () => {
+  const sel = document.querySelector('#release-period-filter .selected');
+
+  if (sel.dataset.value === 'range') return;
+
+  clearActivePreset();
   preserveScroll(() => smoothApplyFilters());
   saveFiltersToCache();
 });
-      
+ 
       document.getElementById('listen-count-filter').addEventListener('change', () => {
+  clearActivePreset();
   preserveScroll(() => smoothApplyFilters());
   saveFiltersToCache();
 });
+
       
       document.getElementById('hide-listened').addEventListener('change', (e) => {
-        hideListened = e.target.checked;
-        preserveScroll(() => smoothApplyFilters());
-saveFiltersToCache();
-      });
+  clearActivePreset();
+  hideListened = e.target.checked;
+  preserveScroll(() => smoothApplyFilters());
+  saveFiltersToCache();
+});
 
       document.getElementById('select-all-genres').addEventListener('click', () => {
         document.querySelectorAll('.genre-checkbox').forEach(cb => {
@@ -2711,7 +3480,7 @@ saveFiltersToCache();
     setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 2000);
   }).catch(err => {
     console.error('Помилка копіювання даних: ', err);
-    msg.textContent = 'Помилка при копіюванні даних.';
+    msg.textContent = 'Помилка при копіюванні даних';
     msg.className = 'error';
     setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
   });
@@ -2722,7 +3491,7 @@ document.getElementById('import-data').addEventListener('click', () => {
   const msg = document.getElementById('import-message');
   const importDataString = importTextarea.value.trim();
   if (!importDataString) {
-    msg.textContent = 'Введіть дані для завантаження.';
+    msg.textContent = 'Введіть дані для завантаження';
     msg.className = 'error';
     setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
     return;
@@ -2791,21 +3560,44 @@ document.getElementById('scrollTopButton').addEventListener('click', () => {
 });  
       
       const logoWrapper = document.querySelector('.logo-wrapper');
+const filtersButton = document.getElementById('filters-button');
+const searchButton  = document.getElementById('search-button');
+const searchContainer = document.getElementById('search-container');
+const searchInput   = document.getElementById('search-input');
+      const searchClose    = document.getElementById('search-close');
 
-document.getElementById('search-button').addEventListener('click', () => {
-  logoWrapper.style.display = 'none';
-  document.getElementById('search-button').style.display = 'none';
-  document.getElementById('search-container').style.display = 'flex';
-  document.getElementById('search-input').focus();
+const filtersContainer = document.getElementById('filters-container');
+const filtersClose     = document.getElementById('filters-close');
+
+searchButton.addEventListener('click', () => {
+  logoWrapper.style.display       = 'none';
+  searchButton.style.display      = 'none';
+  filtersButton.style.display     = 'none';
+  searchContainer.style.display   = 'flex';
+  searchInput.focus();
 });
 
-document.getElementById('search-close').addEventListener('click', () => {
-  logoWrapper.style.display = 'inline-block';
-  document.getElementById('search-button').style.display = 'inline-block';
-  document.getElementById('search-container').style.display = 'none';
-  searchQuery = '';
-  document.getElementById('search-input').value = '';
+searchClose.addEventListener('click', () => {
+  logoWrapper.style.display       = 'inline-block';
+  searchButton.style.display      = 'inline-block';
+  filtersButton.style.display     = 'inline-block';
+  searchContainer.style.display   = 'none';
+  searchInput.value = '';
   smoothApplyFilters();
+});
+
+filtersButton.addEventListener('click', () => {
+  logoWrapper.style.display      = 'none';
+  searchButton.style.display     = 'none';
+  filtersButton.style.display    = 'none';
+  filtersContainer.style.display = 'flex';
+});
+
+filtersClose.addEventListener('click', () => {
+  logoWrapper.style.display       = 'inline-block';
+  searchButton.style.display      = 'inline-block';
+  filtersButton.style.display     = 'inline-block';
+  filtersContainer.style.display  = 'none';
 });
 
 document.getElementById('search-input').addEventListener('input', e => {
@@ -2982,12 +3774,30 @@ if (selectedTrackCount) {
   filteredAlbums = filteredAlbums.filter(al => al.tracksIDs.length >= minTracks);
 }
 
-      const selectedPeriod = document.getElementById('release-period-filter')?.querySelector('.selected')?.dataset?.value;
-if (selectedPeriod) {
-  const days = parseInt(selectedPeriod, 10);
-  const now = new Date();
-  const threshold = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-  filteredAlbums = filteredAlbums.filter(al => new Date(al.date) >= threshold);
+const selEl = document.querySelector('#release-period-filter .selected');
+if (selEl.dataset.value !== 'range') {
+  const selectedPeriod = selEl.dataset.value;
+  if (selectedPeriod) {
+    const days = parseInt(selectedPeriod,10);
+    const now = new Date();
+    const threshold = new Date(now.getTime() - days*24*60*60*1000);
+    filteredAlbums = filteredAlbums.filter(al => new Date(al.date) >= threshold);
+  }
+}
+
+{
+  const ws = +document.getElementById('release-period-start').value;
+  const we = +document.getElementById('release-period-end').value;
+  const dates   = albumsData.map(a => new Date(a.date));
+  const minDate = new Date(Math.min(...dates));
+  const d1 = new Date(minDate.getTime() + ws*7*24*60*60*1000);
+  const d2 = new Date(minDate.getTime() + we*7*24*60*60*1000);
+  const startDate = d1 < d2 ? d1 : d2;
+  const endDate   = d1 < d2 ? d2 : d1;
+  filteredAlbums = filteredAlbums.filter(al => {
+    const d = new Date(al.date);
+    return d >= startDate && d <= endDate;
+  });
 }
       
       const selListen = document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset?.value;
@@ -3143,8 +3953,8 @@ if (labelFilter) {
 
     if (album.__separatorType) {
       const sepText = album.__separatorType === 'label'
-        ? 'Альбоми лейбла, що не відповідають обраним вами фільтрами'
-        : 'Знайдені альбоми, що не відповідають обраним вами фільтрами';
+        ? 'Альбоми лейбла, що не відповідають обраним вами фільтрам'
+        : 'Знайдені альбоми, що не відповідають обраним вами фільтрам';
       const sep = document.createElement('div');
       sep.classList.add('separator');
 
@@ -3342,7 +4152,7 @@ if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music', '160px');
       starBox.style.fontSize   = '24px';
       starBox.style.zIndex     = '11';
       starBox.innerHTML        = '<i class="fas fa-star star-icon" style="color:gold;"></i>';
-      attachTooltip(starBox, 'NUAM рекомендує цей альбом для прослуховування', '180px');
+      attachTooltip(starBox, 'NUAM рекомендує цей альбом до прослуховування', '180px');
       albumDiv.appendChild(starBox);
     }
 
@@ -3360,10 +4170,10 @@ if (nextAlbum) {
     albumDiv.querySelector('img').addEventListener('click', function () {
       const imgSrc        = this.src;
       const enlargedPrev  = document.querySelector('.enlarged-img');
-      const modalOverlay  = document.querySelector('.modal-overlay');
+      const modalOverlay = document.getElementById('preview-overlay');
       if (enlargedPrev) {
         enlargedPrev.remove();
-        modalOverlay.style.display = 'none';
+        modalOverlay.classList.add('hidden');
         document.body.classList.remove('no-scroll');
         document.body.style.top = '';
         window.scrollTo(0, parseInt(document.body.style.top || '0') * -1);
@@ -3376,13 +4186,13 @@ if (nextAlbum) {
       document.body.appendChild(enlargedImg);
       requestAnimationFrame(() => enlargedImg.classList.add('shown'));
 
-      modalOverlay.style.display = 'block';
+      modalOverlay.classList.remove('hidden');
       document.body.classList.add('no-scroll');
       document.body.style.top = `-${scrollY}px`;
 
       const closeImg = () => {
         enlargedImg.remove();
-        modalOverlay.style.display = 'none';
+        modalOverlay.classList.add('hidden');
         document.body.classList.remove('no-scroll');
         document.body.style.top = '';
         window.scrollTo(0, scrollY);
@@ -3617,7 +4427,7 @@ function showAlbum(album) {
     const markButton = albumElement.querySelector('.mark-listened-btn');
     markButton.textContent = album.listened
       ? 'Позначити як не прослуханий'
-      : 'Позначити як прослуханний';
+      : 'Позначити як прослуханий';
 
     albumElement.classList.toggle('album-listened', album.listened);
 
@@ -3749,7 +4559,7 @@ function showAlbum(album) {
         blacklistedArtists.delete(artistID);
 
         localStorage.setItem('blacklistedArtists', JSON.stringify(Array.from(blacklistedArtists)));
-        li.remove();
+        updateBlacklist();
 
         const albumsContainer = document.getElementById('albums-container');
         smoothApplyFilters();
@@ -3781,7 +4591,7 @@ function showAlbum(album) {
       removeIcon.addEventListener('click', () => {
         blacklistedLabels.delete(label);
         localStorage.setItem('blacklistedLabels', JSON.stringify(Array.from(blacklistedLabels)));
-        li.remove();
+        updateBlacklist();
 
         const albumsContainer = document.getElementById('albums-container');
         smoothApplyFilters();
@@ -3801,12 +4611,13 @@ function showAlbum(album) {
 
       const listenedArr = albumsData.filter(al => al.listened);
       if (listenedArr.length === 0) {
-        const msg = document.createElement('p');
-        msg.textContent = 'Тут буде список відслуханих вами альбомів.';
-        msg.style.textAlign = 'center';
-        msg.style.color = '#f3f3f3';
-        list.appendChild(msg);
-      } else {
+  const msg = document.createElement('p');
+  msg.textContent = 'Тут буде список відслуханих вами альбомів.';
+  msg.style.gridColumn  = '1 / -1';
+  msg.style.textAlign   = 'center';
+  msg.style.color       = '#f3f3f3';
+  list.appendChild(msg);
+} else {
         listenedArr.forEach(al => {
           const li = document.createElement('li');
           const a = document.createElement('a');
@@ -3983,12 +4794,14 @@ function removeTooltip(el) {
   list.innerHTML = '';
   const favArr = albumsData.filter(al => favoriteAlbums[al.albumID]);
   if (favArr.length === 0) {
-    const msg = document.createElement('p');
-    msg.textContent = 'Тут буде список ваших улюблених альбомів.';
-    msg.style.textAlign = 'center';
-    msg.style.color = '#f3f3f3';
-    list.appendChild(msg);
-  } else {
+  const msg = document.createElement('p');
+  msg.textContent = 'Тут буде список ваших улюблених альбомів.';
+  msg.style.gridColumn = '1 / -1';
+  msg.style.textAlign  = 'center';
+  msg.style.color      = '#f3f3f3';
+  list.appendChild(msg);
+}
+ else {
     favArr.forEach(al => {
       const li = document.createElement('li');
 
@@ -4025,6 +4838,157 @@ function removeTooltip(el) {
   document.getElementById('album-count').textContent = filteredAlbums.length;
 }
 
+const toggleEditBtn = document.getElementById('toggle-edit-presets');
+const presetsWrapper = document.querySelector('.presets-wrapper');
+let sortable;
+
+
+function attachPresetControls() {
+  presetsWrapper.querySelectorAll('.preset-item').forEach(btn => {
+
+    if (!btn.querySelector('.drag-handle')) {
+      const handle = document.createElement('div');
+      handle.className = 'drag-handle';
+      btn.appendChild(handle);
+    }
+
+    if (!btn.querySelector('.delete-handle')) {
+      const del = document.createElement('span');
+      del.className = 'delete-handle';
+      del.textContent = '×';
+      btn.appendChild(del);
+      del.addEventListener('click', e => {
+        e.stopPropagation();
+        showDeleteConfirm(btn);
+      });
+    }
+
+    if (!btn.querySelector('.edit-name-handle')) {
+      const edit = document.createElement('span');
+      edit.className = 'edit-name-handle';
+      edit.textContent = '✎';
+      btn.appendChild(edit);
+      edit.addEventListener('click', e => {
+        e.stopPropagation();
+        showRenameModal(btn);
+      });
+    }
+  });
+}
+
+toggleEditBtn.addEventListener('click', () => {
+  const isEditing = presetsWrapper.classList.toggle('editing');
+  if (isEditing) {
+    attachPresetControls();
+    sortable = Sortable.create(presetsWrapper, {
+      animation: 150,
+      handle: '.drag-handle',
+      onEnd: () => {
+        const newArr = Array.from(presetsWrapper.children)
+          .map(b => JSON.parse(b.dataset.presetJson));
+        savePresetsToStorage(newArr);
+      }
+    });
+  } else {
+    sortable.destroy();
+    presetsWrapper.querySelectorAll('.drag-handle, .delete-handle, .edit-name-handle')
+      .forEach(el => el.remove());
+  }
+});
+
+function showDeleteConfirm(btn) {
+  const overlay = document.createElement('div');
+  overlay.style = ''
+    + 'position:fixed;top:0;left:0;width:100%;height:100%;'
+    + 'background:rgba(0,0,0,0.7);display:flex;'
+    + 'align-items:center;justify-content:center;z-index:2000;';
+
+  const dlg = document.createElement('div');
+  dlg.style = ''
+    + 'background:#383838;padding:20px;border-radius:7px;'
+    + 'color:#f3f3f3;text-align:center;';
+
+  dlg.addEventListener('click', e => e.stopPropagation());
+
+  const txt     = document.createElement('p');
+  txt.textContent = 'Видалити фільтр?';
+
+  const btnKeep = document.createElement('button');
+  btnKeep.textContent = 'Залишити';
+  btnKeep.style = 'margin:0 10px;';
+
+  const btnDel  = document.createElement('button');
+  btnDel.textContent = 'Видалити';
+  btnDel.style = 'margin:0 10px;';
+
+  overlay.addEventListener('click', () => {
+    document.body.removeChild(overlay);
+  });
+
+  btnKeep.addEventListener('click', () => {
+    document.body.removeChild(overlay);
+  });
+
+  btnDel.addEventListener('click', () => {
+    const cfg = JSON.parse(btn.dataset.presetJson);
+    const arr = getStoredPresets().filter(p => p.name !== cfg.name);
+    savePresetsToStorage(arr);
+    loadPresetsFromStorage();
+    document.body.removeChild(overlay);
+  });
+
+  dlg.append(txt, btnKeep, btnDel);
+  overlay.appendChild(dlg);
+  document.body.appendChild(overlay);
+}
+
+function showRenameModal(btn) {
+  const modal = document.getElementById('edit-name-modal');
+  const input = modal.querySelector('#edit-name-input');
+  const msg   = modal.querySelector('#edit-name-message');
+  const save  = modal.querySelector('#edit-name-save');
+
+  const cfg      = JSON.parse(btn.dataset.presetJson);
+  const oldName  = cfg.name;
+  input.value    = oldName;
+  msg.textContent = '';
+
+  modal.style.display = 'flex';
+  input.focus();
+
+  save.onclick = () => {
+    const newName = input.value.trim();
+    if (!newName) {
+      msg.textContent = 'Вкажіть назву фільтра';
+      msg.className   = 'error';
+      setTimeout(() => (msg.textContent = ''), 3000);
+      return;
+    }
+
+    const presets = getStoredPresets();
+    const idx     = presets.findIndex(p => p.name === oldName);
+    if (idx >= 0) presets[idx].name = newName;
+    savePresetsToStorage(presets);
+    loadPresetsFromStorage();
+
+    modal.style.display = 'none';
+  };
+}
+
+(() => {
+  const modal   = document.getElementById('edit-name-modal');
+  const content = modal.querySelector('.modal-content');
+
+  modal.querySelector('.close')
+       .addEventListener('click', () => (modal.style.display = 'none'));
+
+  modal.addEventListener('click', e => {
+    if (!content.contains(e.target)) modal.style.display = 'none';
+  });
+})();
+
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
 </body>
 </html>
