@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NUAM Albums</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     @font-face {
   font-family: "CustomFont";
@@ -264,16 +266,12 @@ body.no-scroll {
   font-family: "CustomFont", sans-serif;
 }
 
-.checkbox-container::-webkit-scrollbar {
-  width: 14px;
-}
-.checkbox-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-.checkbox-container::-webkit-scrollbar-thumb {
-  background-color: #282626;
-  border-radius: 7px;
-  border: 3px solid #383838;
+#genre-checkboxes::-webkit-scrollbar { width:14px; }
+#genre-checkboxes::-webkit-scrollbar-track { background:transparent; }
+#genre-checkboxes::-webkit-scrollbar-thumb {
+  background-color:#282626;
+  border-radius:7px;
+  border:3px solid #383838;
 }
 
 input[type="checkbox"] {
@@ -283,7 +281,7 @@ input[type="checkbox"] {
   appearance: none;
   border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 4px;
-  background-color: #383838;
+  background-color: transparent;
   display: inline-block;
   position: relative;
   vertical-align: middle;
@@ -330,6 +328,7 @@ input[type="checkbox"]:checked::after {
 }
 
 #genre-checkboxes {
+  overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
@@ -364,6 +363,14 @@ input[type="checkbox"]:checked::after {
   border: 2px solid #282626;
 }
 
+    .bottom-controls {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+    
 .filter-section {
   display: flex;
   flex-direction: column;
@@ -393,7 +400,7 @@ input[type="checkbox"]:checked::after {
   flex-direction: column;
   gap: 10px;
   max-height: 200px;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
 }
 .checkbox-container label {
@@ -468,7 +475,7 @@ input[type="checkbox"]:checked::after {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 10px;
+  padding: 6px 10px;
   background-color: #383838;
   border-radius: 7px;
   justify-content: flex-start;
@@ -479,6 +486,11 @@ input[type="checkbox"]:checked::after {
   gap: 8px;
 }
 
+    .album-count {
+  color: #f3f3f3;
+      padding-bottom: 20px;
+}
+    
 .blacklist-row {
   display: flex;
   gap: 10px;
@@ -500,7 +512,7 @@ input[type="checkbox"]:checked::after {
   gap: 8px;
 }
 
-.blacklist-row #show-listened-albums {
+#show-listened-albums {
   cursor: pointer;
   text-decoration: underline;
 }
@@ -553,7 +565,8 @@ input[type="checkbox"]:checked::after {
 .blacklist-labels ul {
   list-style-type: none;
   padding: 0;
-  margin-top: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
   color: #f3f3f3;
 }
 .blacklist-artists li,
@@ -572,6 +585,40 @@ input[type="checkbox"]:checked::after {
   background-color: #383838;
 }
 
+.blacklist-artists.checkbox-container,
+.blacklist-labels.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.blacklist-artists.checkbox-container ul,
+.blacklist-labels.checkbox-container ul {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar {
+  width: 14px;
+}
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-track,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-track {
+  background: transparent;
+}
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-thumb,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-thumb {
+  background-color: #383838;
+  border-radius: 7px;
+  border: 3px solid #282626;
+}
+
+.blacklist-artists.checkbox-container ul,
+.blacklist-labels.checkbox-container ul {
+  scrollbar-width: thin;
+  scrollbar-color: #383838 transparent;
+}
+ 
 .favorites-section {
 }
 
@@ -691,10 +738,17 @@ input[type="checkbox"]:checked::after {
   outline: none;
   box-shadow: none;
 }
-#search-input:hover, #preset-name-input:hover {
+#search-input:hover, #preset-name-input:hover, #edit-name-input:hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
 
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { 
+      font-family: "CustomFont" !important;
+      -webkit-text-fill-color: #f3f3f3 !important;
+    box-shadow: 0 0 0px 1000px #282626 inset !important;
+      border: 1px solid #84aafb !important;
+    }
+    
 #search-close {
   padding: 5px;
   border: none;
@@ -816,11 +870,9 @@ input[type="checkbox"]:checked::after {
 #filters-container .preset-item:hover {
   border-color: rgba(132, 170, 251, 1);
 }
-.preset-item.preset-active {
-  background-color: #84aafb;
-  color: #282626;
-  border-color: #84aafb;
-}
+    #filters-container .preset-item.preset-active {
+      border-color: rgba(132, 170, 251, 1);
+    }
 
 #filters-container #add-preset {
   flex: none;
@@ -998,7 +1050,7 @@ button {
 }
 
 button {
-  padding: 10px 20px;
+  padding: 10px 10px;
   background-color: #84aafb;
   color: #282626;
   border: 1px solid #84aafb;
@@ -1010,18 +1062,25 @@ button:hover {
   border: 1px solid #f3f3f3;
 }
     
-    .modal-content #preset-save {
-    padding: 0 15px;
+    .modal-content #preset-save, .modal-content #edit-name-save, .keep-btn, .delete-btn {
+    padding: 10px 20px;
     background-color: transparent;
     color: #f3f3f3;
     border: 1px solid rgba(132, 170, 251, 0.5);
     font-size: 14px;
-
+    transition: border 0.3s ease;
 }
-.modal-content #preset-save:hover {
-  border: 1px solid #f3f3f3;
+.modal-content #preset-save:hover, .modal-content #edit-name-save:hover, .keep-btn:hover, .delete-btn:hover {
+  border: 1px solid rgba(132, 170, 251, 1);
 }
 
+    .delete-btn {
+      border: 1px solid rgba(192, 57, 43, 0.5);
+    }
+    .delete-btn:hover {
+    border: 1px solid rgba(192, 57, 43, 1);
+    }
+    
 #preset-save-message.error {
   color: #e74c3c;
   font-size: 13px;
@@ -1029,8 +1088,9 @@ button:hover {
 }
     
 #albums-container {
+  position: relative;
   margin-left: 480px;
-  padding: 25px 20px;
+  padding: 20px 20px 80px 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
@@ -1220,6 +1280,7 @@ button:hover {
     background-color 0.3s ease,
     border-color 0.3s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .track-circle:hover {
@@ -1228,15 +1289,29 @@ button:hover {
 }
 .track-circle i {
   font-size: 20px;
-  color: #555;
+  color: #bababa;
+  z-index: 1;
 }
-
+.track-circle .progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: rgba(132, 170, 251, 0.5);;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+    
 .lazy-loading {
   text-align: center;
   margin: 20px 0;
+  margin-left: 480px;
+  width: calc(100% - 480px);
   color: #f3f3f3;
   user-select: none !important;
 }
+
 
 audio {
   display: none;
@@ -1290,6 +1365,11 @@ audio {
   user-select: none !important;
   opacity: 0;
   transition: opacity 0.3s ease;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 .enlarged-img.shown {
   opacity: 1;
@@ -1322,7 +1402,8 @@ audio {
   font-size: 14px;
 }
 #preset-modal .modal-content > #preset-name-input,
-#preset-modal .modal-content > #preset-save {
+#preset-modal .modal-content > #preset-save, #edit-name-modal .modal-content > #edit-name-input,
+#edit-name-modal .modal-content > #edit-name-save {
   display: inline-block;
   vertical-align: middle;
   margin: 0;
@@ -1338,10 +1419,10 @@ audio {
   display: block;
 }
 .tablink {
-  background-color: #282626;
-  color: #f3f3f3;
+  background-color: #84aafb;
+  color: #282626;
   padding: 10px 20px;
-  border: 1px solid #f3f3f3;
+  border: 1px solid #84aafb;
   cursor: pointer;
   transition:
     border-color 0.3s ease,
@@ -1352,15 +1433,15 @@ audio {
 }
 .tablink.active {
   background-color: #84aafb;
-  border: 1px solid #84aafb;
+  border: 1px solid #f3f3f3;
   color: #282626;
 }
 .tablink.active:hover {
   background-color: #84aafb;
 }
 .tablink:hover {
-  background-color: #282626;
-  border: 1px solid #84aafb;
+  background-color: #84aafb;
+  border: 1px solid #f3f3f3;
 }
 
 .close {
@@ -1390,6 +1471,7 @@ audio {
   font-size: 12px;
   font-weight: bold;
   transition: color 0.3s ease;
+  padding-right: 10px;
 }
 .blacklist-cross:hover {
   color: #e74c3c;
@@ -1442,17 +1524,17 @@ textarea:focus {
   padding: 10px 20px;
   font-size: 14px;
   cursor: pointer;
-  background-color: #4caf50;
+  background-color: transparent;
   color: #f3f3f3;
-  border: none;
+  border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 5px;
   width: fit-content;
   vertical-align: middle;
-  transition: background-color 0.3s;
+  transition: border 0.3s;
 }
 #export-data:hover,
 #import-data:hover {
-  background-color: #388e3c;
+  border: 1px solid rgba(132, 170, 251, 1);
 }
 
 #export-message,
@@ -1482,11 +1564,17 @@ textarea:focus {
   height: 40px;
   object-fit: cover;
   border-radius: 4px;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
 #favorites-albums-list a {
   text-decoration: none;
   transition: text-decoration 0.2s;
+  user-select: none !important;
 }
 #favorites-albums-list a:hover {
   text-decoration: underline;
@@ -1577,24 +1665,7 @@ textarea:focus {
 .genre-buttons button:hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
-
-.track-tooltip {
-  display: none;
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #f3f3f3;
-  padding: 5px 10px;
-  border-radius: 7px;
-  font-size: 12px;
-  white-space: normal;
-  min-width: 160px;
-  text-align: center;
-  z-index: 100;
-}
-
+    
 .alb-head {
   display: flex;
   gap: 12px;
@@ -1677,6 +1748,11 @@ textarea:focus {
   height: 100%;
   object-fit: cover;
   display: block;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
 .controls,
@@ -1777,22 +1853,51 @@ textarea:focus {
   height: 0;
 }
 
-#favorites-albums-list a {
-  user-select: auto !important;
-}
-
     .range-wrapper {
+  --start: 0%;
+  --end: 100%;
   position: relative;
   height: 30px;
   margin: 5px 10px;
 }
+
+.range-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0;
+  width: 100%; height: 4px;
+  background: #444;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.range-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--start);
+  width: calc(var(--end) - var(--start));
+  height: 4px;
+  background: rgba(132,170,251,0.5);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 .range-wrapper input[type="range"] {
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  pointer-events: none;
+  width: 100%; height: 100%;
+  margin: 0;
+  padding: 0;
   background: transparent;
+  pointer-events: none;
   -webkit-appearance: none;
+}
+.range-wrapper input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 4px;
 }
 .range-wrapper input[type="range"]::-webkit-slider-thumb {
   pointer-events: all;
@@ -1800,6 +1905,8 @@ textarea:focus {
   border-radius: 50%;
   background: #84aafb;
   border: 2px solid #282626;
+  cursor: pointer;
+  margin-top: -6px;
   -webkit-appearance: none;
 }
 .range-tooltip {
@@ -1808,7 +1915,6 @@ textarea:focus {
   left: 50%;
   transform: translateX(-50%);
   padding: 4px 8px;
-  background: #333;
   color: #f3f3f3;
   font-size: 12px;
   border-radius: 4px;
@@ -1834,6 +1940,10 @@ textarea:focus {
   border-color: rgba(132,170,251,1);
 }
 
+#toggle-edit-presets.active {
+  border: 1px solid rgba(132, 170, 251, 1);
+}
+    
 .presets-wrapper .preset-item .drag-handle {
   display: none;
 }
@@ -1860,7 +1970,15 @@ textarea:focus {
   bottom: -7px;
   left: -7px;
   right: -7px;
+}
+    
+.sortable-ghost {
+  opacity: 1 !important;
+}
 
+.sortable-chosen {
+  opacity: 0.3 !important;
+  background-color: black !important;
 }
     
 .presets-wrapper .preset-item .delete-handle {
@@ -1939,7 +2057,7 @@ textarea:focus {
 .modal-content h3 {
   display:block; 
   vertical-align: middle;
-  margin: 0 0 10px;
+  margin: 0 0 20px;
   color: #f3f3f3;
 }
 
@@ -1968,6 +2086,70 @@ textarea:focus {
   display:none;
 }
 
+    #toggle-preview-button {
+  position: fixed;
+      height: 40px;
+    width: 40px;
+    bottom: 30px;
+    margin-left: 30px;
+  z-index: 999;
+  background: #282828;
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  padding: 8px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      transition: border 0.3s ease;
+}
+#toggle-preview-button:hover {
+  border: 1px solid rgba(132, 170, 251, 1);
+}
+
+    .actions-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+    
+    #favorites-button, #blacklist-button {
+      width: 145px;
+    }
+    #export-button {
+      width: 150px;
+    }
+    
+    .genre-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.genre-buttons label {
+  display: inline-flex;
+    align-items: center;
+    font-weight: normal;
+    gap: 0px;
+    font-size: 12px;
+    color: #f3f3f3;
+    cursor: pointer;
+}
+
+.genre-buttons input[type="checkbox"] {
+  width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.genre-switch-sep {
+      display: inline-block;
+    width: 2px;
+    height: 26px;
+    background-color: #383838;
+    user-select: none;
+}
+
 @media (max-width: 768px) {
   .controls {
     flex-direction: column;
@@ -1982,7 +2164,6 @@ textarea:focus {
 }
 
   </style>
-
 </head>
 <body>
   
@@ -2048,7 +2229,7 @@ textarea:focus {
 <div id="filters-container" style="display: none; align-items: center; gap: 10px; width: 100%; padding: 0 0 15px 0;">
 
   <button id="add-preset" class="add-preset-btn">+</button>
-  <button id="toggle-edit-presets" title="Редагувати пресети">
+  <button id="toggle-edit-presets">
   <i class="fas fa-pencil-alt"></i>
 </button>
 
@@ -2057,7 +2238,6 @@ textarea:focus {
     <button class="preset-item" data-preset-json='{"name":"Мови","filters":{}}'>Мови</button>
     <button class="preset-item" data-preset-json='{"name":"Тип релізу","filters":{}}'>Тип релізу</button>
     <button class="preset-item" data-preset-json='{"name":"Інше","filters":{}}'>Інше</button>
-
   </div>
 
   <button id="filters-close">✖</button>
@@ -2069,10 +2249,8 @@ textarea:focus {
   <div id="preset-modal" class="modal hidden">
     <div class="modal-content">
       <span class="close" id="preset-close">&times;</span>
-      <h3 style="color: #f3f3f3; margin-top: 0; margin-bottom: 10px;">
-        Ви зберігаєте поточні вибрані фільтри та сортування. Вкажіть назву.
-      </h3>
-      <input id="preset-name-input" placeholder="Назва пресету" style="margin-right:10px;"><button id="preset-save" style="height:40px;">Зберегти</button>
+      <h3 style="color: #f3f3f3; margin-top: 0; margin-bottom: 20px;">Будуть збережені поточні вибрані фільтри та сортування. Вкажіть назву.</h3>
+      <input id="preset-name-input" placeholder="Назва фільтра" style="margin-right:10px;"><button id="preset-save" style="height:40px;">Зберегти</button>
       <span id="preset-save-message"></span>
     </div>
   </div>
@@ -2091,10 +2269,15 @@ textarea:focus {
         <div class="section-title genre-header">
   <span>Жанри:</span>
   <div class="genre-buttons">
-    <button id="select-all-genres">Вибрати всі</button>
-    <button id="deselect-all-genres">Зняти всі</button>
-  </div>
+  <label id="match-all-genres-label">
+  <input type="checkbox" id="match-all-genres-checkbox">усі вибрані жанри</label>
+  <span class="genre-switch-sep"></span>
+  <button id="select-all-genres">Вибрати всі</button>
+  <button id="deselect-all-genres">Зняти всі</button>
 </div>
+
+</div>
+
 <div class="checkbox-grid" id="genre-checkboxes"></div>
 
       </div>
@@ -2127,39 +2310,17 @@ textarea:focus {
       <div class="option" data-value="asc">Спочатку старі</div>
       <div class="option" data-value="listens-desc">Більше прослуховувань</div>
 <div class="option" data-value="listens-asc">Менше прослуховувань</div>
+      <div class="option" data-value="duration-desc">Більш тривалі</div>
+    <div class="option" data-value="duration-asc">Менш тривалі</div>
+    <div class="option" data-value="tracks-desc">Більша кількість треків</div>
+    <div class="option" data-value="tracks-asc">Менша кількість треків</div>
 <div class="option" data-value="popularity-growth">Активне зростання слухачів</div>
 <div class="option" data-value="random">Випадковий порядок</div>
     </div>
   </div>
 </div>
 
-      <div class="sort-section">
-  <label for="duration-filter">Тривалість:</label>
-  <div class="custom-select" id="duration-filter">
-    <div class="selected">Будь-яка тривалість</div>
-    <div class="options-container">
-      <div class="option" data-value="">Будь-яка тривалість</div>
-      <div class="option" data-value="short">До 30 хвилин</div>
-      <div class="option" data-value="medium">30-60 хвилин</div>
-      <div class="option" data-value="long">60-120 хвилин</div>
-      <div class="option" data-value="very-long">Понад 120 хвилин</div>
-    </div>
-  </div>
-</div>
-
-<div class="sort-section">
-  <label for="track-count-filter">Кількість треків:</label>
-  <div class="custom-select" id="track-count-filter">
-    <div class="selected">Будь-яка кількість</div>
-    <div class="options-container">
-      <div class="option" data-value="">Будь-яка кількість</div>
-      <div class="option" data-value="5">5 і більше треків</div>
-      <div class="option" data-value="12">12 і більше треків</div>
-    </div>
-  </div>
-</div>
-      
-<div class="sort-section">
+    <div class="sort-section">
   <label for="release-period-filter">Період релізу:</label>
   <div class="custom-select" id="release-period-filter">
     <div class="selected">За будь-який час</div>
@@ -2175,7 +2336,6 @@ textarea:focus {
           <div class="range-wrapper" id="release-period-range">
       <input type="range" id="release-period-start" min="0" max="0" step="1">
       <input type="range" id="release-period-end"   min="0" max="0" step="1">
-      <div class="range-tooltip" id="release-period-tooltip"></div>
     </div>
 
     </div>
@@ -2183,7 +2343,7 @@ textarea:focus {
 </div>
 
       <div class="sort-section">
-  <label for="listen-count-filter">Кількість прослуховувань:</label>
+  <label for="listen-count-filter">Прослуховувань:</label>
   <div class="custom-select" id="listen-count-filter">
     <div class="selected">Будь-яка кількість</div>
     <div class="options-container">
@@ -2199,10 +2359,51 @@ textarea:focus {
       <div class="option" data-value="250000-500000">Від 250 000 до 500 000</div>
       <div class="option" data-value="500000-1000000">Від 500 000 до 1 000 000</div>
       <div class="option" data-value="1000000-">Від 1 000 000</div>
+
+      <div class="range-wrapper" id="listen-count-range">
+        <input type="range" id="listen-count-start" min="0" max="0" step="1">
+        <input type="range" id="listen-count-end"   min="0" max="0" step="1">
+      </div>
+    </div>
+  </div>
+</div>  
+      
+            <div class="sort-section">
+  <label for="duration-filter">Тривалість:</label>
+  <div class="custom-select" id="duration-filter">
+    <div class="selected">Будь-яка тривалість</div>
+    <div class="options-container">
+      <div class="option" data-value="">Будь-яка тривалість</div>
+      <div class="option" data-value="short">До 30 хвилин</div>
+      <div class="option" data-value="medium">30–60 хвилин</div>
+      <div class="option" data-value="long">60–120 хвилин</div>
+      <div class="option" data-value="very-long">Понад 120 хвилин</div>
+
+      <div class="range-wrapper" id="duration-range">
+        <input type="range" id="duration-start" min="0" max="0" step="1">
+        <input type="range" id="duration-end"   min="0" max="0" step="1">
+      </div>
     </div>
   </div>
 </div>
-      
+         
+<div class="sort-section">
+  <label for="track-count-filter">Кількість треків:</label>
+  <div class="custom-select" id="track-count-filter">
+    <div class="selected">Будь-яка кількість</div>
+    <div class="options-container">
+      <div class="option" data-value="">Будь-яка кількість</div>
+      <div class="option" data-value="5">5 і більше треків</div>
+      <div class="option" data-value="12">12 і більше треків</div>
+
+      <div class="range-wrapper" id="track-count-range">
+        <input type="range" id="track-count-start" min="0" max="0" step="1">
+        <input type="range" id="track-count-end"   min="0" max="0" step="1">
+      </div>
+    </div>
+  </div>
+</div>
+  
       <div class="sort-section">
   <label for="track-count-filter">Альбоми лейблу:</label>
       <div class="custom-select upward" id="label-select">
@@ -2213,30 +2414,28 @@ textarea:focus {
 </div>
         </div>
       
-      <div class="blacklist-row">
-  <div class="blacklist-section">
-    <button id="blacklist-button">Чорний список</button>
-  </div>
+      <div class="actions-row">
+  <button id="favorites-button">Обрані альбоми</button>
+  <button id="blacklist-button">Чорний список</button>
+  <button id="export-button">Перенесення даних</button>
+</div>
+<div class="bottom-controls">
   <div class="hide-listened-section">
     <label for="hide-listened">
       <input type="checkbox" id="hide-listened">Приховати <span id="show-listened-albums">прослухані альбоми</span>
     </label>
   </div>
+  <div class="album-count">
+  Альбомів з урахуванням фільтрів: <span id="album-count">0</span>
 </div>
-
-      <div class="favorites-section">
-  <button id="favorites-button">Обрані альбоми</button>
-
 </div>
-
-      <label>Альбомів з урахуванням фільтрів: <span id="album-count">0</span></label>
     </div>
   </div>
 
   <div id="albums-container"></div>
   <div id="preview-overlay" class="preview-overlay hidden"></div>
 
-  <div class="lazy-loading" id="lazy-loading">Завантаження альбомів...</div>
+  <div class="lazy-loading" id="lazy-loading">Завантаження альбомів…</div>
 
   <div id="blacklist-modal" class="modal hidden">
     <div class="modal-content">
@@ -2323,11 +2522,169 @@ textarea:focus {
 </div>
   
   <script>
+    
+    function loadCsvWithRetry(url, options, retries = 3, delay = 2000) {
+  Papa.parse(url, {
+    ...options,
+    error(err) {
+      if (retries > 0) {
+        console.warn(`Помилка завантаження CSV, залишилося спроб: ${retries}`, err);
+        setTimeout(() => loadCsvWithRetry(url, options, retries - 1, delay), delay);
+      } else {
+        console.error('Не вдалося завантажити CSV після кількох спроб:', err);
+      }
+    }
+  });
+}
+
+    async function getAccessToken() {
+  const clientId     = '919b6650d8a449e5a147474a58ae2981';
+  const clientSecret = '5c383eabdcf8461e8556327f97414906';
+  const resp = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+    },
+    body: 'grant_type=client_credentials'
+  });
+  const { access_token } = await resp.json();
+  return access_token;
+}
+
+async function getAlbumTracks(albumId, token) {
+  let all = [], url = `https://api.spotify.com/v1/albums/${albumId}/tracks?limit=50`;
+  while (url) {
+    const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    const j = await r.json();
+    all = all.concat(j.items);
+    url = j.next;
+  }
+  return all.map(t => ({
+    id:      t.id,
+    name:    t.name,
+    artists: t.artists.map(a => a.name)
+  }));
+}
+
+    let autoPlayingAlbum = null;
+let autoPlayIndex = 0;
+let currentHighlightedCircle = null;
+    
+async function loadAlbumTracksWithRetry(album) {
+  if (!window._spotifyToken) {
+    window._spotifyToken = await getAccessToken();
+  }
+  try {
+    const list = await getAlbumTracks(album.albumID, window._spotifyToken);
+    album.tracksInfo = Object.fromEntries(list.map(t => [t.id, t]));
+  } catch (err) {
+    console.warn('Ошибка при получении треков (пробуем обновить токен)', err);
+
+    window._spotifyToken = await getAccessToken();
+
+    const list = await getAlbumTracks(album.albumID, window._spotifyToken);
+    album.tracksInfo = Object.fromEntries(list.map(t => [t.id, t]));
+  }
+}
+  
 let activePresetButton = null;
+    let isPresetLoading = false;
 
     const newSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRGgPDeRNQcSe5tV2h3zu-rtMr-i7ph-4hU6HKglhXKdaAB5UFXUrdWLZKb8hwGyWgDxL5LDfnmrqe/pub?gid=1559781011&single=true&output=csv";
 
     let searchQuery = '';
+    
+    const previewPlayer = new Audio();
+previewPlayer.preload = 'none';
+previewPlayer.crossOrigin = 'anonymous';
+let previewActivated = false;
+    
+    const scrollTopButton = document.getElementById('scrollTopButton');
+const togglePreviewBtn = document.createElement('button');
+togglePreviewBtn.id = 'toggle-preview-button';
+    
+    attachTooltip(togglePreviewBtn,
+  'Увімкнути відтворення уривків треків при наведенні', '180px');
+    
+scrollTopButton.parentNode.insertBefore(togglePreviewBtn, scrollTopButton);
+
+    const iconOn  = '<i class="fas fa-volume-up"></i>';
+const iconOff = '<i class="fas fa-volume-xmark"></i>';
+togglePreviewBtn.innerHTML = iconOff;
+    
+function togglePreview(state) {
+  previewActivated = (state === true || state === false)
+    ? state
+    : !previewActivated;
+  if (!previewActivated) {
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+    previewPlayer.removeAttribute('src');
+    previewPlayer.load();
+  }
+  togglePreviewBtn.innerHTML = previewActivated ? iconOn : iconOff;
+  
+  removeTooltip(togglePreviewBtn);
+attachTooltip(
+  togglePreviewBtn,
+  previewActivated
+    ? 'Вимкнути відтворення уривків треків при наведенні'
+    : 'Увімкнути відтворення уривків треків при наведенні',
+  '180px'
+);
+}
+
+togglePreview(previewActivated);
+togglePreviewBtn.addEventListener('click', () => {
+
+  if (autoPlayingAlbum) {
+
+    const prevAlbum = autoPlayingAlbum;
+    autoPlayingAlbum = null;
+
+    const prevBtn = document.querySelector(
+      `.play-all-toggle[data-album-id="${prevAlbum}"]`
+    );
+    if (prevBtn) {
+      prevBtn.innerHTML = '<i class="fas fa-play"></i>';
+      removeTooltip(prevBtn);
+      attachTooltip(prevBtn, 'Відтворити всі треки альбому', '180px');
+    }
+
+    if (currentHighlightedCircle) {
+      currentHighlightedCircle.classList.remove('highlight');
+      currentHighlightedCircle = null;
+    }
+
+    const prevTracksContainer = document.querySelector(
+      `.album[data-album-id="${prevAlbum}"] .tracks`
+    );
+    if (prevTracksContainer) {
+      prevTracksContainer
+        .querySelectorAll('.track-circle .progress-fill')
+        .forEach(el => el.style.width = '0%');
+    }
+
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+    previewPlayer.ontimeupdate = null;
+  }
+
+  togglePreview();
+});
+    
+    function fixPos() {
+  const cont = document.getElementById('albums-container');
+  const btn  = document.getElementById('toggle-preview-button');
+  if (!cont || !btn) return;
+  btn.style.left = cont.getBoundingClientRect().left + 'px';
+}
+
+document.addEventListener('scroll',  fixPos);
+document.addEventListener('resize',  fixPos);
+fixPos();
+
     
     const loaderImg = document.querySelector('#loading-screen img');
 if (loaderImg) {
@@ -2355,11 +2712,11 @@ function loadAllowedArtists() {
             if (m) allowedArtistIds.add(m[1]);
           });
         });
-        console.log('Allowed artist IDs:', allowedArtistIds);
+
         resolve();
       },
       error: err => {
-        console.error('Ошибка при загрузке списка артистов:', err);
+        console.error('Помилка під час завантаження списку артистів', err);
         reject(err);
       }
     });
@@ -2378,9 +2735,9 @@ function loadAllowedArtists() {
     let labelFilter = '';
 
 function releaseIcon(t){
-  if (t==='compilation') return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
-  if (t==='album')      return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">LP</text></svg>`;
-  return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="8"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">EP</text></svg>`;
+  if (t==='compilation') return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="4"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
+  if (t==='album')      return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="4"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">LP</text></svg>`;
+  return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="4"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black, Arial, sans-serif" font-size="115" fill="#f3f3f3">EP</text></svg>`;
 }
 
     const listenedAlbums = JSON.parse(localStorage.getItem('listenedAlbums')) || {};
@@ -2410,7 +2767,7 @@ function savePresetsToStorage(arr) {
 }
 
 function loadPresetsFromStorage() {
-  const wrapper = document.querySelector('.presets-wrapper');
+  const wrapper = presetsWrapper;
   if (!wrapper) return;
   wrapper.innerHTML = '';
   getStoredPresets().forEach(preset => {
@@ -2421,6 +2778,21 @@ function loadPresetsFromStorage() {
     btn.addEventListener('click', () => applyPreset(preset));
     wrapper.appendChild(btn);
   });
+
+  if (presetsWrapper.classList.contains('editing')) {
+    attachPresetControls();
+
+    if (sortable) sortable.destroy();
+    sortable = Sortable.create(presetsWrapper, {
+      animation: 150,
+      handle: '.drag-handle',
+      onEnd: () => {
+        const newArr = Array.from(presetsWrapper.children)
+                            .map(b => JSON.parse(b.dataset.presetJson));
+        savePresetsToStorage(newArr);
+      }
+    });
+  }
 }
 
 function clearActivePreset() {
@@ -2432,33 +2804,38 @@ function clearActivePreset() {
 
 function applyPreset(preset) {
   if (!preset.filters) return;
+  isPresetLoading = true;
+
   localStorage.setItem('albumFilters', JSON.stringify(preset.filters));
+
   loadFiltersAfterRender();
   smoothApplyFilters();
   clearActivePreset();
+
   document.querySelectorAll('button.preset-item').forEach(b => b.classList.remove('preset-active'));
-  document.querySelectorAll('button.preset-item').forEach(b => {
-    if (b.textContent === preset.name) {
-      b.classList.add('preset-active');
-      activePresetButton = b;
-    }
-  });
-  document.getElementById('filters-close').click();
+  const btn = [...document.querySelectorAll('button.preset-item')]
+                .find(b => b.textContent === preset.name);
+  if (btn) {
+    btn.classList.add('preset-active');
+    activePresetButton = btn;
+  }
+
+  isPresetLoading = false;
 }
    
 window.addEventListener('DOMContentLoaded', init);
-
+    
 async function init() {
   try {
     await loadAllowedArtists();
   } catch (e) {
-    console.warn('Не удалось загрузить список артистов — показываем все альбомы');
+    console.warn('Не вдалося завантажити список артистів — показуємо всі альбоми');
   }
 
-  Papa.parse(newSheetUrl, {
-    download: true,
-    header: true,
-    complete: function(results) {
+  loadCsvWithRetry(newSheetUrl, {
+  download: true,
+  header: true,
+  complete: function(results) {
       const rawData = results.data;
       processAlbumData(rawData);
 
@@ -2473,68 +2850,261 @@ async function init() {
       populateFilters();
       populateLabelOptions();
       initBasicCustomSelect(document.getElementById('sort-order'));
+      
+      const pgOpt = document.querySelector('#sort-order .option[data-value="popularity-growth"]');
+if (pgOpt) {
+  attachTooltip(
+    pgOpt,
+    'Вгорі будуть показані альбоми, популярність яких зростає швидше за інші',
+    '180px'
+  );
+}
+      
       const sortSel = document.getElementById('sort-order')
                        .querySelector('.selected');
 if (!sortSel.dataset.value) sortSel.dataset.value = 'desc';
       initBasicCustomSelect(document.getElementById('duration-filter'));
       initBasicCustomSelect(document.getElementById('track-count-filter'));
       initBasicCustomSelect(document.getElementById('release-period-filter'));
+
       
       ;(function initReleasePeriodSlider() {
   const start = document.getElementById('release-period-start');
   const end   = document.getElementById('release-period-end');
-  const tip   = document.getElementById('release-period-tooltip');
-  const dates   = albumsData.map(a => new Date(a.date));
+  const wrapper = document.getElementById('release-period-range');
+  const dates = albumsData.map(a => new Date(a.date));
   const minDate = new Date(Math.min(...dates));
   const now     = new Date();
   const maxW    = Math.ceil((now - minDate) / (7*24*60*60*1000));
 
-        const weekOptions = [];
-for (let i = 0; i <= maxW; i++) {
-  const d = new Date(minDate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
-  weekOptions.push(d.toISOString().slice(0,10));
-}
-        
-localStorage.setItem('release-week-options', JSON.stringify(weekOptions));
-        
-  start.min = end.min = 0;
-  start.max = end.max = maxW;
-  start.step = end.step = 1;
+  const weekOptions = [];
+  for (let i = 0; i <= maxW; i++) {
+    const d = new Date(minDate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+    weekOptions.push(d.toISOString().slice(0,10));
+  }
+  localStorage.setItem('release-week-options', JSON.stringify(weekOptions));
+
+  [start, end].forEach(el => {
+    el.min   = 0;
+    el.max   = maxW;
+    el.step  = 1;
+  });
   start.value = 0;
   end.value   = maxW;
 
   let debounce;
-  function updateTip() {
-    const s = +start.value, e = +end.value;
+  function updateRange(skipApply = false) {
+    const s = +start.value;
+    const e = +end.value;
+
     const d1 = new Date(minDate.getTime() + s*7*24*60*60*1000);
     const d2 = new Date(minDate.getTime() + e*7*24*60*60*1000);
     const sd = d1.toISOString().slice(0,10);
     const td = d2.toISOString().slice(0,10);
-    tip.textContent = `${sd} – ${td}`;
-    tip.style.left = ((s+e)/(2*maxW))*100 + '%';
+
     const sel = document.querySelector('#release-period-filter .selected');
-    if (s===0 && e===maxW) {
-      sel.textContent = 'За будь-який час';
-      delete sel.dataset.value;
-    } else {
-      sel.textContent = tip.textContent;
-      sel.dataset.value = 'range';
+    if (sel) {
+      if (s === 0 && e === maxW) {
+        sel.textContent = 'За будь-який час';
+        delete sel.dataset.value;
+      } else {
+        sel.textContent = `${sd} – ${td}`;
+        sel.dataset.value = 'range';
+      }
     }
+
+    wrapper.style.setProperty('--start', (s / maxW * 100) + '%');
+    wrapper.style.setProperty('--end',   (e / maxW * 100) + '%');
+
     clearTimeout(debounce);
-  debounce = setTimeout(() => {
-    saveFiltersToCache();
-    smoothApplyFilters();
-  }, 500);
+  if (!skipApply) {
+    debounce = setTimeout(()=>{
+      saveFiltersToCache();
+      smoothApplyFilters();
+    }, 500);
+  }
   }
 
-  start.addEventListener('input', updateTip);
-  end  .addEventListener('input', updateTip);
-  updateTip();
-        window.updateReleaseRangeTip = updateTip;
+  start.addEventListener('input', () => {
+    if (+start.value > +end.value) start.value = end.value;
+    updateRange(false); });
+
+  end.addEventListener('input', () => {
+    if (+end.value < +start.value) end.value = start.value;
+    updateRange(false); });
+
+  updateRange(true);
+  window.updateReleaseRangeTip = updateRange;
 })();
-      
+
+      ;(function initDurationSlider() {
+  const start = document.getElementById('duration-start');
+  const end   = document.getElementById('duration-end');
+  const wrapper = document.getElementById('duration-range');
+  const mins = albumsData.map(a=>{
+    const [h,m] = (a.duration||'00:00:00').split(':').map(x=>+x);
+    return h*60 + m;
+  });
+  const minV = Math.min(...mins), maxV = Math.max(...mins);
+  [start,end].forEach(el=>{ el.min=minV; el.max=maxV; el.step=1; });
+  start.value=minV; end.value=maxV;
+  let debounce;
+  function upd(skipApply = false) {
+    const s=+start.value, e=+end.value;
+    const sel=document.querySelector('#duration-filter .selected');
+    if (s === minV && e === maxV) {
+  sel.textContent = 'Будь-яка тривалість';
+  sel.removeAttribute('data-value');
+}
+else if (s === minV) {
+  sel.textContent = `До ${e} хв`;
+  sel.dataset.value = `${minV}-${e}`;
+}
+else if (e === maxV) {
+  sel.textContent = `Від ${s} хв`;
+  sel.dataset.value = `${s}-${maxV}`;
+}
+else {
+  sel.textContent = `${s}–${e} хв`;
+  sel.dataset.value = 'range';
+}
+
+    wrapper.style.setProperty('--start', (s-minV)/(maxV-minV)*100+'%');
+    wrapper.style.setProperty('--end',   (e-minV)/(maxV-minV)*100+'%');
+    clearTimeout(debounce);
+  if (!skipApply) {
+    debounce = setTimeout(()=>{
+      saveFiltersToCache();
+      smoothApplyFilters();
+    },300);
+  }
+    }
+  start.addEventListener('input', ()=>{ if(+start.value>+end.value) start.value=end.value; upd(false); });
+ end  .addEventListener('input', ()=>{ if(+end.value<+start.value) end.value=start.value; upd(false); });
+  upd(true);
+})();
+
+;(function initTrackCountSlider() {
+  const start = document.getElementById('track-count-start');
+  const end   = document.getElementById('track-count-end');
+  const wrapper = document.getElementById('track-count-range');
+  const cnts = albumsData.map(a=>a.tracksIDs.length);
+  const minV = Math.min(...cnts), maxV = Math.max(...cnts);
+  [start,end].forEach(el=>{ el.min=minV; el.max=maxV; el.step=1; });
+  start.value=minV; end.value=maxV;
+  let debounce;
+  function upd(skipApply = false) {
+    const s=+start.value, e=+end.value;
+    const sel=document.querySelector('#track-count-filter .selected');
+    if (s === minV && e === maxV) {
+  sel.textContent = 'Будь-яка кількість';
+  sel.removeAttribute('data-value');
+}
+else if (s === minV) {
+  sel.textContent = `До ${e} треків`;
+  sel.dataset.value = `${minV}-${e}`;
+}
+else if (e === maxV) {
+  sel.textContent = `Від ${s} треків`;
+  sel.dataset.value = `${s}-${maxV}`;
+}
+else {
+  sel.textContent = `${s}–${e} треків`;
+  sel.dataset.value = 'range';
+}
+
+    wrapper.style.setProperty('--start', (s-minV)/(maxV-minV)*100+'%');
+    wrapper.style.setProperty('--end',   (e-minV)/(maxV-minV)*100+'%');
+    clearTimeout(debounce);
+  if (!skipApply) {
+    debounce=setTimeout(()=>{ saveFiltersToCache(); smoothApplyFilters(); },300);
+  }
+}
+  start.addEventListener('input', ()=>{ if(+start.value>+end.value) start.value=end.value; upd(false); });
+  end  .addEventListener('input', ()=>{ if(+end.value<+start.value) end.value=start.value; upd(false); });
+  upd(true);
+})();
+
+;(function initListenCountSlider() {
+  const start   = document.getElementById('listen-count-start');
+  const end     = document.getElementById('listen-count-end');
+  const wrapper = document.getElementById('listen-count-range');
+
+  const allListens = albumsData.map(a => a.listens || 0);
+  const posListens = allListens.filter(x => x > 0).sort((a, b) => a - b);
+  if (posListens.length === 0) {
+    posListens.push(1000);
+  }
+
+  const BINS = 100;
+  const N    = posListens.length;
+  const steps = [0];
+  for (let i = 1; i <= BINS; i++) {
+    const idx = Math.floor((i - 1) * (N - 1) / (BINS - 1));
+    steps.push(posListens[idx]);
+  }
+
+  [start, end].forEach(el => {
+    el.min  = 0;
+    el.max  = steps.length - 1;
+    el.step = 1;
+  });
+  start.value = 0;
+  end.value   = steps.length - 1;
+
+  let debounce;
+  
+  function update(skipApply = false) {
+    let i = +start.value;
+    let j = +end.value;
+    if (i > j) { i = j; start.value = i; }
+    if (j < i) { j = i; end.value   = j; }
+
+    const sVal = steps[i];
+    const eVal = steps[j];
+    const sel  = document.querySelector('#listen-count-filter .selected');
+
+    if (i === 0 && j === steps.length - 1) {
+      sel.textContent = 'Будь-яка кількість';
+      sel.removeAttribute('data-value');
+    } else if (i === 0) {
+      sel.textContent = `До ${formatListens(eVal)}`;
+      sel.dataset.value = `0-${eVal}`;
+    } else if (j === steps.length - 1) {
+      sel.textContent = `Від ${formatListens(sVal)}`;
+      sel.dataset.value = `${sVal}-`;
+    } else {
+      sel.textContent = `${formatListens(sVal)}–${formatListens(eVal)}`;
+      sel.dataset.value = `${sVal}-${eVal}`;
+    }
+
+    const L = steps.length - 1;
+    wrapper.style.setProperty('--start', (i / L * 100) + '%');
+    wrapper.style.setProperty('--end',   (j / L * 100) + '%');
+
+    clearTimeout(debounce);
+    if (!skipApply) {
+      debounce = setTimeout(() => {
+        saveFiltersToCache();
+        smoothApplyFilters();
+      }, 200);
+    }
+  }
+
+  start.addEventListener('input', () => update(false));
+  end  .addEventListener('input', () => update(false));
+
+  update(true);
+})();
+
       initBasicCustomSelect(document.getElementById('listen-count-filter'));
       attachGlobalEventListeners();
+      
+      const toggleEditBtn = document.getElementById('toggle-edit-presets');
+attachTooltip(toggleEditBtn, 'Редагувати список фільтрів', '180px');
+      const addPresetBtn = document.getElementById('add-preset');
+attachTooltip(addPresetBtn, 'Створити фільтр', '160px');
+      
       loadPresetsFromStorage();
 
       const addBtn    = document.getElementById('add-preset');
@@ -2593,20 +3163,31 @@ saveBtn.addEventListener('click', () => {
   modal.style.display = 'none';
 });
 
-      const wrap = document.querySelector('.presets-wrapper');
-      const fc   = document.getElementById('filters-container');
-      function updateFade() {
-        const mx = wrap.scrollWidth - wrap.clientWidth;
-        fc.classList.toggle('scrolled',       wrap.scrollLeft > 0);
-        fc.classList.toggle('scrolled-right', wrap.scrollLeft < mx);
-      }
-      wrap.addEventListener('scroll', updateFade);
-      wrap.addEventListener('wheel', e => {
-        e.preventDefault();
-        wrap.scrollBy({ left: e.deltaY, behavior: 'smooth' });
-        updateFade();
-      });
+const wrap          = document.querySelector('.presets-wrapper');
+const fc            = document.getElementById('filters-container');
+const filtersButton = document.getElementById('filters-button');
 
+function updateFade() {
+  const overflow = wrap.scrollWidth > wrap.clientWidth;
+  const atLeft   = wrap.scrollLeft > 0;
+  const atRight  = wrap.scrollLeft + wrap.clientWidth < wrap.scrollWidth;
+  fc.classList.toggle('scrolled',       atLeft);
+  fc.classList.toggle('scrolled-right', overflow && atRight);
+}
+
+wrap.addEventListener('scroll', updateFade);
+wrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  wrap.scrollBy({ left: e.deltaY, behavior: 'smooth' });
+  updateFade();
+});
+
+filtersButton.addEventListener('click', () => {
+  requestAnimationFrame(updateFade);
+});
+
+requestAnimationFrame(updateFade);
+window.addEventListener('resize', updateFade);
       
       const albumFilters = JSON.parse(localStorage.getItem('albumFilters')) || null;
 if (albumFilters) {
@@ -2674,22 +3255,48 @@ function initBasicCustomSelect(select) {
 
     optionsContainer.querySelectorAll('.option').forEach(option => {
     option.addEventListener('click', () => {
-      selected.textContent = option.textContent;
-      selected.dataset.value = option.dataset.value;
+
+      selected.textContent    = option.textContent;
+      selected.dataset.value  = option.dataset.value;
       optionsContainer.style.display = 'none';
       select.classList.remove('open');
 
       if (select.id === 'release-period-filter') {
-        const start = document.getElementById('release-period-start');
-        const end   = document.getElementById('release-period-end');
+        const start  = document.getElementById('release-period-start');
+        const end    = document.getElementById('release-period-end');
+        const wrapper = document.getElementById('release-period-range');
+
         start.value = start.min;
         end.value   = end.max;
+
+        wrapper.style.setProperty('--start', '0%');
+        wrapper.style.setProperty('--end',   '100%');
+      }
+      if (select.id === 'duration-filter') {
+        document.getElementById('duration-start').value = document.getElementById('duration-start').min;
+        document.getElementById('duration-end').  value = document.getElementById('duration-end').  max;
+        document.getElementById('duration-range').style.setProperty('--start','0%');
+        document.getElementById('duration-range').style.setProperty('--end','100%');
+      }
+      if (select.id === 'track-count-filter') {
+        document.getElementById('track-count-start').value = document.getElementById('track-count-start').min;
+        document.getElementById('track-count-end').  value = document.getElementById('track-count-end').  max;
+        document.getElementById('track-count-range').style.setProperty('--start','0%');
+        document.getElementById('track-count-range').style.setProperty('--end','100%');
+      }
+      if (select.id === 'listen-count-filter') {
+        document.getElementById('listen-count-start').value = document.getElementById('listen-count-start').min;
+        document.getElementById('listen-count-end').  value = document.getElementById('listen-count-end').  max;
+        document.getElementById('listen-count-range').style.setProperty('--start','0%');
+        document.getElementById('listen-count-range').style.setProperty('--end','100%');
       }
 
       if (select.id === 'sort-order') sortOrder = option.dataset.value;
 
-      preserveScroll(() => smoothApplyFilters());
-      saveFiltersToCache();
+      if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
     });
   });
 
@@ -2700,7 +3307,6 @@ function initBasicCustomSelect(select) {
     }
   });
 }
-
 
 function friendlyGenreLabel(g) {
   if (g === 'producing work for international') return 'intl prod';
@@ -2897,7 +3503,7 @@ genreName.classList.add('genre-name');
 genreName.textContent = friendlyGenreLabel(genre);
 
 if (genre === 'producing work for international'){
-  attachTooltip(genreName,'Музика наших продюсерів для іноземних артистів', '180px');
+  attachTooltip(genreName,'Музика українських продюсерів для іноземних артистів', '180px');
 }
 
         const genreCount = document.createElement('span');
@@ -3016,7 +3622,7 @@ function populateLabelOptions() {
     
     <div class="option-fixed">
       <div class="option" data-value="">Усі лейбли</div>
-      <input type="text" class="option-search" placeholder="Пошук лейблів...">
+      <input type="text" class="option-search" placeholder="Пошук лейблів…">
     </div>
     <div class="option-list"></div>
   `;
@@ -3076,8 +3682,10 @@ select.classList.toggle('open', !isOpen);
         sortOrder = option.dataset.value;
       }
 
-      preserveScroll(() => smoothApplyFilters());
-      saveFiltersToCache();
+      if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
     });
   });
 
@@ -3187,32 +3795,127 @@ select.classList.toggle('open', !isOpen);
       document.getElementById('nuam-recommended-checkbox').checked = filterData.nuamRecommended;
     }
 
-    const durationSelect = document.getElementById('duration-filter');
-    let optDuration = durationSelect.querySelector(`.option[data-value="${filterData.duration}"]`);
+            const durationSelect = document.getElementById('duration-filter');
+    const selDuration    = durationSelect.querySelector('.selected');
+    const valueDur       = filterData.duration || '';
+    const optDuration    = durationSelect.querySelector(`.option[data-value="${valueDur}"]`);
+
     if (optDuration) {
-      durationSelect.querySelector('.selected').textContent = optDuration.textContent;
-      durationSelect.querySelector('.selected').dataset.value = optDuration.dataset.value;
-    } else {
-      const defaultDuration = durationSelect.querySelector(`.option[data-value=""]`);
-      durationSelect.querySelector('.selected').textContent = defaultDuration.textContent;
-      durationSelect.querySelector('.selected').dataset.value = '';
+  selDuration.textContent   = optDuration.textContent;
+  selDuration.dataset.value = optDuration.dataset.value;
+
+  const durStart   = document.getElementById('duration-start');
+  const durEnd     = document.getElementById('duration-end');
+  const durWrapper = document.getElementById('duration-range');
+  durStart.value = durStart.min;
+  durEnd.value   = durEnd.max;
+  durWrapper.style.setProperty('--start','0%');
+  durWrapper.style.setProperty('--end',  '100%');
+}
+
+    else if (valueDur === 'range') {
+      const start = document.getElementById('duration-start');
+      const end   = document.getElementById('duration-end');
+      start.value = filterData.durationStart;
+      end.value   = filterData.durationEnd;
+
+      selDuration.textContent   = `${filterData.durationStart}–${filterData.durationEnd} хв`;
+      selDuration.dataset.value = 'range';
+
+      const wrapper = document.getElementById('duration-range');
+      const minVal = +start.min, maxVal = +start.max;
+      wrapper.style.setProperty('--start', ((filterData.durationStart - minVal)/(maxVal-minVal)*100) + '%');
+      wrapper.style.setProperty('--end',   ((filterData.durationEnd   - minVal)/(maxVal-minVal)*100) + '%');
+    }
+    else if (valueDur) {
+      const [ds, de] = valueDur.split('-').map(Number);
+      const start = document.getElementById('duration-start');
+      const end   = document.getElementById('duration-end');
+      start.value = ds;
+      end.value   = de;
+
+      const minVal = +start.min, maxVal = +start.max;
+      let text;
+      if (ds === minVal && de !== maxVal)      text = `До ${de} хв`;
+      else if (ds !== minVal && de === maxVal) text = `Від ${ds} хв`;
+      else                                     text = `${ds}–${de} хв`;
+
+      selDuration.textContent   = text;
+      selDuration.dataset.value = valueDur;
+
+      const wrapper = document.getElementById('duration-range');
+      wrapper.style.setProperty('--start', ((ds - minVal)/(maxVal-minVal)*100) + '%');
+      wrapper.style.setProperty('--end',   ((de - minVal)/(maxVal-minVal)*100) + '%');
+    }
+    else {
+      const defOpt = durationSelect.querySelector(`.option[data-value=""]`);
+      selDuration.textContent   = defOpt.textContent;
+      selDuration.dataset.value = '';
     }
 
-    const trackCountSelect = document.getElementById('track-count-filter');
-    let optTrack = trackCountSelect.querySelector(`.option[data-value="${filterData.trackCount}"]`);
+    const trackSelect = document.getElementById('track-count-filter');
+    const selTrack    = trackSelect.querySelector('.selected');
+    const valueTrack  = filterData.trackCount || '';
+    const optTrack    = trackSelect.querySelector(`.option[data-value="${valueTrack}"]`);
+
     if (optTrack) {
-      trackCountSelect.querySelector('.selected').textContent = optTrack.textContent;
-      trackCountSelect.querySelector('.selected').dataset.value = optTrack.dataset.value;
-    } else {
-      const defaultTrack = trackCountSelect.querySelector(`.option[data-value=""]`);
-      trackCountSelect.querySelector('.selected').textContent = defaultTrack.textContent;
-      trackCountSelect.querySelector('.selected').dataset.value = '';
-    }
+  selTrack.textContent   = optTrack.textContent;
+  selTrack.dataset.value = optTrack.dataset.value;
 
+  const tcStart   = document.getElementById('track-count-start');
+  const tcEnd     = document.getElementById('track-count-end');
+  const tcWrapper = document.getElementById('track-count-range');
+  tcStart.value = tcStart.min;
+  tcEnd.value   = tcEnd.max;
+  tcWrapper.style.setProperty('--start','0%');
+  tcWrapper.style.setProperty('--end',  '100%');
+}
+
+    else if (valueTrack === 'range') {
+      const s = filterData.trackStart;
+      const e = filterData.trackEnd;
+      document.getElementById('track-count-start').value = s;
+      document.getElementById('track-count-end').value   = e;
+
+      selTrack.textContent   = `Від ${s} треків`;
+      selTrack.dataset.value = 'range';
+
+      const wrapper = document.getElementById('track-count-range');
+      const minT = +document.getElementById('track-count-start').min;
+      const maxT = +document.getElementById('track-count-start').max;
+      wrapper.style.setProperty('--start', ((s-minT)/(maxT-minT)*100) + '%');
+      wrapper.style.setProperty('--end',   ((e-minT)/(maxT-minT)*100) + '%');
+    }
+    else if (valueTrack) {
+      const [ds, de] = valueTrack.split('-').map(Number);
+      document.getElementById('track-count-start').value = ds;
+      document.getElementById('track-count-end').value   = de;
+
+      let txt;
+      const minT = +document.getElementById('track-count-start').min;
+      const maxT = +document.getElementById('track-count-start').max;
+      if (ds === minT && de !== maxT)      txt = `До ${de} треків`;
+      else if (ds !== minT && de === maxT) txt = `Від ${ds} треків`;
+      else                                  txt = `${ds}–${de} треків`;
+
+      selTrack.textContent   = txt;
+      selTrack.dataset.value = valueTrack;
+
+      const wrapper = document.getElementById('track-count-range');
+      wrapper.style.setProperty('--start', ((ds-minT)/(maxT-minT)*100) + '%');
+      wrapper.style.setProperty('--end',   ((de-minT)/(maxT-minT)*100) + '%');
+    }
+    else {
+      const defOpt = trackSelect.querySelector(`.option[data-value=""]`);
+      selTrack.textContent   = defOpt.textContent;
+      selTrack.dataset.value = '';
+    }
+    
   const periodSelect = document.getElementById('release-period-filter');
   const pSel         = periodSelect.querySelector('.selected');
   const startSlider  = document.getElementById('release-period-start');
   const endSlider    = document.getElementById('release-period-end');
+    const wrapper      = document.getElementById('release-period-range');
 
   if (filterData.period === 'range') {
     const dates  = albumsData.map(a => new Date(a.date));
@@ -3226,56 +3929,95 @@ select.classList.toggle('open', !isOpen);
    endSlider.value   = we;
 
     if (typeof updateReleaseRangeTip === 'function') {
-      updateReleaseRangeTip();
-    } else {
+    updateReleaseRangeTip(true);
+  } else {
       const dates   = albumsData.map(a => new Date(a.date));
       const minDate = new Date(Math.min(...dates));
       const maxW    = +startSlider.max;
       const s = +startSlider.value, e = +endSlider.value;
       const d1 = new Date(minDate.getTime() + s*7*24*60*60*1000);
       const d2 = new Date(minDate.getTime() + e*7*24*60*60*1000);
-      const tip = document.getElementById('release-period-tooltip');
-      tip.textContent = `${d1.toISOString().slice(0,10)} – ${d2.toISOString().slice(0,10)}`;
-      tip.style.left  = ((s+e)/(2*maxW))*100 + '%';
-      pSel.textContent   = tip.textContent;
-      pSel.dataset.value = 'range';
+
+      pSel.textContent   = `${filterData.periodStart} – ${filterData.periodEnd}`;
+pSel.dataset.value = 'range';
     }
 
   } else {
-    const opt = periodSelect.querySelector(
-      `.option[data-value="${filterData.period || ''}"]`
-    );
-    if (opt) {
-      pSel.textContent   = opt.textContent;
-      pSel.dataset.value = opt.dataset.value;
-      if (!opt.dataset.value) delete pSel.dataset.value;
-    }
-
-    startSlider.value = startSlider.min;
-    endSlider.value   = endSlider.max;
-
-    const dates   = albumsData.map(a => new Date(a.date));
-    const minDate = new Date(Math.min(...dates));
-    const maxW    = +startSlider.max;
-    const d1      = minDate;
-    const d2      = new Date(minDate.getTime() + maxW*7*24*60*60*1000);
-    const tip     = document.getElementById('release-period-tooltip');
-    tip.textContent = `${d1.toISOString().slice(0,10)} – ${d2.toISOString().slice(0,10)}`;
-    tip.style.left  = '50%';
-
-    delete pSel.dataset.value;
+  const opt = periodSelect.querySelector(
+    `.option[data-value="${filterData.period || ''}"]`
+  );
+  if (opt) {
+    pSel.textContent   = opt.textContent;
+    pSel.dataset.value = opt.dataset.value;
   }
 
-    const listenSelect = document.getElementById('listen-count-filter');
-    let optListen = listenSelect.querySelector(`.option[data-value="${filterData.listenCount}"]`);
-    if (optListen) {
-      listenSelect.querySelector('.selected').textContent = optListen.textContent;
-      listenSelect.querySelector('.selected').dataset.value = optListen.dataset.value;
-    } else {
-      const defaultListen = listenSelect.querySelector(`.option[data-value=""]`);
-      listenSelect.querySelector('.selected').textContent = defaultListen.textContent;
-      listenSelect.querySelector('.selected').dataset.value = '';
-    }
+  startSlider.value = startSlider.min;
+  endSlider.value   = endSlider.max;
+
+  wrapper.style.setProperty('--start', '0%');
+  wrapper.style.setProperty('--end',   '100%');
+}
+
+const allListens = albumsData.map(a => a.listens || 0);
+const posListens = allListens.filter(x => x > 0).sort((a, b) => a - b);
+const BINS = 100, N = posListens.length;
+const steps = [0];
+for (let i = 1; i <= BINS; i++) {
+  const idx = Math.floor((i - 1) * (N - 1) / (BINS - 1));
+  steps.push(posListens[idx]);
+}
+
+const listenSelect = document.getElementById('listen-count-filter');
+const selListen    = listenSelect.querySelector('.selected');
+const optListen    = listenSelect.querySelector(`.option[data-value="${filterData.listenCount}"]`);
+
+if (!filterData.listenCount) {
+  selListen.textContent = 'Будь-яка кількість';
+  selListen.removeAttribute('data-value');
+
+  const lsInput   = document.getElementById('listen-count-start');
+  const leInput   = document.getElementById('listen-count-end');
+  const lsWrapper = document.getElementById('listen-count-range');
+
+  lsInput.value = lsInput.min;
+  leInput.value = leInput.max;
+  lsWrapper.style.setProperty('--start', '0%');
+  lsWrapper.style.setProperty('--end',   '100%');
+
+} else if (optListen) {
+  selListen.textContent   = optListen.textContent;
+  selListen.dataset.value = optListen.dataset.value;
+
+} else {
+  const lsVal = filterData.listenStart;
+  const leVal = filterData.listenEnd;
+
+  let lsIdx = steps.findIndex(s => s >= lsVal);
+  if (lsIdx === -1) lsIdx = steps.length - 1;
+  let leIdx = steps.findIndex(s => s >= leVal);
+  if (leIdx === -1) leIdx = steps.length - 1;
+
+  document.getElementById('listen-count-start').value = lsIdx;
+  document.getElementById('listen-count-end').value   = leIdx;
+
+  let text;
+  if (lsIdx === 0 && leIdx === steps.length - 1) {
+    text = 'Будь-яка кількість';
+  } else if (lsIdx === 0) {
+    text = `До ${formatListens(leVal)}`;
+  } else if (leIdx === steps.length - 1) {
+    text = `Від ${formatListens(lsVal)}`;
+  } else {
+    text = `${formatListens(lsVal)}–${formatListens(leVal)}`;
+  }
+  selListen.textContent   = text;
+  selListen.dataset.value = 'range';
+
+  const maxI = steps.length - 1;
+  const wrapper = document.getElementById('listen-count-range');
+  wrapper.style.setProperty('--start', (lsIdx / maxI * 100) + '%');
+  wrapper.style.setProperty('--end',   (leIdx / maxI * 100) + '%');
+}
 
     if (filterData.labelFilter !== undefined) {
       const selectLabel = document.getElementById('label-select');
@@ -3294,42 +4036,80 @@ select.classList.toggle('open', !isOpen);
     }
   }
 
-  applyFilters();
+      if (typeof filterData.matchAllGenres === 'boolean') {
+    document.getElementById('match-all-genres-checkbox').checked = filterData.matchAllGenres;
+  }
+      
+  if (!isPresetLoading) {
+    applyFilters();
+  }
 }
-
 
     function saveFiltersToCache() {
-  const selectedGenres   = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
-  const excludedGenres   = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
-  const selectedLanguages   = Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value);
-  const excludedLanguages   = Array.from(document.querySelectorAll('.language-checkbox:disabled')).map(cb => cb.value);
+  const selectedGenres       = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
+  const excludedGenres       = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
+  const selectedLanguages    = Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value);
+  const excludedLanguages    = Array.from(document.querySelectorAll('.language-checkbox:disabled')).map(cb => cb.value);
   const selectedReleaseTypes = Array.from(document.querySelectorAll('.release-type-checkbox:checked')).map(cb => cb.value);
 
-  let sortOrder = document.getElementById('sort-order')
-                         .querySelector('.selected')
-                         .dataset.value;
+  let sortOrder = document.getElementById('sort-order').querySelector('.selected').dataset.value;
+  if (!sortOrder) sortOrder = 'desc';
 
- if (!sortOrder) sortOrder = 'desc';
   const hideListened    = document.getElementById('hide-listened').checked;
   const nuamRecommended = document.getElementById('nuam-recommended-checkbox').checked;
-  const duration   = document.getElementById('duration-filter')?.querySelector('.selected')?.dataset.value || '';
-  const trackCount = document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset.value || '';
-  const listenCount= document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset.value || '';
-  const labelFilter= document.getElementById('label-select')?.querySelector('.selected')?.dataset.value || '';
 
-const sel = document.querySelector('#release-period-filter .selected');
-let period = '', periodStart = '', periodEnd = '';
-if (sel.dataset.value === 'range') {
-  period = 'range';
-  const weekOptions = JSON.parse(localStorage.getItem('release-week-options') || '[]');
-const startIndex = +document.getElementById('release-period-start').value;
-const endIndex   = +document.getElementById('release-period-end').value;
-periodStart = weekOptions[startIndex] || '';
-periodEnd   = weekOptions[endIndex]   || '';
+      const matchAllGenres = document.getElementById('match-all-genres-checkbox').checked;
+      
+  const rawDuration    = document.getElementById('duration-filter').querySelector('.selected').dataset.value || '';
+  const rawTrackCount  = document.getElementById('track-count-filter').querySelector('.selected').dataset.value || '';
+  const rawListenCount = document.getElementById('listen-count-filter').querySelector('.selected').dataset.value || '';
+  const labelFilter    = document.getElementById('label-select').querySelector('.selected').dataset.value || '';
 
-} else {
-  period = sel.dataset.value || '';
-}
+  const duration = rawDuration === 'range'
+    ? `${+document.getElementById('duration-start').value}-${+document.getElementById('duration-end').value}`
+    : rawDuration;
+
+  const trackCount = rawTrackCount === 'range'
+    ? `${+document.getElementById('track-count-start').value}-${+document.getElementById('track-count-end').value}`
+    : rawTrackCount;
+
+  const sel = document.querySelector('#release-period-filter .selected');
+  let period = '', periodStart = '', periodEnd = '';
+  if (sel.dataset.value === 'range') {
+    period = 'range';
+    const weekOptions = JSON.parse(localStorage.getItem('release-week-options') || '[]');
+    periodStart = weekOptions[+document.getElementById('release-period-start').value] || '';
+    periodEnd   = weekOptions[+document.getElementById('release-period-end').value]   || '';
+  } else {
+    period = sel.dataset.value || '';
+  }
+
+  const durationStart = +document.getElementById('duration-start').value;
+  const durationEnd   = +document.getElementById('duration-end').value;
+  const trackStart    = +document.getElementById('track-count-start').value;
+  const trackEnd      = +document.getElementById('track-count-end').value;
+
+  const allListens = albumsData.map(a => a.listens || 0);
+  const posListens = allListens.filter(x => x > 0).sort((a, b) => a - b);
+
+  if (posListens.length === 0) posListens.push(0);
+
+  const BINS = 100;
+  const N    = posListens.length;
+  const steps = [0];
+  for (let i = 1; i <= BINS; i++) {
+    const idx = Math.floor((i - 1) * (N - 1) / (BINS - 1));
+    steps.push(posListens[idx]);
+  }
+
+  const lsIdx       = +document.getElementById('listen-count-start').value;
+  const leIdx       = +document.getElementById('listen-count-end').value;
+  const listenStart = Math.round(steps[lsIdx]);
+  const listenEnd   = Math.round(steps[leIdx]);
+
+  const listenCount = rawListenCount === 'range'
+    ? `${listenStart}-${listenEnd}`
+    : rawListenCount;
 
   const filterData = {
     selectedGenres,
@@ -3339,14 +4119,21 @@ periodEnd   = weekOptions[endIndex]   || '';
     selectedReleaseTypes,
     sortOrder,
     hideListened,
+    nuamRecommended,
     duration,
+    durationStart,
+    durationEnd,
     trackCount,
+    trackStart,
+    trackEnd,
     period,
     periodStart,
     periodEnd,
     listenCount,
-    nuamRecommended,
+    listenStart,
+    listenEnd,
     labelFilter,
+    matchAllGenres
   };
 
   localStorage.setItem('albumFilters', JSON.stringify(filterData));
@@ -3356,11 +4143,13 @@ periodEnd   = weekOptions[endIndex]   || '';
       document.getElementById('genre-checkboxes').addEventListener('change', (e) => {
   if (e.target.classList.contains('genre-checkbox')) {
     clearActivePreset();
-    preserveScroll(() => smoothApplyFilters());
-    saveFiltersToCache();
+    if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
   }
 });
-   
+       
       document.getElementById('genre-checkboxes').addEventListener('click', (e) => {
   if (e.target.classList.contains('exclude-genre')) {
     clearActivePreset();
@@ -3372,11 +4161,21 @@ periodEnd   = weekOptions[endIndex]   || '';
   }
 });
 
+      document.getElementById('match-all-genres-checkbox').addEventListener('change', e => {
+  clearActivePreset();
+  if (!isPresetLoading) {
+    preserveScroll(() => smoothApplyFilters());
+    saveFiltersToCache();
+  }
+});
+      
       document.getElementById('language-checkboxes').addEventListener('change', (e) => {
   if (e.target.classList.contains('language-checkbox')) {
     clearActivePreset();
-    preserveScroll(() => smoothApplyFilters());
-    saveFiltersToCache();
+    if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
   }
 });
   
@@ -3394,29 +4193,19 @@ periodEnd   = weekOptions[endIndex]   || '';
       document.getElementById('release-type-checkboxes').addEventListener('change', (e) => {
   if (e.target.classList.contains('release-type-checkbox')) {
     clearActivePreset();
-    preserveScroll(() => smoothApplyFilters());
-    saveFiltersToCache();
+    if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
   }
 });
 
       document.getElementById('nuam-recommended-checkbox').addEventListener('change', () => {
   clearActivePreset();
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
-});
-
-      
-document.getElementById('duration-filter').addEventListener('change', () => {
-  clearActivePreset();
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
-});
-
-
-document.getElementById('track-count-filter').addEventListener('change', () => {
-  clearActivePreset();
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
+  if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
 });
 
       document.getElementById('release-period-filter').addEventListener('change', () => {
@@ -3425,38 +4214,39 @@ document.getElementById('track-count-filter').addEventListener('change', () => {
   if (sel.dataset.value === 'range') return;
 
   clearActivePreset();
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
+  if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
 });
- 
-      document.getElementById('listen-count-filter').addEventListener('change', () => {
-  clearActivePreset();
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
-});
-
-      
+  
       document.getElementById('hide-listened').addEventListener('change', (e) => {
   clearActivePreset();
   hideListened = e.target.checked;
-  preserveScroll(() => smoothApplyFilters());
-  saveFiltersToCache();
+  if (!isPresetLoading) {
+        preserveScroll(() => smoothApplyFilters());
+        saveFiltersToCache();
+      }
 });
 
       document.getElementById('select-all-genres').addEventListener('click', () => {
         document.querySelectorAll('.genre-checkbox').forEach(cb => {
           if (!cb.disabled) cb.checked = true;
         });
+        if (!isPresetLoading) {
         preserveScroll(() => smoothApplyFilters());
-saveFiltersToCache();
+        saveFiltersToCache();
+      }
       });
       
       document.getElementById('deselect-all-genres').addEventListener('click', () => {
         document.querySelectorAll('.genre-checkbox').forEach(cb => {
           if (!cb.disabled) cb.checked = false;
         });
+        if (!isPresetLoading) {
         preserveScroll(() => smoothApplyFilters());
-saveFiltersToCache();
+        saveFiltersToCache();
+      }
       });
 
       document.getElementById('blacklist-button').addEventListener('click', function() {
@@ -3491,7 +4281,7 @@ document.getElementById('import-data').addEventListener('click', () => {
   const msg = document.getElementById('import-message');
   const importDataString = importTextarea.value.trim();
   if (!importDataString) {
-    msg.textContent = 'Введіть дані для завантаження';
+    msg.textContent = 'Вставте дані для завантаження';
     msg.className = 'error';
     setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
     return;
@@ -3510,6 +4300,10 @@ document.getElementById('import-data').addEventListener('click', () => {
     if (importData.albumFilters) {
       localStorage.setItem('albumFilters', JSON.stringify(importData.albumFilters));
     }
+        if (importData.favoriteAlbums) {
+      localStorage.setItem('favoriteAlbums', JSON.stringify(importData.favoriteAlbums));
+    }
+
     msg.textContent = 'Дані завантажені. Перезавантажте сторінку.';
     msg.className = 'success';
     setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 5000);
@@ -3552,13 +4346,24 @@ document.getElementById('close-favorites-modal').addEventListener('click', () =>
   }
 });
       
+      document.querySelector('#blacklist-modal .close').addEventListener('click', () => {
+  document.getElementById('blacklist-modal').style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+  const modal = document.getElementById('blacklist-modal');
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+      
 document.getElementById('scrollTopButton').addEventListener('click', () => {
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
 });  
-      
+    
       const logoWrapper = document.querySelector('.logo-wrapper');
 const filtersButton = document.getElementById('filters-button');
 const searchButton  = document.getElementById('search-button');
@@ -3583,7 +4388,8 @@ searchClose.addEventListener('click', () => {
   filtersButton.style.display     = 'inline-block';
   searchContainer.style.display   = 'none';
   searchInput.value = '';
-  smoothApplyFilters();
+ searchQuery = '';
+ smoothApplyFilters();
 });
 
 filtersButton.addEventListener('click', () => {
@@ -3614,6 +4420,7 @@ document.getElementById('search-input').addEventListener('input', e => {
         label.style.textDecoration = 'none';
         label.style.color = '#f3f3f3';
       } else {
+        checkbox.checked = false;
         checkbox.disabled = true;
         genreCross.textContent = '↻';
         genreCross.classList.add('repeat-symbol');
@@ -3631,6 +4438,7 @@ document.getElementById('search-input').addEventListener('input', e => {
         label.style.textDecoration = 'none';
         label.style.color = '#f3f3f3';
       } else {
+        checkbox.checked = false;
         checkbox.disabled = true;
         langCross.textContent = '↻';
         langCross.classList.add('language-repeat-symbol');
@@ -3678,12 +4486,21 @@ document.getElementById('search-input').addEventListener('input', e => {
     function applyFilters(renderImmediately = false) {
       filteredAlbums = [...albumsData];
 
-      const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
-      if (selectedGenres.length > 0) {
-        filteredAlbums = filteredAlbums.filter(al => {
-          return al.genres.some(g => selectedGenres.includes(g));
-        });
-      }
+      const selectedGenres = Array.from(document.querySelectorAll('.genre-checkbox:checked'))
+                            .map(cb => cb.value);
+const matchAll = document.getElementById('match-all-genres-checkbox').checked;
+
+if (selectedGenres.length > 0) {
+  if (matchAll) {
+    filteredAlbums = filteredAlbums.filter(al =>
+      selectedGenres.every(g => al.genres.includes(g))
+    );
+  } else {
+    filteredAlbums = filteredAlbums.filter(al =>
+      al.genres.some(g => selectedGenres.includes(g))
+    );
+  }
+}
 
       const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
       if (excludedGenres.length > 0) {
@@ -3747,29 +4564,97 @@ if (onlyRecommended) {
     const j = Math.floor(Math.random() * (i + 1));
     [filteredAlbums[i], filteredAlbums[j]] = [filteredAlbums[j], filteredAlbums[i]];
   }
+} else if (sortOrder === 'duration-desc') {
+  filteredAlbums.sort((a, b) => {
+    const [hA, mA] = (a.duration || '00:00:00').split(':').map(Number);
+    const [hB, mB] = (b.duration || '00:00:00').split(':').map(Number);
+    return (hB * 60 + mB) - (hA * 60 + mA);
+  });
+} else if (sortOrder === 'duration-asc') {
+  filteredAlbums.sort((a, b) => {
+    const [hA, mA] = (a.duration || '00:00:00').split(':').map(Number);
+    const [hB, mB] = (b.duration || '00:00:00').split(':').map(Number);
+    return (hA * 60 + mA) - (hB * 60 + mB);
+  });
+} else if (sortOrder === 'tracks-desc') {
+  filteredAlbums.sort((a, b) => b.tracksIDs.length - a.tracksIDs.length);
+} else if (sortOrder === 'tracks-asc') {
+  filteredAlbums.sort((a, b) => a.tracksIDs.length - b.tracksIDs.length);
 } else {
   filteredAlbums.sort((a, b) => {
-    const da = new Date(a.date);
-    const db = new Date(b.date);
+    const da = new Date(a.date), db = new Date(b.date);
     return sortOrder === 'asc' ? da - db : db - da;
   });
 }
 
-const selectedDuration = document.getElementById('duration-filter')?.querySelector('.selected')?.dataset?.value || '';
-if (selectedDuration) {
+const selectedDuration = document
+  .getElementById('duration-filter')
+  .querySelector('.selected')
+  .dataset.value || '';
+
+if (selectedDuration === 'range') {
+  const s = +document.getElementById('duration-start').value;
+  const e = +document.getElementById('duration-end').value;
   filteredAlbums = filteredAlbums.filter(al => {
-    const parts = (al.duration || '00:00:00').split(':').map(p => parseInt(p) || 0);
-    const totalMinutes = parts[0] * 60 + parts[1];
-    if (selectedDuration === 'short') return totalMinutes < 30;
-    if (selectedDuration === 'medium') return totalMinutes >= 30 && totalMinutes < 60;
-    if (selectedDuration === 'long') return totalMinutes >= 60 && totalMinutes < 120;
-    if (selectedDuration === 'very-long') return totalMinutes >= 120;
+    const [h,m] = (al.duration || '00:00:00')
+      .split(':')
+      .map(x => parseInt(x,10) || 0);
+    const total = h*60 + m;
+    return total >= Math.min(s,e) && total <= Math.max(s,e);
+  });
+
+} else if (/^\d+-\d+$/.test(selectedDuration)
+        || /^\d+-$/.test(selectedDuration)
+        || /^-\d+$/.test(selectedDuration)) {
+  const [minStr, maxStr] = selectedDuration.split('-');
+  const min = minStr ? parseInt(minStr, 10) : 0;
+  const max = maxStr ? parseInt(maxStr, 10) : Infinity;
+  filteredAlbums = filteredAlbums.filter(al => {
+    const [h,m] = (al.duration || '00:00:00')
+      .split(':')
+      .map(x => parseInt(x,10) || 0);
+    const total = h*60 + m;
+    return total >= min && total <= max;
+  });
+
+} else if (selectedDuration) {
+  filteredAlbums = filteredAlbums.filter(al => {
+    const [h,m] = (al.duration || '00:00:00')
+      .split(':')
+      .map(x => parseInt(x,10) || 0);
+    const total = h*60 + m;
+    if (selectedDuration === 'short')      return total < 30;
+    if (selectedDuration === 'medium')     return total >= 30  && total < 60;
+    if (selectedDuration === 'long')       return total >= 60  && total < 120;
+    if (selectedDuration === 'very-long')  return total >= 120;
     return true;
   });
 }
 
-const selectedTrackCount = document.getElementById('track-count-filter')?.querySelector('.selected')?.dataset?.value || '';
-if (selectedTrackCount) {
+const selectedTrackCount = document
+  .getElementById('track-count-filter')
+  .querySelector('.selected').dataset.value || '';
+
+if (selectedTrackCount === 'range') {
+  const s = +document.getElementById('track-count-start').value;
+  const e = +document.getElementById('track-count-end').value;
+  filteredAlbums = filteredAlbums.filter(al => {
+    const t = al.tracksIDs.length;
+    return t >= Math.min(s, e) && t <= Math.max(s, e);
+  });
+
+} else if (/^\d+-\d+$/.test(selectedTrackCount)
+        || /^\d+-$/.test(selectedTrackCount)
+        || /^-\d+$/.test(selectedTrackCount)) {
+  const [minStr, maxStr] = selectedTrackCount.split('-');
+  const min = minStr ? parseInt(minStr, 10) : 0;
+  const max = maxStr ? parseInt(maxStr, 10) : Infinity;
+  filteredAlbums = filteredAlbums.filter(al => {
+    const t = al.tracksIDs.length;
+    return t >= min && t <= max;
+  });
+
+} else if (selectedTrackCount) {
   const minTracks = parseInt(selectedTrackCount, 10);
   filteredAlbums = filteredAlbums.filter(al => al.tracksIDs.length >= minTracks);
 }
@@ -3799,9 +4684,36 @@ if (selEl.dataset.value !== 'range') {
     return d >= startDate && d <= endDate;
   });
 }
-      
-      const selListen = document.getElementById('listen-count-filter')?.querySelector('.selected')?.dataset?.value;
-if (selListen) {
+
+const selListen = document.getElementById('listen-count-filter')
+  .querySelector('.selected').dataset.value || '';
+
+if (selListen === 'range') {
+  const i1 = +document.getElementById('listen-count-start').value;
+  const i2 = +document.getElementById('listen-count-end').value;
+
+  const allListens = albumsData.map(a => a.listens || 0);
+  const posListens = allListens.filter(x => x > 0).sort((a, b) => a - b);
+  if (posListens.length === 0) posListens.push(0);
+
+  const BINS = 100;
+  const N    = posListens.length;
+  const steps = [0];
+  for (let k = 1; k <= BINS; k++) {
+    const idx = Math.floor((k - 1) * (N - 1) / (BINS - 1));
+    steps.push(posListens[idx]);
+  }
+
+  const startIdx = Math.min(i1, i2);
+  const endIdx   = Math.max(i1, i2);
+  const sVal = Math.round(steps[startIdx]);
+  const eVal = Math.round(steps[endIdx]);
+
+  filteredAlbums = filteredAlbums.filter(al =>
+    al.listens >= sVal && al.listens <= eVal
+  );
+
+} else if (selListen) {
   const [minStr, maxStr] = selListen.split('-');
   const min = minStr ? parseInt(minStr, 10) : 0;
   const max = maxStr ? parseInt(maxStr, 10) : Infinity;
@@ -4144,6 +5056,13 @@ if (ytIcon) attachTooltip(ytIcon, 'Шукати в YouTube Music', '160px');
 const appleIcon = albumDiv.querySelector('.apple-icon');
 if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music', '160px');
     
+    const matchAllLabel = document.getElementById('match-all-genres-label');
+attachTooltip(
+  matchAllLabel,
+  'Інакше будуть показані альбоми, в яких є хоча б один обраний жанр',
+  '160px'
+);
+    
     if (album.good) {
       const starBox = document.createElement('div');
       starBox.style.position   = 'absolute';
@@ -4201,26 +5120,304 @@ if (nextAlbum) {
       modalOverlay.addEventListener('click', closeImg);
     });
 
-    const tracksContainer = document.getElementById(`tracks-${i}`);
-    album.tracksIDs.forEach((trackID, idx) => {
-      const mp3hash = album.tracksMP3[idx] || '';
-      if (!trackID || !mp3hash) return;
-      const trackLink    = `https://open.spotify.com/track/${trackID}`;
-      const trackPreview = `https://p.scdn.co/mp3-preview/${mp3hash}`;
-      
-      const circle = document.createElement('a');
-      circle.classList.add('track-circle');
-      circle.href   = trackLink;
-      circle.target = '_blank';
-      circle.innerHTML = '<i class="fas fa-music"></i>';
+const tracksContainer = document.getElementById(`tracks-${i}`);
 
-      const audio = document.createElement('audio');
-      audio.src = trackPreview;
-      circle.appendChild(audio);
+const playAll = document.createElement('a');
+playAll.classList.add('track-circle', 'play-all-toggle');
+playAll.innerHTML = '<i class="fas fa-play"></i>';
+    playAll.dataset.albumId = album.albumID;
 
-      attachTrackBehavior(circle, audio, album, albumDiv);
-      tracksContainer.appendChild(circle);
-    });
+    attachTooltip(playAll, 'Відтворити всі треки альбому', '180px');
+    
+tracksContainer.appendChild(playAll);
+
+playAll.addEventListener('click', async () => {
+  
+  if (autoPlayingAlbum && autoPlayingAlbum !== album.albumID) {
+    const prevBtn = document.querySelector(
+      `.play-all-toggle[data-album-id="${autoPlayingAlbum}"]`
+    );
+    if (prevBtn) prevBtn.innerHTML = '<i class="fas fa-play"></i>';
+
+    if (prevBtn) {
+      removeTooltip(prevBtn);
+      attachTooltip(prevBtn, 'Відтворити всі треки альбому', '180px');
+    }
+    
+    if (currentHighlightedCircle) {
+      currentHighlightedCircle.classList.remove('highlight');
+      currentHighlightedCircle = null;
+    }
+
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+
+    const prevTracks = document.querySelector(
+      `.album[data-album-id="${autoPlayingAlbum}"] .tracks`
+    );
+    if (prevTracks) {
+      prevTracks
+        .querySelectorAll('.track-circle .progress-fill')
+        .forEach(el => el.style.width = '0%');
+    }
+
+    previewPlayer.ontimeupdate = null;
+  }
+  
+  if (autoPlayingAlbum === album.albumID) {
+    autoPlayingAlbum = null;
+    playAll.innerHTML = '<i class="fas fa-play"></i>';
+    
+    removeTooltip(playAll);
+    attachTooltip(playAll, 'Відтворити всі треки альбому', '180px');
+    
+    togglePreview(true);
+    
+    if (currentHighlightedCircle) {
+      currentHighlightedCircle.classList.remove('highlight');
+      currentHighlightedCircle = null;
+    }
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+    return;
+  }
+
+  autoPlayingAlbum = album.albumID;
+  
+  togglePreview(false);
+  
+  autoPlayIndex = 0;
+  playAll.innerHTML = '<i class="fas fa-stop"></i>';
+
+  removeTooltip(playAll);
+  attachTooltip(playAll, 'Зупинити відтворення', '180px');
+  
+  if (!album.tracksInfo) {
+    await loadAlbumTracksWithRetry(album);
+  }
+
+  function playNext() {
+
+  const container = document.querySelector(
+    `.album[data-album-id="${album.albumID}"] .tracks`
+  );
+  const btn = document.querySelector(
+    `.play-all-toggle[data-album-id="${album.albumID}"]`
+  );
+
+  if (autoPlayingAlbum !== album.albumID) return;
+
+  if (autoPlayIndex >= album.tracksIDs.length) {
+    autoPlayingAlbum = null;
+    if (btn) btn.innerHTML = '<i class="fas fa-play"></i>';
+    if (currentHighlightedCircle) {
+      currentHighlightedCircle.classList.remove('highlight');
+      currentHighlightedCircle = null;
+    }
+    return;
+  }
+
+  container
+    .querySelectorAll('.track-circle .progress-fill')
+    .forEach(el => el.style.width = '0%');
+
+  const tid  = album.tracksIDs[autoPlayIndex];
+  const hash = album.tracksMP3[autoPlayIndex];
+  const nextCirc = container.querySelector(
+    `.track-circle[data-track-id="${tid}"]`
+  );
+
+  if (currentHighlightedCircle) {
+    currentHighlightedCircle.classList.remove('highlight');
+  }
+  if (nextCirc) {
+    nextCirc.classList.add('highlight');
+    currentHighlightedCircle = nextCirc;
+  }
+
+  previewPlayer.src = `https://p.scdn.co/mp3-preview/${hash}`;
+  previewPlayer.ontimeupdate = null;
+
+  const fillEl = nextCirc && nextCirc.querySelector('.progress-fill');
+  if (fillEl) {
+    previewPlayer.ontimeupdate = () => {
+      const dur = previewPlayer.duration || 1;
+      fillEl.style.width =
+        (previewPlayer.currentTime / dur * 100) + '%';
+    };
+  }
+
+  previewPlayer.play().catch(() => {});
+  previewPlayer.onended = () => {
+    if (fillEl) fillEl.style.width = '0%';
+    previewPlayer.ontimeupdate = null;
+    autoPlayIndex++;
+    playNext();
+  };
+}
+
+playNext();
+playAll.playNext = playNext;
+});
+  
+album.tracksIDs.forEach((trackID, idx) => {
+  const mp3hash = album.tracksMP3[idx] || '';
+  if (!trackID || !mp3hash) return;
+
+    const circle = document.createElement('a');
+  circle.classList.add('track-circle');
+  circle.href       = `https://open.spotify.com/track/${trackID}`;
+  circle.target     = '_blank';
+  circle.innerHTML  = '<i class="fas fa-music"></i>';
+  
+  const fill = document.createElement('div');
+  fill.className = 'progress-fill';
+  circle.appendChild(fill);
+  
+  circle.dataset.trackId = trackID;
+  circle.dataset.albumId = album.albumID;
+
+  circle.addEventListener('mouseenter', async e => {
+  if (autoPlayingAlbum !== null) {
+    const info = album.tracksInfo && album.tracksInfo[trackID];
+    if (info) {
+      showSimpleTooltip(
+        e.clientX,
+        e.clientY,
+        `${info.artists.join(', ')} — ${info.name}`
+      );
+    }
+    return;
+  }
+
+  if (!previewActivated) return;
+
+  showSimpleTooltip(e.clientX, e.clientY, 'Завантажуємо назву…');
+  if (!window._spotifyToken) {
+    window._spotifyToken = await getAccessToken();
+  }
+  if (!album.tracksInfo) {
+    await loadAlbumTracksWithRetry(album);
+  }
+  const info = album.tracksInfo[trackID];
+  if (info) {
+    showSimpleTooltip(
+      e.clientX,
+      e.clientY,
+      `${info.artists.join(', ')} — ${info.name}`
+    );
+  }
+});
+
+  circle.addEventListener('mousemove', e => {
+    if (!previewActivated) return;
+    moveSimpleTooltip(e.clientX, e.clientY);
+  });
+
+  circle.addEventListener('mouseleave', () => {
+    hideSimpleTooltip();
+    if (previewActivated) {
+      previewPlayer.pause();
+      previewPlayer.currentTime = 0;
+      previewPlayer.removeAttribute('src');
+      previewPlayer.load();
+    }
+  });
+
+  circle.dataset.albumId = album.albumID;
+attachTrackBehavior(circle, `https://p.scdn.co/mp3-preview/${mp3hash}`);
+
+circle.addEventListener('click', async evt => {
+  evt.preventDefault();
+
+  document.querySelectorAll('.track-circle .progress-fill')
+    .forEach(el => el.style.width = '0%');
+  previewPlayer.ontimeupdate = null;
+  
+  if (autoPlayingAlbum && autoPlayingAlbum !== album.albumID) {
+    const prevAlbumId = autoPlayingAlbum;
+    autoPlayingAlbum = null;
+
+    const prevBtn = document.querySelector(
+      `.album[data-album-id="${prevAlbumId}"] .play-all-toggle`
+    );
+    if (prevBtn) {
+      prevBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+
+    if (currentHighlightedCircle) {
+      currentHighlightedCircle.classList.remove('highlight');
+      currentHighlightedCircle = null;
+    }
+
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+  }
+
+    if (autoPlayingAlbum === album.albumID) {
+    const clickedIndex = album.tracksIDs.indexOf(trackID);
+    if (clickedIndex >= 0) {
+      autoPlayIndex = clickedIndex;
+
+      const hash = album.tracksMP3[autoPlayIndex];
+      previewPlayer.src = `https://p.scdn.co/mp3-preview/${hash}`;
+      previewPlayer.currentTime = 0;
+      previewPlayer.play().catch(() => {});
+
+      if (currentHighlightedCircle) {
+        currentHighlightedCircle.classList.remove('highlight');
+      }
+      const newCirc = tracksContainer.querySelector(
+        `.track-circle[data-track-id="${trackID}"]`
+      );
+      if (newCirc) {
+        newCirc.classList.add('highlight');
+        currentHighlightedCircle = newCirc;
+      }
+
+      previewPlayer.ontimeupdate = () => {
+        const dur = previewPlayer.duration || 1;
+        const pct = (previewPlayer.currentTime / dur) * 100;
+        const fillEl = newCirc.querySelector('.progress-fill');
+        if (fillEl) fillEl.style.width = pct + '%';
+      };
+    }
+    return;
+  }
+
+  if (!previewActivated) {
+    togglePreview(true);
+  }
+
+  previewPlayer.src = `https://p.scdn.co/mp3-preview/${mp3hash}`;
+  previewPlayer.currentTime = 0;
+  try {
+    await previewPlayer.play();
+  } catch (e) {
+    console.warn('Не удалось сразу запустить превью:', e);
+  }
+
+  hideSimpleTooltip();
+  showSimpleTooltip(evt.clientX, evt.clientY, 'Завантажуємо назву…');
+
+  if (!window._spotifyToken) {
+    window._spotifyToken = await getAccessToken();
+  }
+  if (!album.tracksInfo) {
+    await loadAlbumTracksWithRetry(album);
+  }
+  const info = album.tracksInfo[trackID];
+  if (info) {
+    showSimpleTooltip(
+      evt.clientX,
+      evt.clientY,
+      `${info.artists.join(', ')} — ${info.name}`
+    );
+  }
+});
+
+  tracksContainer.appendChild(circle);
+});
 
    const listensEl = document.getElementById(`listens-${i}`);
 if (album.listens === 0) {
@@ -4252,11 +5449,42 @@ albumDiv.querySelectorAll('.blacklist-cross[data-type="artist"]').forEach(cross 
 });
   }
 
+      if (autoPlayingAlbum) {
+
+  const playingDiv = document.querySelector(`.album[data-album-id="${autoPlayingAlbum}"]`);
+  if (playingDiv) {
+
+    const btn = playingDiv.querySelector('.play-all-toggle');
+    if (btn) {
+      btn.innerHTML = '<i class="fas fa-stop"></i>';
+      removeTooltip(btn);
+      attachTooltip(btn, 'Зупинити відтворення', '180px');
+    }
+
+    const trackID = albumsData.find(a => a.albumID === autoPlayingAlbum)
+                           .tracksIDs[autoPlayIndex];
+    const circ = playingDiv.querySelector(`.track-circle[data-track-id="${trackID}"]`);
+    if (circ) {
+      circ.classList.add('highlight');
+      currentHighlightedCircle = circ;
+
+      const fill = circ.querySelector('.progress-fill');
+      if (fill) {
+
+        previewPlayer.ontimeupdate = () => {
+          const dur = previewPlayer.duration || 1;
+          fill.style.width = (previewPlayer.currentTime / dur * 100) + '%';
+        };
+      }
+    }
+  }
+}
+      
   currentIndex = endIndex;
   document.getElementById('lazy-loading').textContent =
     currentIndex >= data.length
       ? 'Більше немає альбомів для завантаження'
-      : 'Завантаження альбомів...';
+      : 'Завантаження альбомів…';
 }
 
     function renderArtists(index, album) {
@@ -4355,50 +5583,42 @@ function showAlbum(album) {
       return t;
     }
 
-    function attachTrackBehavior(circle, audio, album, albumDiv) {
-      let tooltipShown = false;
-      const tipText = 'Натисніть для відтворення уривка. Далі просто наводьте курсор на треки.';
-
-      circle.addEventListener('mouseenter', (e) => {
-        if (!audioActivated) {
-          showSimpleTooltip(e.clientX, e.clientY, tipText);
-        } else {
-          audio.play().catch(err => {
-  if (err.name !== 'AbortError') {
-    console.error('Audio play error:', err);
-  }
-});
-        }
-      });
-      
-      circle.addEventListener('mousemove', (e) => {
-        if (!audioActivated) {
-          moveSimpleTooltip(e.clientX, e.clientY);
-        }
-      });
-      
-      circle.addEventListener('mouseleave', () => {
-        hideSimpleTooltip();
-        if (audioActivated) {
-          if (!audio.paused) {
-  audio.pause();
-  audio.currentTime = 0;
-}
-        }
-      });
-      
-      circle.addEventListener('click', (evt) => {
-        if (!audioActivated) {
-          evt.preventDefault();
-          audioActivated = true;
-          hideSimpleTooltip();
-          audio.play();
-        }
-      });
-
-      audio.addEventListener('pause', () => {
-      });
+    function attachTrackBehavior(circle, trackPreviewUrl) {
+  const tipText = 'Натисніть для відтворення уривка. Далі наводьте курсор на треки.';
+  circle.addEventListener('mouseenter', e => {
+    if (autoPlayingAlbum === circle.dataset.albumId) {
+      const albumObj = albumsData.find(a => a.albumID === circle.dataset.albumId);
+      const info     = albumObj && albumObj.tracksInfo && albumObj.tracksInfo[circle.dataset.trackId];
+      if (info) {
+        showSimpleTooltip(e.clientX, e.clientY, `${info.artists.join(', ')} — ${info.name}`);
+      }
+      return;
     }
+
+    if (!previewActivated) {
+      showSimpleTooltip(e.clientX, e.clientY, tipText);
+    } else {
+      previewPlayer.src = trackPreviewUrl;
+      previewPlayer.play().catch(()=>{});
+    }
+  });
+
+  circle.addEventListener('mousemove', e => {
+    if (!previewActivated) {
+      moveSimpleTooltip(e.clientX, e.clientY);
+    }
+  });
+
+  circle.addEventListener('mouseleave', () => {
+    hideSimpleTooltip();
+    if (previewActivated) {
+      previewPlayer.pause();
+      previewPlayer.currentTime = 0;
+      previewPlayer.removeAttribute('src');
+      previewPlayer.load();
+    }
+  });
+}
 
     function removeTooltip(element) {
       element.dispatchEvent(new Event('mouseleave'));
@@ -4657,6 +5877,7 @@ function showAlbum(album) {
     }
 
     function attachTooltip(el, text, width) {
+  if (!el) return;
   el._tooltipText = text;
 
   if (width !== undefined) {
@@ -4671,10 +5892,11 @@ function showAlbum(album) {
       const tip = document.createElement('div');
       tip.classList.add('tooltip');
       tip.style.position      = 'fixed';
-      tip.style.backgroundColor = '#333';
+      tip.style.backgroundColor = '#30302f';
       tip.style.color         = '#f3f3f3';
       tip.style.padding       = '5px 10px';
       tip.style.borderRadius  = '7px';
+      tip.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.25)';
       tip.style.fontSize      = '12px';
       tip.style.zIndex        = '9999';
       document.body.appendChild(tip);
@@ -4696,7 +5918,7 @@ function showAlbum(album) {
   });
 
   el.addEventListener('mouseleave', () => {
-    if (el._tooltip) {
+    if (el && el._tooltip) {
       el._tooltip.remove();
       el._tooltip = null;
     }
@@ -4724,10 +5946,11 @@ function removeTooltip(el) {
       if (!simpleTooltip) {
         simpleTooltip = document.createElement('div');
         simpleTooltip.style.position = 'fixed';
-        simpleTooltip.style.backgroundColor = '#333';
+        simpleTooltip.style.backgroundColor = '#30302f';
         simpleTooltip.style.color = '#f3f3f3';
         simpleTooltip.style.padding = '5px 10px';
         simpleTooltip.style.borderRadius = '7px';
+        simpleTooltip.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.25)';
         simpleTooltip.style.fontSize = '12px';
         simpleTooltip.style.visibility = 'hidden';
         simpleTooltip.style.whiteSpace = 'normal';
@@ -4771,6 +5994,7 @@ function removeTooltip(el) {
 }
    
     function smoothApplyFilters() {
+      clearActivePreset();
   isFiltering = true;
   const container = document.getElementById('albums-container');
 
@@ -4842,7 +6066,6 @@ const toggleEditBtn = document.getElementById('toggle-edit-presets');
 const presetsWrapper = document.querySelector('.presets-wrapper');
 let sortable;
 
-
 function attachPresetControls() {
   presetsWrapper.querySelectorAll('.preset-item').forEach(btn => {
 
@@ -4878,6 +6101,7 @@ function attachPresetControls() {
 
 toggleEditBtn.addEventListener('click', () => {
   const isEditing = presetsWrapper.classList.toggle('editing');
+  toggleEditBtn.classList.toggle('active', isEditing);
   if (isEditing) {
     attachPresetControls();
     sortable = Sortable.create(presetsWrapper, {
@@ -4912,13 +6136,16 @@ function showDeleteConfirm(btn) {
 
   const txt     = document.createElement('p');
   txt.textContent = 'Видалити фільтр?';
+  txt.style  = 'padding: 0px 20px 20px 20px;margin: auto;';
 
   const btnKeep = document.createElement('button');
   btnKeep.textContent = 'Залишити';
+  btnKeep.className = 'modal-action keep-btn';
   btnKeep.style = 'margin:0 10px;';
 
   const btnDel  = document.createElement('button');
   btnDel.textContent = 'Видалити';
+  btnDel.className  = 'modal-action delete-btn';
   btnDel.style = 'margin:0 10px;';
 
   overlay.addEventListener('click', () => {
@@ -4987,6 +6214,12 @@ function showRenameModal(btn) {
   });
 })();
 
+    document.getElementById('export-button').addEventListener('click', () => {
+  const modal = document.getElementById('blacklist-modal');
+  modal.style.display = 'flex';
+  document.getElementById('export-tab').click();
+});
+    
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
