@@ -1721,6 +1721,7 @@
 			<div class="label-with-dropdown"> <span class="dropdown-label">Відстеження<br>останніх релізів</span> <select id="genreSelect" style="display: none;">
           <option value="allMusic">Вся музика</option>
           <option value="nuamSelection">Вибір NUAM</option>
+          <option value="friday">Релізна п'ятниця</option>
           <option value="rock">Рок</option>
           <option value="hiphop">Хіп-хоп</option>
           <option value="electronic">Електронна</option>
@@ -2609,6 +2610,9 @@ optionsContainer.addEventListener('click', (event) => {
         break;
     case 'nuamSelection':
         loadPlaylist('6DeL9XwoICqs7SJpRJV8gl', getSpreadsheetUrl('432450178'));
+        break;
+    case 'friday':
+        loadPlaylist('3qev34QE5v3QfiJa2YcRWz', getSpreadsheetUrl('1382994370'));
         break;
     case 'rock':
         loadPlaylist('1kbv778UlCDaOqRfd6nxYB', getSpreadsheetUrl('1760322616'));
