@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Графік релізів (2013 – 2025)</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+
+<style>
+  body{margin:0;padding:20px;background:#111;color:#eee;font-family:sans-serif}
+  #chart{max-width:1200px;max-height:700px}
+</style>
+</head>
+<body>
+
+<canvas id="chart" width="1200" height="700"></canvas>
+
+<script>
+const labels = [
+  '2013','2014','2015','2016','2017','2018','2019',
+  '2020','2021','2022','2023','2024','2025'
+];
+
+const singles      = [504,646,829,1178,1691,2065,3203,5539,7997,13811,21133,24795,16762];
+const eps          = [134,157,196,198,276,310,399,617,803,927,1446,2086,1214];
+const albums       = [259,284,300,422,474,471,593,844,1036,1008,1412,2054,1310];
+const compilations = [3,4,6,4,24,9,6,18,11,11,15,63,21];
+
+new Chart(document.getElementById('chart'),{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[
+      { label:'Сингли',       data:singles,      backgroundColor:'#ff6384' },
+      { label:'EP',           data:eps,          backgroundColor:'#36a2eb' },
+      { label:'Альбоми',      data:albums,       backgroundColor:'#ffce56' },
+      { label:'Компіляції',   data:compilations, backgroundColor:'#4bc0c0' }
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{ labels:{ color:'#eee' } },
+      zoom:{
+        pan:{ enabled:true, mode:'x' },
+        zoom:{ wheel:{ enabled:true }, pinch:{ enabled:true }, mode:'x' }
+      },
+      tooltip:{
+        callbacks:{
+          label(ctx){
+            const cur  = ctx.parsed.y;
+            const prev = ctx.dataset.data[ctx.dataIndex-1] ?? null;
+            let pct = '';
+            if(ctx.dataIndex>0){
+              if(prev>0){
+                const diff = ((cur-prev)/prev*100).toFixed(1);
+                pct = ` (${diff>0?'+':''}${diff}%)`;
+              }else if(prev===0){
+                pct = ' (∞%)';
+              }
+            }
+            return `${ctx.dataset.label}: ${cur}${pct}`;
+          }
+        }
+      }
+    },
+    scales:{
+      x:{
+        title:{display:true,text:'Рік',color:'#eee',padding:{top:10}},
+        ticks:{ color:'#eee' },
+        grid:{ color:'#333' }
+      },
+      y:{
+        beginAtZero:true,
+        title:{display:true,text:'Кількість релізів',color:'#eee',padding:{bottom:10}},
+        ticks:{ color:'#eee' },
+        grid:{ color:'#333' }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
