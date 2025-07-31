@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Графік дебютів</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+
+<style>
+  body{margin:0;padding:20px;background:#111;color:#eee;font-family:sans-serif}
+  #chart{max-width:1200px;max-height:700px}
+</style>
+</head>
+<body>
+
+<canvas id="chart" width="1200" height="700"></canvas>
+
+<script>
+const labels = ['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const dataDebuts = [176,206,218,285,383,450,661,1160,1427,2117,2602,2256,1193];
+
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Дебюти',
+        data: dataDebuts,
+        backgroundColor: '#36a2eb'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: { color: '#eee' }
+      },
+      zoom: {
+        pan: { enabled: true, mode: 'x' },
+        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' }
+      },
+      tooltip: {
+        callbacks: {
+          label(ctx) {
+            const cur = ctx.parsed.y;
+            const prev = ctx.dataset.data[ctx.dataIndex - 1] ?? null;
+            let pct = '';
+            if (ctx.dataIndex > 0) {
+              if (prev > 0) {
+                const diff = ((cur - prev) / prev * 100).toFixed(1);
+                pct = ` (${diff > 0 ? '+' : ''}${diff}%)`;
+              } else {
+                pct = ' (∞%)';
+              }
+            }
+            return `Дебюти: ${cur}${pct}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Рік', color: '#eee', padding: { top: 10 } },
+        ticks: { color: '#eee' },
+        grid: { color: '#333' }
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Кількість дебютів', color: '#eee', padding: { bottom: 10 } },
+        ticks: { color: '#eee' },
+        grid: { color: '#333' }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
