@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Відсотки за жанрами (квартали)</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #1e1e1e;
+      color: #ddd;
+      font-family: Arial, sans-serif;
+    }
+    #chart-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+    }
+    #genreChart {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart-container">
+    <canvas id="genreChart"></canvas>
+  </div>
+  <script>
+    const labels = [
+      '2013-Q1','2013-Q2','2013-Q3','2013-Q4',
+      '2014-Q1','2014-Q2','2014-Q3','2014-Q4',
+      '2015-Q1','2015-Q2','2015-Q3','2015-Q4',
+      '2016-Q1','2016-Q2','2016-Q3','2016-Q4',
+      '2017-Q1','2017-Q2','2017-Q3','2017-Q4',
+      '2018-Q1','2018-Q2','2018-Q3','2018-Q4',
+      '2019-Q1','2019-Q2','2019-Q3','2019-Q4',
+      '2020-Q1','2020-Q2','2020-Q3','2020-Q4',
+      '2021-Q1','2021-Q2','2021-Q3','2021-Q4',
+      '2022-Q1','2022-Q2','2022-Q3','2022-Q4',
+      '2023-Q1','2023-Q2','2023-Q3','2023-Q4',
+      '2024-Q1','2024-Q2','2024-Q3','2024-Q4',
+      '2025-Q1','2025-Q2'
+    ];
+
+    const pop = [457,100,152,417,503,213,222,217,396,176,306,387,459,221,281,519,533,457,339,627,595,620,479,585,570,905,848,1053,1829,1642,1477,1546,1811,1497,1345,1787,1151,1854,2176,2167,2756,2565,2652,3153,3199,3694,5643,5051,6548,7390];
+    const electronic = [338,376,371,387,478,407,378,511,483,590,399,446,533,479,540,689,722,868,730,697,966,895,860,911,959,966,880,1275,1084,1282,1419,1610,1832,2031,1984,2409,2195,2901,3576,3512,4255,4193,4766,4624,6085,5736,7444,6471,6709,6601];
+    const alternative = [511,457,326,804,639,572,398,529,578,521,456,737,732,652,673,948,1255,905,901,972,718,598,660,866,1068,1116,881,1162,1472,1285,1087,1601,1449,1611,1719,2127,1687,1664,1953,2464,2252,2740,2562,2989,3229,3350,3355,3692,3732,4464];
+    const hip_hop = [71,29,44,62,19,36,45,97,123,148,56,92,150,85,75,88,81,155,90,114,170,154,189,214,212,305,288,394,383,706,687,809,710,958,1007,1250,976,1240,2053,2138,2426,2974,3105,3160,3090,3023,3008,3002,2858,3163];
+    const indie = [73,26,59,90,96,104,27,116,78,101,55,190,174,137,48,140,142,132,145,230,168,181,214,353,262,281,177,378,285,331,374,493,382,577,498,680,506,570,994,1131,907,1183,974,1200,1202,1292,1212,1444,1221,1209];
+    const instrumental = [86,219,56,85,34,131,49,118,156,94,70,318,224,121,136,137,171,160,180,266,251,140,172,525,198,176,229,370,319,332,351,663,422,375,334,659,625,604,689,729,750,708,592,653,734,679,850,640,987,835];
+    const folk = [41,19,60,135,116,32,145,47,59,88,44,91,91,38,110,139,156,61,36,93,219,114,48,146,86,84,115,162,183,222,115,159,139,187,155,201,150,162,119,297,256,267,283,299,591,226,297,511,334,429];
+    const AI = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,222,2828,2312,3866,5532];
+    const experimental = [60,1,16,56,74,42,27,49,37,37,30,62,35,44,18,65,67,18,27,88,99,97,85,121,88,129,72,125,170,127,227,210,160,125,183,430,228,281,306,482,431,352,469,376,677,723,813,668,864,614];
+    const background = [0,3,38,1,0,14,0,0,38,32,7,10,47,10,31,22,62,5,26,23,48,10,24,30,34,65,62,170,90,104,54,107,186,524,176,236,229,378,363,414,678,409,416,315,415,365,501,455,459,549];
+    const worship = [16,15,12,67,25,2,11,25,41,30,22,18,25,29,30,29,49,22,2,59,67,35,55,38,42,94,42,122,121,91,217,89,51,54,108,130,97,45,115,86,87,75,118,85,245,140,147,192,453,517];
+    const etc = [0,46,0,0,0,0,0,0,0,0,0,0,0,8,0,0,37,11,9,3,5,25,4,9,2,0,14,18,1,1,2,24,6,8,4,17,13,6,10,32,52,35,79,150,38,41,35,137,74,69];
+
+    const legendSpacer = {
+    id: 'legendSpacer',
+    beforeInit(chart) {
+      const originalFit = chart.legend.fit;
+      chart.legend.fit = function fit() {
+        originalFit.bind(this)();
+        this.height += 20; // <-- здесь задаём отступ после легенды
+      };
+    }
+  };
+
+  function getColor(i) {
+    const palette = [
+      '#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4',
+      '#46f0f0','#f032e6','#bcf60c','#fabebe','#008080','#e6beff'
+    ];
+    return palette[i % palette.length];
+  }
+
+  const totals = labels.map((_,i) =>
+    pop[i] + electronic[i] + alternative[i] + hip_hop[i] +
+    indie[i] + instrumental[i] + folk[i] + AI[i] +
+    experimental[i] + background[i] + worship[i] + etc[i]
+  );
+
+  let _lastClick = { time: 0, index: null };
+
+  const datasets = [
+    { label:'pop',           dataRaw:pop,           data:pop.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(0) },
+    { label:'electronic',    dataRaw:electronic,    data:electronic.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(1) },
+    { label:'alternative',   dataRaw:alternative,   data:alternative.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(2) },
+    { label:'hip-hop',       dataRaw:hip_hop,       data:hip_hop.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(3) },
+    { label:'indie',         dataRaw:indie,         data:indie.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(4) },
+    { label:'instrumental',  dataRaw:instrumental,  data:instrumental.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(5) },
+    { label:'folk',          dataRaw:folk,          data:folk.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(6) },
+    { label:'AI',            dataRaw:AI,            data:AI.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(7) },
+    { label:'experimental',  dataRaw:experimental,  data:experimental.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(8) },
+    { label:'background',    dataRaw:background,    data:background.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(9) },
+    { label:'worship',       dataRaw:worship,       data:worship.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(10) },
+    { label:'etc',           dataRaw:etc,           data:etc.map((v,i)=>totals[i]?v/totals[i]*100:0), backgroundColor:getColor(11) }
+  ];
+
+  const ctx = document.getElementById('genreChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    plugins: [ legendSpacer ],  // <-- подключаем плагин здесь
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'center',
+          labels: { color: '#ddd', boxWidth: 20 },
+          onClick: (e, legendItem) => {
+            const idx = legendItem.datasetIndex;
+            const now = Date.now();
+            if (_lastClick.index === idx && now - _lastClick.time < 350) {
+              const metas = chart.data.datasets.map((_, i) => chart.getDatasetMeta(i));
+              const onlyThis = metas.every((m,i) => i === idx ? !m.hidden : m.hidden);
+              metas.forEach((m,i) => m.hidden = onlyThis ? false : (i !== idx));
+              chart.update();
+              _lastClick = { time: 0, index: null };
+            } else {
+              const meta = chart.getDatasetMeta(idx);
+              meta.hidden = !meta.hidden;
+              chart.update();
+              _lastClick = { time: now, index: idx };
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const c = ctx.dataset.dataRaw[ctx.dataIndex] || 0;
+              const p = ctx.parsed.y.toFixed(1);
+              return `${ctx.dataset.label}: ${c} треків (${p}%)`;
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          stacked: true,
+          ticks: { color: '#ccc' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          max: 100,
+          ticks: { color: '#ccc', callback: v => v + '%' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        }
+      }
+    }
+  });
+</script>
