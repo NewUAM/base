@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Плейлісти · Δ підписників</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;
+  background:#0f0f0f;
+  color:#f0f0f0;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 20px
+}
+h1{margin-bottom:30px;font-size:28px;font-weight:600;letter-spacing:.5px}
+.container{
+  width:100%;
+  max-width:950px;
+  background:#161616;
+  border:1px solid #262626;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.6)
+}
+table{width:100%;border-collapse:collapse}
+thead{background:#1e1e1e}
+th,td{padding:12px 16px;text-align:left}
+th{font-weight:600;font-size:15px}
+tbody tr:nth-child(odd){background:#1a1a1a}
+tbody tr:hover{background:#222}
+.pos{color:#13c47f;font-variant-numeric:tabular-nums}
+.neg{color:#f25c54;font-variant-numeric:tabular-nums}
+.dash{color:#6c6c6c}
+td{font-size:14px;font-variant-numeric:tabular-nums}
+.name{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:600px){
+  th:nth-child(2),td:nth-child(2){display:none}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+<h1>Різниця в кількості підписників</h1>
+<div class="container">
+<table id="tbl">
+<thead><tr>
+<th>Плейліст</th><th>Підписники</th><th>Δ день</th><th>Δ 31&nbsp;день</th>
+</tr></thead><tbody></tbody>
+</table>
+</div>
+
+<script>
+const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=0&single=true&output=csv';
+
+Papa.parse(CSV_URL,{
+  download:true,header:false,
+  complete:({data})=>{
+    if(!data.length) return;
+    const hdr=data[0], todayCol=hdr.length-1, yestCol=hdr.length-2, firstCol=2;
+    const rows=[];
+    for(let i=1;i<data.length;i++){
+      const name   = data[i][1];
+      const today  = parseInt(data[i][todayCol]||0,10);
+      const yest   = parseInt(data[i][yestCol]   ||0,10);
+      const month  = parseInt(data[i][firstCol]  ||0,10);
+
+      const diffDay   = yest ? today - yest   : null;
+      const diffMonth = month ? today - month : null;
+
+      rows.push({name,today,dDay:diffDay,dMon:diffMonth});
+    }
+    rows.sort((a,b)=>Math.abs(b.dDay||0)-Math.abs(a.dDay||0));
+
+    const tbody=document.querySelector('#tbl tbody');
+    const fmt=n=>n.toLocaleString('uk-UA');
+    const val=(v)=>v===null?'<span class="dash">—</span>'
+      : v===0?'<span class="dash">—</span>'
+      : `<span class="${v>0?'pos':'neg'}">${v>0?'+':''}${fmt(v)}</span>`;
+
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td class="name" title="${r.name}">${r.name}</td>
+        <td>${fmt(r.today)}</td>
+        <td>${val(r.dDay)}</td>
+        <td>${val(r.dMon)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+});
+</script>
+</body>
+</html>
