@@ -2,96 +2,300 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
-<title>Плейлісти · Δ підписників</title>
+<title>Плейлісти · Spotify / YouTube статистика</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:'Inter',sans-serif;
-  background:#0f0f0f;
-  color:#f0f0f0;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:40px 20px
-}
-h1{margin-bottom:30px;font-size:28px;font-weight:600;letter-spacing:.5px}
-.container{
-  width:100%;
-  max-width:950px;
-  background:#161616;
-  border:1px solid #262626;
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:0 4px 20px rgba(0,0,0,.6)
-}
+body{font-family:'Inter',sans-serif;background:#0f0f0f;color:#f0f0f0;
+     min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+h1{margin-bottom:30px;font-size:26px;font-weight:600;letter-spacing:.4px;text-align:center}
+
+.container{width:100%;max-width:1150px;background:#161616;border:1px solid #262626;
+  border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+
 table{width:100%;border-collapse:collapse}
 thead{background:#1e1e1e}
-th,td{padding:12px 16px;text-align:left}
-th{font-weight:600;font-size:15px}
-tbody tr:nth-child(odd){background:#1a1a1a}
+th,td{padding:11px 14px;text-align:left;font-size:14px;font-variant-numeric:tabular-nums}
+th{font-weight:600}
+tbody tr:nth-child(odd){background:#1b1b1b}
 tbody tr:hover{background:#222}
-.pos{color:#13c47f;font-variant-numeric:tabular-nums}
-.neg{color:#f25c54;font-variant-numeric:tabular-nums}
-.dash{color:#6c6c6c}
-td{font-size:14px;font-variant-numeric:tabular-nums}
+
+.pos{color:#13c47f}.neg{color:#f25c54}.dash{color:#777}
 .name{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(max-width:600px){
-  th:nth-child(2),td:nth-child(2){display:none}
+.profile-row{background:#2b2b2b !important;font-weight:600}
+.profile-badge{display:inline-block;background:#404040;color:#ddd;font-size:11px;
+  padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:middle}
+
+@media(max-width:720px){
+  th:nth-child(2),td:nth-child(2),
+  th:nth-child(5),td:nth-child(5){display:none}
 }
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
-<h1>Різниця в кількості підписників</h1>
+
+<h1>Статистика плейлістів</h1>
+
 <div class="container">
 <table id="tbl">
-<thead><tr>
-<th>Плейліст</th><th>Підписники</th><th>Δ день</th><th>Δ 31&nbsp;день</th>
-</tr></thead><tbody></tbody>
+  <thead>
+    <tr>
+      <th rowspan="2">Плейліст / Профіль</th>
+      <th colspan="3">Spotify</th>
+      <th colspan="3">YouTube Music</th>
+    </tr>
+    <tr>
+      <th>сьогодні</th><th>Δ&nbsp;день</th><th>Δ&nbsp;місяць</th>
+      <th>сьогодні</th><th>Δ&nbsp;день</th><th>Δ&nbsp;місяць</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
 </table>
 </div>
 
 <script>
-const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=0&single=true&output=csv';
+/* ---------- CSV-джерела ---------- */
+const CSV_SPOTIFY = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=0&single=true&output=csv';
+const CSV_YOUTUBE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=549875811&single=true&output=csv';
 
-Papa.parse(CSV_URL,{
-  download:true,header:false,
-  complete:({data})=>{
-    if(!data.length) return;
-    const hdr=data[0], todayCol=hdr.length-1, yestCol=hdr.length-2, firstCol=2;
-    const rows=[];
-    for(let i=1;i<data.length;i++){
-      const name   = data[i][1];
-      const today  = parseInt(data[i][todayCol]||0,10);
-      const yest   = parseInt(data[i][yestCol]   ||0,10);
-      const month  = parseInt(data[i][firstCol]  ||0,10);
+/* ───────── мапа YouTube → Spotify ───────── */
+const MAP_RAW = `
+PLolD6trREzkvRfihkz6QouuGJs5ENiGRk	3qev34QE5v3QfiJa2YcRWz
+PLolD6trREzks8CkEq9c4H8Q2GDodNvd7j	6MwzoPbLwF6ggmeYPRlV69
+PLolD6trREzkuvsu1fL3f4U0gu4qvWA79f	3Dbs6sArMetXo7baxiHQnB
+PLolD6trREzkslb_6UJYS-NNiekFOwVdkV	3ETMNtFP2rEUeBNwEuPQqe
+PLolD6trREzktUNPU6cVkVZIsItanZERfK	7CwZaOXZ7Y0vXenHEHPW3j
+PLolD6trREzkvEKM52D8JvYw6Fvg8Dr0Dq	3Ij2SGQd85JZUDZf98ozkR
+PLolD6trREzktaZ9lX3OYfUvZT6gqCCm76	77VbVn6QHcefbIKB9Qc17s
+PLolD6trREzkuBMMIc5gcdIDRNQZa15Pgb	17h2r88WoOAxAgzOM0uBcn
+PLolD6trREzktRfkQjgY6QaZJFiF-HfSHy	3pYvIFvdC0VIn0vrykjJoD
+PLolD6trREzkukw--EzxmKeSDF8XwyNK-z	3HOzzLZcUsEuSaSgHoCRDz
+PLolD6trREzksanY6xXRQJRJadpRCoW3Po	5eVSxCCXP95ISrH0Z0DT5A
+PLolD6trREzkug2QWBjsGcGt2VJZaAtyEV	2gWP504Sx1JQW3xV0F7SOS
+PLolD6trREzkv6u2fpxb7C5BBw4s5rQVsU	3OLjVsX9ufkOWTzsl53kqZ
+PLolD6trREzkttHhdf-TaerPWsxRZ3GGwL	6lybRh73PUYWuMHAO7I5si
+PLolD6trREzks0L5gBUykJP16I4Retccuf	3ZtNMBjSPGP8HDXHTngwf3
+PLolD6trREzksTOj9jNWWnfoOnxo78WNaY	1kXfQFAn0iL38UIqshJltl
+PLolD6trREzkuUq_nf0cOX8T6Lie6i_z9q	7MFlgMnLTQxlKltelqMGIk
+PLolD6trREzkvs9rq-voHshT6f947j6ZJl	1GLjmgQGdeTSKaCZZnF1eS
+PLolD6trREzkuf1_cQn5MyS9k0a16PUPRb	6Yf3YB35y6Vh3D1ReQGIdI
+PLolD6trREzkupdrZSiS39z1vGv1FC_ALb	2gDiHO3owqo9Y9TxVzD82n
+PLolD6trREzktMs8V89BeDUJiXDEMf5m3G	0BKmaY0BjrhXriPG7ZqeVS
+PLolD6trREzkuUSkXT3e_CBVJYvaG9L7C5	5iJYhQ9JwLtK9fUlMFlLfw
+PLolD6trREzktkVjutK5dmCvLeJzyDX0F2	7bVHHsxAiuZq0KC1oMixiG
+PLolD6trREzkv6CltrJbdCMBLF1YdkQl1F	6Ny5q9oEslo3IzLRtZ5bSs
+PLolD6trREzkut7LrbR-SNHjn9fgQ3g0d3	1c7KQ0Bl28DXPQVQ0xOLlN
+PLolD6trREzkuPKlSbRYSiWble9mEK5Dkg	0rJX7ynyMWtUPSAApL2KMs
+PLolD6trREzkt1RdwoVxPUkPoB-sJvdCFF	3Y8XMTw08Jn6A2v1FhfevW
+PLolD6trREzktdEQQ3iUSIMyJyd7Pu-nm4	68gykHOCki4XeUU2oYDxE7
+PLolD6trREzkuWa4XkCueR-k9MuCh7ZGWD	5i8ix6kfL3aX3wEp7eTLSk
+PLolD6trREzksOpjDUvksnd1B4wiVV7W6E	2Qle3uMbbZI68ISA256H9K
+PLolD6trREzkuXNxcHphqMrqhU8GM5mY6G	6nHAWt0vxAl8FMsV1mfkdX
+PLolD6trREzkvnGeQFHUzkYUjGNXZjfclV	0d496n4wShEBqy9SMJtjDi
+PLolD6trREzkvZ56t7BVCOfJw9iFrY1AmI	0F0DiGz2afSoJQQ9GN8rav
+PLolD6trREzktjxLmJGYUJbWyTot3IHuPG	7xQoxMPaapbiydSP4qcmb6
+PLolD6trREzku97cmPt3ClVgSMOXXiQmJS	0HeEiOMhCqRamzo0Ssie2e
+PLolD6trREzkuDTwb5dcjxi3ktz_JLFu0o	7MQJq6ESHq8Wwa2NGKtoYb
+PLolD6trREzku7DcjS2yjigeP_eUPmuzEA	1fCmvxVJ18Leccomgl0tEf
+PLolD6trREzktiZvcR_96uKlT8f9fAmoiJ	15NJ5E8w9IHIGYqC4pZwim
+PLolD6trREzkumyr1X9fMrcGRhbnRvTHCM	0SaQrbG5m5CGv5chZ73ANT
+PLolD6trREzksmh6XfF7UnLo7IKxmdY33T	2kiUa0dgfQTSLqiVt7UaB5
+PLolD6trREzkv4H-LEIq06-IjWyBPUHXJp	6L3275bjC6g8bsRqOizYnL
+PLolD6trREzktz_gxSUOZMXYtKmAPk3dym	0zvKRsBL6GAdRrY1q1PcAX
+PLolD6trREzkvK6gyZxoJaeQe-lmtqmVwJ	0Ne4rmTJ1nlZ6dStyG1FDk
+PLolD6trREzkvAuKrvtA5j1s8lKTuVyMGF	1OxokJquZtYjsipflZyZOl
+PLolD6trREzkuIMGJjg10_A_KtC8iawZmB	2K3KlQNFIr6iUWMXkVa5GK
+PLolD6trREzku_bEBJaXEhu0G4JZfs0OuX	2zdndKC5Tls04Yw99hqiAH
+PLolD6trREzksK20wEQJmVzIBouTphrkNT	0L2LYGAal9rXJotDO7HAOs
+PLolD6trREzkvWk6VGwVvxtD8B4llS3dCR	1MUfQwdptuIjx9Z4zhpuuT
+PLolD6trREzks5dUEJl-kXCtnw5hZkRJ3Z	6nLmSQmcctkQasgCpB7MGd
+PLolD6trREzku7bwVT9PwDGLz67tZJtuwR	1aciYsNAi2fj0jxmlnHbvv
+PLolD6trREzkvLxH6c7TxTeCoFNTv-W45N	3krj67mS2CtXhNk2WaaNTn
+PLolD6trREzksVUE9apCcN_2MJL7bh0Vmp	6DeL9XwoICqs7SJpRJV8gl
+PLolD6trREzktmQRVzqF3GFBfjf5YxgkCc	3hj1UH9diN5XCWSssz4ip8
+PLolD6trREzktIElkcYzdu6WO7oV8FXjXO	5wiudpVU2QVzTkWllQR1dt
+PLolD6trREzku3A8yPLmJgExQGTDVCftz7	217uzAnVUalZM93yPDcSib
+PLolD6trREzkuINAzw5IExrp5N-g0zTR7f	2LERLfeyHOzN5WzUQDifR4
+PLolD6trREzktQyHcW-lCM42Qyc9LGWSEr	0I8ZJfPb6B0XHf45WdwOnZ
+PLolD6trREzktGgZU2ICpadOADQBbEEnLd	7fRO9zKuQw2r3vw2xkf3Xd
+PLolD6trREzkv5mGCD2zEm28BKEBHB4XKH	6xiGdvoAWGllIA7NFwq1EP
+PLolD6trREzkub2-IGcxnJmlN3xE7-O1e3	740hzCdDeGcLH3PI2p7EUa
+PLolD6trREzkt8TTaZ4jJTROTs8nwy3f7d	4qj7eOJ1s6PXGK8UhysbDx
+PLolD6trREzks8DTRKQ96yUtM_iYXWSkyQ	4GbRg01vFyvtGiR40niI4V
+PLolD6trREzksqjlZ3BTEAtjOrOWIjVaId	76YZytSiBtgDG5YVUD4hbS
+PLolD6trREzktkd46HceoPsEyVRIIzcfQ0	4oiYa0pq0A5GsCM5T1DSP1
+PLolD6trREzksuJcOGQDxhs7orVMXGpTey	0wBCSKU8XDlh04B76xQBKn
+PLolD6trREzkv_CkkYBgouQiD9BZx1y0lf	24kjjHHcUk1U3oXWHgko4Y
+PLolD6trREzktbtPZkRfCZXQhMs09UvvUD	7b6cgIP5d7W9NB8umhCgVa
+PLolD6trREzksVNRTVD_ON1Y4rlUnvtCuv	3mH8RAEzjSFq9di1jSPXvT
+PLolD6trREzkvXBBwK3esnrvmUyESe03Vk	0Ad5Y975zEVLwSYdVcuf5w
+PLolD6trREzks1iMxtEfDkvSEbL3eLy6S5	4vjrpNQwniulRL1EMKX9Pq
+PLolD6trREzktdxIcGMek6IsqKyFAvei-i	41wUwoccy4tsfm2eYIbjdL
+PLolD6trREzkvQgiwzS9rQviAEcYLq1BwY	4YrtFWHlNHEFLs2jq5TM8V
+PLolD6trREzku7arYcxadKePp6MBGGl8Z9	3OnYz3Ikrm4MkTA3GF5oSp
+PLolD6trREzksu79F0VcXH-p5M2T5GIlDT	3IuRTs5ilVkuQk7shlEoXh
+PLolD6trREzksEtOX5qVC0xATzCAe7zWeZ	6sDz8BGGpJsT7GwvXTfxyB
+PLolD6trREzkudNfyCTfY5hUl4mD0Dlftm	2Pa6dfXRI3Kvzlh3HdflJX
+PLolD6trREzktwH1XgTSHaHUF0jxAQ6EKI	3cRxDmmzE7g52eg5h1eNZw
+PLolD6trREzkvzelByOko8cboLUCWahTB2	3pCjbyHKje6erRA5IOG094
+PLolD6trREzkvKf3mdBQWqjMajcUXqpmbi	4KgphTO8kyfZrcvmWrvHwt
+PLolD6trREzksT9CX2qOWbakZiSKZ4l7fh	5mdDTqeDG4AacJUOM2rk3T
+PLolD6trREzksk3RBG0DFl1GZ5T12fokYH	4kd2UqAIGz4zKOdokdqaD8
+PLolD6trREzkub5doSyt-50o9F7US2Hs7O	2u8u602RnHYAiu3MUWZIJo
+PLolD6trREzkvccbDWPTovJRS0huKLtgX3	7GDrn3fQM0nZZ23vNzwJth
+PLolD6trREzktRyoijhIu5q5qNoQAt0Ib8	0GLdxC059GyooPEG8TTPso
+PLolD6trREzkuXjEoKik9heKbVFAzILNQZ	5kqmkV51ou4JQlBRfnBm33
+PLolD6trREzkt0fhNAhZM09l5okwi8cRLH	6JrrRkbG8xhuEKvzF6Gyci
+PLolD6trREzkvvKOzfRZ_IhIPq0YkekFeB	77oJ7FSwgNmoWXm17r0hfI
+PLolD6trREzksMAhcAUUZ0JWx9wjAhkFsg	7ALLjCGfcqBmqCcDE8Lwer
+PLolD6trREzku1FQjx8cGGb9pYTXpo_ClZ	34tsNDGFND5H3XxQehBkxn
+PLolD6trREzkt0-86kUY4YeosQeRXFnW_c	6hCz4OtgJva5nG1qbMa6SQ
+PLolD6trREzktIFT9s8xwwO03IvVc4q06x	2ebmpMVNHtR2wMD5XBpfK1
+PLolD6trREzktQ2DJ9nyJxbEMvhZgjSRPf	7GGWYrYTOGN8H1zoUeWgyz
+PLolD6trREzkvnPHXOaC7NaKFJYRBfrCIr	22kBgL9ad8uzCHHb6CZH9T
+PLolD6trREzks_XivYgjhTpBZ7z7iG_8Th	7xbRUp8mUuGfe0jBfAfZLW
+PLolD6trREzkvAfN7OkixDggTG51djePHn	30PfTODwjXOeWPKNzLAJzL
+PLolD6trREzktGpMozhcMSGHlWO351V69s	3xZP9rBZscGCVJooZRFChj
+PLolD6trREzkvhCZ023HGRqcFEJTByxL-g	1UTHFUEtZnS2r0330bA0Kq
+PLolD6trREzkv4H4A723NxWsk7pIProFXm	4RzHBlLgtHfjoRkOeBfGMc
+PLolD6trREzkvYyX03YuO6BR1v0derQDVX	2x79Htl2giDWVNG6ch418k
+PLolD6trREzku6tyza7BKsjj-YCruQQqEM	6praJHvlDRMSi3WDhs4kko
+PLolD6trREzkuTyUfO-6RtbY0kkKuzHC6G	7vyh4rRtNGtMn6lb6vhuX2
+PLolD6trREzktZvNbVSBhrdCVNgR2XmxTQ	1kbv778UlCDaOqRfd6nxYB
+PLolD6trREzkt42Qnyk1jcR0GNK6SCrUsM	3RDNyHI0P9PuFvSBCyJd12
+PLolD6trREzkt7CHMNcrGVvXH34TObEBsy	638zRS7AP7siKTtslAeP0V
+PLolD6trREzkufxWtqYdtmmBsa0zKDAvjk	31Cr6GPfYhyiR2Hu1FWXHI
+PLolD6trREzkuocaweGGJipxEBB0JwH5Lr	5x5AAcVAlmE52264BGYoAe
+PLolD6trREzks8cmiFioGwNNYfg2_iS_jk	3i5ddI1LrB2thzdMUTHQ48
+PLolD6trREzksdiOezdiA8VP-N5jnjjXR7	7n5VbX0y2ZLK015O0Up4vY
+PLolD6trREzkvsu384YMqu77vEq9XFTxHg	3c7behOUUlQObscj9yNWBQ
+PLolD6trREzkvJURhArrU0pU0m8MkHYDJG	3tMN5kGC9Ne6MvK16MZzb2
+PLolD6trREzkuvwwlItFl5K_CT4rLdMItS	3AmNGGW857Q0VhOD2Iu2Ga
+PLolD6trREzkunCya2e38DXzbwI7uqIoCp	78ZZWbtEfJ0Hn7rxzsdkXN
+PLolD6trREzkseuCPpqlsnjzw_-C7PgjTp	6X9yHnme66AHc76tfaPUCc
+PLolD6trREzkvrvvsS6vHTSXamvPvphsGz	6lAjre8t0dBsr9vpl0DcyH
+PLolD6trREzkvEi6psHy0gdwazMwjkxz8f	51wALV3AHnDjzn13hygowV
+PLolD6trREzkv09OUhV8JMX8kljaTN8g74	6Qm60x7B0wEpTLFgqpolXw
+PLolD6trREzksJTmX70dGIIImV2uF98c-0	0AXxvLV3Ub7ec7WJbe6M1f
+PLolD6trREzksU4lC1q2wQggEakhhmzTgd	328IEl0z6qTM9MKORsjFVu
+PLolD6trREzkve-v7KIK5KFi9XBY6MV4VT	3n3dF8Fb5J62SDxRkVWpzi
+PLolD6trREzksnFUpFhbkGwecZwrv4xpGX	35zGjqOcZhrXk733Z3xsay
+PLolD6trREzkuBnqQoSV8d5UX2RaRgkESH	2MvgwlhvZ6QbApLLPnvDF7
+PLolD6trREzkvC5Bv-toKgkNL3i0j7jW5R	5dOptI7cE6F3GoxIxDo6Do
+PLolD6trREzkt6T9xHIbXkmKvqFGjMA0TT	35FGACg6a4U4pN9cyYFd9O
+PLolD6trREzku5Qs-32OQmJEFg-z16ohxp	1nliRCVNb75GHs39xaD3m1
+PLolD6trREzks8qA1Fgz6KKaFb1MO14NAF	2BertrCrEJfhyT1frYxllM
+PLolD6trREzkusQW68ailNk4yAN8Y_wbgE	6u6A58b4FQykaszQoU3zjp
+PLolD6trREzkuhYtn_lkGfqGomuLr-BPw0	3JwlX1x5doB2tqdq7HKWmE
+PLolD6trREzkuoOAzqi3GOoCBLW4UfEaG5	1xTZrQoTs90oVC56ZnoE2v
+PLolD6trREzkt7avI6zWkTFq1nX3y0tcSO	212tT3ekQ3bl8EnRg8UlOf
+PLolD6trREzkvKU_47A5PEbfXQxLp8avQ3	49EjoQZbmQ56HbjqMmT6DL
+PLolD6trREzkvWhoqNlD1j1l_o-_oaeVgX	6mqAthNHAELWcfa4eFZY9K`;
 
-      const diffDay   = yest ? today - yest   : null;
-      const diffMonth = month ? today - month : null;
+  const MAP = {};
+MAP_RAW.trim().split('\n').forEach(l=>{
+  const [yt,sp]=l.split(/\s+/);
+  if(yt&&sp) MAP[yt]=sp;
+});
 
-      rows.push({name,today,dDay:diffDay,dMon:diffMonth});
-    }
-    rows.sort((a,b)=>Math.abs(b.dDay||0)-Math.abs(a.dDay||0));
+/* ---------- утиліти ---------- */
+const fmt   = n=>n.toLocaleString('uk-UA');
+const dash  = '<span class="dash">—</span>';
+const delta = v => (v===null||v===undefined||isNaN(v)||v===0)
+                   ? dash
+                   : `<span class="${v>0?'pos':'neg'}">${v>0?'+':''}${fmt(v)}</span>`;
 
-    const tbody=document.querySelector('#tbl tbody');
-    const fmt=n=>n.toLocaleString('uk-UA');
-    const val=(v)=>v===null?'<span class="dash">—</span>'
-      : v===0?'<span class="dash">—</span>'
-      : `<span class="${v>0?'pos':'neg'}">${v>0?'+':''}${fmt(v)}</span>`;
+/* ---------- завантажуємо обидва CSV ---------- */
+Promise.all([loadCsv(CSV_SPOTIFY), loadCsv(CSV_YOUTUBE)])
+       .then(([sp,yt])=>build(dict(sp), dict(yt)));
 
-    rows.forEach(r=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`
-        <td class="name" title="${r.name}">${r.name}</td>
-        <td>${fmt(r.today)}</td>
-        <td>${val(r.dDay)}</td>
-        <td>${val(r.dMon)}</td>`;
-      tbody.appendChild(tr);
+function loadCsv(url){
+  return new Promise(res=>{
+    Papa.parse(url,{download:true,header:false,complete:r=>res(r.data)});
+  });
+}
+
+/* CSV → словник {id:{name,t,d,m}} */
+function dict(csv){
+  const hdr=csv[0], todayCol=hdr.length-1, yCol=todayCol-1, mCol=2, out={};
+  for(let i=1;i<csv.length;i++){
+    const id=csv[i][0]?.trim(); if(!id) continue;
+    const today=Number(csv[i][todayCol])||0;
+
+    const yRaw=csv[i][yCol],  mRaw=csv[i][mCol];
+    const dDay = isFinite(+yRaw) ? today - Number(yRaw) : null;
+    const dMon = isFinite(+mRaw) ? today - Number(mRaw) : null;
+
+    out[id]={name:csv[i][1].trim(), t:today, d:dDay, m:dMon};
+  }
+  return out;
+}
+
+/* ---------- будуємо таблицю ---------- */
+function build(sp, yt) {
+  const rows = [];
+
+  /* 1 ─ об’єднуємо дані за мапою */
+  for (const [ytId, spId] of Object.entries(MAP)) {
+    const s = sp[spId] || {}, y = yt[ytId] || {};
+    const name = (s.name || y.name || ytId).trim();
+    rows.push({
+      name,
+      isP : name.toLowerCase() === 'nuam',
+      st  : s.t || 0, sd : s.d, sm : s.m,
+      yt  : (y.t ?? null), yd : y.d, ym : y.m
     });
   }
-});
+
+  /* 2 ─ додаємо профіль NUAM, якщо він не в мапі */
+  if (!rows.some(r => r.isP)) {
+    const nu = Object.values(sp).find(r => r.name?.toLowerCase() === 'nuam');
+    if (nu) {
+      rows.unshift({
+        name: nu.name, isP: true,
+        st: nu.t, sd: nu.d, sm: nu.m,
+        yt: null, yd: null, ym: null
+      });
+    }
+  }
+
+  /* 3 ─ сортування
+       спершу всі з Δ Spotify ≠ 0 (за |Δ Spotify| ↓),
+       далі ті, де Δ Spotify = 0, але Δ YouTube ≠ 0 (за |Δ YouTube| ↓),
+       решта без змін у кінці. */
+  rows.sort((a, b) => {
+    const aTier = a.sd ? 2 : (a.yd ? 1 : 0);
+    const bTier = b.sd ? 2 : (b.yd ? 1 : 0);
+    if (aTier !== bTier) return bTier - aTier;               // спершу tier-2, потім tier-1
+    if (aTier === 2) return Math.abs(b.sd) - Math.abs(a.sd); // обидва мають Δ Spotify
+    if (aTier === 1) return Math.abs(b.yd) - Math.abs(a.yd); // обидва лише Δ YouTube
+    return 0;                                                // обидва без змін
+  });
+
+  /* NUAM завжди перший */
+  const nuIdx = rows.findIndex(r => r.isP);
+  if (nuIdx > 0) rows.unshift(rows.splice(nuIdx, 1)[0]);
+
+  /* 4 ─ рендер */
+  const tbody = document.querySelector('#tbl tbody');
+  tbody.innerHTML = '';                                       // очищаємо
+  const show = v => (v === null || v === undefined || isNaN(v)) ? '<span class="dash">—</span>' : fmt(v);
+
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    if (r.isP) tr.classList.add('profile-row');
+    tr.innerHTML = `
+      <td class="name" title="${r.name}">${r.name}${r.isP ? '<span class="profile-badge">профіль</span>' : ''}</td>
+      <td>${show(r.st)}</td><td>${delta(r.sd)}</td><td>${delta(r.sm)}</td>
+      <td>${show(r.yt)}</td><td>${delta(r.yd)}</td><td>${delta(r.ym)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+
 </script>
 </body>
 </html>
