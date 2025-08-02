@@ -9,23 +9,44 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#0f0f0f;color:#f0f0f0;
      min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
-h1{margin-bottom:30px;font-size:26px;font-weight:600;letter-spacing:.4px;text-align:center}
+h1{margin-bottom:18px;font-size:26px;font-weight:600;letter-spacing:.4px;text-align:center}
 
+/* панель оновлення */
+.toolbar{display:flex;align-items:center;gap:14px;margin-bottom:24px;font-size:14px}
+#updated{color:#9c9c9c}
+#reload{cursor:pointer;background:#2d2d2d;border:1px solid #444;color:#f0f0f0;
+        padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600}
+#reload:hover{background:#393939}
+
+/* таблиця */
 .container{width:100%;max-width:1150px;background:#161616;border:1px solid #262626;
-  border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.6)}
-
+           border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.6)}
 table{width:100%;border-collapse:collapse}
 thead{background:#1e1e1e}
 th,td{padding:11px 14px;text-align:left;font-size:14px;font-variant-numeric:tabular-nums}
 th{font-weight:600}
 tbody tr:nth-child(odd){background:#1b1b1b}
-tbody tr:hover{background:#222}
 
 .pos{color:#13c47f}.neg{color:#f25c54}.dash{color:#777}
 .name{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.profile-row{background:#2b2b2b !important;font-weight:600}
+
 .profile-badge{display:inline-block;background:#404040;color:#ddd;font-size:11px;
-  padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:middle}
+               padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:middle}
+.profile-row {
+  position: sticky;
+  top: 0;
+  background: #2b2b2b !important;
+  font-weight: 600;
+  z-index: 3;            /* выше всех остальных рядов */
+}
+
+.summary-row {
+  position: sticky;
+  top: 36px;             /* отступ ровно под profile-row */
+  background: #2b2b2b !important;
+  font-weight: 600;
+  z-index: 2;            /* чуть ниже profile-row, но выше плейлистов */
+}
 
 @media(max-width:720px){
   th:nth-child(2),td:nth-child(2),
@@ -38,6 +59,11 @@ tbody tr:hover{background:#222}
 <body>
 
 <h1>Статистика плейлістів</h1>
+
+<div class="toolbar">
+  <span id="updated">Оновлено: —</span>
+  <button id="reload">Перезавантажити CSV</button>
+</div>
 
 <div class="container">
 <table id="tbl">
@@ -59,7 +85,7 @@ tbody tr:hover{background:#222}
 <script>
 /* ---------- CSV-джерела ---------- */
 const CSV_SPOTIFY = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=0&single=true&output=csv';
-const CSV_YOUTUBE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=549875811&single=true&output=csv';
+const CSV_YT = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=549875811&single=true&output=csv';
 
 /* ───────── мапа YouTube → Spotify ───────── */
 const MAP_RAW = `
@@ -201,101 +227,104 @@ MAP_RAW.trim().split('\n').forEach(l=>{
   if(yt&&sp) MAP[yt]=sp;
 });
 
-/* ---------- утиліти ---------- */
-const fmt   = n=>n.toLocaleString('uk-UA');
-const dash  = '<span class="dash">—</span>';
-const delta = v => (v===null||v===undefined||isNaN(v)||v===0)
-                   ? dash
-                   : `<span class="${v>0?'pos':'neg'}">${v>0?'+':''}${fmt(v)}</span>`;
+/* ------- утиліти ------- */
+const fmt=n=>n.toLocaleString('uk-UA');
+const dash='<span class="dash">—</span>';
+const delta=v=>v===null||v===undefined||isNaN(v)||v===0
+             ?dash
+             :`<span class="${v>0?'pos':'neg'}">${v>0?'+':''}${fmt(v)}</span>`;
 
-/* ---------- завантажуємо обидва CSV ---------- */
-Promise.all([loadCsv(CSV_SPOTIFY), loadCsv(CSV_YOUTUBE)])
-       .then(([sp,yt])=>build(dict(sp), dict(yt)));
-
+/* ---------- завантажити CSV ---------- */
 function loadCsv(url){
-  return new Promise(res=>{
-    Papa.parse(url,{download:true,header:false,complete:r=>res(r.data)});
-  });
+  return new Promise(res=>Papa.parse(url,{download:true,header:false,complete:r=>res(r.data)}));
 }
-
-/* CSV → словник {id:{name,t,d,m}} */
-function dict(csv){
-  const hdr=csv[0], todayCol=hdr.length-1, yCol=todayCol-1, mCol=2, out={};
+/* ---------- CSV → словник ---------- */
+function csvDict(csv){
+  const h=csv[0], t=h.length-1, y=t-1, m=2, o={};
   for(let i=1;i<csv.length;i++){
     const id=csv[i][0]?.trim(); if(!id) continue;
-    const today=Number(csv[i][todayCol])||0;
-
-    const yRaw=csv[i][yCol],  mRaw=csv[i][mCol];
-    const dDay = isFinite(+yRaw) ? today - Number(yRaw) : null;
-    const dMon = isFinite(+mRaw) ? today - Number(mRaw) : null;
-
-    out[id]={name:csv[i][1].trim(), t:today, d:dDay, m:dMon};
+    const today=+csv[i][t]||0;
+    const yRaw=csv[i][y],mRaw=csv[i][m];
+    o[id]={name:csv[i][1].trim(),
+           t:today,
+           d:isFinite(+yRaw)?today-+yRaw:null,
+           m:isFinite(+mRaw)?today-+mRaw:null};
   }
-  return out;
+  return o;
 }
-
-/* ---------- будуємо таблицю ---------- */
-function build(sp, yt) {
-  const rows = [];
-
-  /* 1 ─ об’єднуємо дані за мапою */
-  for (const [ytId, spId] of Object.entries(MAP)) {
-    const s = sp[spId] || {}, y = yt[ytId] || {};
-    const name = (s.name || y.name || ytId).trim();
-    rows.push({
-      name,
-      isP : name.toLowerCase() === 'nuam',
-      st  : s.t || 0, sd : s.d, sm : s.m,
-      yt  : (y.t ?? null), yd : y.d, ym : y.m
-    });
+/* ---------- побудова таблиці ---------- */
+function build(sp,yt){
+  const rows=[];
+  for(const [ytId,spId] of Object.entries(MAP)){
+    const s=sp[spId]||{}, y=yt[ytId]||{};
+    const name=(s.name||y.name||ytId).trim();
+    rows.push({name,isP:name.toLowerCase()==='nuam',
+               st:s.t||0, sd:s.d, sm:s.m,
+               yt:(y.t??null), yd:y.d, ym:y.m});
   }
-
-  /* 2 ─ додаємо профіль NUAM, якщо він не в мапі */
-  if (!rows.some(r => r.isP)) {
-    const nu = Object.values(sp).find(r => r.name?.toLowerCase() === 'nuam');
-    if (nu) {
-      rows.unshift({
-        name: nu.name, isP: true,
-        st: nu.t, sd: nu.d, sm: nu.m,
-        yt: null, yd: null, ym: null
-      });
-    }
+  /* профіль NUAM, якщо не в мапі */
+  if(!rows.some(r=>r.isP)){
+    const nu=Object.values(sp).find(r=>r.name?.toLowerCase()==='nuam');
+    if(nu) rows.unshift({name:nu.name,isP:true,st:nu.t,sd:nu.d,sm:nu.m,
+                         yt:null,yd:null,ym:null});
   }
-
-  /* 3 ─ сортування
-       спершу всі з Δ Spotify ≠ 0 (за |Δ Spotify| ↓),
-       далі ті, де Δ Spotify = 0, але Δ YouTube ≠ 0 (за |Δ YouTube| ↓),
-       решта без змін у кінці. */
-  rows.sort((a, b) => {
-    const aTier = a.sd ? 2 : (a.yd ? 1 : 0);
-    const bTier = b.sd ? 2 : (b.yd ? 1 : 0);
-    if (aTier !== bTier) return bTier - aTier;               // спершу tier-2, потім tier-1
-    if (aTier === 2) return Math.abs(b.sd) - Math.abs(a.sd); // обидва мають Δ Spotify
-    if (aTier === 1) return Math.abs(b.yd) - Math.abs(a.yd); // обидва лише Δ YouTube
-    return 0;                                                // обидва без змін
+  /* сортування: спершу Δ Spotify, потім Δ YouTube */
+  rows.sort((a,b)=>{
+    const aTier=a.sd?2:(a.yd?1:0), bTier=b.sd?2:(b.yd?1:0);
+    if(aTier!==bTier) return bTier-aTier;
+    if(aTier===2) return Math.abs(b.sd)-Math.abs(a.sd);
+    if(aTier===1) return Math.abs(b.yd)-Math.abs(a.yd);
+    return 0;
   });
+  const pIdx=rows.findIndex(r=>r.isP); if(pIdx>0) rows.unshift(rows.splice(pIdx,1)[0]);
+  
+  const totalSt = rows.reduce((sum, r) => sum + r.st, 0);
+const totalSd = rows
+  .filter(r => !r.isP)
+  .reduce((sum, r) => sum + (r.sd || 0), 0);
+const totalSm = rows
+  .filter(r => !r.isP)
+  .reduce((sum, r) => sum + (r.sm || 0), 0);
+const totalYt = rows.reduce((sum, r) => sum + (r.yt || 0), 0);
+const totalYd = rows.reduce((sum, r) => sum + (r.yd || 0), 0);
+const totalYm = rows.reduce((sum, r) => sum + (r.ym || 0), 0);
 
-  /* NUAM завжди перший */
-  const nuIdx = rows.findIndex(r => r.isP);
-  if (nuIdx > 0) rows.unshift(rows.splice(nuIdx, 1)[0]);
+const summaryObj = {
+  name:'Всього', isSummary:true,
+  st: totalSt,  sd: totalSd, sm: totalSm,
+  yt: totalYt,  yd: totalYd, ym: totalYm
+};
+rows.splice(1, 0, summaryObj);
 
-  /* 4 ─ рендер */
-  const tbody = document.querySelector('#tbl tbody');
-  tbody.innerHTML = '';                                       // очищаємо
-  const show = v => (v === null || v === undefined || isNaN(v)) ? '<span class="dash">—</span>' : fmt(v);
-
-  rows.forEach(r => {
-    const tr = document.createElement('tr');
-    if (r.isP) tr.classList.add('profile-row');
-    tr.innerHTML = `
-      <td class="name" title="${r.name}">${r.name}${r.isP ? '<span class="profile-badge">профіль</span>' : ''}</td>
+  const tb=document.querySelector('#tbl tbody');
+  tb.innerHTML='';
+  const show=v=>v===null?dash:fmt(v);
+  rows.forEach(r=>{
+    const tr=document.createElement('tr');
+    if(r.isSummary)   tr.classList.add('summary-row');
+else if(r.isP)    tr.classList.add('profile-row');
+    tr.innerHTML=`
+      <td class="name">${r.name}${r.isP?'<span class="profile-badge">профіль</span>':''}</td>
       <td>${show(r.st)}</td><td>${delta(r.sd)}</td><td>${delta(r.sm)}</td>
       <td>${show(r.yt)}</td><td>${delta(r.yd)}</td><td>${delta(r.ym)}</td>`;
-    tbody.appendChild(tr);
+    tb.appendChild(tr);
   });
 }
 
+/* ---------- завантаження + оновлення часу ---------- */
+async function refresh(){
+  document.getElementById('updated').textContent='Оновлення…';
+  const [spCsv,ytCsv]=await Promise.all([loadCsv(CSV_SPOTIFY),loadCsv(CSV_YT)]);
+  build(csvDict(spCsv),csvDict(ytCsv));
+  const ts=new Date().toLocaleString('uk-UA',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('updated').textContent='Оновлено: '+ts;
+}
 
+/* перше завантаження + кнопка */
+document.getElementById('reload').addEventListener('click',refresh);
+refresh();
+  const AUTO_MS = 2 * 60 * 60 * 1000; // 2 години в мс
+setInterval(refresh, AUTO_MS);
 </script>
 </body>
 </html>
