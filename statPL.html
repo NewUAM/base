@@ -5,12 +5,49 @@
 <title>Плейлісти · Spotify / YouTube статистика</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#0f0f0f;color:#f0f0f0;
      min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
 h1{margin-bottom:18px;font-size:26px;font-weight:600;letter-spacing:.4px;text-align:center}
 
+  body {
+  background: linear-gradient(135deg, #282626, #383838);
+}
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+table, th, td {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* 3. Вставить после существующего .container{...} */
+.container {
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, #6a5acd, #00fa9a) 1;
+}
+
+/* 4. Градиент для бейджа */
+.profile-badge {
+  background: linear-gradient(45deg, #6a5acd, #00fa9a);
+  box-shadow: 0 0 6px rgba(0,250,154,0.6);
+}
+
+/* 5. Градиент для строк заголовка таблицы */
+thead {
+  background: linear-gradient(to right, #3a3a5e, #1e1e1e);
+}
+th {
+  color: #fff;
+}
+  
 /* панель оновлення */
 .toolbar{display:flex;align-items:center;gap:14px;margin-bottom:24px;font-size:14px}
 #updated{color:#9c9c9c}
@@ -48,6 +85,40 @@ tbody tr:nth-child(odd){background:#1b1b1b}
   z-index: 2;            /* чуть ниже profile-row, но выше плейлистов */
 }
 
+  .profile-row {
+  position: sticky;
+  top: 0;
+  background: #2b2b2b !important;
+  font-weight: 700;
+  z-index: 3;
+  border-bottom: 1px solid #444;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.summary-row {
+  position: sticky;
+  top: 36px;
+  background: #1c1c1c !important;
+  font-weight: 500;
+  z-index: 2;
+  border-bottom: 1px solid #333;
+  box-shadow: inset 0 -1px 0 #333;
+  opacity: 0.95;
+}
+
+tbody tr:not(.profile-row):not(.summary-row):hover {
+  background: #252525;
+  transition: background 0.2s;
+}
+
+tbody tr td {
+  transition: background 0.2s;
+}
+
+  thead th i {
+  margin-right: 6px;
+}
+
 @media(max-width:720px){
   th:nth-child(2),td:nth-child(2),
   th:nth-child(5),td:nth-child(5){display:none}
@@ -70,8 +141,8 @@ tbody tr:nth-child(odd){background:#1b1b1b}
   <thead>
     <tr>
       <th rowspan="2">Плейліст</th>
-      <th colspan="3">Spotify (підписники)</th>
-      <th colspan="3">YouTube Music (прослуховування)</th>
+      <th colspan="3"><i class="fab fa-spotify"></i> Spotify (підписники)</th>
+      <th colspan="3"><i class="fab fa-youtube"></i> YouTube Music (прослуховування)</th>
     </tr>
     <tr>
       <th>сьогодні</th><th>Δ&nbsp;день</th><th>Δ&nbsp;місяць</th>
