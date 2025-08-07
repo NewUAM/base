@@ -28,19 +28,16 @@ table, th, td {
   font-family: 'Roboto', sans-serif;
 }
 
-/* 3. Вставить после существующего .container{...} */
 .container {
   border: 2px solid transparent;
   border-image: linear-gradient(90deg, #6a5acd, #00fa9a) 1;
 }
 
-/* 4. Градиент для бейджа */
 .profile-badge {
   background: linear-gradient(45deg, #6a5acd, #00fa9a);
   box-shadow: 0 0 6px rgba(0,250,154,0.6);
 }
 
-/* 5. Градиент для строк заголовка таблицы */
 thead {
   background: linear-gradient(to right, #3a3a5e, #1e1e1e);
 }
@@ -48,14 +45,12 @@ th {
   color: #fff;
 }
   
-/* панель оновлення */
 .toolbar{display:flex;align-items:center;gap:14px;margin-bottom:24px;font-size:14px}
 #updated{color:#9c9c9c}
 #reload{cursor:pointer;background:#2d2d2d;border:1px solid #444;color:#f0f0f0;
         padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600}
 #reload:hover{background:#393939}
 
-/* таблиця */
 .container{width:100%;max-width:1150px;background:#161616;border:1px solid #262626;
            border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.6)}
 table{width:100%;border-collapse:collapse}
@@ -74,15 +69,15 @@ tbody tr:nth-child(odd){background:#1b1b1b}
   top: 0;
   background: #2b2b2b !important;
   font-weight: 600;
-  z-index: 3;            /* выше всех остальных рядов */
+  z-index: 3;
 }
 
 .summary-row {
   position: sticky;
-  top: 36px;             /* отступ ровно под profile-row */
+  top: 36px;
   background: #2b2b2b !important;
   font-weight: 600;
-  z-index: 2;            /* чуть ниже profile-row, но выше плейлистов */
+  z-index: 2;
 }
 
   .profile-row {
@@ -118,6 +113,16 @@ tbody tr td {
   thead th i {
   margin-right: 6px;
 }
+  
+  thead th i.fa-sort,
+  thead th i.fa-sort-up,
+  thead th i.fa-sort-down {
+    color: #888!important;
+  }
+
+thead th[rowspan="2"] {
+  vertical-align: bottom;
+}
 
 @media(max-width:720px){
   th:nth-child(2),td:nth-child(2),
@@ -139,26 +144,29 @@ tbody tr td {
 <div class="container">
 <table id="tbl">
   <thead>
-    <tr>
-      <th rowspan="2">Плейліст</th>
-      <th colspan="3"><i class="fab fa-spotify"></i> Spotify (підписники)</th>
-      <th colspan="3"><i class="fab fa-youtube"></i> YouTube Music (прослуховування)</th>
-    </tr>
-    <tr>
-      <th>сьогодні</th><th>Δ&nbsp;день</th><th>Δ&nbsp;місяць</th>
-      <th>сьогодні</th><th>Δ&nbsp;день</th><th>Δ&nbsp;місяць</th>
-    </tr>
-  </thead>
+  <tr>
+    <th rowspan="2">Плейліст <i class="fas fa-sort"></i></th>
+    <th colspan="3"><i class="fab fa-spotify"></i> Spotify (підписники)</th>
+    <th colspan="3"><i class="fab fa-youtube"></i> YouTube Music (прослуховування)</th>
+  </tr>
+  <tr>
+    <th>сьогодні <i class="fas fa-sort"></i></th>
+    <th>день <i class="fas fa-sort"></i></th>
+    <th>місяць <i class="fas fa-sort"></i></th>
+    <th>сьогодні <i class="fas fa-sort"></i></th>
+    <th>день <i class="fas fa-sort"></i></th>
+    <th>місяць <i class="fas fa-sort"></i></th>
+  </tr>
+</thead>
+
   <tbody></tbody>
 </table>
 </div>
 
 <script>
-/* ---------- CSV-джерела ---------- */
 const CSV_SPOTIFY = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=0&single=true&output=csv';
 const CSV_YT = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfd33Ve7z4ACD0KN8xvAer6ZKo4O7akFh2dkppczMO9Ga_vTsRvVcJPp2kp890yx4e0OaQ-99vyeng/pub?gid=549875811&single=true&output=csv';
 
-/* ───────── мапа YouTube → Spotify ───────── */
 const MAP_RAW = `
 PLolD6trREzkvRfihkz6QouuGJs5ENiGRk	3qev34QE5v3QfiJa2YcRWz
 PLolD6trREzks8CkEq9c4H8Q2GDodNvd7j	6MwzoPbLwF6ggmeYPRlV69
@@ -298,18 +306,16 @@ MAP_RAW.trim().split('\n').forEach(l=>{
   if(yt&&sp) MAP[yt]=sp;
 });
 
-/* ------- утиліти ------- */
 const fmt=n=>n.toLocaleString('uk-UA');
 const dash='<span class="dash">—</span>';
 const delta=v=>v===null||v===undefined||isNaN(v)||v===0
              ?dash
              :`<span class="${v>0?'pos':'neg'}">${v>0?'+':''}${fmt(v)}</span>`;
 
-/* ---------- завантажити CSV ---------- */
 function loadCsv(url){
   return new Promise(res=>Papa.parse(url,{download:true,header:false,complete:r=>res(r.data)}));
 }
-/* ---------- CSV → словник ---------- */
+
 function csvDict(csv){
   const h=csv[0], t=h.length-1, y=t-1, m=2, o={};
   for(let i=1;i<csv.length;i++){
@@ -323,7 +329,7 @@ function csvDict(csv){
   }
   return o;
 }
-/* ---------- побудова таблиці ---------- */
+
 function build(sp,yt){
   const rows=[];
   for(const [ytId,spId] of Object.entries(MAP)){
@@ -333,13 +339,13 @@ function build(sp,yt){
                st:s.t||0, sd:s.d, sm:s.m,
                yt:(y.t??null), yd:y.d, ym:y.m});
   }
-  /* профіль NUAM, якщо не в мапі */
+
   if(!rows.some(r=>r.isP)){
     const nu=Object.values(sp).find(r=>r.name?.toLowerCase()==='nuam');
     if(nu) rows.unshift({name:nu.name,isP:true,st:nu.t,sd:nu.d,sm:nu.m,
                          yt:null,yd:null,ym:null});
   }
-  /* сортування: спершу Δ Spotify, потім Δ YouTube */
+
   rows.sort((a,b)=>{
     const aTier=a.sd?2:(a.yd?1:0), bTier=b.sd?2:(b.yd?1:0);
     if(aTier!==bTier) return bTier-aTier;
@@ -382,7 +388,6 @@ else if(r.isP)    tr.classList.add('profile-row');
   });
 }
 
-/* ---------- завантаження + оновлення часу ---------- */
 async function refresh(){
   document.getElementById('updated').textContent='Оновлення…';
   const [spCsv,ytCsv]=await Promise.all([loadCsv(CSV_SPOTIFY),loadCsv(CSV_YT)]);
@@ -391,11 +396,64 @@ async function refresh(){
   document.getElementById('updated').textContent='Оновлено: '+ts;
 }
 
-/* перше завантаження + кнопка */
 document.getElementById('reload').addEventListener('click',refresh);
 refresh();
-  const AUTO_MS = 2 * 60 * 60 * 1000; // 2 години в мс
+  const AUTO_MS = 2 * 60 * 60 * 1000;
 setInterval(refresh, AUTO_MS);
+  
+const table = document.getElementById('tbl');
+const mainTh  = table.querySelector('thead tr:first-child th[rowspan="2"]');
+const subThs  = [...table.querySelectorAll('thead tr:nth-child(2) th')];
+const ths     = [mainTh, ...subThs];
+const sortDir = {};
+
+ths.forEach((th, idx) => {
+  const icon = th.querySelector('i.fa-sort');
+  if (!icon) return;
+  let asc = false;
+  th.style.cursor = 'pointer';
+  th.addEventListener('click', () => {
+    const tbody    = table.tBodies[0];
+    const fixed    = [...tbody.querySelectorAll('tr.profile-row, tr.summary-row')];
+    const dataRows = [...tbody.rows].filter(r =>
+      !r.classList.contains('profile-row') &&
+      !r.classList.contains('summary-row')
+    );
+    const getValue = row => {
+      const txt = row.cells[idx].textContent.trim();
+      const num = txt.replace(/[^0-9.\-]/g, '');
+      return num !== '' && !isNaN(num) ? num : txt;
+    };
+    dataRows.forEach((r,i)=>r._i=i);
+dataRows.sort((a, b) => {
+  const dash = '—';
+  const aText = a.cells[idx].textContent.trim();
+  const bText = b.cells[idx].textContent.trim();
+  const aDash = aText === dash;
+  const bDash = bText === dash;
+  if (aDash && bDash) return 0;
+  if (aDash) return 1;
+  if (bDash) return -1;
+  const aNum = parseFloat(aText.replace(/[^0-9.\-]/g, ''));
+  const bNum = parseFloat(bText.replace(/[^0-9.\-]/g, ''));
+  let diff;
+  if (!isNaN(aNum) && !isNaN(bNum)) {
+    diff = aNum - bNum;
+  } else {
+    diff = aText.localeCompare(bText, undefined, {numeric: true});
+  }
+  return asc ? diff : -diff;
+});
+
+    asc = !asc;
+    table.querySelectorAll('thead i.fa-sort-up, thead i.fa-sort-down')
+         .forEach(ic => ic.className = 'fas fa-sort');
+    icon.className = asc ? 'fas fa-sort-up' : 'fas fa-sort-down';
+    tbody.innerHTML = '';
+    fixed.forEach(r => tbody.appendChild(r));
+    dataRows.forEach(r => tbody.appendChild(r));
+  });
+});
 </script>
 </body>
 </html>
