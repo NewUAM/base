@@ -4260,20 +4260,37 @@ if (!filterData.listenCount) {
 
       window.addEventListener('scroll', throttle(handleScroll, 200));
 
-      document.getElementById('export-data').addEventListener('click', () => {
+async function safeCopyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext && document.hasFocus()) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (_) {}
+  try {
+    const tmp = document.createElement('textarea');
+    tmp.value = text;
+    tmp.setAttribute('readonly', '');
+    tmp.style.position = 'fixed';
+    tmp.style.left = '-9999px';
+    document.body.appendChild(tmp);
+    tmp.focus();
+    tmp.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(tmp);
+    return ok;
+  } catch (_) {
+    return false;
+  }
+}
+
+document.getElementById('export-data').addEventListener('click', async () => {
   const dataTextarea = document.getElementById('data-textarea');
   const msg = document.getElementById('export-message');
-  dataTextarea.select();
-  navigator.clipboard.writeText(dataTextarea.value).then(() => {
-    msg.textContent = 'Скопійовано!';
-    msg.className = 'success';
-    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 2000);
-  }).catch(err => {
-    console.error('Помилка копіювання даних: ', err);
-    msg.textContent = 'Помилка при копіюванні даних';
-    msg.className = 'error';
-    setTimeout(() => { msg.textContent = ''; msg.className = ''; }, 4000);
-  });
+  const ok = await safeCopyText(dataTextarea.value);
+  msg.textContent = ok ? 'Скопійовано!' : 'Копіювання заблоковано';
+  msg.className   = ok ? 'success' : 'error';
+  setTimeout(() => { msg.textContent = ''; msg.className = ''; }, ok ? 2000 : 4000);
 });
 
 document.getElementById('import-data').addEventListener('click', () => {
