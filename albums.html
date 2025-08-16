@@ -56,21 +56,35 @@ body.no-scroll {
   overflow-y: scroll;
 }
 
-:root {
-  --nuam-logo-url: url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
-}
-
 .logo-wrapper {
   position: relative;
   display: inline-block;
-  background: #383838;
+  background-color: rgba(53,53,60,0.55);
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  transition: border-radius 0.3s ease;
+  z-index: 1000;
 }
+
 .logo-wrapper:hover {
   border-radius: 8px 8px 0 0;
 }
+
+.logo-dropdown { z-index: 1001; }
+
 
 .logo-row {
   display: flex;
@@ -97,8 +111,8 @@ body.no-scroll {
 
 .vertical-sep {
   width: 1px;
-  height: 20px;
-  background: #383838;
+  height: 31px;
+  background: #555;
 }
 
 #app-logo {
@@ -113,7 +127,7 @@ body.no-scroll {
   left: 0;
   width: 100%;
   box-sizing: border-box;
-  background: #383838;
+  background-color: rgba(53, 53, 60, 0.55);
   border-radius: 0 0 8px 8px;
   display: flex;
   flex-direction: column;
@@ -121,7 +135,6 @@ body.no-scroll {
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transform: translateY(-10px);
   transition:
     max-height 0.3s ease,
     opacity 0.3s ease,
@@ -129,7 +142,23 @@ body.no-scroll {
   z-index: 100;
   padding: 0 10px 10px;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
+
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
+
 .logo-wrapper:hover .logo-dropdown {
   max-height: 200px;
   opacity: 1;
@@ -266,12 +295,12 @@ body.no-scroll {
   font-family: "CustomFont", sans-serif;
 }
 
-#genre-checkboxes::-webkit-scrollbar { width:14px; }
+#genre-checkboxes::-webkit-scrollbar { width:8px; }
 #genre-checkboxes::-webkit-scrollbar-track { background:transparent; }
 #genre-checkboxes::-webkit-scrollbar-thumb {
   background-color:#282626;
   border-radius:8px;
-  border:3px solid #383838;
+  border:1px solid transparent;
 }
 
 input[type="checkbox"] {
@@ -292,12 +321,12 @@ input[type="checkbox"]:hover {
   border-color: rgba(132, 170, 251, 1);
 }
 input[type="checkbox"]:checked {
-  background-color: #84aafb;
+  background: rgba(132, 170, 251, 0.2);
   border-color: #84aafb;
 }
 input[type="checkbox"]:checked::after {
   content: "\2713";
-  color: #282626;
+  color: #f3f3f3;
   font-size: 12px;
   font-weight: bold;
   position: absolute;
@@ -340,22 +369,27 @@ input[type="checkbox"]:checked::after {
   width: 460px;
   min-width: 260px;
   min-width: 0;
-  height: 100vh;
-  padding: 20px 10px 20px;
-  overflow-y: auto;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 10px;
+  bottom: 10px;
+  left: 5px;
+  padding: 10px 10px 10px 10px;
+  overflow-y: auto;
   background: #282626;
-  box-shadow: 3px 0px 5px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(53, 53, 60, 0.55);
+  background-clip: padding-box;
+  box-shadow: 0 0 15px rgba(0,0,0,0.35);
   z-index: 1000;
   user-select: none !important;
 }
+
 .controls::-webkit-scrollbar {
   width: 10px;
 }
 .controls::-webkit-scrollbar-track {
-  background: #282626;
+  background: transparent;
+  margin: 5px 0;
 }
 .controls::-webkit-scrollbar-thumb {
   background: #383838;
@@ -368,8 +402,6 @@ input[type="checkbox"]:checked::after {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 20px;
-      margin-bottom: 20px
 }
     
     label[for="nuam-recommended-checkbox"]{
@@ -398,15 +430,27 @@ input[type="checkbox"]:checked::after {
 }
 
 .checkbox-container {
-  background: #383838;
+  background-color: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
   padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   max-height: 200px;
   overflow: hidden;
   position: relative;
+  
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+    background-size: 20px 20px;
+    background-blend-mode: overlay;
 }
 .checkbox-container label {
   display: inline-flex;
@@ -481,9 +525,21 @@ input[type="checkbox"]:checked::after {
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  background-color: #383838;
+  background-color: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
   justify-content: flex-start;
+  
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+    background-size: 20px 20px;
+    background-blend-mode: overlay;
 }
 
 .hide-listened-section label {
@@ -535,7 +591,6 @@ input[type="checkbox"]:checked::after {
 .release-column .hide-listened-section {
   margin-top: auto;
   height: 37px;
-  background-color: #383838;
   display: flex;
   align-items: center;
   padding: 0px 10px 0px 5px;
@@ -986,12 +1041,24 @@ button {
 .custom-select {
   position: relative;
   width: 100%;
-  background-color: #383838;
+  background-color: rgba(53, 53, 60, 0.55);
   border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 8px;
   font-family: "CustomFont", Arial, sans-serif;
   user-select: none;
   transition: border-color 0.3s ease;
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
 }
 .custom-select:hover {
   border-color: rgba(132, 170, 251, 1);
@@ -1035,7 +1102,6 @@ button {
   top: 100%;
   left: -1px;
   width: calc(100% + 2px);
-  background-color: #383838;
   border-top: none;
   border-left: 1px solid rgba(132, 170, 251, 1);
   border-right: 1px solid rgba(132, 170, 251, 1);
@@ -1046,6 +1112,11 @@ button {
   flex-direction: column;
   z-index: 10;
   overflow: hidden;
+
+  background-color: rgba(53, 53, 60, 0.55);
+  background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 .custom-select.upward .options-container {
@@ -1071,19 +1142,19 @@ button {
 
 button {
   padding: 10px 10px;
-  background-color: #84aafb;
-  color: #282626;
-  border: 1px solid #84aafb;
+  background-color: rgba(132, 170, 251, 0.2);
+  color: #f3f3f3;
+  border: 1px solid rgba(132, 170, 251, 0.0);
   border-radius: 8px;
   cursor: pointer;
   transition: border 0.3s ease;
 }
 button:hover {
-  border: 1px solid #f3f3f3;
+  border: 1px solid #84aafb;
 }
     
     #reset-filters-btn {
-  background-color: #282626;
+  background-color: rgba(53, 53, 60, 0.1);
   color: #f3f3f3;
   border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 8px;
@@ -1098,13 +1169,26 @@ button:hover {
   margin-left: 6px;
   cursor: pointer;
   transition: border 0.3s ease, background-color 0.3s ease;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
 
 #reset-filters-btn:hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
 
-    
     .modal-content #preset-save, .modal-content #edit-name-save, .keep-btn, .delete-btn {
     padding: 10px 20px;
     background-color: transparent;
@@ -1142,7 +1226,7 @@ button:hover {
 }
 
 .album {
-  background-color: #383838;
+  background-color: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
   overflow: visible;
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
@@ -1151,7 +1235,20 @@ button:hover {
   flex-direction: column;
   min-width: 400px;
   max-width: 500px;
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
+
 .album img {
   width: 100%;
   height: auto;
@@ -1175,7 +1272,6 @@ button:hover {
 .album-details {
   padding: 15px;
   flex-grow: 1;
-  background-color: #383838;
 }
 .album-details h3 {
   margin: 0 0 10px 0;
@@ -1685,7 +1781,6 @@ textarea:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #383838;
 }
 
 .genre-header {
@@ -1828,13 +1923,33 @@ textarea:focus {
   border-right: 1px solid #84aafb;
   border-top: 1px solid #84aafb;
   border-bottom: none;
-  background: #383838;
+
+  background-color: rgba(56, 56, 56, 0.55);
+
   position: absolute;
   width: calc(100% + 2px);
   z-index: 99;
+
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 .options-container {
   overflow: hidden;
+  background-color: rgba(53, 53, 60, 0.55);
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 #label-select .option-list {
@@ -1845,10 +1960,14 @@ textarea:focus {
   flex-shrink: 0;
   padding-top: 4px;
   padding-bottom: 4px;
-  background: #383838;
+
+  background-color: rgba(56, 56, 56, 0.55);
   border-top: 1px solid #84aafb;
   display: flex;
   flex-direction: column;
+
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 #label-select .option-search {
@@ -2146,37 +2265,57 @@ textarea:focus {
 
     #toggle-preview-button {
   position: fixed;
-      height: 40px;
-    width: 40px;
-    bottom: 30px;
-    margin-left: 30px;
+  height: 40px;
+  width: 40px;
+  bottom: 30px;
+  margin-left: 30px;
   z-index: 999;
-  background: #282828;
+  background: rgba(53, 53, 60, 0.75);
   color: #f3f3f3;
   border: 1px solid rgba(132, 170, 251, 0.5);
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-      transition: border 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: border 0.3s ease;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
 }
+
 #toggle-preview-button:hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
 
-#album-count-badge{
+    #toggle-preview-button:has(.fa-volume-up) {
+  background: rgba(132, 170, 251, 0.2);
+}
+
+    
+#album-count-badge {
   position: fixed;
   bottom: 30px;
   z-index: 100;
-  background: #282626;
+  background: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
   height: 40px;
   padding: 0 12px;
   box-sizing: border-box;
   color: #f3f3f3;
   font-size: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
   white-space: nowrap;
   gap: 6px;
   display: flex;
@@ -2184,9 +2323,21 @@ textarea:focus {
   justify-content: center;
   pointer-events: auto;
   user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
   cursor: default;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+
+  background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
 }
 
     .actions-row {
@@ -2226,9 +2377,9 @@ textarea:focus {
 
 .genre-switch-sep {
       display: inline-block;
-    width: 2px;
-    height: 26px;
-    background-color: #383838;
+    width: 1px;
+    height: 24px;
+    background-color: #555;
     user-select: none;
 }
     
