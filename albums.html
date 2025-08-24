@@ -141,7 +141,7 @@ body.no-scroll {
     transform 0.3s ease;
   z-index: 100;
   padding: 0 10px 10px;
-  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
@@ -379,7 +379,7 @@ input[type="checkbox"]:checked::after {
   border-radius: 8px;
   border: 1px solid rgba(53, 53, 60, 0.55);
   background-clip: padding-box;
-  box-shadow: 0 0 15px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   user-select: none !important;
 }
@@ -402,6 +402,8 @@ input[type="checkbox"]:checked::after {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-bottom: 20px;
+      margin-bottom: 20px
 }
     
     label[for="nuam-recommended-checkbox"]{
@@ -606,15 +608,16 @@ input[type="checkbox"]:checked::after {
 .blacklist-labels {
   flex: 1;
   max-height: 300px;
-  overflow-y: auto;
+  overflow: hidden;
   background-color: #282626;
   border-radius: 8px;
 }
+
 .blacklist-artists h4,
 .blacklist-labels h4 {
   position: sticky;
   top: 0;
-  background-color: #383838;
+  background-color: #282626;
   padding: 10px;
   margin: 0;
   border-radius: 8px;
@@ -633,15 +636,10 @@ input[type="checkbox"]:checked::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 0;
+  padding: 5px;
 }
 
 .blacklist-section {
-}
-.blacklist-artists::-webkit-scrollbar-thumb,
-.blacklist-labels::-webkit-scrollbar-thumb {
-  border: 3px solid #282626 !important;
-  background-color: #383838;
 }
 
 .blacklist-artists.checkbox-container,
@@ -649,36 +647,26 @@ input[type="checkbox"]:checked::after {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  
+  background-color: rgba(53, 53, 60, 0.55);
+  
+background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
 
 .blacklist-artists.checkbox-container ul,
 .blacklist-labels.checkbox-container ul {
   flex: 1;
   overflow-y: auto;
-}
-
-.blacklist-artists.checkbox-container ul::-webkit-scrollbar,
-.blacklist-labels.checkbox-container ul::-webkit-scrollbar {
-  width: 14px;
-}
-.blacklist-artists.checkbox-container ul::-webkit-scrollbar-track,
-.blacklist-labels.checkbox-container ul::-webkit-scrollbar-track {
-  background: transparent;
-}
-.blacklist-artists.checkbox-container ul::-webkit-scrollbar-thumb,
-.blacklist-labels.checkbox-container ul::-webkit-scrollbar-thumb {
-  background-color: #383838;
-  border-radius: 8px;
-  border: 3px solid #282626;
-}
-
-.blacklist-artists.checkbox-container ul,
-.blacklist-labels.checkbox-container ul {
-  scrollbar-width: thin;
-  scrollbar-color: #383838 transparent;
-}
- 
-.favorites-section {
 }
 
 .favorite-button {
@@ -688,7 +676,6 @@ input[type="checkbox"]:checked::after {
   z-index: 11;
   cursor: pointer;
   padding: 5px;
-  background-color: #282626;
   border-radius: 8px;
   border: 1px solid rgba(132, 170, 251, 0.5);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -701,6 +688,20 @@ input[type="checkbox"]:checked::after {
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+  background-color: rgba(53, 53, 60, 0.55);
+background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
 .favorite-button:hover {
   border-color: rgba(132, 170, 251, 1);
@@ -752,9 +753,7 @@ input[type="checkbox"]:checked::after {
 .search-buttons-column button {
   width: 100%;
   height: 23px;
-  background-color: transparent;
   color: #f3f3f3;
-  border: 1px solid rgba(132, 170, 251, 0.5);
   border-radius: 8px;
   font-size: 14px;
   font-family: "CustomFont";
@@ -931,6 +930,7 @@ input[type="checkbox"]:checked::after {
 }
     #filters-container .preset-item.preset-active {
       border-color: rgba(132, 170, 251, 1);
+      background-color: rgba(132, 170, 251, 0.2);
     }
 
 #filters-container #add-preset {
@@ -975,8 +975,7 @@ input[type="checkbox"]:checked::after {
 .listened-albums-container {
   max-height: 300px;
   overflow-y: auto;
-  background-color: #383838;
-  padding: 10px;
+  padding: 0px 10px 10px 0px;
   border-radius: 8px;
 }
 .listened-albums-container ul {
@@ -993,8 +992,21 @@ input[type="checkbox"]:checked::after {
   justify-content: space-between;
   align-items: center;
   padding: 10px 10px;
-  background-color: #282626;
   border-radius: 8px;
+
+  background-color: rgba(53, 53, 60, 0.55);
+  
+background-image:
+    url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
 .listened-albums-container a {
   color: #f3f3f3;
@@ -1013,13 +1025,13 @@ input[type="checkbox"]:checked::after {
   color: #e74c3c;
 }
 .listened-albums-container::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 .listened-albums-container::-webkit-scrollbar-track {
-  background: #383838;
+  background: #282626;
 }
 .listened-albums-container::-webkit-scrollbar-thumb {
-  background: #282626;
+  background: #383838;
   border-radius: 8px;
 }
 
@@ -1112,11 +1124,6 @@ button {
   flex-direction: column;
   z-index: 10;
   overflow: hidden;
-
-  background-color: rgba(53, 53, 60, 0.55);
-  background-blend-mode: overlay;
-  backdrop-filter: blur(8px) saturate(140%);
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 .custom-select.upward .options-container {
@@ -1229,7 +1236,7 @@ button:hover {
   background-color: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
   overflow: visible;
-  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1502,7 +1509,7 @@ audio {
   width: 640px;
   z-index: 1000;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   user-select: none !important;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -1529,7 +1536,7 @@ audio {
 .modal.hidden{display:none;}
 
 .modal-content {
-  background-color: #383838;
+  background-color: #282626;
   margin: 15% auto;
   padding: 20px;
   border-radius: 8px;
@@ -1560,10 +1567,10 @@ audio {
   display: block;
 }
 .tablink {
-  background-color: #84aafb;
-  color: #282626;
+  background-color: rgba(132, 170, 251, 0.2);
+  color: #f3f3f3;
   padding: 10px 20px;
-  border: 1px solid #84aafb;
+  border: 1px solid rgba(132, 170, 251, 0.0);
   cursor: pointer;
   transition:
     border-color 0.3s ease,
@@ -1573,16 +1580,16 @@ audio {
   margin-right: 10px;
 }
 .tablink.active {
-  background-color: #84aafb;
-  border: 1px solid #f3f3f3;
-  color: #282626;
+  background-color: rgba(132, 170, 251, 0.2);
+      border-color: rgba(132, 170, 251, 1);
+  color: #f3f3f3;
 }
 .tablink.active:hover {
-  background-color: #84aafb;
+  border-color: rgba(132, 170, 251, 1);
 }
 .tablink:hover {
-  background-color: #84aafb;
-  border: 1px solid #f3f3f3;
+  background-color: rgba(132, 170, 251, 0.2);
+  border-color: rgba(132, 170, 251, 1);
 }
 
 .close {
@@ -1923,9 +1930,6 @@ textarea:focus {
   border-right: 1px solid #84aafb;
   border-top: 1px solid #84aafb;
   border-bottom: none;
-
-  background-color: rgba(56, 56, 56, 0.55);
-
   position: absolute;
   width: calc(100% + 2px);
   z-index: 99;
@@ -1936,7 +1940,6 @@ textarea:focus {
 .options-container {
   overflow: hidden;
   background-color: rgba(53, 53, 60, 0.55);
-
   background-image:
     url('data:image/svg+xml;utf8,\
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
@@ -1955,19 +1958,14 @@ textarea:focus {
 #label-select .option-list {
   overflow-y: auto;
 }
-
+    
 #label-select .option-fixed {
   flex-shrink: 0;
   padding-top: 4px;
   padding-bottom: 4px;
-
-  background-color: rgba(56, 56, 56, 0.55);
   border-top: 1px solid #84aafb;
   display: flex;
   flex-direction: column;
-
-  backdrop-filter: blur(8px) saturate(140%);
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 #label-select .option-search {
@@ -2043,7 +2041,7 @@ textarea:focus {
   position: absolute;
   top: 50%; left: 0;
   width: 100%; height: 4px;
-  background: #444;
+  background: rgba(132, 170, 251, 0.2);
   border-radius: 2px;
   transform: translateY(-50%);
   pointer-events: none;
@@ -2081,22 +2079,9 @@ textarea:focus {
   width: 16px; height: 16px;
   border-radius: 50%;
   background: #84aafb;
-  border: 2px solid #282626;
   cursor: pointer;
   margin-top: -6px;
   -webkit-appearance: none;
-}
-.range-tooltip {
-  position: absolute;
-  top: -24px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 4px 8px;
-  color: #f3f3f3;
-  font-size: 12px;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
 }
 
 #toggle-edit-presets {
@@ -2277,11 +2262,10 @@ textarea:focus {
   border-radius: 8px;
   font-size: 12px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: border 0.3s ease;
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-
   background-image:
     url('data:image/svg+xml;utf8,\
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
@@ -2302,7 +2286,6 @@ textarea:focus {
     #toggle-preview-button:has(.fa-volume-up) {
   background: rgba(132, 170, 251, 0.2);
 }
-
     
 #album-count-badge {
   position: fixed;
@@ -2315,7 +2298,7 @@ textarea:focus {
   box-sizing: border-box;
   color: #f3f3f3;
   font-size: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
   gap: 6px;
   display: flex;
@@ -2382,6 +2365,48 @@ textarea:focus {
     background-color: #555;
     user-select: none;
 }
+ 
+    .blacklist-artists,
+.blacklist-labels {
+  overflow: hidden;
+}
+
+.blacklist-artists.checkbox-container ul,
+.blacklist-labels.checkbox-container ul {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar {
+  width: 8px;
+}
+
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-track,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-thumb,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-thumb,
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-thumb:hover,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-thumb:hover,
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-thumb:active,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-thumb:active {
+  background: #282626 !important;
+  border: 1px solid #282626 !important;
+  border-radius: 8px !important;
+  background-clip: content-box !important;
+}
+
+.blacklist-artists.checkbox-container ul::-webkit-scrollbar-button,
+.blacklist-labels.checkbox-container ul::-webkit-scrollbar-button {
+  display: none; width: 0; height: 0;
+}
+
+    #scrollTopButton:hover {
+    border: 1px solid rgba(132, 170, 251, 1);
+  }
     
 @media (max-width: 768px) {
   .controls {
@@ -2730,27 +2755,38 @@ textarea:focus {
   </div>
 </div>
 
-  <div id="scrollTopButton" style="
+  <div id="scrollTopButton"
+     onmouseenter="this.style.borderColor='rgba(132,170,251,1)'"
+     onmouseleave="this.style.borderColor='rgba(132, 170, 251, 0.5)'"
+     style="
   position: fixed;
-  bottom: 30px;
+  bottom: 20px;
   right: 30px;
-  width: 50px;
-  height: 50px;
-  background: #84aafb;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  border: 1px solid rgba(132, 170, 251, 0.5);
   display: none;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 9999;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  transition: opacity 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s, border-color 0.3s ease;
   user-select: none;
+
+  background-color: rgba(53, 53, 60, 0.55);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;100&quot; height=&quot;100&quot; viewBox=&quot;0 0 100 100&quot;><filter id=&quot;grain&quot;><feTurbulence type=&quot;fractalNoise&quot; baseFrequency=&quot;0.9&quot; numOctaves=&quot;4&quot; seed=&quot;2&quot;/><feColorMatrix type=&quot;saturate&quot; values=&quot;0&quot;/></filter><rect width=&quot;100%25&quot; height=&quot;100%25&quot; filter=&quot;url(%23grain)&quot; opacity=&quot;0.15&quot;/></svg>');
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 ">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#282626" viewBox="0 0 24 24">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#f3f3f3" viewBox="0 0 24 24">
     <path d="M12 4l-8 8h6v8h4v-8h6z"/>
   </svg>
 </div>
+
   
   <script>
     
@@ -5462,7 +5498,7 @@ favButton.appendChild(checkmark);
     
 attachTooltip(favButton, favoriteAlbums[album.albumID]
   ? 'Прибрати альбом з обраного'
-  : 'Додати альбом в обране', '180px');
+  : 'Додати альбом в обране');
 
 favButton.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -5490,13 +5526,13 @@ favButton.addEventListener('click', (e) => {
 albumDiv.appendChild(favButton);
     
     const spotifyIcon = albumDiv.querySelector('.spotify-icon');
-if (spotifyIcon) attachTooltip(spotifyIcon, 'Відкрити в Spotify', '160px');
+if (spotifyIcon) attachTooltip(spotifyIcon, 'Відкрити в Spotify');
 
 const ytIcon = albumDiv.querySelector('.yt-icon');
-if (ytIcon) attachTooltip(ytIcon, 'Шукати в YouTube Music', '160px');
+if (ytIcon) attachTooltip(ytIcon, 'Шукати в YouTube Music');
 
 const appleIcon = albumDiv.querySelector('.apple-icon');
-if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music', '160px');
+if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music');
     
     if (album.good) {
       const starBox = document.createElement('div');
@@ -5561,7 +5597,7 @@ playAll.classList.add('track-circle', 'play-all-toggle');
 playAll.innerHTML = '<i class="fas fa-play"></i>';
     playAll.dataset.albumId = album.albumID;
 
-    attachTooltip(playAll, 'Відтворити всі треки альбому', '180px');
+    attachTooltip(playAll, 'Відтворити всі треки альбому');
     
 tracksContainer.appendChild(playAll);
 
@@ -5575,7 +5611,7 @@ playAll.addEventListener('click', async () => {
 
     if (prevBtn) {
       removeTooltip(prevBtn);
-      attachTooltip(prevBtn, 'Відтворити всі треки альбому', '180px');
+      attachTooltip(prevBtn, 'Відтворити всі треки альбому');
     }
     
     if (currentHighlightedCircle) {
@@ -5603,7 +5639,7 @@ playAll.addEventListener('click', async () => {
     playAll.innerHTML = '<i class="fas fa-play"></i>';
     
     removeTooltip(playAll);
-    attachTooltip(playAll, 'Відтворити всі треки альбому', '180px');
+    attachTooltip(playAll, 'Відтворити всі треки альбому');
     
     togglePreview(true);
     
@@ -5624,7 +5660,7 @@ playAll.addEventListener('click', async () => {
   playAll.innerHTML = '<i class="fas fa-stop"></i>';
 
   removeTooltip(playAll);
-  attachTooltip(playAll, 'Зупинити відтворення', '180px');
+  attachTooltip(playAll, 'Зупинити відтворення');
   
   if (!album.tracksInfo) {
     await loadAlbumTracksWithRetry(album);
@@ -5892,7 +5928,7 @@ albumDiv.querySelectorAll('.blacklist-cross[data-type="artist"]').forEach(cross 
     if (btn) {
       btn.innerHTML = '<i class="fas fa-stop"></i>';
       removeTooltip(btn);
-      attachTooltip(btn, 'Зупинити відтворення', '180px');
+      attachTooltip(btn, 'Зупинити відтворення');
     }
 
     const trackID = albumsData.find(a => a.albumID === autoPlayingAlbum)
@@ -6389,21 +6425,25 @@ function attachTooltip(el, text, width) {
   }
 
   el.addEventListener('mouseenter', ev => {
-    if (!el._tooltip) {
-      const tip = document.createElement('div');
-      tip.className = 'tooltip';
-      tip.style.position      = 'fixed';
-      tip.style.background    = '#30302f';
-      tip.style.color         = '#f3f3f3';
-      tip.style.padding       = '5px 10px';
-      tip.style.borderRadius  = '8px';
-      tip.style.boxShadow     = '0 2px 8px rgba(0,0,0,0.25)';
-      tip.style.fontSize      = '12px';
-      tip.style.zIndex        = '9999';
-      tip.style.pointerEvents = 'none';
-      document.body.appendChild(tip);
-      el._tooltip = tip;
-    }
+  if (!el._tooltip) {
+    const tip = document.createElement('div');
+    tip.className = 'tooltip';
+    tip.style.position      = 'fixed';
+    tip.style.background    = '#28262675';
+    tip.style.color         = '#f3f3f3';
+    tip.style.padding       = '5px 10px';
+    tip.style.borderRadius  = '8px';
+    tip.style.boxShadow     = '0 4px 6px rgba(0, 0, 0, 0.3)';
+    tip.style.fontSize      = '12px';
+    tip.style.zIndex        = '9999';
+    tip.style.pointerEvents = 'none';
+    tip.style.backdropFilter = 'blur(8px) saturate(140%)';
+    tip.style.webkitBackdropFilter = 'blur(8px) saturate(140%)';
+
+    document.body.appendChild(tip);
+    el._tooltip = tip;
+  }
+
 
     const tip = el._tooltip;
     tip.textContent      = el._tooltipText;
@@ -6474,18 +6514,21 @@ function showSimpleTooltip(x, y, text) {
   if (!simpleTooltip) {
     simpleTooltip = document.createElement('div');
     simpleTooltip.style.position      = 'fixed';
-    simpleTooltip.style.background    = '#30302f';
+    simpleTooltip.style.background    = '#28262675';
     simpleTooltip.style.color         = '#f3f3f3';
     simpleTooltip.style.padding       = '5px 10px';
     simpleTooltip.style.borderRadius  = '8px';
-    simpleTooltip.style.boxShadow     = '0 2px 8px rgba(0,0,0,0.25)';
+    simpleTooltip.style.boxShadow     = '0 4px 6px rgba(0, 0, 0, 0.3)';
     simpleTooltip.style.fontSize      = '12px';
     simpleTooltip.style.whiteSpace    = 'normal';
     simpleTooltip.style.maxWidth      = '200px';
     simpleTooltip.style.zIndex        = '9999';
     simpleTooltip.style.pointerEvents = 'none';
+    simpleTooltip.style.backdropFilter = 'blur(8px) saturate(140%)';
+    simpleTooltip.style.webkitBackdropFilter = 'blur(8px) saturate(140%)';
     document.body.appendChild(simpleTooltip);
   }
+
   if (simpleTooltipCleanup) simpleTooltipCleanup();
 
   simpleTooltip.textContent      = text;
