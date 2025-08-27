@@ -56,6 +56,17 @@ body.no-scroll {
   overflow-y: scroll;
 }
 
+    :root {
+  --grain-bg: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
+<filter id="grain">\
+<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
+<feColorMatrix type="saturate" values="0"/>\
+</filter>\
+<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
+</svg>');
+}
+    
 .logo-wrapper {
   position: relative;
   display: inline-block;
@@ -64,15 +75,8 @@ body.no-scroll {
   padding: 10px;
   margin-bottom: 10px;
 
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
+
   background-size: 20px 20px;
   background-blend-mode: overlay;
   transition: border-radius 0.3s ease;
@@ -146,15 +150,8 @@ body.no-scroll {
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
+
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -251,42 +248,26 @@ body.no-scroll {
   margin-bottom: 20px;
 }
 
-.load-wrapp {
+#csv-loading{
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
+  gap: 10px;
+  align-items: stretch;
+  min-width: 260px;
+  max-width: 520px;
+  background: rgba(53,53,60,0.55);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+  border-radius: 8px;
+  padding: 20px 20px;
+  color: #f3f3f3;
 }
-
-.load-10 {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.bar {
-  width: 15px;
-  height: 6px;
-  border-radius: 2px;
-  background-color: #88c8dc;
-  margin: 0 5px;
-  animation: loadingJ 2s cubic-bezier(0.17, 0.37, 0.43, 0.67) infinite;
-}
-
-@keyframes loadingJ {
-  0% {
-    transform: translateX(-38.75px);
-  }
-
-  50% {
-    transform: translateX(38.75px);
-    background-color: #d5da8d;
-    width: 25px;
-  }
-
-  100% {
-    transform: translateX(-38.75px);
-  }
-}
+#csv-loading-title{ font-size:14px; }
+#csv-loading-bar{ height:10px; border-radius:4px; background:#282626; overflow:hidden; }
+#csv-loading-fill{ width:0%; height:100%; background:rgba(132,170,251,.8); transition: width .1s linear; }
+#csv-loading-info{ font-size:12px; color: #bababa; display:flex; justify-content:space-between; gap:10px; }
 
 .loading-text {
   color: #f3f3f3;
@@ -306,6 +287,7 @@ body.no-scroll {
 input[type="checkbox"] {
   width: 20px;
   height: 20px;
+  margin: 5px 5px 5px 5px;
   cursor: pointer;
   appearance: none;
   border: 1px solid rgba(132, 170, 251, 0.5);
@@ -402,8 +384,7 @@ input[type="checkbox"]:checked::after {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 20px;
-      margin-bottom: 20px
+
 }
     
     label[for="nuam-recommended-checkbox"]{
@@ -442,15 +423,8 @@ input[type="checkbox"]:checked::after {
   overflow: hidden;
   position: relative;
   
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
+
     background-size: 20px 20px;
     background-blend-mode: overlay;
 }
@@ -526,22 +500,13 @@ input[type="checkbox"]:checked::after {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 5px 5px 5px 5px;
   background-color: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
   justify-content: flex-start;
-  
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
-    background-size: 20px 20px;
-    background-blend-mode: overlay;
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
 }
 
 .hide-listened-section label {
@@ -592,10 +557,9 @@ input[type="checkbox"]:checked::after {
 
 .release-column .hide-listened-section {
   margin-top: auto;
-  height: 37px;
   display: flex;
   align-items: center;
-  padding: 0px 10px 0px 5px;
+  padding: 5px 10px 5px 5px;
   border-radius: 8px;
   gap: 8px;
 }
@@ -647,18 +611,8 @@ input[type="checkbox"]:checked::after {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  
   background-color: rgba(53, 53, 60, 0.55);
-  
-background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -690,16 +644,8 @@ background-image:
   justify-content: center;
   backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
-  background-color: rgba(53, 53, 60, 0.55);
-background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-color: rgba(53, 53, 60, 0.55);  
+  background-image: var(--grain-bg);
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -821,6 +767,28 @@ background-image:
   color: #f3f3f3;
 }
 
+    .tri-toggle{
+  display:flex;gap:5px;align-items:center;flex-shrink:0;
+  padding:6px 5px 6px 5px;border-radius:8px;
+  background: rgba(53,53,60,.55);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+  box-sizing:border-box;
+}
+.tri-toggle button{
+  height:28px;width:28px;padding:0 10px;border-radius:8px;
+  background:transparent;color:#f3f3f3;cursor:pointer;
+  border:1px solid rgba(132, 170, 251, 0.5);font-family:"CustomFont", Arial, sans-serif;
+  font-size:12px;line-height:28px;display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s, background-color .2s;white-space:nowrap;
+}
+.tri-toggle button:hover{ border-color: rgba(132,170,251,1); }
+.tri-toggle button.active{
+  border-color: rgba(132,170,251,1);
+  background-color: rgba(132,170,251,.2);
+}
+    
 #filters-container {
   display: flex;
   align-items: center;
@@ -996,15 +964,8 @@ background-image:
 
   background-color: rgba(53, 53, 60, 0.55);
   
-background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+background-image: var(--grain-bg);
+
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -1059,16 +1020,7 @@ button {
   font-family: "CustomFont", Arial, sans-serif;
   user-select: none;
   transition: border-color 0.3s ease;
-
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
   background-size: 160px 160px;
   background-blend-mode: overlay;
 }
@@ -1124,6 +1076,7 @@ button {
   flex-direction: column;
   z-index: 10;
   overflow: hidden;
+
 }
 
 .custom-select.upward .options-container {
@@ -1179,15 +1132,8 @@ button:hover {
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
+
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -1243,15 +1189,8 @@ button:hover {
   min-width: 400px;
   max-width: 500px;
 
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
+
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -1526,10 +1465,16 @@ audio {
 .modal{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.7);
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(53, 53, 60, 0.55);
+  backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    background-image: var(--grain-bg);
+
+    background-size: 160px 160px;
+    background-blend-mode: overlay;
   z-index: 2000;
 }
 
@@ -1537,7 +1482,7 @@ audio {
 
 .modal-content {
   background-color: #282626;
-  margin: 15% auto;
+  margin: 200px auto 0 auto;
   padding: 20px;
   border-radius: 8px;
   width: 1064px;
@@ -1546,7 +1491,6 @@ audio {
 
 #preset-modal .modal-content {
   width: 640px;
-      height: 73px;
   font-size: 14px;
 }
 #preset-modal .modal-content > #preset-name-input,
@@ -1560,6 +1504,15 @@ audio {
   margin-right: 10px;
 }
 
+#preset-modal .modal-content,
+#edit-name-modal .modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+   
 .tabcontent {
   display: none;
 }
@@ -1591,7 +1544,7 @@ audio {
   background-color: rgba(132, 170, 251, 0.2);
   border-color: rgba(132, 170, 251, 1);
 }
-
+  
 .close {
   color: #aaa;
   float: right;
@@ -1616,7 +1569,7 @@ audio {
 .blacklist-cross {
   cursor: pointer;
   color: #c0392b;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   transition: color 0.3s ease;
   padding-right: 10px;
@@ -1770,11 +1723,38 @@ textarea:focus {
   color: #90ee90;
 }
 
-.star-icon {
-  background-color: #282626;
+.star-box {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  line-height: 0;
+  z-index: 11;
+  background-color: rgba(53, 53, 60, 0.55);
   border-radius: 8px;
-  padding: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+}
+
+.star-box .star-icon {
+  display: block;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 24px;
+  line-height: 1;
+  vertical-align: middle;
+  color: #e6c200;
 }
 
 .section-title {
@@ -1933,22 +1913,13 @@ textarea:focus {
   position: absolute;
   width: calc(100% + 2px);
   z-index: 99;
-
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 .options-container {
   overflow: hidden;
   background-color: rgba(53, 53, 60, 0.55);
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
   background-size: 20px 20px;
   background-blend-mode: overlay;
   backdrop-filter: blur(8px) saturate(140%);
@@ -1957,7 +1928,7 @@ textarea:focus {
 
 #label-select .option-list {
   overflow-y: auto;
-}
+}  
     
 #label-select .option-fixed {
   flex-shrink: 0;
@@ -2192,8 +2163,8 @@ textarea:focus {
   background: #84aafb;
   box-shadow: 0 0 5px #84aafb;
 }
-    
-.modal-content input {
+
+.modal-content input:not([type="checkbox"]) {
   flex-grow: 1;
   padding: 10px 5px 10px 10px;
   border-radius: 8px;
@@ -2204,14 +2175,36 @@ textarea:focus {
   color: #f3f3f3;
   transition: border 0.3s ease;
 }
-.modal-content input:focus {
+.modal-content input:not([type="checkbox"]):focus {
   outline: none;
   box-shadow: none;
 }
-.modal-content input:hover {
+.modal-content input:not([type="checkbox"]):hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
 
+#blacklist-content .bl-temp-toggle{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px 0;
+  color: #f3f3f3;
+  background-color: rgba(53, 53, 60, 0.55);
+  border-radius: 8px;
+  padding: 5px 10px 5px 5px;
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+#blacklist-content .bl-temp-toggle label{
+  cursor: pointer;
+  user-select: none;
+  margin: 0 0 0 -5px;
+}
+    
 .modal-content {
   position: relative;
 }
@@ -2234,14 +2227,19 @@ textarea:focus {
 }
 
 #edit-name-modal .modal-content {
-  width: auto;
-  height: auto;
+  width: 400px;
 }
 
     .preview-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.7);
+  background: rgba(53, 53, 60, 0.55);
+  backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    background-image: var(--grain-bg);
+
+    background-size: 160px 160px;
+    background-blend-mode: overlay;
   z-index: 1000;
 }
 .preview-overlay.hidden{
@@ -2266,15 +2264,9 @@ textarea:focus {
   transition: border 0.3s ease;
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+
+  background-image: var(--grain-bg);
+
   background-size: 160px 160px;
   background-blend-mode: overlay;
 }
@@ -2310,15 +2302,8 @@ textarea:focus {
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 
-  background-image:
-    url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">\
-<filter id="grain">\
-<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>\
-<feColorMatrix type="saturate" values="0"/>\
-</filter>\
-<rect width="100%" height="100%" filter="url(%23grain)" opacity="0.15"/>\
-</svg>');
+  background-image: var(--grain-bg);
+
   background-size: 160px 160px;
   background-blend-mode: overlay;
 }
@@ -2427,11 +2412,10 @@ textarea:focus {
   
   <div id="loading-screen">
   <img src="https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png" alt="NUAM Albums Logo">
-  <div class="load-wrapp">
-    <div class="load-10">
-      <div class="bar"></div>
-    </div>
-    <p class="loading-text">Підключення до бази NUAM</p>
+  <div id="csv-loading">
+    <div id="csv-loading-title">Завантаження бази NUAM…</div>
+    <div id="csv-loading-bar"><div id="csv-loading-fill"></div></div>
+    <div id="csv-loading-info"><span id="csv-loaded">0 Б</span><span id="csv-total">—</span></div>
   </div>
 </div>
   
@@ -2480,7 +2464,12 @@ textarea:focus {
       <button id="filters-button">Фільтри</button>
     </div>
     <div id="search-container" style="display: none; align-items: center; gap: 5px;">
-      <input type="text" id="search-input" placeholder="Пошук альбомів…" />
+      <div id="search-mode-toggle" class="tri-toggle" role="group" aria-label="Режим пошуку">
+  <button type="button" data-mode="artist">Артист</button>
+  <button type="button" data-mode="artist-album" class="active">Артист+Альбом</button>
+  <button type="button" data-mode="album">Альбом</button>
+</div>
+      <input type="text" id="search-input" placeholder="Пошук релізів…" />
       <button id="search-close">✖</button>
     </div>
 
@@ -2507,7 +2496,7 @@ textarea:focus {
   <div id="preset-modal" class="modal hidden">
     <div class="modal-content">
       <span class="close" id="preset-close">&times;</span>
-      <h3 style="color: #f3f3f3; margin-top: 0; margin-bottom: 20px;">Будуть збережені поточні вибрані фільтри та сортування. Вкажіть назву.</h3>
+      <h3 style="color: #f3f3f3; margin-top: 0; margin-bottom: 20px;">Будуть збережені поточні вибрані фільтри та сортування</h3>
       <input id="preset-name-input" placeholder="Назва фільтра" style="margin-right:10px;"><button id="preset-save" style="height:40px;">Зберегти</button>
       <span id="preset-save-message"></span>
     </div>
@@ -2694,25 +2683,63 @@ textarea:focus {
   <div class="lazy-loading" id="lazy-loading">Завантаження альбомів…</div>
 
   <div id="blacklist-modal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="tabs">
-        <button class="tablink active" id="blacklist-tab" onclick="openTab(event, 'blacklist-content')">Чорний список</button>
-        <button class="tablink" id="listened-albums-tab" onclick="openTab(event, 'listened-albums-content')">Прослухані альбоми</button>
-        <button class="tablink" id="export-tab" onclick="openTab(event, 'export-content')">Перенесення даних</button>
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    <div class="tabs">
+      <button class="tablink active" id="blacklist-tab" onclick="openTab(event, 'blacklist-content')">Чорний список</button>
+      <button class="tablink" id="listened-albums-tab" onclick="openTab(event, 'listened-albums-content')">Прослухані альбоми</button>
+      <button class="tablink" id="export-tab" onclick="openTab(event, 'export-content')">Перенесення даних</button>
+    </div>
+
+    <div id="blacklist-content" class="tabcontent active">
+      <div class="bl-temp-toggle">
+        <input type="checkbox" id="temp-disable-blacklist">
+        <label for="temp-disable-blacklist">Тимчасово вимкнути чорний список</label>
       </div>
-      <div id="blacklist-content" class="tabcontent active">
-        <div class="blacklist-container">
-          <div class="blacklist-artists checkbox-container">
-            <h4>Артисти</h4>
-            <ul id="blacklisted-artists"></ul>
+
+      <div class="blacklist-container">
+        <div class="blacklist-artists checkbox-container">
+          <h4>Артисти</h4>
+          <ul id="blacklisted-artists"></ul>
+        </div>
+        <div class="blacklist-labels checkbox-container">
+          <h4>Лейбли</h4>
+          <ul id="blacklisted-labels"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="listened-albums-content" class="tabcontent">
+      <div class="listened-albums-container">
+        <ul id="listened-albums-list"></ul>
+      </div>
+    </div>
+
+    <div id="export-content" class="tabcontent">
+      <div class="export-import-container">
+        <div class="export-section" style="display:flex; flex-direction:column; gap:10px;">
+          <label for="data-textarea">Дані для експорту:</label>
+          <textarea id="data-textarea" readonly></textarea>
+          <div class="button-line">
+            <button id="export-data">Копіювати дані</button>
+            <span id="export-message">&nbsp;</span>
           </div>
-          <div class="blacklist-labels checkbox-container">
-            <h4>Лейбли</h4>
-            <ul id="blacklisted-labels"></ul>
+        </div>
+
+        <div class="import-section" style="display:flex; flex-direction:column; gap:10px;">
+          <label for="import-textarea">Вставте сюди дані для імпорту:</label>
+          <textarea id="import-textarea" placeholder="Вставте сюди дані"></textarea>
+          <div class="button-line">
+            <button id="import-data">Завантажити дані</button>
+            <span id="import-message">&nbsp;</span>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+   
       <div id="listened-albums-content" class="tabcontent">
         <div class="listened-albums-container">
           <ul id="listened-albums-list"></ul>
@@ -2787,7 +2814,6 @@ textarea:focus {
   </svg>
 </div>
 
-  
   <script>
     
     function loadCsvWithRetry(url, options, retries = 3, delay = 2000) {
@@ -2858,7 +2884,93 @@ async function loadAlbumTracksWithRetry(album) {
 let activePresetButton = null;
     let isPresetLoading = false;
 
-    const newSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRGgPDeRNQcSe5tV2h3zu-rtMr-i7ph-4hU6HKglhXKdaAB5UFXUrdWLZKb8hwGyWgDxL5LDfnmrqe/pub?gid=1559781011&single=true&output=csv";
+(function(){
+  if (window.__csvBarInstalled) return; window.__csvBarInstalled = true;
+
+  function human(n){ if(!n&&n!==0) return '—'; const u=['Б','КБ','МБ','ГБ']; let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++;} return n.toFixed(i?1:0)+' '+u[i]; }
+  function isCsv(input){
+    try{
+      const url = typeof input==='string' ? input : (input&&input.url?input.url:'');
+      if (window.newSheetUrl && typeof newSheetUrl==='string') return url===newSheetUrl;
+      return /\/nuam\.csv(\?|$)/.test(url);
+    }catch(_){ return false; }
+  }
+  function ensureIDs(){
+
+    return !!(document.getElementById('csv-loading') &&
+              document.getElementById('csv-loading-fill') &&
+              document.getElementById('csv-loaded') &&
+              document.getElementById('csv-total') &&
+              document.getElementById('csv-loading-title'));
+  }
+
+  (function(){
+    const _open = XMLHttpRequest.prototype.open;
+    const _send = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function(m,u){ this.__csv = isCsv(u); return _open.apply(this,arguments); };
+    XMLHttpRequest.prototype.send = function(b){
+      if (this.__csv && ensureIDs()){
+        const fill = ()=>document.getElementById('csv-loading-fill');
+        const got  = ()=>document.getElementById('csv-loaded');
+        const tot  = ()=>document.getElementById('csv-total');
+        const ttl  = ()=>document.getElementById('csv-loading-title');
+
+        this.addEventListener('progress', e=>{
+          if (e.lengthComputable){
+            tot().textContent = human(e.total);
+            got().textContent = human(e.loaded);
+            fill().style.width = Math.min(100, Math.round(e.loaded*100/e.total)) + '%';
+          } else {
+            got().textContent = human(e.loaded||0);
+          }
+        });
+        this.addEventListener('loadstart', ()=>{
+          try { const l = Number(this.getResponseHeader&&this.getResponseHeader('content-length')); if(l) tot().textContent = human(l); } catch(_){}
+        });
+        this.addEventListener('loadend', ()=>{
+          ttl().textContent = 'Завантаження бази NUAM…';
+          fill().style.width = '100%';
+        });
+        this.addEventListener('error', ()=>{ ttl().textContent = 'Помилка завантаження'; });
+        this.addEventListener('abort', ()=>{ ttl().textContent = 'Скасовано'; });
+      }
+      return _send.apply(this, arguments);
+    };
+  })();
+
+  (function(){
+    const _fetch = window.fetch;
+    window.fetch = async function(res, init){
+      const rsp = await _fetch(res, init);
+      try{
+        if (!rsp.body || !isCsv(res) || !ensureIDs()) return rsp;
+        const fill = document.getElementById('csv-loading-fill');
+        const got  = document.getElementById('csv-loaded');
+        const tot  = document.getElementById('csv-total');
+        const ttl  = document.getElementById('csv-loading-title');
+
+        const total = Number(rsp.headers.get('content-length'))||0;
+        if (total) tot.textContent = human(total);
+
+        const [a,b] = rsp.body.tee();
+        (async ()=>{
+          const r = b.getReader(); let rec = 0;
+          for(;;){
+            const {done,value} = await r.read(); if(done) break;
+            rec += value.byteLength;
+            got.textContent = human(rec);
+            if (total) fill.style.width = Math.min(100, Math.round(rec*100/total)) + '%';
+          }
+          ttl.textContent = 'Завантаження бази NUAM…';
+          if (!total){ tot.textContent = human(rec); fill.style.width = '100%'; }
+        })();
+        return new Response(a, { status:rsp.status, statusText:rsp.statusText, headers:rsp.headers });
+      }catch(_){ return rsp; }
+    };
+  })();
+})();
+    
+    const newSheetUrl = "https://nuam-albums.hi-f50.workers.dev/nuam.csv";
 
     let searchQuery = '';
     
@@ -3279,7 +3391,6 @@ async function init() {
     anyBtn.classList.add('active'); anyBtn.setAttribute('aria-pressed','true');
   }
 }
-
       initBasicCustomSelect(document.getElementById('sort-order'));
        
       const pgOpt = document.querySelector('#sort-order .option[data-value="popularity-growth"]');
@@ -3526,7 +3637,6 @@ else {
 
   update(true);
 })();
-
       initBasicCustomSelect(document.getElementById('listen-count-filter'));
       attachGlobalEventListeners();
       
@@ -3544,25 +3654,35 @@ attachTooltip(addPresetBtn, 'Створити фільтр', '160px');
       const inputName = document.getElementById('preset-name-input');
 
       addBtn.addEventListener('click', () => {
-        inputName.value = '';
-        modal.style.display = 'flex';
-        inputName.focus();
-      });
-      closeX.addEventListener('click', () => modal.style.display = 'none');
+  inputName.value = '';
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  inputName.focus();
+});
+      closeX.addEventListener('click', () => {
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+});
+
       modal.addEventListener('click', e => {
-        if (e.target === modal) modal.style.display = 'none';
-      });
+  if (e.target === modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+});
 
 const editNameModal  = document.getElementById('edit-name-modal');
 const editNameClose  = editNameModal.querySelector('.close');
 
 editNameClose.addEventListener('click', () => {
   editNameModal.style.display = 'none';
+  document.body.style.overflow = 'auto';
 });
 
 editNameModal.addEventListener('click', e => {
   if (e.target === editNameModal) {
     editNameModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
   }
 });
  
@@ -3656,8 +3776,7 @@ function initBasicCustomSelect(select) {
     optionsContainer.style.display = isOpen ? 'none' : 'flex';
     select.classList.toggle('open', !isOpen);
   });
-
-    optionsContainer.querySelectorAll('.option').forEach(option => {
+ optionsContainer.querySelectorAll('.option').forEach(option => {
     option.addEventListener('click', () => {
 
       selected.textContent    = option.textContent;
@@ -4074,7 +4193,6 @@ if (!isOpen) {
 optionsContainer.style.display = isOpen ? 'none' : 'flex';
 select.classList.toggle('open', !isOpen);
 });
-
   optionsContainer.querySelectorAll('.option').forEach(option => {
     option.addEventListener('click', () => {
       selected.textContent = option.textContent;
@@ -4828,6 +4946,77 @@ const searchContainer = document.getElementById('search-container');
 const searchInput   = document.getElementById('search-input');
       const searchClose    = document.getElementById('search-close');
 
+window.albumSearchMode = localStorage.getItem('albumSearchMode') || 'artist-album';
+
+(function initAlbumSearchModeToggle(){
+  const wrap = document.getElementById('search-mode-toggle');
+  if(!wrap) return;
+
+  const buttons = Array.from(wrap.querySelectorAll('button'));
+  const setActive = (mode) => {
+  if (mode === 'artist-album') {
+    buttons.forEach(b => b.classList.add('active'));
+  } else {
+    buttons.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  }
+};
+
+  setActive(window.albumSearchMode);
+
+  wrap.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-mode]');
+    if(!btn) return;
+    const mode = btn.dataset.mode;
+    window.albumSearchMode = mode;
+    localStorage.setItem('albumSearchMode', mode);
+    setActive(mode);
+    if (typeof smoothApplyFilters === 'function') smoothApplyFilters();
+  });
+})();
+
+(function replaceSearchModeButtonTextWithIcons(){
+  const wrap = document.getElementById('search-mode-toggle');
+  if (!wrap) return;
+
+  const MAP = {
+    'artist':        { html: '<i class="fa-solid fa-user"></i>',          tip: 'Шукати тільки за артистами' },
+    'artist-album':  { html: '<i class="fa-solid fa-arrows-left-right"></i>', tip: 'Шукати за артистами або альбомами' },
+    'album':         { html: '<i class="fa-solid fa-compact-disc"></i>',  tip: 'Шукати тільки за альбомами'}
+  };
+
+  Object.entries(MAP).forEach(([mode, cfg]) => {
+    const btn = wrap.querySelector(`button[data-mode="${mode}"]`);
+    if (!btn) return;
+
+    const textBlock =
+      btn.querySelector('.label, .btn-text, .text, span, div') ||
+      btn.firstElementChild || null;
+
+    if (textBlock) {
+      textBlock.innerHTML = cfg.html;
+    } else {
+      btn.innerHTML = cfg.html;
+    }
+
+    btn.setAttribute('data-tooltip', cfg.tip);
+    btn.setAttribute('aria-label',  cfg.tip);
+    btn.title = '';
+  });
+})();
+
+(function initSearchModeTooltips(){
+  const wrap = document.getElementById('search-mode-toggle');
+  if (!wrap || typeof attachTooltip !== 'function') return;
+
+  const btnArtist = wrap.querySelector('button[data-mode="artist"]');
+  const btnBoth   = wrap.querySelector('button[data-mode="artist-album"]');
+  const btnAlbum  = wrap.querySelector('button[data-mode="album"]');
+
+  attachTooltip(btnArtist, 'Шукати тільки за артистами');
+  attachTooltip(btnBoth,   'Шукати за артистами або альбомами', '300px');
+  attachTooltip(btnAlbum,  'Шукати тільки за альбомами');
+})();
+ 
 const filtersContainer = document.getElementById('filters-container');
 const filtersClose     = document.getElementById('filters-close');
 
@@ -4936,8 +5125,9 @@ const matchGenres = base && onlyOk;
     );
 
     const matchRelease = selectedReleaseTypes.length === 0 || selectedReleaseTypes.includes(al.type);
-    const notBlacklistedArtist = !al.artistIDs.some(id => blacklistedArtists.has(id));
-    const notBlacklistedLabel = !blacklistedLabels.has(al.label);
+    const notBlacklistedArtist = (window.tempIgnoreBlacklist) || !al.artistIDs.some(id => blacklistedArtists.has(id));
+const notBlacklistedLabel  = (window.tempIgnoreBlacklist) || !blacklistedLabels.has(al.label);
+
 
     return matchGenres && notExcludedGenres &&
            matchLangs && notExcludedLangs &&
@@ -4962,7 +5152,6 @@ if (selectedGenres.length > 0) {
     return base && onlyOk;
   });
 }
-
 
       const excludedGenres = Array.from(document.querySelectorAll('.genre-checkbox:disabled')).map(cb => cb.value);
       if (excludedGenres.length > 0) {
@@ -5003,13 +5192,10 @@ if (onlyRecommended) {
   filteredAlbums = filteredAlbums.filter(al => al.good);
 }
       
-      filteredAlbums = filteredAlbums.filter(al => {
-  return !al.artistIDs.some(id => blacklistedArtists.has(id));
-});
-
-      filteredAlbums = filteredAlbums.filter(al => {
-        return !blacklistedLabels.has(al.label);
-      });
+      if (!window.tempIgnoreBlacklist) {
+  filteredAlbums = filteredAlbums.filter(al => !al.artistIDs.some(id => blacklistedArtists.has(id)));
+  filteredAlbums = filteredAlbums.filter(al => !blacklistedLabels.has(al.label));
+}
 
       if (hideListened) {
         filteredAlbums = filteredAlbums.filter(al => !al.listened);
@@ -5196,10 +5382,15 @@ if (selListen === 'range') {
 const preSearch = filteredAlbums.slice();
 
 if (searchQuery) {
-  const searchMatches = albumsData.filter(al =>
-    al.nameAlbum.toLowerCase().includes(searchQuery) ||
-    al.artistNames.some(n => n.toLowerCase().includes(searchQuery))
-  );
+  const mode = window.albumSearchMode || 'artist-album';
+const searchMatches = albumsData.filter(al => {
+  const albumHit  = String(al.nameAlbum || '').toLowerCase().includes(searchQuery);
+  const artistHit = Array.isArray(al.artistNames) && al.artistNames.some(n => String(n||'').toLowerCase().includes(searchQuery));
+  if (mode === 'artist') return artistHit;
+  if (mode === 'album')  return albumHit;
+  return albumHit || artistHit;
+});
+
 
   const primary = filteredAlbums.filter(al => searchMatches.includes(al));
   const hiddenByFilters = searchMatches.filter(al => !primary.includes(al));
@@ -5498,7 +5689,7 @@ favButton.appendChild(checkmark);
     
 attachTooltip(favButton, favoriteAlbums[album.albumID]
   ? 'Прибрати альбом з обраного'
-  : 'Додати альбом в обране');
+  : 'Додати альбом до обраного');
 
 favButton.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -5520,7 +5711,7 @@ favButton.addEventListener('click', (e) => {
   removeTooltip(favButton);
   attachTooltip(favButton, favoriteAlbums[album.albumID]
     ? 'Прибрати альбом з обраного'
-    : 'Додати альбом в обране');
+    : 'Додати альбом до обраного');
 });
 
 albumDiv.appendChild(favButton);
@@ -5535,16 +5726,12 @@ const appleIcon = albumDiv.querySelector('.apple-icon');
 if (appleIcon) attachTooltip(appleIcon, 'Шукати в Apple Music');
     
     if (album.good) {
-      const starBox = document.createElement('div');
-      starBox.style.position   = 'absolute';
-      starBox.style.top        = '10px';
-      starBox.style.right      = '10px';
-      starBox.style.fontSize   = '24px';
-      starBox.style.zIndex     = '11';
-      starBox.innerHTML        = '<i class="fas fa-star star-icon" style="color:gold;"></i>';
-      attachTooltip(starBox, 'NUAM рекомендує цей альбом до прослуховування', '180px');
-      albumDiv.appendChild(starBox);
-    }
+  const starBox = document.createElement('div');
+  starBox.className = 'star-box';
+  starBox.innerHTML = '<i class="fas fa-star star-icon"></i>';
+  attachTooltip(starBox, 'NUAM рекомендує цей альбом до прослуховування', '180px');
+  albumDiv.appendChild(starBox);
+}
 
     const nextAlbum = [...container.children].find(div => {
   const idx = filteredAlbums.findIndex(a => a.albumID === div.dataset.albumId);
@@ -6186,12 +6373,30 @@ function showAlbum(album) {
       }
     }
 
+(() => {
+  const el = document.getElementById('temp-disable-blacklist');
+  if (!el) return;
+
+  const blTempContainer = document.querySelector('#blacklist-content .bl-temp-toggle');
+if (blTempContainer) {
+  attachTooltip(
+    blTempContainer,
+    'Будуть показані всі релізи, без урахування артистів і лейблів з чорного списку. Це налаштування буде скинуто після перезавантаження сторінки.',
+    '360px'
+  );
+}
+
+  el.addEventListener('change', (e) => {
+    window.tempIgnoreBlacklist = e.target.checked;
+    smoothApplyFilters();
+  });
+})();
+  
     function openTab(evt, tabName) {
       const tablinks = document.querySelectorAll('.tablink');
       const tabcontents = document.querySelectorAll('.tabcontent');
       tabcontents.forEach(tb => tb.classList.remove('active'));
       tablinks.forEach(ln => ln.classList.remove('active'));
-
       document.getElementById(tabName).classList.add('active');
       evt.currentTarget.classList.add('active');
 
@@ -6443,7 +6648,6 @@ function attachTooltip(el, text, width) {
     document.body.appendChild(tip);
     el._tooltip = tip;
   }
-
 
     const tip = el._tooltip;
     tip.textContent      = el._tooltipText;
@@ -6712,50 +6916,63 @@ function showDeleteConfirm(btn) {
   const overlay = document.createElement('div');
   overlay.style = ''
     + 'position:fixed;top:0;left:0;width:100%;height:100%;'
-    + 'background:rgba(0,0,0,0.7);display:flex;'
-    + 'align-items:center;justify-content:center;z-index:2000;';
+    + 'display:flex;align-items:center;justify-content:center;z-index:2000;'
+    + 'background: rgba(53, 53, 60, 0.55);'
+    + 'backdrop-filter: blur(8px) saturate(140%);'
+    + '-webkit-backdrop-filter: blur(8px) saturate(140%);'
+    + 'background-image: var(--grain-bg);'
+    + 'background-size: 160px 160px;'
+    + 'background-blend-mode: overlay;';
 
   const dlg = document.createElement('div');
   dlg.style = ''
-    + 'background:#383838;padding:20px;border-radius:8px;'
+    + 'background:#282626;padding:20px;border-radius:8px;'
     + 'color:#f3f3f3;text-align:center;';
 
   dlg.addEventListener('click', e => e.stopPropagation());
 
-  const txt     = document.createElement('p');
+  const txt = document.createElement('p');
   txt.textContent = 'Видалити фільтр?';
-  txt.style  = 'padding: 0px 20px 20px 20px;margin: auto;';
+  txt.style = 'padding:0px 20px 20px 20px;margin:auto;';
 
   const btnKeep = document.createElement('button');
   btnKeep.textContent = 'Залишити';
   btnKeep.className = 'modal-action keep-btn';
   btnKeep.style = 'margin:0 10px;';
 
-  const btnDel  = document.createElement('button');
+  const btnDel = document.createElement('button');
   btnDel.textContent = 'Видалити';
-  btnDel.className  = 'modal-action delete-btn';
+  btnDel.className = 'modal-action delete-btn';
   btnDel.style = 'margin:0 10px;';
 
-  overlay.addEventListener('click', () => {
-    document.body.removeChild(overlay);
-  });
+  function close() {
+    document.removeEventListener('keydown', onKey);
+    if (overlay.parentNode) document.body.removeChild(overlay);
+    document.body.style.overflow = prevOverflow;
+  }
 
-  btnKeep.addEventListener('click', () => {
-    document.body.removeChild(overlay);
-  });
+  overlay.addEventListener('click', close);
+  btnKeep.addEventListener('click', close);
 
   btnDel.addEventListener('click', () => {
     const cfg = JSON.parse(btn.dataset.presetJson);
     const arr = getStoredPresets().filter(p => p.name !== cfg.name);
     savePresetsToStorage(arr);
     loadPresetsFromStorage();
-    document.body.removeChild(overlay);
+    close();
   });
 
   dlg.append(txt, btnKeep, btnDel);
   overlay.appendChild(dlg);
+
+  const prevOverflow = document.body.style.overflow || '';
+  document.body.style.overflow = 'hidden';
   document.body.appendChild(overlay);
+
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
 }
+
 
 function showRenameModal(btn) {
   const modal = document.getElementById('edit-name-modal');
@@ -6768,26 +6985,28 @@ function showRenameModal(btn) {
   input.value    = oldName;
   msg.textContent = '';
 
-  modal.style.display = 'flex';
-  input.focus();
+  modal.style.display = 'block';
+document.body.style.overflow = 'hidden';
+input.focus();
 
   save.onclick = () => {
-    const newName = input.value.trim();
-    if (!newName) {
-      msg.textContent = 'Вкажіть назву фільтра';
-      msg.className   = 'error';
-      setTimeout(() => (msg.textContent = ''), 3000);
-      return;
-    }
+  const newName = input.value.trim();
+  if (!newName) {
+    msg.textContent = 'Вкажіть назву фільтра';
+    msg.className   = 'error';
+    setTimeout(() => (msg.textContent = ''), 3000);
+    return;
+  }
 
-    const presets = getStoredPresets();
-    const idx     = presets.findIndex(p => p.name === oldName);
-    if (idx >= 0) presets[idx].name = newName;
-    savePresetsToStorage(presets);
-    loadPresetsFromStorage();
+  const presets = getStoredPresets();
+  const idx     = presets.findIndex(p => p.name === oldName);
+  if (idx >= 0) presets[idx].name = newName;
+  savePresetsToStorage(presets);
+  loadPresetsFromStorage();
 
-    modal.style.display = 'none';
-  };
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+};
 }
 
 (() => {
@@ -6795,16 +7014,22 @@ function showRenameModal(btn) {
   const content = modal.querySelector('.modal-content');
 
   modal.querySelector('.close')
-       .addEventListener('click', () => (modal.style.display = 'none'));
+     .addEventListener('click', () => {
+       modal.style.display = 'none';
+       document.body.style.overflow = 'auto';
+     });
 
-  modal.addEventListener('click', e => {
-    if (!content.contains(e.target)) modal.style.display = 'none';
-  });
+modal.addEventListener('click', e => {
+  if (!content.contains(e.target)) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+});
 })();
 
     document.getElementById('export-button').addEventListener('click', () => {
   const modal = document.getElementById('blacklist-modal');
-  modal.style.display = 'flex';
+  modal.style.display = 'block';
   document.getElementById('export-tab').click();
 });
     
