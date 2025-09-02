@@ -4016,7 +4016,7 @@ else {
 attachTooltip(toggleEditBtn, 'Редагувати список фільтрів', '180px');
       const addPresetBtn = document.getElementById('add-preset');
 attachTooltip(addPresetBtn, 'Створити фільтр', '160px');
-      
+      ensureDefaultPresets();
       loadPresetsFromStorage();
 
       const addBtn    = document.getElementById('add-preset');
