@@ -74,9 +74,7 @@ body.no-scroll {
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
-
   background-image: var(--grain-bg);
-
   background-size: 20px 20px;
   background-blend-mode: overlay;
   transition: border-radius 0.3s ease;
@@ -146,12 +144,9 @@ body.no-scroll {
   z-index: 100;
   padding: 0 10px 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-
   background-image: var(--grain-bg);
-
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -404,7 +399,6 @@ input[type="checkbox"]:checked::after {
   flex-direction: row;
   gap: 10px;
   width: 100%;
-
   align-items: stretch;
 }
 .filter-group .checkbox-container {
@@ -422,9 +416,7 @@ input[type="checkbox"]:checked::after {
   max-height: 200px;
   overflow: hidden;
   position: relative;
-  
   background-image: var(--grain-bg);
-
     background-size: 20px 20px;
     background-blend-mode: overlay;
 }
@@ -961,11 +953,8 @@ input[type="checkbox"]:checked::after {
   align-items: center;
   padding: 10px 10px;
   border-radius: 8px;
-
-  background-color: rgba(53, 53, 60, 0.55);
-  
-background-image: var(--grain-bg);
-
+  background-color: rgba(53, 53, 60, 0.55); 
+  background-image: var(--grain-bg);
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -1049,6 +1038,29 @@ button {
   border-radius: 8px;
 }
     
+.custom-select .selected {
+  position: relative;
+  padding-right: 28px;
+}
+
+.custom-select .selected::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.8;
+  background: no-repeat center / contain
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path d="M7 9l5-5 5 5" fill="none" stroke="%2384aafb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 15l5 5 5-5" fill="none" stroke="%2384aafb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+}
+
+.custom-select.open .selected::after {
+  opacity: 0;
+}
+    
     .custom-select.open:not(.upward) .selected {
   background-color: #282626;
   border-bottom-left-radius: 0;
@@ -1076,7 +1088,6 @@ button {
   flex-direction: column;
   z-index: 10;
   overflow: hidden;
-
 }
 
 .custom-select.upward .options-container {
@@ -1131,9 +1142,7 @@ button:hover {
   transition: border 0.3s ease, background-color 0.3s ease;
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-
   background-image: var(--grain-bg);
-
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -1188,9 +1197,7 @@ button:hover {
   flex-direction: column;
   min-width: 400px;
   max-width: 500px;
-
   background-image: var(--grain-bg);
-
   background-size: 20px 20px;
   background-blend-mode: overlay;
 }
@@ -1472,7 +1479,6 @@ audio {
   backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
     background-image: var(--grain-bg);
-
     background-size: 160px 160px;
     background-blend-mode: overlay;
   z-index: 2000;
@@ -1504,6 +1510,11 @@ audio {
   margin-right: 10px;
 }
 
+    #preset-name-input {
+  width: 200px;
+  flex: 0 0 auto;
+}
+    
 #preset-modal .modal-content,
 #edit-name-modal .modal-content {
   position: absolute;
@@ -1513,6 +1524,66 @@ audio {
   margin: 0;
 }
    
+    .preset-actions-row {
+  display: flex;
+  align-items: center;
+}
+
+.preset-separator {
+  border: none;
+  border-top: 1px solid #555;
+  margin: 20px 0;
+}
+
+.preset-restore-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+#preset-restore {
+  height: 40px;
+  padding: 10px 20px;
+  border: 1px solid rgba(132,170,251,0.5);
+  border-radius: 8px;
+  background: transparent;
+  color: #f3f3f3;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, opacity 0.3s ease !important;
+}
+
+#preset-restore:hover {
+  border-color: rgba(132,170,251,1);
+}
+
+#preset-modal .preset-separator,
+#preset-modal #preset-restore {
+  display: none;
+}
+ 
+    #preset-restore-msg {
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  color: #7dc77d;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.preset-restore-row.show-msg #preset-restore-msg {
+  opacity: 1;
+}
+
+.preset-restore-row.fade-out > *{
+  opacity:0;
+  transition:opacity .35s ease;
+}
+
+#preset-modal .preset-separator.fade-out{
+  opacity:0;
+  transition:opacity .35s ease;
+}
+    
 .tabcontent {
   display: none;
 }
@@ -1572,7 +1643,7 @@ audio {
   font-size: 11px;
   font-weight: bold;
   transition: color 0.3s ease;
-  padding-right: 10px;
+  padding-right: 2px;
 }
 .blacklist-cross:hover {
   color: #e74c3c;
@@ -2076,7 +2147,7 @@ textarea:focus {
 #toggle-edit-presets.active {
   border: 1px solid rgba(132, 170, 251, 1);
 }
-    
+   
 .presets-wrapper .preset-item .drag-handle {
   display: none;
 }
@@ -2131,12 +2202,11 @@ textarea:focus {
   border-radius: 0 8px 0 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background 0.3s, box-shadow 0.3s;
+  transition: background 0.3s;
 }
 
   .presets-wrapper.editing .preset-item .delete-handle:hover {
   background: #e74c3c;
-  box-shadow: 0 0 5px #e74c3c;
 }
     
 .presets-wrapper .preset-item .edit-name-handle {
@@ -2156,12 +2226,11 @@ textarea:focus {
   border-radius: 8px 0 8px 0;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.3s, box-shadow 0.3s;
+  transition: background 0.3s;
 }
 
     .presets-wrapper.editing .preset-item .edit-name-handle:hover {
   background: #84aafb;
-  box-shadow: 0 0 5px #84aafb;
 }
 
 .modal-content input:not([type="checkbox"]) {
@@ -2237,7 +2306,6 @@ textarea:focus {
   backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
     background-image: var(--grain-bg);
-
     background-size: 160px 160px;
     background-blend-mode: overlay;
   z-index: 1000;
@@ -2264,9 +2332,7 @@ textarea:focus {
   transition: border 0.3s ease;
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-
   background-image: var(--grain-bg);
-
   background-size: 160px 160px;
   background-blend-mode: overlay;
 }
@@ -2277,6 +2343,9 @@ textarea:focus {
 
     #toggle-preview-button:has(.fa-volume-up) {
   background: rgba(132, 170, 251, 0.2);
+      border: 1px solid rgba(132, 170, 251, 1);
+      background-image: var(--grain-bg);
+  background-blend-mode: overlay;
 }
     
 #album-count-badge {
@@ -2301,9 +2370,7 @@ textarea:focus {
   cursor: default;
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-
   background-image: var(--grain-bg);
-
   background-size: 160px 160px;
   background-blend-mode: overlay;
 }
@@ -2497,8 +2564,17 @@ textarea:focus {
     <div class="modal-content">
       <span class="close" id="preset-close">&times;</span>
       <h3 style="color: #f3f3f3; margin-top: 0; margin-bottom: 20px;">Будуть збережені поточні вибрані фільтри та сортування</h3>
-      <input id="preset-name-input" placeholder="Назва фільтра" style="margin-right:10px;"><button id="preset-save" style="height:40px;">Зберегти</button>
-      <span id="preset-save-message"></span>
+      <div class="preset-actions-row">
+  <input id="preset-name-input" placeholder="Назва фільтра" style="margin-right:10px;">
+  <button id="preset-save" style="height:40px;">Зберегти</button>
+  <span id="preset-save-message"></span>
+</div>
+
+<hr class="preset-separator">
+
+<div class="preset-restore-row">
+  <button id="preset-restore">Відновити стандартні фільтри</button>
+</div>
     </div>
   </div>
 
@@ -2797,11 +2873,10 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 9999;
+  z-index: 1999;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: opacity 0.3s, border-color 0.3s ease;
   user-select: none;
-
   background-color: rgba(53, 53, 60, 0.55);
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
@@ -2975,10 +3050,36 @@ let activePresetButton = null;
     let searchQuery = '';
     
     const previewPlayer = new Audio();
+    
+    function markUnavailableCircle(circle) {
+  if (!circle) return;
+
+  circle.dataset.unavail = '1';
+
+  const icon = circle.querySelector('i.fas');
+  if (icon) {
+    icon.className = 'fas fa-music';
+    icon.style.color = '#c0392b94';
+  }
+
+  if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+  if (typeof removeTooltip === 'function')    removeTooltip(circle);
+
+  circle.removeAttribute('title');
+  if (circle.dataset && 'tooltip' in circle.dataset) delete circle.dataset.tooltip;
+
+  if (typeof attachTooltip === 'function') {
+    attachTooltip(circle, 'Уривок треку поки що недоступний');
+  }
+}
+    
+    let playToken = 0;
+    
 previewPlayer.preload = 'none';
 previewPlayer.crossOrigin = 'anonymous';
 let previewActivated = false;
-    
+    let previewProbe = null;
+
     const scrollTopButton = document.getElementById('scrollTopButton');
 const togglePreviewBtn = document.createElement('button');
 togglePreviewBtn.id = 'toggle-preview-button';
@@ -3103,6 +3204,65 @@ const artistsSheetId = '1_PavIrMhHpUHXG7uDrT83yznb2nrJfSd-9G8Hnm9ywM';
 const artistsGid     = '0';
 const allowedArtistIds = new Set();
 
+function showRestoredMessage() {
+  const btn = document.getElementById('preset-restore');
+  if (!btn) return;
+
+  const FADE_MS = 300;
+  const HOLD_MS = 2000;
+
+  const parent = btn.parentNode;
+
+  let msg = document.getElementById('preset-restore-msg');
+  if (!msg) {
+    msg = document.createElement('span');
+    msg.id = 'preset-restore-msg';
+    msg.textContent = 'Стандартні пресети відновлено';
+    msg.style.cssText = [
+      'display:inline-block',
+      'opacity:0',
+      'color:#7dc77d',
+      `transition:opacity ${FADE_MS}ms ease`,
+      'white-space:nowrap'
+    ].join(';');
+    parent.insertBefore(msg, btn);
+  }
+
+  const cs = getComputedStyle(btn);
+  msg.style.minWidth = cs.width;
+  msg.style.lineHeight = cs.height;
+
+  btn.style.transition = `opacity ${FADE_MS}ms ease`;
+  void btn.offsetWidth;
+  btn.style.opacity = '0';
+
+  setTimeout(() => {
+    btn.style.display = 'none';
+    msg.style.opacity = '1';
+  }, FADE_MS);
+
+  setTimeout(() => {
+    msg.style.opacity = '0';
+  }, FADE_MS + HOLD_MS);
+
+  setTimeout(() => {
+    msg.remove();
+    btn.style.display = '';
+    btn.style.opacity = '0';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { btn.style.opacity = '1'; });
+    });
+  }, FADE_MS + HOLD_MS + FADE_MS);
+}
+
+function restoreDefaultsAndNotify(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (typeof restoreDefaultPresets === 'function') restoreDefaultPresets();
+  if (typeof loadPresetsFromStorage === 'function') loadPresetsFromStorage();
+  if (typeof updateRestorePresetUI === 'function') updateRestorePresetUI();
+  showRestoredMessage();
+}
+    
 function loadAllowedArtists() {
   return new Promise((resolve, reject) => {
     const q = encodeURIComponent('select F,K');
@@ -3162,6 +3322,197 @@ function releaseIcon(t){
 
 const PRESETS_KEY = 'albumPresets';
 
+const DEFAULT_PRESET_NAMES = [
+  'Актуальне',
+  'Популярні альбоми',
+  'Великі релізи',
+  'Хорошого потроху'
+];
+
+function isAnyDefaultMissing() {
+  const names = new Set(getStoredPresets().map(p => p.name));
+  for (const n of DEFAULT_PRESET_NAMES) if (!names.has(n)) return true;
+  return false;
+}
+
+function hasUserPresets() {
+  const std = new Set(DEFAULT_PRESET_NAMES);
+  return getStoredPresets().some(p => !std.has(p.name));
+}
+
+function updateRestorePresetUI() {
+  const modal = document.getElementById('preset-modal');
+  const btn = modal && modal.querySelector('#preset-restore');
+  const sep = modal && modal.querySelector('.preset-separator');
+  if (!btn || !sep) return;
+
+  if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+  if (typeof removeTooltip === 'function') removeTooltip(btn);
+
+  const STD = new Set(['Актуальне','Популярні альбоми','Великі релізи','Хорошого потроху']);
+  const list = getStoredPresets();
+  const names = new Set(list.map(p => p.name));
+
+  const missingDefaults = [...STD].some(n => !names.has(n));
+  const hasUser = list.some(p => !STD.has(p.name));
+
+  btn.style.display = missingDefaults ? 'inline-block' : 'none';
+  sep.style.display = missingDefaults ? 'block' : 'none';
+
+  btn.dataset.missingDefaults = missingDefaults ? '1' : '0';
+  btn.dataset.hasUser = hasUser ? '1' : '0';
+}
+
+const DEFAULT_PRESETS = [
+  {
+    name: 'Актуальне',
+    filters: {
+      selectedGenres: [],
+      excludedGenres: ['phonk', 'ai', 'producing work for international'],
+      selectedLanguages: [],
+      excludedLanguages: ['rus'],
+      selectedReleaseTypes: [],
+      sortOrder: 'popularity-growth',
+      hideListened: false,
+      nuamRecommended: false,
+
+      period: '14',
+      periodStart: '',
+      periodEnd: '',
+
+      duration: '',
+      durationStart: 0,
+      durationEnd: 999,
+      trackCount: '',
+      trackStart: 0,
+      trackEnd: 999,
+      labelFilter: '',
+
+      listenCount: '',
+      listenStart: 0,
+      listenEnd: 999999999,
+
+      genreMode: 'any',
+      genreOnlySelected: false
+    }
+  },
+  {
+    name: 'Популярні альбоми',
+    filters: {
+      selectedGenres: [],
+      excludedGenres: ['phonk', 'ai', 'producing work for international'],
+      selectedLanguages: [],
+      excludedLanguages: ['rus'],
+
+      selectedReleaseTypes: ['album'],
+      sortOrder: 'listens-desc',
+      hideListened: false,
+      nuamRecommended: false,
+
+      period: '90',
+      periodStart: '',
+      periodEnd: '',
+
+      duration: '',
+      durationStart: 0,
+      durationEnd: 999,
+      trackCount: '',
+      trackStart: 0,
+      trackEnd: 999,
+      labelFilter: '',
+
+      listenCount: '',
+      listenStart: 0,
+      listenEnd: 999999999,
+
+      genreMode: 'any',
+      genreOnlySelected: false
+    }
+  },
+  {
+    name: 'Великі релізи',
+    filters: {
+      selectedGenres: ['pop/indie', 'rock', 'hip-hop', 'metal', 'post-punk', 'folk'],
+      excludedGenres: ['phonk', 'ai', 'producing work for international'],
+      selectedLanguages: [],
+      excludedLanguages: ['rus'],
+
+      selectedReleaseTypes: ['album'],
+      sortOrder: 'popularity-growth',
+      hideListened: false,
+      nuamRecommended: false,
+
+      period: '90',
+      periodStart: '',
+      periodEnd: '',
+
+      duration: 'range',
+      durationStart: 40,
+      durationEnd: 999,
+
+      trackCount: '',
+      trackStart: 0,
+      trackEnd: 999,
+      labelFilter: '',
+
+      listenCount: '',
+      listenStart: 0,
+      listenEnd: 999999999,
+
+      genreMode: 'any',
+      genreOnlySelected: false
+    }
+  },
+  {
+    name: 'Хорошого потроху',
+    filters: {
+      selectedGenres: [],
+      excludedGenres: ['phonk', 'ai', 'producing work for international'],
+      selectedLanguages: [],
+      excludedLanguages: ['rus'],
+      selectedReleaseTypes: [],
+      sortOrder: 'random',
+      hideListened: false,
+      nuamRecommended: false,
+
+      period: '182',
+      periodStart: '',
+      periodEnd: '',
+
+      duration: 'range',
+      durationStart: 10,
+      durationEnd: 20,
+
+      trackCount: '',
+      trackStart: 0,
+      trackEnd: 999,
+      labelFilter: '',
+
+      listenCount: 'range',
+      listenStart: 1001,
+      listenEnd: 999999999,
+
+      genreMode: 'any',
+      genreOnlySelected: false
+    }
+  }
+];
+
+function ensureDefaultPresets() {
+  const current = getStoredPresets();
+  const byName  = new Map(current.map(p => [p.name, p]));
+  let changed = false;
+
+  DEFAULT_PRESETS.forEach(def => {
+    if (!byName.has(def.name)) {
+      current.push(def);
+      changed = true;
+    }
+  });
+
+  if (changed) savePresetsToStorage(current);
+}
+    
 function getStoredPresets() {
   try {
     const raw = localStorage.getItem(PRESETS_KEY);
@@ -3174,7 +3525,27 @@ function savePresetsToStorage(arr) {
   localStorage.setItem(PRESETS_KEY, JSON.stringify(arr));
 }
 
+function restoreDefaultPresets() {
+  if (typeof DEFAULT_PRESETS === 'undefined') return;
+
+  const current = getStoredPresets();
+  const names = new Set(current.map(p => p.name));
+  let changed = false;
+
+  DEFAULT_PRESETS.forEach(def => {
+    if (!names.has(def.name)) {
+      current.push(def);
+      changed = true;
+    }
+  });
+
+  if (changed) savePresetsToStorage(current);
+  loadPresetsFromStorage();
+  updateRestorePresetUI();
+}
+    
 function loadPresetsFromStorage() {
+
   const wrapper = presetsWrapper;
   if (!wrapper) return;
   wrapper.innerHTML = '';
@@ -3201,6 +3572,7 @@ function loadPresetsFromStorage() {
       }
     });
   }
+  updateRestorePresetUI();
 }
 
 function clearActivePreset() {
@@ -3653,12 +4025,81 @@ attachTooltip(addPresetBtn, 'Створити фільтр', '160px');
       const saveBtn   = document.getElementById('preset-save');
       const inputName = document.getElementById('preset-name-input');
 
+const restoreBtn = document.getElementById('preset-restore');
+if (restoreBtn && !restoreBtn.dataset.bound) {
+  restoreBtn.addEventListener('click', restoreDefaultsAndNotify);
+
+  restoreBtn.addEventListener('mouseenter', (e) => {
+    if (restoreBtn.style.display === 'none') return;
+    const hasUser = (function () {
+      const STD = new Set(['Актуальне','Популярні альбоми','Великі релізи','Хорошого потроху']);
+      return getStoredPresets().some(p => !STD.has(p.name));
+    })();
+    if (!hasUser) return;
+    if (typeof removeTooltip === 'function') removeTooltip(restoreBtn);
+    if (typeof attachTooltip === 'function') attachTooltip(restoreBtn, 'Ваші фільтри будуть збережені');
+    if (typeof moveSimpleTooltip === 'function') moveSimpleTooltip(e.clientX, e.clientY);
+  });
+
+  restoreBtn.addEventListener('mousemove', (e) => {
+    if (restoreBtn.style.display === 'none') return;
+    const hasUser = (function () {
+      const STD = new Set(['Актуальне','Популярні альбоми','Великі релізи','Хорошого потроху']);
+      return getStoredPresets().some(p => !STD.has(p.name));
+    })();
+    if (!hasUser) return;
+    if (typeof moveSimpleTooltip === 'function') moveSimpleTooltip(e.clientX, e.clientY);
+  });
+
+  restoreBtn.addEventListener('mouseleave', () => {
+    if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+    if (typeof removeTooltip === 'function') removeTooltip(restoreBtn);
+  });
+
+  restoreBtn.dataset.bound = '1';
+}
+
       addBtn.addEventListener('click', () => {
   inputName.value = '';
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
   inputName.focus();
+
+  updateRestorePresetUI();
+
+  const oldBtn = document.getElementById('preset-restore');
+  if (oldBtn) {
+    const newBtn = oldBtn.cloneNode(true);
+    oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+
+    newBtn.addEventListener('click', restoreDefaultsAndNotify);
+
+    newBtn.addEventListener('mouseenter', (e) => {
+      if (newBtn.style.display === 'none') return;
+      if (newBtn.dataset.missingDefaults !== '1') return;
+      if (newBtn.dataset.hasUser !== '1') return;
+      if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+      if (typeof showSimpleTooltip === 'function') {
+        showSimpleTooltip(e.clientX, e.clientY, 'Ваші фільтри будуть збережені');
+      } else if (typeof attachTooltip === 'function') {
+        attachTooltip(newBtn, 'Ваші фільтри будуть збережені');
+      }
+    });
+
+    newBtn.addEventListener('mousemove', (e) => {
+      if (newBtn.style.display === 'none') return;
+      if (newBtn.dataset.missingDefaults !== '1') return;
+      if (newBtn.dataset.hasUser !== '1') return;
+      if (typeof moveSimpleTooltip === 'function') moveSimpleTooltip(e.clientX, e.clientY);
+    });
+
+    newBtn.addEventListener('mouseleave', () => {
+      if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+      if (typeof removeTooltip === 'function') removeTooltip(newBtn);
+    });
+  }
 });
+
       closeX.addEventListener('click', () => {
   modal.style.display = 'none';
   document.body.style.overflow = 'auto';
@@ -3710,6 +4151,7 @@ saveBtn.addEventListener('click', () => {
   else          arr.push(presetObj);
   savePresetsToStorage(arr);
   loadPresetsFromStorage();
+  updateRestorePresetUI();
   modal.style.display = 'none';
 });
 
@@ -4597,7 +5039,6 @@ if (only)          { onlyBtn.classList.add('active'); onlyBtn.setAttribute('aria
 
       const genreMode = document.getElementById('mode-all').classList.contains('active') ? 'all' : 'any';
 const genreOnlySelected = document.getElementById('mode-only').classList.contains('active');
-
       
   const rawDuration    = document.getElementById('duration-filter').querySelector('.selected').dataset.value || '';
   const rawTrackCount  = document.getElementById('track-count-filter').querySelector('.selected').dataset.value || '';
@@ -4752,7 +5193,6 @@ modeOnlyBtn.addEventListener('click', () => {
   saveFiltersToCache();
 });
 
-      
       document.getElementById('language-checkboxes').addEventListener('change', (e) => {
   if (e.target.classList.contains('language-checkbox')) {
     clearActivePreset();
@@ -5836,6 +6276,12 @@ playAll.addEventListener('click', async () => {
     }
     previewPlayer.pause();
     previewPlayer.currentTime = 0;
+        previewActivated = false;
+const toggleBtn = document.getElementById('toggle-preview-button');
+if (toggleBtn) {
+  toggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+}
+
     return;
   }
 
@@ -5853,15 +6299,9 @@ playAll.addEventListener('click', async () => {
     await loadAlbumTracksWithRetry(album);
   }
 
-  function playNext() {
-
-  const container = document.querySelector(
-    `.album[data-album-id="${album.albumID}"] .tracks`
-  );
-  const btn = document.querySelector(
-    `.play-all-toggle[data-album-id="${album.albumID}"]`
-  );
-
+function playNext() {
+  const container = document.querySelector(`.album[data-album-id="${album.albumID}"] .tracks`);
+  const btn = document.querySelector(`.play-all-toggle[data-album-id="${album.albumID}"]`);
   if (autoPlayingAlbum !== album.albumID) return;
 
   if (autoPlayIndex >= album.tracksIDs.length) {
@@ -5874,43 +6314,69 @@ playAll.addEventListener('click', async () => {
     return;
   }
 
-  container
-    .querySelectorAll('.track-circle .progress-fill')
-    .forEach(el => el.style.width = '0%');
+  container.querySelectorAll('.track-circle .progress-fill').forEach(el => (el.style.width = '0%'));
 
-  const tid  = album.tracksIDs[autoPlayIndex];
-  const hash = album.tracksMP3[autoPlayIndex];
-  const nextCirc = container.querySelector(
-    `.track-circle[data-track-id="${tid}"]`
-  );
+  const i    = autoPlayIndex;
+  const tid  = album.tracksIDs[i];
+  const hash = album.tracksMP3[i];
+  const url  = `https://p.scdn.co/mp3-preview/${hash}`;
+  const circ = container.querySelector(`.track-circle[data-track-id="${tid}"]`);
 
-  if (currentHighlightedCircle) {
-    currentHighlightedCircle.classList.remove('highlight');
-  }
-  if (nextCirc) {
-    nextCirc.classList.add('highlight');
-    currentHighlightedCircle = nextCirc;
-  }
+  if (currentHighlightedCircle) currentHighlightedCircle.classList.remove('highlight');
+  if (circ) { circ.classList.add('highlight'); currentHighlightedCircle = circ; }
 
-  previewPlayer.src = `https://p.scdn.co/mp3-preview/${hash}`;
+  const token = ++playToken;
+
+  previewPlayer.onended = null;
+  previewPlayer.onerror = null;
   previewPlayer.ontimeupdate = null;
 
-  const fillEl = nextCirc && nextCirc.querySelector('.progress-fill');
+  const fillEl = circ && circ.querySelector('.progress-fill');
   if (fillEl) {
     previewPlayer.ontimeupdate = () => {
       const dur = previewPlayer.duration || 1;
-      fillEl.style.width =
-        (previewPlayer.currentTime / dur * 100) + '%';
+      fillEl.style.width = (previewPlayer.currentTime / dur) * 100 + '%';
     };
   }
 
-  previewPlayer.play().catch(() => {});
-  previewPlayer.onended = () => {
+  const probe = new Audio();
+  probe.preload = 'auto';
+  probe.src = url;
+
+  probe.onerror = () => {
+    if (token !== playToken || autoPlayingAlbum !== album.albumID) return;
     if (fillEl) fillEl.style.width = '0%';
-    previewPlayer.ontimeupdate = null;
-    autoPlayIndex++;
+    markUnavailableCircle(circ);
+    autoPlayIndex = i + 1;
     playNext();
   };
+
+  const startPlayback = () => {
+    if (token !== playToken || autoPlayingAlbum !== album.albumID) return;
+
+    previewPlayer.src = url;
+
+    previewPlayer.onended = () => {
+      if (token !== playToken) return;
+      if (fillEl) fillEl.style.width = '0%';
+      previewPlayer.ontimeupdate = null;
+      autoPlayIndex = i + 1;
+      playNext();
+    };
+
+    previewPlayer.onerror = () => {
+      if (token !== playToken) return;
+      if (fillEl) fillEl.style.width = '0%';
+      previewPlayer.ontimeupdate = null;
+      autoPlayIndex = i + 1;
+      playNext();
+    };
+
+    previewPlayer.play().catch(() => {});
+  };
+
+  probe.oncanplaythrough = startPlayback;
+  probe.oncanplay = startPlayback;
 }
 
 playNext();
@@ -5935,6 +6401,11 @@ album.tracksIDs.forEach((trackID, idx) => {
   circle.dataset.albumId = album.albumID;
 
   circle.addEventListener('mouseenter', async e => {
+        if (circle.dataset.unavail === '1') {
+      if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+      return;
+    }
+
   if (autoPlayingAlbum !== null) {
     const info = album.tracksInfo && album.tracksInfo[trackID];
     if (info) {
@@ -5967,9 +6438,9 @@ album.tracksIDs.forEach((trackID, idx) => {
 });
 
   circle.addEventListener('mousemove', e => {
-    if (!previewActivated) return;
-    moveSimpleTooltip(e.clientX, e.clientY);
-  });
+  if (circle.dataset.unavail === '1') return;
+  moveSimpleTooltip(e.clientX, e.clientY);
+});
 
   circle.addEventListener('mouseleave', () => {
     hideSimpleTooltip();
@@ -6243,6 +6714,11 @@ function showAlbum(album) {
     function attachTrackBehavior(circle, trackPreviewUrl) {
   const tipText = 'Натисніть для відтворення уривка. Далі наводьте курсор на треки.';
   circle.addEventListener('mouseenter', e => {
+        if (circle.dataset.unavail === '1') {
+      if (typeof hideSimpleTooltip === 'function') hideSimpleTooltip();
+      return;
+    }
+
     if (autoPlayingAlbum === circle.dataset.albumId) {
       const albumObj = albumsData.find(a => a.albumID === circle.dataset.albumId);
       const info     = albumObj && albumObj.tracksInfo && albumObj.tracksInfo[circle.dataset.trackId];
@@ -6255,18 +6731,42 @@ function showAlbum(album) {
     if (!previewActivated) {
       showSimpleTooltip(e.clientX, e.clientY, tipText);
     } else {
-      previewPlayer.src = trackPreviewUrl;
-      previewPlayer.play().catch(()=>{});
+      const token = Symbol();
+      circle._hoverToken = token;
+
+      const probe = new Audio();
+      probe.preload = 'auto';
+      probe.src = trackPreviewUrl;
+
+      const start = () => {
+        if (circle._hoverToken !== token) return;
+        previewPlayer.src = trackPreviewUrl;
+        previewPlayer.onerror = () => {
+          if (circle._hoverToken !== token) return;
+          markUnavailableCircle(circle);
+        };
+        previewPlayer.play().catch(()=>{});
+      };
+
+      probe.onerror = () => {
+        if (circle._hoverToken !== token) return;
+        markUnavailableCircle(circle);
+      };
+
+      probe.oncanplay = start;
+      probe.oncanplaythrough = start;
     }
+
   });
 
   circle.addEventListener('mousemove', e => {
-    if (!previewActivated) {
-      moveSimpleTooltip(e.clientX, e.clientY);
-    }
-  });
+  if (!previewActivated || circle.dataset.unavail === '1') return;
+  moveSimpleTooltip(e.clientX, e.clientY);
+});
 
   circle.addEventListener('mouseleave', () => {
+        circle._hoverToken = null;
+
     hideSimpleTooltip();
     if (previewActivated) {
       previewPlayer.pause();
@@ -6893,6 +7393,7 @@ function attachPresetControls() {
 
 toggleEditBtn.addEventListener('click', () => {
   const isEditing = presetsWrapper.classList.toggle('editing');
+  
   toggleEditBtn.classList.toggle('active', isEditing);
   if (isEditing) {
     attachPresetControls();
@@ -6959,6 +7460,7 @@ function showDeleteConfirm(btn) {
     const arr = getStoredPresets().filter(p => p.name !== cfg.name);
     savePresetsToStorage(arr);
     loadPresetsFromStorage();
+    updateRestorePresetUI();
     close();
   });
 
@@ -6972,7 +7474,6 @@ function showDeleteConfirm(btn) {
   const onKey = (e) => { if (e.key === 'Escape') close(); };
   document.addEventListener('keydown', onKey);
 }
-
 
 function showRenameModal(btn) {
   const modal = document.getElementById('edit-name-modal');
