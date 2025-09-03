@@ -728,7 +728,7 @@ input[type="checkbox"]:checked::after {
   transition: border 0.3s ease;
 }
     #preset-name-input, #edit-name-input {
-      width: 180px;
+      width: 200px;
     }
 #search-input:focus, #preset-name-input:focus {
   outline: none;
@@ -1159,6 +1159,9 @@ button:hover {
     font-size: 14px;
     transition: border 0.3s ease;
 }
+    .modal-content #preset-save, .modal-content #edit-name-save {
+    width: 100px;
+    }
 .modal-content #preset-save:hover, .modal-content #edit-name-save:hover, .keep-btn:hover, .delete-btn:hover {
   border: 1px solid rgba(132, 170, 251, 1);
 }
@@ -1496,16 +1499,20 @@ audio {
 }
 
 #preset-modal .modal-content {
-  width: 640px;
+  width: 520px;
   font-size: 14px;
 }
 #preset-modal .modal-content > #preset-name-input,
-#preset-modal .modal-content > #preset-save, #edit-name-modal .modal-content > #edit-name-input,
-#edit-name-modal .modal-content > #edit-name-save {
+#preset-modal .modal-content > #preset-save,
+#preset-modal .modal-content > #preset-desc-input,
+#edit-name-modal .modal-content > #edit-name-input,
+#edit-name-modal .modal-content > #edit-name-save,
+#edit-name-modal .modal-content > #edit-desc-input {
   display: inline-block;
   vertical-align: middle;
   margin: 0;
 }
+
 #preset-modal .modal-content > #preset-name-input {
   margin-right: 10px;
 }
@@ -1524,6 +1531,13 @@ audio {
   margin: 0;
 }
    
+    #preset-name-input,
+    #preset-desc-input,
+    #edit-name-input,
+    #edit-desc-input {
+  box-sizing: border-box;
+}
+    
     .preset-actions-row {
   display: flex;
   align-items: center;
@@ -2296,7 +2310,7 @@ textarea:focus {
 }
 
 #edit-name-modal .modal-content {
-  width: 400px;
+  width: 520px;
 }
 
     .preview-overlay{
@@ -2570,11 +2584,14 @@ textarea:focus {
   <span id="preset-save-message"></span>
 </div>
 
+<input id="preset-desc-input" placeholder="Опис фільтра (необов'язково)" maxlength="250" style="display:block; width:310px; margin-top:10px;">
+
 <hr class="preset-separator">
 
 <div class="preset-restore-row">
   <button id="preset-restore">Відновити стандартні фільтри</button>
 </div>
+
     </div>
   </div>
 
@@ -2584,6 +2601,7 @@ textarea:focus {
       <h3>Редагування назви фільтра</h3>
       <input id="edit-name-input" placeholder="Нова назва фільтра" style="margin-right:10px;"><button id="edit-name-save" style="height:40px;">Зберегти</button>
       <span id="edit-name-message"></span>
+      <input id="edit-desc-input" placeholder="Опис фільтра (необов'язково)" maxlength="250" style="width: 310px; display:block; margin:10px 0 0 0;">
     </div>
   </div>
   
@@ -3366,6 +3384,7 @@ function updateRestorePresetUI() {
 const DEFAULT_PRESETS = [
   {
     name: 'Актуальне',
+        desc: 'Найсвіжіші та найгарячіші альбоми з потенційним зростанням слухачів',
     filters: {
       selectedGenres: [],
       excludedGenres: ['phonk', 'ai', 'producing work for international'],
@@ -3398,6 +3417,8 @@ const DEFAULT_PRESETS = [
   },
   {
     name: 'Популярні альбоми',
+        desc: 'Найпопулярніші повноформатні альбоми за останній час',
+
     filters: {
       selectedGenres: [],
       excludedGenres: ['phonk', 'ai', 'producing work for international'],
@@ -3431,6 +3452,8 @@ const DEFAULT_PRESETS = [
   },
   {
     name: 'Великі релізи',
+        desc: 'Великі альбоми з активним зростанням слухачів',
+
     filters: {
       selectedGenres: ['pop/indie', 'rock', 'hip-hop', 'metal', 'post-punk', 'folk'],
       excludedGenres: ['phonk', 'ai', 'producing work for international'],
@@ -3465,6 +3488,8 @@ const DEFAULT_PRESETS = [
   },
   {
     name: 'Хорошого потроху',
+        desc: 'Не хочете слухати музику альбомами? Почніть хоча б з коротких.',
+
     filters: {
       selectedGenres: [],
       excludedGenres: ['phonk', 'ai', 'producing work for international'],
@@ -3504,11 +3529,15 @@ function ensureDefaultPresets() {
   let changed = false;
 
   DEFAULT_PRESETS.forEach(def => {
-    if (!byName.has(def.name)) {
-      current.push(def);
-      changed = true;
-    }
-  });
+  const cur = byName.get(def.name);
+  if (!cur) {
+    current.push(def);
+    changed = true;
+  } else if (def.desc && !cur.desc) {
+    cur.desc = def.desc;
+    changed = true;
+  }
+});
 
   if (changed) savePresetsToStorage(current);
 }
@@ -3555,6 +3584,12 @@ function loadPresetsFromStorage() {
     btn.textContent = preset.name;
     btn.dataset.presetJson = JSON.stringify(preset);
     btn.addEventListener('click', () => applyPreset(preset));
+    if (preset.desc) {
+  if (typeof attachTooltip === 'function') attachTooltip(btn, preset.desc);
+  btn.removeAttribute('title');
+  btn.setAttribute('aria-label', preset.desc);
+}
+
     wrapper.appendChild(btn);
   });
 
@@ -4024,6 +4059,7 @@ attachTooltip(addPresetBtn, 'Створити фільтр', '160px');
       const closeX    = document.getElementById('preset-close');
       const saveBtn   = document.getElementById('preset-save');
       const inputName = document.getElementById('preset-name-input');
+      const inputDesc = document.getElementById('preset-desc-input');
 
 const restoreBtn = document.getElementById('preset-restore');
 if (restoreBtn && !restoreBtn.dataset.bound) {
@@ -4064,6 +4100,7 @@ if (restoreBtn && !restoreBtn.dataset.bound) {
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
   inputName.focus();
+          if (inputDesc) inputDesc.value = '';
 
   updateRestorePresetUI();
 
@@ -4143,12 +4180,14 @@ saveBtn.addEventListener('click', () => {
   saveMsg.className = '';
 
   saveFiltersToCache();
-  const arr = getStoredPresets();
-  const cf  = JSON.parse(localStorage.getItem('albumFilters') || '{}');
-  const presetObj = { name, filters: cf };
-  const idx = arr.findIndex(p => p.name === name);
-  if (idx >= 0) arr[idx] = presetObj;
-  else          arr.push(presetObj);
+const arr = getStoredPresets();
+const cf  = JSON.parse(localStorage.getItem('albumFilters') || '{}');
+const desc = (inputDesc?.value || '').trim().slice(0, 250);
+const presetObj = { name, filters: cf, ...(desc ? { desc } : {}) };
+const idx = arr.findIndex(p => p.name === name);
+if (idx >= 0) arr[idx] = presetObj;
+else          arr.push(presetObj);
+
   savePresetsToStorage(arr);
   loadPresetsFromStorage();
   updateRestorePresetUI();
@@ -5646,6 +5685,7 @@ if (onlyRecommended) {
 } else if (sortOrder === 'listens-asc') {
   filteredAlbums.sort((a, b) => a.listens - b.listens);
 } else if (sortOrder === 'popularity-growth') {
+  filteredAlbums = filteredAlbums.filter(al => (al.listens || 0) > 0 && (al.popularity || 0) > 0);
   filteredAlbums.sort((a, b) => {
     const pa = a.popularity ?? -Infinity;
     const pb = b.popularity ?? -Infinity;
@@ -5656,6 +5696,7 @@ if (onlyRecommended) {
     return String(a.nameAlbum).localeCompare(String(b.nameAlbum));
   });
 }
+
  else if (sortOrder === 'random') {
   for (let i = filteredAlbums.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -5853,7 +5894,14 @@ if (labelFilter) {
   if (sortOrder === 'listens-desc') {
     hiddenByLabel.sort((a,b) => b.listens - a.listens);
   } else if (sortOrder === 'popularity-growth') {
-  hiddenByLabel.sort((a,b) => {
+
+  for (let i = hiddenByLabel.length - 1; i >= 0; i--) {
+    const al = hiddenByLabel[i];
+    if (!((al.listens || 0) > 0 && (al.popularity || 0) > 0)) {
+      hiddenByLabel.splice(i, 1);
+    }
+  }
+  hiddenByLabel.sort((a, b) => {
     const pa = a.popularity ?? -Infinity;
     const pb = b.popularity ?? -Infinity;
     if (pb !== pa) return pb - pa;
@@ -7480,11 +7528,13 @@ function showRenameModal(btn) {
   const input = modal.querySelector('#edit-name-input');
   const msg   = modal.querySelector('#edit-name-message');
   const save  = modal.querySelector('#edit-name-save');
+  const descInput = modal.querySelector('#edit-desc-input');
 
   const cfg      = JSON.parse(btn.dataset.presetJson);
   const oldName  = cfg.name;
   input.value    = oldName;
   msg.textContent = '';
+  if (descInput) descInput.value = (cfg.desc || '');
 
   modal.style.display = 'block';
 document.body.style.overflow = 'hidden';
@@ -7502,6 +7552,9 @@ input.focus();
   const presets = getStoredPresets();
   const idx     = presets.findIndex(p => p.name === oldName);
   if (idx >= 0) presets[idx].name = newName;
+    const newDesc = (descInput?.value || '').trim().slice(0, 250);
+if (idx >= 0) presets[idx].desc = newDesc || undefined;
+
   savePresetsToStorage(presets);
   loadPresetsFromStorage();
 
