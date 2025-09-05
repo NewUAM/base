@@ -2909,18 +2909,35 @@ textarea:focus {
 
   <script>
     
-    function loadCsvWithRetry(url, options, retries = 3, delay = 2000) {
-  Papa.parse(url, {
-    ...options,
-    error(err) {
-      if (retries > 0) {
-        console.warn(`Помилка завантаження CSV, залишилося спроб: ${retries}`, err);
-        setTimeout(() => loadCsvWithRetry(url, options, retries - 1, delay), delay);
-      } else {
-        console.error('Не вдалося завантажити CSV після кількох спроб:', err);
-      }
+    function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+async function fetchCsvWithRetry(url, tries = 5, baseDelay = 700){
+  for(let i=0;i<tries;i++){
+    try{
+      const resp = await fetch(url, { cache: 'no-store', mode: 'cors' });
+      if(!resp.ok) throw new Error('HTTP '+resp.status);
+      const text = await resp.text();
+      if(!text || text.length < 50) throw new Error('CSV is empty');
+      return text;
+    }catch(e){
+      if(i === tries-1) throw e;
+      const jitter = Math.floor(Math.random()*250);
+      await sleep(baseDelay * (2**i) + jitter);
     }
-  });
+  }
+}
+
+function loadCsvWithRetry(url, options, tries = 5, baseDelay = 700){
+  (async ()=>{
+    try{
+      const csvText = await fetchCsvWithRetry(url, tries, baseDelay);
+      const res = Papa.parse(csvText, { ...options, download: false });
+      if (options && typeof options.complete === 'function') options.complete(res);
+    }catch(err){
+      if (options && typeof options.error === 'function') options.error(err);
+      else console.error('CSV load failed', err);
+    }
+  })();
 }
 
     async function getAccessToken() {
@@ -3065,6 +3082,33 @@ let activePresetButton = null;
     
     const newSheetUrl = "https://nuam-albums.hi-f50.workers.dev/nuam.csv";
 
+    let __mainCsvOnce = null;
+
+(function hardenPapaForMainCsv(){
+  const origParse = Papa.parse;
+
+  Papa.parse = function(input, opts){
+    try{
+      if (typeof input === 'string' && input === newSheetUrl && opts && opts.download === true){
+        if (!__mainCsvOnce){
+          __mainCsvOnce = (async ()=>{
+            const csvText = await fetchCsvWithRetry(newSheetUrl, 5, 700);
+            const res = Papa.parse(csvText, { ...opts, download: false });
+            if (opts.complete) opts.complete(res);
+          })().catch(err=>{
+            if (opts.error) opts.error(err);
+            __mainCsvOnce = null;
+          });
+        }else{
+          __mainCsvOnce.then(()=>{}).catch(()=>{});
+        }
+        return;
+      }
+    }catch(_){}
+    return origParse.apply(Papa, arguments);
+  };
+})();
+    
     let searchQuery = '';
     
     const previewPlayer = new Audio();
@@ -5894,7 +5938,7 @@ if (labelFilter) {
   if (sortOrder === 'listens-desc') {
     hiddenByLabel.sort((a,b) => b.listens - a.listens);
   } else if (sortOrder === 'popularity-growth') {
-
+  // убрать альбомы с 0 прослухов або 0 popularity
   for (let i = hiddenByLabel.length - 1; i >= 0; i--) {
     const al = hiddenByLabel[i];
     if (!((al.listens || 0) > 0 && (al.popularity || 0) > 0)) {
