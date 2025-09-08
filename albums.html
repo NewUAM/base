@@ -2909,18 +2909,37 @@ textarea:focus {
 
   <script>
     
-    function loadCsvWithRetry(url, options, retries = 3, delay = 2000) {
-  Papa.parse(url, {
-    ...options,
-    error(err) {
-      if (retries > 0) {
-        console.warn(`Помилка завантаження CSV, залишилося спроб: ${retries}`, err);
-        setTimeout(() => loadCsvWithRetry(url, options, retries - 1, delay), delay);
-      } else {
-        console.error('Не вдалося завантажити CSV після кількох спроб:', err);
+    function loadCsvWithRetry(url, options, retries = 3, delay = 1000, fallbackUrl = null) {
+  let attempts = 0;
+
+  function tryLoad(currentUrl) {
+    Papa.parse(currentUrl, {
+      ...options,
+      download: true,
+      error(err) {
+        attempts++;
+
+        if (attempts < retries) {
+          setTimeout(() => tryLoad(currentUrl), delay);
+          return;
+        }
+
+        if (fallbackUrl && currentUrl !== fallbackUrl) {
+          attempts = 0;
+          tryLoad(fallbackUrl);
+          return;
+        }
+
+        if (options && typeof options.error === 'function') {
+          options.error(err);
+        } else {
+          console.error('Не вдалося завантажити CSV після кількох спроб:', err);
+        }
       }
-    }
-  });
+    });
+  }
+
+  tryLoad(url);
 }
 
     async function getAccessToken() {
@@ -3064,6 +3083,7 @@ let activePresetButton = null;
 })();
     
     const newSheetUrl = "https://nuam-albums.hi-f50.workers.dev/nuam.csv";
+    const fallbackSheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRGgPDeRNQcSe5tV2h3zu-rtMr-i7ph-4hU6HKglhXKdaAB5UFXUrdWLZKb8hwGyWgDxL5LDfnmrqe/pub?gid=1559781011&single=true&output=csv";
 
     let searchQuery = '';
     
@@ -3661,15 +3681,17 @@ function applyPreset(preset) {
     lblL.style.textDecoration = 'line-through';
     lblL.style.color = 'gray';
   }
-  document.getElementById('hide-listened').checked = true;
+    document.getElementById('hide-listened').checked = true;
   hideListened = true;
-  applyFilters();
+  preserveScroll(() => smoothApplyFilters());
   saveFiltersToCache();
 };
+
 
 window.resetFiltersToDefault = function() {
   if (typeof clearActivePreset === 'function') clearActivePreset();
   localStorage.removeItem('albumFilters');
+  isPresetLoading = true;
 
   document.querySelectorAll('.genre-checkbox').forEach(function(cb){
     cb.checked = false;
@@ -3760,6 +3782,9 @@ window.resetFiltersToDefault = function() {
   if (hide) hide.checked = true;
 
   window.applyDefaultFilters();
+  isPresetLoading = false;
+applyDefaultFilters();
+
 };
     
 window.addEventListener('DOMContentLoaded', init);
@@ -3771,52 +3796,38 @@ async function init() {
     console.warn('Не вдалося завантажити список артистів — показуємо всі альбоми');
   }
 
-  loadCsvWithRetry(newSheetUrl, {
-  download: true,
-  header: true,
-  complete: function(results) {
+  loadCsvWithRetry(
+  newSheetUrl,
+  {
+    download: true,
+    header: true,
+    complete: function(results) {
       const rawData = results.data;
       processAlbumData(rawData);
-
       const loading = document.getElementById('loading-screen');
       if (loading) {
         loading.classList.add('hidden');
-        loading.addEventListener('transitionend', () => {
-          loading.remove();
-        }, { once: true });
+        loading.addEventListener('transitionend', () => loading.remove(), { once: true });
       }
-
       populateFilters();
       populateLabelOptions();
-    
-    if (typeof window.readGenreModes !== 'function') {
-
-  const anyBtn  = document.getElementById('mode-any');
-  const allBtn  = document.getElementById('mode-all');
-  const onlyBtn = document.getElementById('mode-only');
-  if (anyBtn && !anyBtn.classList.contains('active') && allBtn && !allBtn.classList.contains('active')) {
-    anyBtn.classList.add('active'); anyBtn.setAttribute('aria-pressed','true');
-  }
-}
+      if (typeof window.readGenreModes !== 'function') {
+        const anyBtn  = document.getElementById('mode-any');
+        const allBtn  = document.getElementById('mode-all');
+        const onlyBtn = document.getElementById('mode-only');
+        if (anyBtn && !anyBtn.classList.contains('active') && allBtn && !allBtn.classList.contains('active')) {
+          anyBtn.classList.add('active'); anyBtn.setAttribute('aria-pressed','true');
+        }
+      }
       initBasicCustomSelect(document.getElementById('sort-order'));
-       
       const pgOpt = document.querySelector('#sort-order .option[data-value="popularity-growth"]');
-if (pgOpt) {
-  attachTooltip(
-    pgOpt,
-    'Вгорі будуть показані альбоми, популярність яких зростає швидше за інші',
-    '180px'
-  );
-}
-      
-      const sortSel = document.getElementById('sort-order')
-                       .querySelector('.selected');
-if (!sortSel.dataset.value) sortSel.dataset.value = 'desc';
+      if (pgOpt) attachTooltip(pgOpt, 'Вгорі будуть показані альбоми, популярність яких зростає швидше за інші', '180px');
+      const sortSel = document.getElementById('sort-order').querySelector('.selected');
+      if (!sortSel.dataset.value) sortSel.dataset.value = 'desc';
       initBasicCustomSelect(document.getElementById('duration-filter'));
       initBasicCustomSelect(document.getElementById('track-count-filter'));
       initBasicCustomSelect(document.getElementById('release-period-filter'));
-      
-      ;(function initReleasePeriodSlider() {
+      (function initReleasePeriodSlider(){
   const start = document.getElementById('release-period-start');
   const end   = document.getElementById('release-period-end');
   const wrapper = document.getElementById('release-period-range');
@@ -4230,7 +4241,11 @@ if (albumFilters) {
     error: function(error) {
       console.error('Помилка під час завантаження CSV:', error);
     }
-  });
+  },
+  3,
+  1000,
+  fallbackSheetUrl
+);
 }
 
 function initBasicCustomSelect(select) {
@@ -5872,7 +5887,6 @@ const searchMatches = albumsData.filter(al => {
   return albumHit || artistHit;
 });
 
-
   const primary = filteredAlbums.filter(al => searchMatches.includes(al));
   const hiddenByFilters = searchMatches.filter(al => !primary.includes(al));
   if (hiddenByFilters.length) {
@@ -5894,7 +5908,7 @@ if (labelFilter) {
   if (sortOrder === 'listens-desc') {
     hiddenByLabel.sort((a,b) => b.listens - a.listens);
   } else if (sortOrder === 'popularity-growth') {
-  // убрать альбомы с 0 прослухов або 0 popularity
+
   for (let i = hiddenByLabel.length - 1; i >= 0; i--) {
     const al = hiddenByLabel[i];
     if (!((al.listens || 0) > 0 && (al.popularity || 0) > 0)) {
