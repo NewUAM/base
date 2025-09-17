@@ -1823,10 +1823,6 @@ textarea:focus {
 #favorites-albums-list a {
   text-decoration: none;
   transition: text-decoration 0.2s;
-  user-select: text !important;
-}
-#favorites-albums-list a * {
-  user-select: text !important;
 }
 
 #favorites-albums-list a:hover {
@@ -7083,6 +7079,16 @@ function attachGlobalEventListeners() {
   const searchInput = document.getElementById("search-input");
   const searchClose = document.getElementById("search-close");
 
+{
+  const TIP = 'Збережіть встановлені вами фільтри, щоб пізніше до них повернутися';
+  filtersButton.setAttribute('aria-label', TIP);
+  filtersButton.removeAttribute('data-tooltip');
+  filtersButton.removeAttribute('title');
+  if (typeof attachTooltip === 'function') {
+    attachTooltip(filtersButton, TIP, '230px');
+  }
+}
+  
   window.albumSearchMode =
     localStorage.getItem("albumSearchMode") || "artist-album";
 
@@ -9245,21 +9251,118 @@ function updateFavoritesModal() {
       a.textContent = `${al.artistNames.join(", ")} – ${al.nameAlbum}`;
       a.style.color = "#f3f3f3";
 
-      const removeIcon = document.createElement("span");
-      removeIcon.textContent = "✖";
-      removeIcon.classList.add("blacklist-cross");
-      removeIcon.style.cursor = "pointer";
-      removeIcon.style.marginLeft = "auto";
-      removeIcon.addEventListener("click", () => {
-        delete favoriteAlbums[al.albumID];
-        localStorage.setItem("favoriteAlbums", JSON.stringify(favoriteAlbums));
-        updateFavoritesModal();
-      });
+const removeIcon = document.createElement("span");
+removeIcon.textContent = "✖";
+removeIcon.classList.add("blacklist-cross");
+removeIcon.style.cursor = "pointer";
+removeIcon.addEventListener("click", () => {
+  delete favoriteAlbums[al.albumID];
+  localStorage.setItem("favoriteAlbums", JSON.stringify(favoriteAlbums));
+  updateFavoritesModal();
+});
 
-      li.appendChild(img);
-      li.appendChild(a);
-      li.appendChild(removeIcon);
-      list.appendChild(li);
+const iconsCol = document.createElement("div");
+iconsCol.style.display = "flex";
+iconsCol.style.flexDirection = "column";
+iconsCol.style.alignItems = "center";
+iconsCol.style.justifyContent = "center";
+iconsCol.style.gap = "6px";
+iconsCol.style.marginLeft = "auto";
+
+const mkBox = () => {
+  const box = document.createElement("div");
+  box.style.width = "20px";
+  box.style.height = "20px";
+  box.style.display = "inline-flex";
+  box.style.alignItems = "center";
+  box.style.justifyContent = "center";
+  box.style.position = "relative";
+  return box;
+};
+
+const removeBox = mkBox();
+removeBox.appendChild(removeIcon);
+
+const copyBox = mkBox();
+copyBox.style.cursor = "pointer";
+
+const icoCopy = document.createElement("i");
+icoCopy.className = "fa-regular fa-copy";
+icoCopy.style.fontSize = "16px";
+icoCopy.style.color = "#bababa";
+icoCopy.style.transition = "color .2s, opacity .2s";
+icoCopy.style.position = "absolute";
+icoCopy.style.left = "50%";
+icoCopy.style.top = "50%";
+icoCopy.style.transform = "translate(-50%,-50%)";
+
+const icoCheck = document.createElement("i");
+icoCheck.className = "fa-solid fa-check";
+icoCheck.style.fontSize = "16px";
+icoCheck.style.color = "#3cc16e";
+icoCheck.style.opacity = "0";
+icoCheck.style.transition = "opacity .2s";
+icoCheck.style.position = "absolute";
+icoCheck.style.left = "50%";
+icoCheck.style.top = "50%";
+icoCheck.style.transform = "translate(-50%,-50%)";
+
+copyBox.appendChild(icoCopy);
+copyBox.appendChild(icoCheck);
+
+copyBox.addEventListener("mouseenter", () => {
+  if (icoCheck.style.opacity === "0") icoCopy.style.color = "#f3f3f3";
+});
+copyBox.addEventListener("mouseleave", () => {
+  if (icoCheck.style.opacity === "0") icoCopy.style.color = "#bababa";
+});
+
+const copyTitle = async () => {
+  const txt = a.textContent || "";
+  let ok = false;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(txt);
+      ok = true;
+    }
+  } catch(e){}
+  if (!ok) {
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    ta.style.pointerEvents = "none";
+    ta.style.setProperty("user-select", "text", "important");
+    ta.style.setProperty("-webkit-user-select", "text", "important");
+    document.body.appendChild(ta);
+    ta.select();
+    try { ok = document.execCommand("copy"); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  icoCopy.style.opacity = "0";
+  icoCheck.style.opacity = "1";
+  setTimeout(() => {
+    icoCheck.style.opacity = "0";
+    icoCopy.style.opacity = "1";
+    icoCopy.style.color = "#bababa";
+  }, 1000);
+};
+
+copyBox.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  copyTitle();
+});
+
+iconsCol.appendChild(removeBox);
+iconsCol.appendChild(copyBox); 
+
+li.appendChild(img);
+li.appendChild(a);
+li.appendChild(iconsCol);
+list.appendChild(li);
     });
   }
 }
