@@ -191,26 +191,26 @@ body.no-scroll {
 }
 
 .logo-row:first-child a::after {
-  mask-image: url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
-  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png");
+  mask-image: var(--mask-logo-main);
+  -webkit-mask-image: var(--mask-logo-main);
   background: linear-gradient(1deg, #cdd28d, #89bfd0);
 }
 
 .logo-dropdown .logo-row:nth-child(1) a::after {
-  mask-image: url("https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png");
-  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png");
+  mask-image: var(--mask-logo-1);
+  -webkit-mask-image: var(--mask-logo-1);
   background: linear-gradient(1deg, #cdd28d, #89bfd0);
 }
 
 .logo-dropdown .logo-row:nth-child(2) a::after {
-  mask-image: url("https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png");
-  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png");
+  mask-image: var(--mask-logo-2);
+  -webkit-mask-image: var(--mask-logo-2);
   background: linear-gradient(1deg, #cdd28d, #89bfd0);
 }
 
 .logo-dropdown .logo-row:nth-child(3) a::after {
-  mask-image: url("https://static.wixstatic.com/media/c77f36_09ede4c28e284822b304eab05c1f8d99~mv2.png");
-  -webkit-mask-image: url("https://static.wixstatic.com/media/c77f36_09ede4c28e284822b304eab05c1f8d99~mv2.png");
+  mask-image: var(--mask-logo-3);
+  -webkit-mask-image: var(--mask-logo-3);
   background: linear-gradient(1deg, #cdd28d, #89bfd0);
 }
 
@@ -2776,7 +2776,7 @@ textarea:focus {
     alt="NUAM Albums Logo"
   />
   <div id="csv-loading">
-    <div id="csv-loading-title">Завантаження бази NUAM…</div>
+    <div id="csv-loading-title">Підключення до бази NUAM…</div>
     <div id="csv-loading-bar"><div id="csv-loading-fill"></div></div>
     <div id="csv-loading-info">
       <span id="csv-loaded">0 Б</span><span id="csv-total">—</span>
@@ -2790,10 +2790,10 @@ textarea:focus {
       <div class="logo-row">
         <a href="https://nuam.club/albums">
           <img
-            id="app-logo"
-            src="https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png"
-            alt="NUAM Albums Logo"
-          />
+  id="app-logo"
+  data-src="https://static.wixstatic.com/media/c77f36_f267062b41fa4c0a9d708971e3a36a18~mv2.png"
+  alt="NUAM Albums Logo"
+/>
           <span class="vertical-sep"></span>
           <span>Каталог альбомів України</span>
         </a>
@@ -2803,9 +2803,9 @@ textarea:focus {
         <div class="logo-row">
           <a href="https://nuam.club/base">
             <img
-              src="https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png"
-              alt="NUAM Base Logo"
-            />
+  data-src="https://static.wixstatic.com/media/c77f36_266d45c9554a489da21c5f4fa4f9d79e~mv2.png"
+  alt="NUAM Base Logo"
+/>
             <span class="vertical-sep"></span>
             <span>База артистів України</span>
           </a>
@@ -2813,9 +2813,9 @@ textarea:focus {
         <div class="logo-row">
           <a href="https://nuam.club/echo">
             <img
-              src="https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png"
-              alt="NUAM Echo Logo"
-            />
+  data-src="https://static.wixstatic.com/media/c77f36_b0ac036b92b54f478d7e85548f99b6dd~mv2.png"
+  alt="NUAM Echo Logo"
+/>
             <span class="vertical-sep"></span>
             <span>Радар релізів України</span>
           </a>
@@ -3359,40 +3359,122 @@ textarea:focus {
 
   <script>
     
+const NUAM_CACHE_NAME='nuam-cache-v1';
+const NUAM_KEYS={etag:'nuam.csv:etag',lm:'nuam.csv:lm',len:'nuam.csv:len',hash:'nuam.csv:sha256'};
+
+const CSVLOG = {
+  on: true,
+  g: null,
+  start(tag, url){ if(!this.on) return; this.g = console.groupCollapsed ? console.groupCollapsed(`[CSV] ${tag}: ${url}`) : null; },
+  info(...a){ if(this.on) console.log('[CSV]', ...a); },
+  end(){ if(this.on && console.groupEnd) console.groupEnd(); }
+};
+
+async function sha256Hex(t){
+  const enc=new TextEncoder().encode(t);
+  const buf=await crypto.subtle.digest('SHA-256',enc);
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function readFromCache(url){
+  const c=await caches.open(NUAM_CACHE_NAME);
+  const m=await c.match(url,{ignoreSearch:false,ignoreVary:false});
+  return m ? await m.text() : null;
+}
+async function writeToCache(url,text){
+  const c=await caches.open(NUAM_CACHE_NAME);
+  await c.put(url,new Response(text,{headers:{'Content-Type':'text/csv; charset=utf-8'}}));
+}
+function normETag(s){ return (s||'').trim().replace(/^W\//i,'').replace(/^"+|"+$/g,''); }
+
+async function loadNuamCsvText(url){
+  const ttl = document.getElementById("csv-loading-title");
+
+  const prevET = localStorage.getItem(NUAM_KEYS.etag) || '';
+  const prevLM = localStorage.getItem(NUAM_KEYS.lm)   || '';
+  const prevHS = localStorage.getItem(NUAM_KEYS.hash) || '';
+
+  const cachedBody = await readFromCache(url);
+
+  if (prevET || prevLM){
+    const h = new Headers();
+    if (prevET) h.set('If-None-Match', prevET);
+    if (prevLM) h.set('If-Modified-Since', prevLM);
+
+    const r = await fetch(url, { method:'GET', headers:h, cache:'no-cache' });
+
+    if (r.status === 304 && cachedBody != null){
+      if (ttl) ttl.textContent = "Використовуємо базу з кешу";
+      return { text: cachedBody, source: 'cache-304' };
+    }
+
+    if (r.ok){
+      if (ttl) ttl.textContent = "Завантаження бази NUAM…";
+      const text = await r.text();
+      await writeToCache(url, text);
+      const et = r.headers.get('ETag'); if (et) localStorage.setItem(NUAM_KEYS.etag, normETag(et));
+      const lm = r.headers.get('Last-Modified'); if (lm) localStorage.setItem(NUAM_KEYS.lm, lm);
+      try{ const hsh = await sha256Hex(text); localStorage.setItem(NUAM_KEYS.hash, hsh); }catch(_){}
+      return { text, source: 'network-200' };
+    }
+
+    if (cachedBody != null){
+      if (ttl) ttl.textContent = "Використовуємо базу з кешу";
+      return { text: cachedBody, source: 'cache-fallback' };
+    }
+
+    throw new Error('CSV fetch failed: ' + r.status);
+  }
+
+  const r2 = await fetch(url, { method:'GET', cache:'no-cache' });
+  if (!r2.ok) throw new Error('HTTP ' + r2.status);
+  if (ttl) ttl.textContent = "Завантаження бази NUAM…";
+  const text2 = await r2.text();
+  await writeToCache(url, text2);
+  const et2 = r2.headers.get('ETag'); if (et2) localStorage.setItem(NUAM_KEYS.etag, normETag(et2));
+  const lm2 = r2.headers.get('Last-Modified'); if (lm2) localStorage.setItem(NUAM_KEYS.lm, lm2);
+  try{ const h2 = await sha256Hex(text2); localStorage.setItem(NUAM_KEYS.hash, h2); }catch(_){}
+  return { text: text2, source: 'network-200' };
+}
+    
     function loadCsvWithRetry(
   url,
   options,
   retries = 3,
   delay = 1000,
   fallbackUrl = null,
-) {
+){
   let attempts = 0;
 
-  function tryLoad(currentUrl) {
-    Papa.parse(currentUrl, {
-      ...options,
-      download: true,
-      error(err) {
-        attempts++;
+  async function tryLoad(currentUrl){
+    const ttl = document.getElementById("csv-loading-title");
+    if (ttl) ttl.textContent = "Підключення до бази NUAM…";
 
-        if (attempts < retries) {
-          setTimeout(() => tryLoad(currentUrl), delay);
-          return;
-        }
+    try{
+      const res = await loadNuamCsvText(currentUrl);
 
-        if (fallbackUrl && currentUrl !== fallbackUrl) {
-          attempts = 0;
-          tryLoad(fallbackUrl);
-          return;
-        }
+      if (res && res.source && String(res.source).startsWith('cache')) {
+        const t = document.getElementById("csv-loading-title");
+        if (t) t.textContent = "Використовуємо базу з кешу";
+      }
+      const opts = { ...(options||{}) };
+      if ('download' in opts) delete opts.download;
+      Papa.parse(res.text, opts);
 
-        if (options && typeof options.error === "function") {
-          options.error(err);
-        } else {
-          console.error("Не вдалося завантажити CSV після кількох спроб:", err);
-        }
-      },
-    });
+    }catch(err){
+      attempts++;
+      if (attempts < retries){
+        setTimeout(()=>{ tryLoad(currentUrl); }, delay);
+        return;
+      }
+      if (fallbackUrl && currentUrl !== fallbackUrl){
+        attempts = 0;
+        tryLoad(fallbackUrl);
+        return;
+      }
+      if (options && typeof options.error === 'function'){
+        try { options.error(err instanceof Error ? err : new Error(String(err))); } catch(_){}
+      }
+    }
   }
 
   tryLoad(url);
@@ -3515,18 +3597,17 @@ let isPresetLoading = false;
           }
         });
         this.addEventListener("loadstart", () => {
-          try {
-            const l = Number(
-              this.getResponseHeader &&
-                this.getResponseHeader("content-length"),
-            );
-            if (l) tot().textContent = human(l);
-          } catch (_) {}
-        });
+  try {
+    const l = Number(this.getResponseHeader && this.getResponseHeader("content-length"));
+    if (l) tot().textContent = human(l);
+  } catch (_) {}
+  ttl().textContent = "Завантаження бази NUAM…";
+});
+
         this.addEventListener("loadend", () => {
-          ttl().textContent = "Завантаження бази NUAM…";
-          fill().style.width = "100%";
-        });
+  fill().style.width = "100%";
+});
+
         this.addEventListener("error", () => {
           ttl().textContent = "Помилка завантаження";
         });
@@ -3552,30 +3633,31 @@ let isPresetLoading = false;
         const total = Number(rsp.headers.get("content-length")) || 0;
         if (total) tot.textContent = human(total);
 
-        const [a, b] = rsp.body.tee();
-        (async () => {
-          const r = b.getReader();
-          let rec = 0;
-          for (;;) {
-            const { done, value } = await r.read();
-            if (done) break;
-            rec += value.byteLength;
-            got.textContent = human(rec);
-            if (total)
-              fill.style.width =
-                Math.min(100, Math.round((rec * 100) / total)) + "%";
-          }
-          ttl.textContent = "Завантаження бази NUAM…";
-          if (!total) {
-            tot.textContent = human(rec);
-            fill.style.width = "100%";
-          }
-        })();
-        return new Response(a, {
-          status: rsp.status,
-          statusText: rsp.statusText,
-          headers: rsp.headers,
-        });
+        ttl.textContent = "Завантаження бази NUAM…";
+const [a, b] = rsp.body.tee();
+(async () => {
+  const r = b.getReader();
+  let rec = 0;
+  for (;;) {
+    const { done, value } = await r.read();
+    if (done) break;
+    rec += value.byteLength;
+    got.textContent = human(rec);
+    if (total) {
+      fill.style.width = Math.min(100, Math.round((rec * 100) / total)) + "%";
+    }
+  }
+  if (!total) {
+    tot.textContent = human(rec);
+    fill.style.width = "100%";
+  }
+})();
+return new Response(a, {
+  status: rsp.status,
+  statusText: rsp.statusText,
+  headers: rsp.headers,
+});
+
       } catch (_) {
         return rsp;
       }
@@ -3861,6 +3943,36 @@ let blacklistedLabels = new Set(
 );
 let labelFilter = "";
 
+const LABEL_ALIASES = {
+  "ПОТОП": ["ПОТОП Distribution"],
+  "Dear Deer": ["Dear Deer Black"],
+  "GM DIGITAL": ["Gm Digital", "Vg Star / Gm Digital"],
+  "BEST MUSIC": ["LEVEL SOUND / Best Music"],
+  "NoLeak": ["NoLeakLabel"],
+  "Papa Music": ["Papa Music 2.0"],
+  "ReidlMusic": ["ReidlMusic, LLC.", "REIDLMUSIC, LLC."],
+  "Vista": ["Vista Distribution"],
+  "VG STAR": ["Vg Star / Gm Digital", "VG STAR RN"]
+};
+const __LABEL_VARIANT_TO_CANON = (() => {
+  const m = new Map();
+  for (const [canon, vars] of Object.entries(LABEL_ALIASES)) {
+    const k = canon.trim();
+    m.set(k.toLowerCase(), k);
+    m.set(k, k);
+    (vars || []).forEach(v => {
+      const vv = String(v).trim();
+      if (vv) m.set(vv.toLowerCase(), k);
+    });
+  }
+  return m;
+})();
+function canonLabel(lbl){
+  if (!lbl) return "";
+  const key = String(lbl).trim();
+  return __LABEL_VARIANT_TO_CANON.get(key.toLowerCase()) || key;
+}
+    
 function releaseIcon(t) {
   if (t === "compilation")
     return `<svg class="rls-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="5" y="5" width="190" height="190" rx="40" ry="40" fill="none" stroke="#f3f3f3" stroke-width="4"/><text x="50%" y="43%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">CO</text><text x="50%" y="83%" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="75" fill="#f3f3f3">MP</text></svg>`;
@@ -6146,17 +6258,22 @@ function populateFilters() {
 }
 
 function populateLabelOptions() {
-  const map = {};
+  const map = new Map();
+
   albumsData.forEach((al) => {
     if (!al.label || al.artistNames.length === 0) return;
     const artist = al.artistNames[0];
-    if (artist === al.label) return;
-    if (!map[al.label]) map[al.label] = new Set();
-    map[al.label].add(artist);
+    const canon  = canonLabel(al.label);
+    if (artist === al.label || artist === canon) return;
+    if (!map.has(canon)) map.set(canon, new Set());
+    map.get(canon).add(artist);
   });
-  const labels = Object.entries(map)
-    .filter(([, artists]) => artists.size >= 3)
-    .map(([lbl]) => lbl)
+
+  const FORCE_INCLUDE = new Set(["VG STAR"]);
+
+  const labels = Array.from(map.entries())
+    .filter(([canon, artists]) => artists.size >= 3 || (FORCE_INCLUDE.has(canon) && artists.size > 0))
+    .map(([canon]) => canon)
     .sort((a, b) => a.localeCompare(b));
 
   const select = document.getElementById("label-select");
@@ -6175,7 +6292,7 @@ function populateLabelOptions() {
     const o = document.createElement("div");
     o.className = "option";
     o.dataset.value = lbl;
-    o.textContent = lbl;
+    o.textContent  = lbl;
     listContainer.appendChild(o);
   });
 
@@ -7064,8 +7181,7 @@ function attachGlobalEventListeners() {
       modal.style.display = "none";
     }
   });
-
-  document.getElementById("scrollTopButton").addEventListener("click", () => {
+ document.getElementById("scrollTopButton").addEventListener("click", () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -7078,6 +7194,68 @@ function attachGlobalEventListeners() {
   const searchContainer = document.getElementById("search-container");
   const searchInput = document.getElementById("search-input");
   const searchClose = document.getElementById("search-close");
+  
+(function initLogosNoDup(){
+  const root = document.documentElement;
+
+  const GROUPS = [
+    { sel: '#app-logo',                                 cssVar: '--mask-logo-main' },
+    { sel: '.logo-dropdown .logo-row:nth-child(1) img', cssVar: '--mask-logo-1'   },
+    { sel: '.logo-dropdown .logo-row:nth-child(2) img', cssVar: '--mask-logo-2'   },
+    { sel: '.logo-dropdown .logo-row:nth-child(3) img', cssVar: '--mask-logo-3'   },
+  ];
+
+  const urlToTargets = new Map();
+  GROUPS.forEach(({ sel, cssVar }) => {
+    document.querySelectorAll(sel).forEach((img) => {
+      const url = img.getAttribute('data-src') || img.getAttribute('src');
+      if (!url) return;
+      if (!urlToTargets.has(url)) urlToTargets.set(url, { cssVars: new Set(), imgs: new Set() });
+      urlToTargets.get(url).imgs.add(img);
+      urlToTargets.get(url).cssVars.add(cssVar);
+    });
+  });
+
+  function preload(url, cb){
+    const im = new Image();
+    im.decoding = 'async';
+    im.onload = () => cb(url);
+    im.onerror = () => cb(url);
+    im.src = url;
+  }
+
+  function applyFor(url){
+    const t = urlToTargets.get(url);
+    if (!t) return;
+
+    t.imgs.forEach((img) => {
+      if (!img.getAttribute('src')) img.setAttribute('src', url);
+      else                          img.src = url;
+    });
+
+    t.cssVars.forEach((v) => root.style.setProperty(v, `url("${url}")`));
+  }
+
+  function start(){
+    if (urlToTargets.size === 0){
+      document.querySelectorAll('.logo-wrapper').forEach(w => w.classList.add('logos-ready'));
+      return;
+    }
+    let pending = urlToTargets.size;
+    urlToTargets.forEach((_, url) => {
+      preload(url, (readyUrl) => {
+        applyFor(readyUrl);
+        pending -= 1;
+        if (pending === 0){
+          document.querySelectorAll('.logo-wrapper').forEach(w => w.classList.add('logos-ready'));
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
+})();
 
 {
   const TIP = 'Збережіть встановлені вами фільтри, щоб пізніше до них повернутися';
@@ -7634,14 +7812,14 @@ function applyFilters(renderImmediately = false) {
   }
 
   if (labelFilter) {
-    filteredAlbums = filteredAlbums.filter((al) => al.label === labelFilter);
-  }
+  filteredAlbums = filteredAlbums.filter((al) => canonLabel(al.label) === labelFilter);
+}
 
   if (labelFilter) {
-    const totalByLabel = albumsData.filter((a) => a.label === labelFilter);
-    const hiddenByLabel = totalByLabel.filter(
-      (a) => !filteredAlbums.includes(a),
-    );
+  const totalByLabel = albumsData.filter((a) => canonLabel(a.label) === labelFilter);
+  const hiddenByLabel = totalByLabel.filter(
+    (a) => !filteredAlbums.includes(a),
+  );
 
     if (sortOrder === "listens-desc") {
       hiddenByLabel.sort((a, b) => b.listens - a.listens);
@@ -7687,10 +7865,10 @@ function applyFilters(renderImmediately = false) {
   const lazyMsg = document.getElementById("lazy-loading");
 
   if (labelFilter) {
-    const totalByLabel = albumsData.filter((a) => a.label === labelFilter);
-    const hiddenByLabel = totalByLabel.filter(
-      (a) => !filteredAlbums.includes(a),
-    );
+  const totalByLabel = albumsData.filter((a) => canonLabel(a.label) === labelFilter);
+  const hiddenByLabel = totalByLabel.filter(
+    (a) => !filteredAlbums.includes(a),
+  );
 
     if (hiddenByLabel.length) {
       filteredAlbums.push({ __separatorType: "label" });
