@@ -2215,7 +2215,7 @@ textarea:focus {
 }
 
 .option-all-labels {
-  margin-top: 8px;
+  margin-top: 5px;
 }
   
 .range-wrapper {
@@ -8536,38 +8536,91 @@ function renderAlbums(data, reset = false, forceAll = false) {
       container.appendChild(albumDiv);
     }
     albumDiv.querySelector("img").addEventListener("click", function () {
-      const imgSrc = this.src;
-      const enlargedPrev = document.querySelector(".enlarged-img");
-      const modalOverlay = document.getElementById("preview-overlay");
-      if (enlargedPrev) {
-        enlargedPrev.remove();
-        modalOverlay.classList.add("hidden");
-        document.body.classList.remove("no-scroll");
-        document.body.style.top = "";
-        window.scrollTo(0, parseInt(document.body.style.top || "0") * -1);
-        return;
-      }
-      const scrollY = window.scrollY;
-      const enlargedImg = document.createElement("img");
-      enlargedImg.src = imgSrc;
-      enlargedImg.classList.add("enlarged-img");
-      document.body.appendChild(enlargedImg);
-      requestAnimationFrame(() => enlargedImg.classList.add("shown"));
+  const thumb = this;
+  const imgSrc = thumb.src;
+  const opened = document.querySelector(".enlarged-img");
+  const modalOverlay = document.getElementById("preview-overlay");
 
-      modalOverlay.classList.remove("hidden");
-      document.body.classList.add("no-scroll");
-      document.body.style.top = `-${scrollY}px`;
+  if (opened) {
+    opened.remove();
+    modalOverlay.classList.add("hidden");
+    document.body.classList.remove("no-scroll");
+    const prevTop = parseInt(document.body.style.top || "0") * -1;
+    document.body.style.top = "";
+    window.scrollTo(0, prevTop);
+    return;
+  }
 
-      const closeImg = () => {
-        enlargedImg.remove();
-        modalOverlay.classList.add("hidden");
-        document.body.classList.remove("no-scroll");
-        document.body.style.top = "";
-        window.scrollTo(0, scrollY);
-      };
-      enlargedImg.addEventListener("click", closeImg);
-      modalOverlay.addEventListener("click", closeImg);
-    });
+  const scrollY = window.scrollY;
+
+  const r = thumb.getBoundingClientRect();
+  const startX = r.left;
+  const startY = r.top;
+  const startW = r.width;
+  const startH = r.height;
+  const aspect = startW / startH;
+
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let targetW = Math.min(640, vw * 0.9);
+  let targetH = targetW / aspect;
+  if (targetH > vh * 0.9) { targetH = vh * 0.9; targetW = targetH * aspect; }
+  const targetX = (vw - targetW) / 2;
+  const targetY = (vh - targetH) / 2;
+
+  const enlargedImg = document.createElement("img");
+  enlargedImg.src = imgSrc;
+  enlargedImg.classList.add("enlarged-img");
+
+  Object.assign(enlargedImg.style, {
+    position: "fixed",
+    left: "0", top: "0",
+    width: startW + "px",
+    height: startH + "px",
+    transformOrigin: "top left",
+    transform: `translate(${startX}px, ${startY}px) scale(1,1)`,
+    borderRadius: "0px",
+    opacity: "1",
+    transition: "transform .35s cubic-bezier(.2,.9,.2,1), opacity .2s ease, border-radius .35s ease"
+  });
+
+  document.body.appendChild(enlargedImg);
+
+  modalOverlay.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+  document.body.style.top = `-${scrollY}px`;
+
+  requestAnimationFrame(() => {
+    const sx = targetW / startW;
+    const sy = targetH / startH;
+    enlargedImg.style.transform = `translate(${targetX}px, ${targetY}px) scale(${sx}, ${sy})`;
+  });
+
+  const closeImg = () => {
+    const rr = thumb.getBoundingClientRect();
+    const endX = rr.left;
+    const endY = rr.top;
+
+const thumbRadius = getComputedStyle(thumb).borderRadius || "8px";
+enlargedImg.style.borderRadius = thumbRadius;
+
+enlargedImg.style.transform = `translate(${endX}px, ${endY}px) scale(1,1)`;
+modalOverlay.classList.add("hidden");
+
+const cleanup = () => {
+  enlargedImg.removeEventListener("transitionend", cleanup);
+  requestAnimationFrame(() => {
+    enlargedImg.remove();
+    document.body.classList.remove("no-scroll");
+    document.body.style.top = "";
+    window.scrollTo(0, scrollY);
+  });
+};
+enlargedImg.addEventListener("transitionend", cleanup, { once: true });
+  };
+
+  enlargedImg.addEventListener("click", closeImg, { once: true });
+  modalOverlay.addEventListener("click", closeImg, { once: true });
+});
 
     const tracksContainer = document.getElementById(`tracks-${i}`);
 
