@@ -2084,8 +2084,7 @@ textarea:focus {
 
 #label-select .option-fixed {
   flex-shrink: 0;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-bottom: 9px;
   border-top: 1px solid #84aafb;
   display: flex;
   flex-direction: column;
@@ -2114,6 +2113,28 @@ textarea:focus {
   box-shadow: none;
 }
 
+#label-select .option-fixed{ position: relative; }
+#label-select .option-search{ padding-right: 28px; }
+
+#label-select .option-clear{
+  position: absolute;
+  right: 10px;
+  width: 26px;
+  height: 16px;
+  padding: 0px 0px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
+  color: #bababa;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .15s ease;
+}
+#label-select .option-clear.visible{ display: flex; }
+#label-select .option-clear:hover{ color: #eaeaea; }
+  
 #label-select .option-list {
   overflow-y: auto;
   max-height: 460px;
@@ -2151,6 +2172,52 @@ textarea:focus {
   height: 0;
 }
 
+    #label-select .no-results {
+  padding: 20px;
+  text-align: center;
+  color: #bababa;
+  font-size: 14px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#label-select .label-sortbar{
+  position: sticky; top: 0; z-index: 1;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  background-color: rgba(53, 53, 60, 0.55);
+    background-image: var(--grain-bg);
+    background-size: 20px 20px;
+    background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  border-bottom: 1px solid #84aafb;
+}
+#label-select .label-sortbar-title{
+  font-family: "CustomFont"; font-size: 13px; color: #f3f3f3; white-space: nowrap;
+}
+#label-select .label-sortbar button{
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(132,170,251,.5);
+  border-radius: 6px; background: transparent; color: #f3f3f3; cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+#label-select .label-sortbar button.active{
+  border-color: rgba(132,170,251,1);
+  background: rgba(132,170,251,.1);
+}
+
+#label-select .label-sortbar i{
+  font-size: 14px; line-height: 1; display: inline-block;
+}
+
+.option-all-labels {
+  margin-top: 8px;
+}
+  
 .range-wrapper {
   --start: 0%;
   --end: 100%;
@@ -2753,6 +2820,83 @@ textarea:focus {
   padding: 5px 5px 5px 5px;
 }
 
+    .ld-sep{
+  display:block;
+  height:1px;
+  background:#555;
+  border:0;
+  margin-left:-10px;
+  margin-right:-10px;
+  width:calc(100% + 20px);
+  box-sizing:content-box;
+}
+.ld-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  padding:0;
+  margin:0;
+}
+
+.ld-btn{
+  display:flex !important;
+  width:100%;
+  height:30px;
+  color:#f3f3f3;
+  border-radius:8px;
+  font-size:14px;
+  font-family:"CustomFont";
+  cursor:pointer;
+  transition:border-color .3s ease;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  padding:0;
+  border: 1px solid rgba(132, 170, 251, 0);
+  background-color: rgba(132, 170, 251, 0.2);
+  text-decoration:none;
+  line-height:1;
+}
+
+.ld-btn:hover{ border-color:rgba(132,170,251,1); text-decoration:none; }
+
+.ld-btn__icon {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    margin-left: 5px;
+    display: block;
+    align-self: center;
+    transform: translateY(-2px);
+}
+
+.ld-btn__icon path{ fill:#f3f3f3; }
+  
+    #nuam-about-modal .modal-content,
+#about-modal .modal-content {
+  margin: 0;
+  max-width: 100vh;
+  overflow: auto;
+}
+    
+    #nuam-about-modal .nuam-modal__body a,
+#about-modal .modal-body a {
+  color: #84aafb !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+#nuam-about-modal .nuam-modal__body a:hover,
+#about-modal .modal-body a:hover {
+  text-decoration: underline;
+}
+
+#nuam-about-modal .nuam-modal__body a:visited,
+#about-modal .modal-body a:visited {
+  color: #84aafb !important;
+}
+ 
 @media (max-width: 768px) {
   .controls {
     flex-direction: column;
@@ -2830,6 +2974,18 @@ textarea:focus {
             <span>Сайт проєкту</span>
           </a>
         </div>
+        <div class="ld-sep" role="separator"></div>
+<div class="ld-actions">
+  <button id="ld-about-btn" type="button" class="ld-btn">Про проєкт</button>
+
+  <a class="ld-btn" href="https://send.monobank.ua/jar/2BLPSRWwYb" target="_blank" rel="noopener noreferrer">
+    Підтримати
+    <svg class="ld-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3Zm-4 4v2H5v10h12v-5h2v7H3V7h7Z"/>
+    </svg>
+  </a>
+</div>
+
       </div>
     </div>
 
@@ -3318,6 +3474,21 @@ textarea:focus {
 
 <div class="modal-overlay"></div>
 
+  <div id="nuam-about-modal" class="modal hidden" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="nuam-about-title">
+
+    <div class="nuam-modal__header">
+      <h3 id="nuam-about-title" class="nuam-modal__title">Про проєкт</h3>
+      <button id="nuam-about-close" class="nuam-modal__close" aria-label="Закрити">×</button>
+    </div>
+    <div class="nuam-modal__body">
+      <p><strong>NUAM Albums</strong> — веб-додаток сервісу <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">NUAM</a> з автоматично оновлюваним каталогом музичних альбомів України: повноформатних релізів, міні-альбомів та компіляцій.</p>
+      <p>У вашому розпорядженні широкий набір інструментів для пошуку, сортування та детальної фільтрації за різними параметрами. Слухайте уривки треків безпосередньо в додатку, переглядайте статистику, зберігайте власні фільтри для швидкого доступу, відзначайте улюблені альбоми.</p>
+        <p>Досліджуйте українську сцену — вона значно більша й різноманітніша, ніж здається!</p>
+    </div>
+  </div>
+</div>
+  
 <div
   id="scrollTopButton"
   onmouseenter="this.style.borderColor='rgba(132,170,251,1)'"
@@ -5810,6 +5981,15 @@ function initBasicCustomSelect(select) {
         otherSelect.classList.remove("open");
       }
     });
+
+    (function(){
+      const ls = document.querySelector('#label-select .option-search');
+      const lc = document.querySelector('#label-select .options-container');
+      if (ls && lc && lc.style.display !== "flex") {
+        if (ls.value) { ls.value = ""; ls.dispatchEvent(new Event("input", { bubbles: true })); }
+      }
+    })();
+
     const isOpen = optionsContainer.style.display === "flex";
     if (!isOpen) {
       const r = select.getBoundingClientRect();
@@ -5822,6 +6002,7 @@ function initBasicCustomSelect(select) {
     optionsContainer.style.display = isOpen ? "none" : "flex";
     select.classList.toggle("open", !isOpen);
   });
+
   optionsContainer.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       selected.textContent = option.textContent;
@@ -5833,10 +6014,8 @@ function initBasicCustomSelect(select) {
         const start = document.getElementById("release-period-start");
         const end = document.getElementById("release-period-end");
         const wrapper = document.getElementById("release-period-range");
-
         start.value = start.min;
         end.value = end.max;
-
         wrapper.style.setProperty("--start", "0%");
         wrapper.style.setProperty("--end", "100%");
       }
@@ -5845,36 +6024,24 @@ function initBasicCustomSelect(select) {
           document.getElementById("duration-start").min;
         document.getElementById("duration-end").value =
           document.getElementById("duration-end").max;
-        document
-          .getElementById("duration-range")
-          .style.setProperty("--start", "0%");
-        document
-          .getElementById("duration-range")
-          .style.setProperty("--end", "100%");
+        document.getElementById("duration-range").style.setProperty("--start", "0%");
+        document.getElementById("duration-range").style.setProperty("--end", "100%");
       }
       if (select.id === "track-count-filter") {
         document.getElementById("track-count-start").value =
           document.getElementById("track-count-start").min;
         document.getElementById("track-count-end").value =
           document.getElementById("track-count-end").max;
-        document
-          .getElementById("track-count-range")
-          .style.setProperty("--start", "0%");
-        document
-          .getElementById("track-count-range")
-          .style.setProperty("--end", "100%");
+        document.getElementById("track-count-range").style.setProperty("--start", "0%");
+        document.getElementById("track-count-range").style.setProperty("--end", "100%");
       }
       if (select.id === "listen-count-filter") {
         document.getElementById("listen-count-start").value =
           document.getElementById("listen-count-start").min;
         document.getElementById("listen-count-end").value =
           document.getElementById("listen-count-end").max;
-        document
-          .getElementById("listen-count-range")
-          .style.setProperty("--start", "0%");
-        document
-          .getElementById("listen-count-range")
-          .style.setProperty("--end", "100%");
+        document.getElementById("listen-count-range").style.setProperty("--start", "0%");
+        document.getElementById("listen-count-range").style.setProperty("--end", "100%");
       }
 
       if (select.id === "sort-order") sortOrder = option.dataset.value;
@@ -5890,6 +6057,11 @@ function initBasicCustomSelect(select) {
     if (!select.contains(e.target)) {
       optionsContainer.style.display = "none";
       select.classList.remove("open");
+
+      if (select.id === "label-select") {
+        const ls = select.querySelector(".option-search");
+        if (ls && ls.value) { ls.value = ""; ls.dispatchEvent(new Event("input", { bubbles: true })); }
+      }
     }
   });
 }
@@ -6258,6 +6430,7 @@ function populateFilters() {
 }
 
 function populateLabelOptions() {
+
   const map = new Map();
 
   albumsData.forEach((al) => {
@@ -6265,34 +6438,50 @@ function populateLabelOptions() {
     const artist = al.artistNames[0];
     const canon  = canonLabel(al.label);
     if (artist === al.label || artist === canon) return;
-    if (!map.has(canon)) map.set(canon, new Set());
-    map.get(canon).add(artist);
+
+    if (!map.has(canon)) {
+      map.set(canon, { artists: new Set(), releases: 0, listens: 0 });
+    }
+
+    const st = map.get(canon);
+    st.artists.add(artist);
+    st.releases += 1;
+
+    const ls = parseInt(al.listens, 10) || 0;
+    st.listens += ls;
   });
 
   const FORCE_INCLUDE = new Set(["VG STAR"]);
 
   const labels = Array.from(map.entries())
-    .filter(([canon, artists]) => artists.size >= 3 || (FORCE_INCLUDE.has(canon) && artists.size > 0))
-    .map(([canon]) => canon)
-    .sort((a, b) => a.localeCompare(b));
+    .filter(([canon, st]) => st.artists.size >= 3 || (FORCE_INCLUDE.has(canon) && st.artists.size > 0))
+    .map(([canon, st]) => ({
+      name: canon,
+      releases: st.releases,
+      artists: st.artists.size,
+      listens: st.listens
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name, "uk"));
 
   const select = document.getElementById("label-select");
   const optsContainer = select.querySelector(".options-container");
   optsContainer.innerHTML = `
-    
-    <div class="option-fixed">
-      <div class="option" data-value="">Усі лейбли</div>
-      <input type="text" class="option-search" placeholder="Пошук лейблів…">
-    </div>
-    <div class="option-list"></div>
-  `;
+  <div class="option-fixed">
+    <div class="option option-all-labels" data-value="">Усі лейбли</div>
+    <input type="text" class="option-search" placeholder="Пошук лейблів…">
+  </div>
+  <div class="option-list"></div>
+`;
 
   const listContainer = optsContainer.querySelector(".option-list");
   labels.forEach((lbl) => {
     const o = document.createElement("div");
     o.className = "option";
-    o.dataset.value = lbl;
-    o.textContent  = lbl;
+    o.dataset.value    = lbl.name;
+    o.dataset.releases = String(lbl.releases);
+    o.dataset.artists  = String(lbl.artists);
+    o.dataset.listens  = String(lbl.listens);
+    o.textContent  = lbl.name;
     listContainer.appendChild(o);
   });
 
@@ -6306,15 +6495,147 @@ function initCustomSelect(select) {
   const fixedContainer = optionsContainer.querySelector(".option-fixed");
   const searchInput = fixedContainer.querySelector(".option-search");
 
+  const clearLabelSearch = () => {
+    if (select.id === 'label-select' && searchInput && searchInput.value) {
+      searchInput.value = '';
+      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  };
+
+  let labelSortMode = 'name';
+let sortbar;
+if (select.id === 'label-select') {
+  sortbar = document.createElement('div');
+  sortbar.className = 'label-sortbar';
+  sortbar.innerHTML = `
+    <span class="label-sortbar-title">Сортувати лейбли:</span>
+
+    <button type="button" data-mode="name" class="active" aria-label="За назвою">
+      <i class="fas fa-solid fa-sort-alpha-down fa-fw"></i>
+    </button>
+
+    <button type="button" data-mode="releases" aria-label="За кількістю релізів">
+      <i class="fas fa-solid fa-layer-group fa-fw"></i>
+    </button>
+
+    <button type="button" data-mode="artists" aria-label="За кількістю артистів">
+      <i class="fas fa-solid fa-users fa-fw"></i>
+    </button>
+
+    <button type="button" data-mode="listens" aria-label="За сумою прослуховувань">
+      <i class="fas fa-solid fa-headphones fa-fw"></i>
+    </button>
+  `;
+  fixedContainer.insertBefore(sortbar, fixedContainer.firstChild);
+
+  try {
+    const buttons = sortbar.querySelectorAll('button[data-mode]');
+    buttons.forEach((btn) => {
+      btn.removeAttribute('title');
+      const text = btn.getAttribute('aria-label') || '';
+
+      attachTooltip(btn, text);
+    });
+  } catch (_) {}
+  
+    sortbar.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const mode = btn.getAttribute('data-mode');
+      if (!mode) return;
+      labelSortMode = mode;
+      sortbar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      applySortAndFilter();
+    });
+  }
+
+  let noResults = listContainer.querySelector('.no-results');
+  if (!noResults) {
+    noResults = document.createElement('div');
+    noResults.className = 'no-results';
+    noResults.textContent = 'Такого лейбла не знайдено';
+    listContainer.appendChild(noResults);
+  }
+
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'option-clear';
+  clearBtn.setAttribute('aria-label','Очистити');
+  clearBtn.textContent = '✖';
+  fixedContainer.appendChild(clearBtn);
+
+  const toggleClear = () => { clearBtn.classList.toggle('visible', !!searchInput.value); };
+  toggleClear();
+  searchInput.addEventListener('input', toggleClear);
+
+  function placeClear(){
+    const ip = searchInput;
+    const p  = fixedContainer;
+    const h  = 16;
+    const ipTop = ip.offsetTop;
+    const ipH   = ip.offsetHeight || 32;
+    clearBtn.style.top = (ipTop + (ipH - h)/2) + 'px';
+  }
+  placeClear();
+
+  try { new ResizeObserver(placeClear).observe(searchInput); } catch(e){}
+  window.addEventListener('resize', placeClear, { passive: true });
+  fixedContainer.addEventListener('transitionend', placeClear, true);
+
+  clearBtn.addEventListener('mousedown', e => e.preventDefault());
+  clearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    searchInput.value = '';
+    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    searchInput.focus();
+    placeClear();
+    applySortAndFilter();
+  });
+
+  function applySortAndFilter() {
+    if (select.id !== 'label-select') return;
+
+    const q = (searchInput?.value || '').trim().toLowerCase();
+    const items = Array.from(listContainer.querySelectorAll('.option'));
+
+    let visible = items.filter(opt => opt.textContent.toLowerCase().includes(q));
+
+    if (labelSortMode === 'name') {
+      visible.sort((a,b) => a.textContent.localeCompare(b.textContent, 'uk'));
+    } else if (labelSortMode === 'releases') {
+      visible.sort((a,b) => (parseInt(b.dataset.releases,10)||0) - (parseInt(a.dataset.releases,10)||0)
+                     || a.textContent.localeCompare(b.textContent,'uk'));
+    } else if (labelSortMode === 'artists') {
+      visible.sort((a,b) => (parseInt(b.dataset.artists,10)||0) - (parseInt(a.dataset.artists,10)||0)
+                     || a.textContent.localeCompare(b.textContent,'uk'));
+    } else if (labelSortMode === 'listens') {
+      visible.sort((a,b) => (parseInt(b.dataset.listens,10)||0) - (parseInt(a.dataset.listens,10)||0)
+                     || a.textContent.localeCompare(b.textContent,'uk'));
+    }
+
+    items.forEach(el => el.style.display = 'none');
+    visible.forEach(el => { el.style.display = ''; listContainer.appendChild(el); });
+
+    noResults.style.display = visible.length ? 'none' : 'flex';
+  }
+
   selected.addEventListener("click", (e) => {
     e.stopPropagation();
 
     document.querySelectorAll(".custom-select").forEach((otherSelect) => {
       if (otherSelect !== select) {
-        otherSelect.querySelector(".options-container").style.display = "none";
-        otherSelect.classList.remove("open");
+        const oc = otherSelect.querySelector(".options-container");
+        if (oc && oc.style.display === "flex") {
+          oc.style.display = "none";
+          otherSelect.classList.remove("open");
+          if (otherSelect.id === 'label-select') {
+            const si = otherSelect.querySelector('.option-search');
+            if (si && si.value) { si.value=''; si.dispatchEvent(new Event('input',{bubbles:true})); }
+          }
+        }
       }
     });
+
     const isOpen = optionsContainer.style.display === "flex";
     if (!isOpen) {
       const r = select.getBoundingClientRect();
@@ -6325,13 +6646,18 @@ function initCustomSelect(select) {
       else select.classList.remove("upward");
     }
     optionsContainer.style.display = isOpen ? "none" : "flex";
+    if (isOpen) clearLabelSearch();
     select.classList.toggle("open", !isOpen);
+
+    if (!isOpen && select.id === 'label-select') applySortAndFilter();
   });
+
   optionsContainer.querySelectorAll(".option").forEach((option) => {
     option.addEventListener("click", () => {
       selected.textContent = option.textContent;
       selected.dataset.value = option.dataset.value;
       optionsContainer.style.display = "none";
+      clearLabelSearch();
       select.classList.remove("open");
 
       if (select.id === "label-select") {
@@ -6350,17 +6676,19 @@ function initCustomSelect(select) {
   document.addEventListener("click", (e) => {
     if (!select.contains(e.target)) {
       optionsContainer.style.display = "none";
+      clearLabelSearch();
       select.classList.remove("open");
     }
   });
 
   searchInput.addEventListener("input", () => {
-    const q = searchInput.value.trim().toLowerCase();
-    listContainer.querySelectorAll(".option").forEach((opt) => {
-      opt.style.display = opt.textContent.toLowerCase().includes(q)
-        ? ""
-        : "none";
-    });
+    if (select.id === 'label-select') applySortAndFilter();
+    else {
+      const q = searchInput.value.trim().toLowerCase();
+      listContainer.querySelectorAll(".option").forEach((opt) => {
+        opt.style.display = opt.textContent.toLowerCase().includes(q) ? "" : "none";
+      });
+    }
   });
 }
 
@@ -7175,6 +7503,24 @@ function attachGlobalEventListeners() {
       document.getElementById("blacklist-modal").style.display = "none";
     });
 
+  (function () {
+  const SAFE_INPUTS = '.option-search, #preset-name-input, #preset-desc-input, #edit-name-input, #edit-desc-input';
+  let suppressNextClick = false;
+
+  document.addEventListener('mousedown', function (e) {
+    const t = e.target;
+    suppressNextClick = !!(t && t.closest && t.closest(SAFE_INPUTS));
+  }, true);
+
+  document.addEventListener('click', function (e) {
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+    }
+  }, true);
+})();
+  
   window.addEventListener("click", (event) => {
     const modal = document.getElementById("blacklist-modal");
     if (event.target === modal) {
@@ -9725,7 +10071,6 @@ function showRenameModal(btn) {
 (() => {
   const modal = document.getElementById("edit-name-modal");
   const content = modal.querySelector(".modal-content");
-
   modal.querySelector(".close").addEventListener("click", () => {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
@@ -9744,6 +10089,57 @@ document.getElementById("stats-button").addEventListener("click", () => {
   if (typeof openStatsModal === "function") openStatsModal();
 });
 
+window.createAboutModal = function () {
+  if (document.getElementById("about-modal")) return;
+
+  const src = document.getElementById("nuam-about-modal");
+  const titleText = src?.querySelector("#nuam-about-title")?.textContent || "Про проєкт";
+  const bodyHtml  = src?.querySelector(".nuam-modal__body")?.innerHTML || "";
+
+  const overlay = document.createElement("div");
+  overlay.id = "about-modal";
+  overlay.className = "modal hidden";
+
+  overlay.innerHTML = `
+    <div class="modal-content">
+      <span class="close" id="about-close">&times;</span>
+      <h3 style="color:#f3f3f3; margin:0 0 20px;">${titleText}</h3>
+      <div class="modal-body" style="overflow:auto; color:#f3f3f3; font-size:16px; margin: -10px 0px -10px 0px;">
+        ${bodyHtml}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const content = overlay.querySelector(".modal-content");
+  const closeX  = overlay.querySelector("#about-close");
+
+  closeX.addEventListener("click", () => {
+    overlay.classList.add("hidden");
+    document.body.style.overflow = "auto";
+  });
+
+  overlay.addEventListener("click", (e) => {
+    if (!content.contains(e.target)) {
+      overlay.classList.add("hidden");
+      document.body.style.overflow = "auto";
+    }
+  });
+};
+
+window.openAboutModal = function () {
+  const el = document.getElementById("about-modal");
+  if (!el) return;
+  el.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+};
+
+document.getElementById("ld-about-btn")?.addEventListener("click", () => {
+  if (typeof createAboutModal === "function") createAboutModal();
+  if (typeof openAboutModal === "function") openAboutModal();
+});
+    
 async function copyExportData() {
   const text = document.getElementById("data-textarea")?.value ?? "";
 
