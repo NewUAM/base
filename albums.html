@@ -4244,8 +4244,8 @@ const DEFAULT_PRESETS = [
       duration: "",
       durationStart: 0,
       durationEnd: 999,
-      trackCount: "",
-      trackStart: 0,
+      trackCount: "range",
+      trackStart: 3,
       trackEnd: 999,
       labelFilter: "",
 
@@ -6839,26 +6839,35 @@ function loadFiltersAfterRender() {
       durWrapper.style.setProperty("--start", "0%");
       durWrapper.style.setProperty("--end", "100%");
     } else if (valueDur === "range") {
-      const start = document.getElementById("duration-start");
-      const end = document.getElementById("duration-end");
-      start.value = filterData.durationStart;
-      end.value = filterData.durationEnd;
+  const start = document.getElementById("duration-start");
+  const end = document.getElementById("duration-end");
 
-      selDuration.textContent = `${filterData.durationStart}–${filterData.durationEnd} хв`;
-      selDuration.dataset.value = "range";
+  const minVal = +start.min;
+  const maxVal = +end.max;
 
-      const wrapper = document.getElementById("duration-range");
-      const minVal = +start.min,
-        maxVal = +start.max;
-      wrapper.style.setProperty(
-        "--start",
-        ((filterData.durationStart - minVal) / (maxVal - minVal)) * 100 + "%",
-      );
-      wrapper.style.setProperty(
-        "--end",
-        ((filterData.durationEnd - minVal) / (maxVal - minVal)) * 100 + "%",
-      );
-    } else if (valueDur) {
+  let s = +filterData.durationStart;
+  let e = +filterData.durationEnd;
+  if (Number.isNaN(s)) s = minVal;
+  if (Number.isNaN(e)) e = maxVal;
+  if (s < minVal) s = minVal;
+  if (e > maxVal) e = maxVal;
+
+  start.value = s;
+  end.value = e;
+
+  let text;
+  if (s === minVal && e !== maxVal) text = `До ${e} хв`;
+  else if (s !== minVal && e === maxVal) text = `Від ${s} хв`;
+  else text = `${s}–${e} хв`;
+
+  selDuration.textContent = text;
+  selDuration.dataset.value = "range";
+
+  const wrapper = document.getElementById("duration-range");
+  wrapper.style.setProperty("--start", ((s - minVal) / (maxVal - minVal)) * 100 + "%");
+  wrapper.style.setProperty("--end", ((e - minVal) / (maxVal - minVal)) * 100 + "%");
+}
+ else if (valueDur) {
       const [ds, de] = valueDur.split("-").map(Number);
       const start = document.getElementById("duration-start");
       const end = document.getElementById("duration-end");
@@ -6909,26 +6918,35 @@ function loadFiltersAfterRender() {
       tcWrapper.style.setProperty("--start", "0%");
       tcWrapper.style.setProperty("--end", "100%");
     } else if (valueTrack === "range") {
-      const s = filterData.trackStart;
-      const e = filterData.trackEnd;
-      document.getElementById("track-count-start").value = s;
-      document.getElementById("track-count-end").value = e;
+  const startEl = document.getElementById("track-count-start");
+  const endEl = document.getElementById("track-count-end");
+  const wrapper = document.getElementById("track-count-range");
 
-      selTrack.textContent = `Від ${s} треків`;
-      selTrack.dataset.value = "range";
+  const minT = +startEl.min;
+  const maxT = +startEl.max;
 
-      const wrapper = document.getElementById("track-count-range");
-      const minT = +document.getElementById("track-count-start").min;
-      const maxT = +document.getElementById("track-count-start").max;
-      wrapper.style.setProperty(
-        "--start",
-        ((s - minT) / (maxT - minT)) * 100 + "%",
-      );
-      wrapper.style.setProperty(
-        "--end",
-        ((e - minT) / (maxT - minT)) * 100 + "%",
-      );
-    } else if (valueTrack) {
+  let s = +filterData.trackStart;
+  let e = +filterData.trackEnd;
+  if (Number.isNaN(s)) s = minT;
+  if (Number.isNaN(e)) e = maxT;
+  if (s < minT) s = minT;
+  if (e > maxT) e = maxT;
+
+  startEl.value = s;
+  endEl.value = e;
+
+  let txt;
+  if (s === minT && e !== maxT) txt = `До ${e} треків`;
+  else if (s !== minT && e === maxT) txt = `Від ${s} треків`;
+  else txt = `${s}–${e} треків`;
+
+  selTrack.textContent = txt;
+  selTrack.dataset.value = "range";
+
+  wrapper.style.setProperty("--start", ((s - minT) / (maxT - minT)) * 100 + "%");
+  wrapper.style.setProperty("--end", ((e - minT) / (maxT - minT)) * 100 + "%");
+}
+ else if (valueTrack) {
       const [ds, de] = valueTrack.split("-").map(Number);
       document.getElementById("track-count-start").value = ds;
       document.getElementById("track-count-end").value = de;
@@ -7674,7 +7692,13 @@ function attachGlobalEventListeners() {
       window.albumSearchMode = mode;
       localStorage.setItem("albumSearchMode", mode);
       setActive(mode);
-      if (typeof smoothApplyFilters === "function") smoothApplyFilters();
+
+      const inp = document.getElementById("search-input");
+      const qLocal = (inp && typeof inp.value === "string") ? inp.value.trim() : "";
+      const qState = (typeof searchQuery === "string") ? searchQuery.trim() : "";
+      const hasQuery = (qLocal !== "") || (qState !== "");
+
+      if (hasQuery && typeof smoothApplyFilters === "function") smoothApplyFilters();
     });
   })();
 
