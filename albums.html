@@ -4437,7 +4437,6 @@ function loadPresetsFromStorage() {
       btn.removeAttribute("title");
       btn.setAttribute("aria-label", preset.desc);
     }
-
     wrapper.appendChild(btn);
   });
 
@@ -4667,7 +4666,68 @@ window.resetFiltersToDefault = function () {
   applyDefaultFilters();
 };
 
-window.addEventListener("DOMContentLoaded", init);
+    const DESKTOP_MIN_WIDTH = 768;
+
+function isSmallScreen() {
+  const w1 = window.innerWidth || 0;
+  const w2 = document.documentElement?.clientWidth || 0;
+  return Math.min(w1, w2 || w1) < DESKTOP_MIN_WIDTH;
+}
+
+function showDesktopOnlyBlock() {
+  const overlay = document.createElement("div");
+  overlay.id = "nuam-desktop-only";
+  overlay.style.cssText = [
+    "position:fixed","inset:0","z-index:2147483647",
+    "display:flex","align-items:center","justify-content:center",
+    "background:#282626","color:#f3f3f3","padding:24px"
+  ].join(";");
+  overlay.innerHTML = `
+    <div style="max-width:760px;margin:auto;text-align:center;display:flex;flex-direction:column;gap:16px">
+      <div style="font-size:20px;line-height:1.4;font-weight:700;margin:0">
+        NUAM Albums зараз доступний тільки з комп'ютера.
+      </div>
+      <div style="font-size:16px;line-height:1.6;opacity:.9;margin:0">
+        Досліджуйте тисячі альбомів української музичної сцени завдяки безлічі фільтрів, режимів сортування та пошуку.
+      </div>
+      <div>
+        <button id="nuam-go-back" type="button"
+          style="margin-top:8px;padding:12px 16px;border-radius:8px;border:0;background:#84aafb33;color:#f3f3f3;font-weight:600;cursor:pointer">
+          Повернутися назад
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.documentElement.style.overflow = "hidden";
+  const backBtn = overlay.querySelector("#nuam-go-back");
+  if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    try {
+      if (window.top && window.top !== window && window.top.history && window.top.history.length > 1) {
+        window.top.history.back();
+        return;
+      }
+    } catch (_) {}
+
+    if (history.length > 1) {
+      history.back();
+      return;
+    }
+
+    if (document.referrer && document.referrer !== location.href) {
+      location.replace(document.referrer);
+      return;
+    }
+
+    location.href = "/";
+  });
+}
+}
+    
+window.addEventListener("DOMContentLoaded", () => {
+  if (isSmallScreen()) { showDesktopOnlyBlock(); return; }
+  init();
+});
 
 (function () {
   if (window.__stats_inited__) return;
@@ -4987,7 +5047,6 @@ window.addEventListener("DOMContentLoaded", init);
         y += rowH + rowGap;
       }
     }
-
     drawPanel(pad, L);
     drawPanel(pad + colW + colGap, R);
   };
@@ -8279,7 +8338,6 @@ isEmptyResult = filteredAlbums.length === 0;
 lazyMsg.textContent = isEmptyResult
   ? "Немає альбомів за вказаними вами параметрами"
   : "";
-  
 }
 
 function updateRenderedAlbums(filteredAlbums) {
@@ -8311,8 +8369,6 @@ function handleScroll() {
   }
 }
 
-
-
 function forceLazyLoadCheck() {
   const container = document.getElementById("albums-container");
 
@@ -8330,8 +8386,6 @@ function forceLazyLoadCheck() {
     ? "Немає альбомів за вказаними вами параметрами"
     : "";
 }
-
-
 }
 
 function throttle(func, limit) {
