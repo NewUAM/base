@@ -909,7 +909,9 @@ input:-webkit-autofill:active {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
+  overscroll-behavior: contain;
 }
+
 .presets-wrapper::-webkit-scrollbar {
   display: none;
 }
@@ -1462,7 +1464,7 @@ button:hover {
 
 .lazy-loading {
   text-align: center;
-  margin: 20px 0;
+  margin: 0px 0px 100px 100px;
   margin-left: 480px;
   width: calc(100% - 480px);
   color: #f3f3f3;
@@ -1489,6 +1491,7 @@ audio {
 }
 .album-listened img:hover {
   background-color: rgba(40, 38, 38, 0.7);
+  border-radius: 0px !important;
   transform: none !important;
   z-index: auto !important;
 }
@@ -3482,7 +3485,7 @@ textarea:focus {
       <button id="nuam-about-close" class="nuam-modal__close" aria-label="Закрити">×</button>
     </div>
     <div class="nuam-modal__body">
-      <p><strong>NUAM Albums</strong> — веб-додаток сервісу <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">NUAM</a> з автоматично оновлюваним каталогом музичних альбомів України: повноформатних релізів, міні-альбомів та компіляцій.</p>
+      <p><strong>NUAM Albums</strong> — вебдодаток сервісу <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">NUAM</a> з автоматично оновлюваним каталогом музичних альбомів України: повноформатних релізів, міні-альбомів та компіляцій.</p>
       <p>У вашому розпорядженні широкий набір інструментів для пошуку, сортування та детальної фільтрації за різними параметрами. Слухайте уривки треків безпосередньо в додатку, переглядайте статистику, зберігайте власні фільтри для швидкого доступу, відзначайте улюблені альбоми.</p>
         <p>Досліджуйте українську сцену — вона значно більша й різноманітніша, ніж здається!</p>
     </div>
@@ -3651,31 +3654,27 @@ async function loadNuamCsvText(url){
   tryLoad(url);
 }
 
+    const WORKER_URL = "https://nuam-albums.hi-f50.workers.dev";
+    
 async function getAccessToken() {
-  const clientId = "919b6650d8a449e5a147474a58ae2981";
-  const clientSecret = "5c383eabdcf8461e8556327f97414906";
-  const resp = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic " + btoa(clientId + ":" + clientSecret),
-    },
-    body: "grant_type=client_credentials",
-  });
-  const { access_token } = await resp.json();
-  return access_token;
+  const r = await fetch(`${WORKER_URL}/spotify/token`, { method: "POST" });
+  const j = await r.json();
+  return j.access_token;
 }
 
-async function getAlbumTracks(albumId, token) {
-  let all = [],
-    url = `https://api.spotify.com/v1/albums/${albumId}/tracks?limit=50`;
+async function getAlbumTracks(albumId, _token_ignored) {
+  let all = [];
+  let url = `${WORKER_URL}/spotify/v1/albums/${albumId}/tracks?limit=50`;
   while (url) {
-    const r = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const r = await fetch(url);
     const j = await r.json();
-    all = all.concat(j.items);
-    url = j.next;
+    all = all.concat((j && j.items) || []);
+    if (j && j.next) {
+      const u = new URL(j.next);
+      url = `${WORKER_URL}/spotify${u.pathname}${u.search}`;
+    } else {
+      url = null;
+    }
   }
   return all.map((t) => ({
     id: t.id,
@@ -4165,13 +4164,16 @@ const languageLabels = {
 const REPLACE_LABELS = {
   "other lang": "Інші мови",
   "producing work for international": "intl prod",
+  "like old trash": "estrade",
 };
+
 function mapName(s) {
   const k = String(s).trim().toLowerCase();
   return REPLACE_LABELS[k] || s;
 }
 
 const batchSize = 20;
+let isEmptyResult = false;
 
 const PRESETS_KEY = "albumPresets";
 
@@ -4227,7 +4229,7 @@ const DEFAULT_PRESETS = [
     desc: "Найсвіжіші та найгарячіші альбоми з потенційним зростанням слухачів",
     filters: {
       selectedGenres: [],
-      excludedGenres: ["phonk", "ai", "producing work for international"],
+      excludedGenres: ["phonk", "ai", "producing work for international", "like old trash"],
       selectedLanguages: [],
       excludedLanguages: ["rus"],
       selectedReleaseTypes: [],
@@ -4261,7 +4263,7 @@ const DEFAULT_PRESETS = [
 
     filters: {
       selectedGenres: [],
-      excludedGenres: ["phonk", "ai", "producing work for international"],
+      excludedGenres: ["phonk", "ai", "producing work for international", "like old trash"],
       selectedLanguages: [],
       excludedLanguages: ["rus"],
 
@@ -4303,7 +4305,7 @@ const DEFAULT_PRESETS = [
         "post-punk",
         "folk",
       ],
-      excludedGenres: ["phonk", "ai", "producing work for international"],
+      excludedGenres: ["phonk", "ai", "producing work for international", "like old trash"],
       selectedLanguages: [],
       excludedLanguages: ["rus"],
 
@@ -4339,7 +4341,7 @@ const DEFAULT_PRESETS = [
 
     filters: {
       selectedGenres: [],
-      excludedGenres: ["phonk", "ai", "producing work for international"],
+      excludedGenres: ["phonk", "ai", "producing work for international", "like old trash"],
       selectedLanguages: [],
       excludedLanguages: ["rus"],
       selectedReleaseTypes: [],
@@ -4489,7 +4491,7 @@ function applyPreset(preset) {
 }
 
 window.applyDefaultFilters = function () {
-  ["phonk", "ai", "producing work for international"].forEach((g) => {
+  ["phonk", "ai", "producing work for international", "like old trash"].forEach((g) => {
     const cb = document.getElementById(`genre-${encodeURIComponent(g)}`);
     if (cb) {
       cb.disabled = true;
@@ -4646,7 +4648,18 @@ window.resetFiltersToDefault = function () {
   clickFirst("listen-count-filter");
   clickFirst("label-select");
 
+  const nuam = document.getElementById("nuam-recommended-checkbox");
+  if (nuam) nuam.checked = false;
+
+  labelFilter = "";
+  const selectedLabelDiv = document.querySelector("#label-select .selected");
+  if (selectedLabelDiv) {
+    selectedLabelDiv.textContent = "Усі лейбли";
+    selectedLabelDiv.dataset.value = "";
+  }
+
   var hide = document.getElementById("hide-listened");
+
   if (hide) hide.checked = true;
 
   window.applyDefaultFilters();
@@ -5937,11 +5950,27 @@ async function init() {
         }
 
         wrap.addEventListener("scroll", updateFade);
-        wrap.addEventListener("wheel", (e) => {
-          e.preventDefault();
-          wrap.scrollBy({ left: e.deltaY, behavior: "smooth" });
-          updateFade();
-        });
+wrap.addEventListener(
+  "wheel",
+  (e) => {
+    const el = wrap;
+
+    if (el.scrollWidth <= el.clientWidth) return;
+
+    const dx = e.deltaX || 0;
+    const dy = e.deltaY || 0;
+    const delta = Math.abs(dy) >= Math.abs(dx) ? dy : dx;
+    if (!delta) return;
+
+    const before = el.scrollLeft;
+    el.scrollLeft += delta;
+
+    if (el.scrollLeft !== before) e.preventDefault();
+
+    requestAnimationFrame(updateFade);
+  },
+  { passive: false }
+);
 
         filtersButton.addEventListener("click", () => {
           requestAnimationFrame(updateFade);
@@ -6070,6 +6099,7 @@ function friendlyGenreLabel(g) {
   if (g === "producing work for international") return "intl prod";
   if (g === "ai") return "AI";
   if (g === "instrumental rock") return "alt. instrumental";
+  if (g === "like old trash") return "estrade";
   return g;
 }
 
@@ -6140,6 +6170,9 @@ function processAlbumData(rawData) {
             base.push(g);
           }
         });
+        if (base.includes("like old trash") && base.includes("pop/indie")) {
+          base = base.filter((g) => g !== "pop/indie");
+        }
         return base;
       })(),
       languages: (() => {
@@ -6288,6 +6321,7 @@ function populateFilters() {
     "drone",
     "exp. electronic",
     "exp. instrumental",
+    "like old trash",
     "opera",
     "a cappella",
     "background",
@@ -6460,8 +6494,8 @@ function populateLabelOptions() {
       releases: st.releases,
       artists: st.artists.size,
       listens: st.listens
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name, "uk"));
+        }))
+    .sort((a, b) => (b.listens - a.listens) || a.name.localeCompare(b.name, "uk"));
 
   const select = document.getElementById("label-select");
   const optsContainer = select.querySelector(".options-container");
@@ -6502,7 +6536,7 @@ function initCustomSelect(select) {
     }
   };
 
-  let labelSortMode = 'name';
+    let labelSortMode = 'listens';
 let sortbar;
 if (select.id === 'label-select') {
   sortbar = document.createElement('div');
@@ -6510,7 +6544,7 @@ if (select.id === 'label-select') {
   sortbar.innerHTML = `
     <span class="label-sortbar-title">Сортувати лейбли:</span>
 
-    <button type="button" data-mode="name" class="active" aria-label="За назвою">
+        <button type="button" data-mode="name" aria-label="За назвою">
       <i class="fas fa-solid fa-sort-alpha-down fa-fw"></i>
     </button>
 
@@ -6522,7 +6556,7 @@ if (select.id === 'label-select') {
       <i class="fas fa-solid fa-users fa-fw"></i>
     </button>
 
-    <button type="button" data-mode="listens" aria-label="За сумою прослуховувань">
+    <button type="button" data-mode="listens" class="active" aria-label="За сумою прослуховувань">
       <i class="fas fa-solid fa-headphones fa-fw"></i>
     </button>
   `;
@@ -7709,14 +7743,22 @@ function attachGlobalEventListeners() {
   });
 
   searchClose.addEventListener("click", () => {
-    logoWrapper.style.display = "inline-block";
-    searchButton.style.display = "inline-block";
-    filtersButton.style.display = "inline-block";
-    searchContainer.style.display = "none";
-    searchInput.value = "";
-    searchQuery = "";
+  const hadQuery =
+    (searchInput.value && searchInput.value.trim() !== "") ||
+    (typeof searchQuery === "string" && searchQuery.trim() !== "");
+
+  logoWrapper.style.display = "inline-block";
+  searchButton.style.display = "inline-block";
+  filtersButton.style.display = "inline-block";
+  searchContainer.style.display = "none";
+
+  searchInput.value = "";
+  searchQuery = "";
+
+  if (hadQuery && typeof smoothApplyFilters === "function") {
     smoothApplyFilters();
-  });
+  }
+});
 
   filtersButton.addEventListener("click", () => {
     logoWrapper.style.display = "none";
@@ -8206,29 +8248,14 @@ function applyFilters(renderImmediately = false) {
 
   renderAlbums(filteredAlbums, true, forceAll);
 
-  updateAlbumCount();
+updateAlbumCount();
 
-  const lazyMsg = document.getElementById("lazy-loading");
-
-  if (labelFilter) {
-  const totalByLabel = albumsData.filter((a) => canonLabel(a.label) === labelFilter);
-  const hiddenByLabel = totalByLabel.filter(
-    (a) => !filteredAlbums.includes(a),
-  );
-
-    if (hiddenByLabel.length) {
-      filteredAlbums.push({ __separatorType: "label" });
-
-      filteredAlbums.push(...hiddenByLabel);
-    }
-
-    lazyMsg.textContent = "";
-  } else {
-    lazyMsg.textContent =
-      filteredAlbums.length === 0
-        ? "Більше немає альбомів для завантаження"
-        : "";
-  }
+const lazyMsg = document.getElementById("lazy-loading");
+isEmptyResult = filteredAlbums.length === 0;
+lazyMsg.textContent = isEmptyResult
+  ? "Немає альбомів за вказаними вами параметрами"
+  : "";
+  
 }
 
 function updateRenderedAlbums(filteredAlbums) {
@@ -8250,13 +8277,17 @@ function updateRenderedAlbums(filteredAlbums) {
 function handleScroll() {
   if (isFiltering) return;
 
-  if (
-    window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
-    currentIndex < filteredAlbums.length
-  ) {
+  const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+  const lazyEl = document.getElementById("lazy-loading");
+
+  if (atBottom && currentIndex < filteredAlbums.length) {
     renderAlbums(filteredAlbums);
+  } else if (atBottom && currentIndex >= filteredAlbums.length && !isEmptyResult) {
+    if (lazyEl) lazyEl.textContent = "Більше немає альбомів для завантаження";
   }
 }
+
+
 
 function forceLazyLoadCheck() {
   const container = document.getElementById("albums-container");
@@ -8270,9 +8301,13 @@ function forceLazyLoadCheck() {
   ) {
     renderAlbums(filteredAlbums);
   } else if (currentIndex >= filteredAlbums.length) {
-    document.getElementById("lazy-loading").textContent =
-      "Більше немає альбомів для завантаження";
-  }
+  const el = document.getElementById("lazy-loading");
+  el.textContent = isEmptyResult
+    ? "Немає альбомів за вказаними вами параметрами"
+    : "";
+}
+
+
 }
 
 function throttle(func, limit) {
@@ -9047,10 +9082,12 @@ enlargedImg.addEventListener("transitionend", cleanup, { once: true });
   }
 
   currentIndex = endIndex;
-  document.getElementById("lazy-loading").textContent =
-    currentIndex >= data.length
-      ? "Більше немає альбомів для завантаження"
-      : "Завантаження альбомів…";
+const lazyEl = document.getElementById("lazy-loading");
+if (currentIndex < data.length) {
+  lazyEl.textContent = "Завантаження альбомів…";
+} else if (!isEmptyResult) {
+  lazyEl.textContent = "";
+}
 }
 
 function renderArtists(index, album) {
