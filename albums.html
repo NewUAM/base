@@ -5967,34 +5967,36 @@ async function init() {
         });
 
         const saveMsg = document.getElementById("preset-save-message");
-        saveBtn.addEventListener("click", () => {
-          const name = inputName.value.trim();
-          if (!name) {
-            saveMsg.textContent = "Вкажіть назву фільтра";
-            saveMsg.className = "error";
-            setTimeout(() => {
-              saveMsg.textContent = "";
-              saveMsg.className = "";
-            }, 2000);
-            return;
-          }
-          saveMsg.textContent = "";
-          saveMsg.className = "";
+saveBtn.addEventListener("click", () => {
+  const name = inputName.value.trim();
+  if (!name) {
+    saveMsg.textContent = "Вкажіть назву фільтра";
+    saveMsg.className = "error";
+    setTimeout(() => {
+      saveMsg.textContent = "";
+      saveMsg.className = "";
+    }, 2000);
+    return;
+  }
+  saveMsg.textContent = "";
+  saveMsg.className = "";
 
-          saveFiltersToCache();
-          const arr = getStoredPresets();
-          const cf = JSON.parse(localStorage.getItem("albumFilters") || "{}");
-          const desc = (inputDesc?.value || "").trim().slice(0, 250);
-          const presetObj = { name, filters: cf, ...(desc ? { desc } : {}) };
-          const idx = arr.findIndex((p) => p.name === name);
-          if (idx >= 0) arr[idx] = presetObj;
-          else arr.push(presetObj);
+  saveFiltersToCache();
+  const arr = getStoredPresets();
+  const cf = JSON.parse(localStorage.getItem("albumFilters") || "{}");
+  const desc = (inputDesc?.value || "").trim().slice(0, 250);
+  const presetObj = { name, filters: cf, ...(desc ? { desc } : {}) };
+  const idx = arr.findIndex((p) => p.name === name);
+  if (idx >= 0) arr[idx] = presetObj;
+  else arr.push(presetObj);
 
-          savePresetsToStorage(arr);
-          loadPresetsFromStorage();
-          updateRestorePresetUI();
-          modal.style.display = "none";
-        });
+  savePresetsToStorage(arr);
+  loadPresetsFromStorage();
+  updateRestorePresetUI();
+
+  modal.style.display = "none";
+  document.body.style.overflow = "auto";
+});
 
         const wrap = document.querySelector(".presets-wrapper");
         const fc = document.getElementById("filters-container");
