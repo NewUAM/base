@@ -2900,6 +2900,48 @@ textarea:focus {
   color: #84aafb !important;
 }
  
+@supports (-moz-appearance: none) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #383838 #282626;
+  }
+
+  .controls,
+  .listened-albums-container,
+  .checkbox-container,
+  .checkbox-container ul,
+  .options-container,
+  #stats-modal .stats-scroll,
+  textarea {
+    scrollbar-width: thin;
+    scrollbar-color: #383838 #282626;
+  }
+  
+  #genre-checkboxes, .option-list, #blacklisted-artists,
+  #blacklisted-labels, #weekly-scroll {
+    scrollbar-width: auto;
+    scrollbar-color: #282626 #383838;
+    scrollbar-gutter: stable both-edges;
+  }
+
+  #data-textarea,
+  #import-textarea {
+    overflow: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: #383838 #282626;
+  }
+  
+  .presets-wrapper { scrollbar-width: none; }
+  
+  #blacklisted-artists .blacklist-cross,
+#blacklisted-labels .blacklist-cross {
+  padding-right: 12px;
+}
+  #search-container {
+  padding: 0px 0px 14px 0px;
+}
+}
+  
 @media (max-width: 768px) {
   .controls {
     flex-direction: column;
