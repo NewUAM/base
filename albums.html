@@ -949,7 +949,7 @@ input:-webkit-autofill:active {
   flex: none;
   width: 40px;
   height: 40px;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   background-color: transparent;
   color: #f3f3f3;
@@ -1278,6 +1278,8 @@ button:hover {
   backface-visibility: hidden;
   transform-style: preserve-3d;
   will-change: transform, border-radius;
+  image-rendering: smooth;
+  transform: translateZ(0);
 }
 
 .album img:hover {
@@ -2940,6 +2942,56 @@ textarea:focus {
   #search-container {
   padding: 0px 0px 14px 0px;
 }
+  
+  .actions-row {
+  gap: 20px;
+}
+  
+  #favorites-button, #blacklist-button, #stats-button {
+  width: 140px;
+}
+  
+  #listen-count-range input[type="range"],
+  #release-period-range input[type="range"],
+  #duration-range input[type="range"],
+  #track-count-range input[type="range"] {
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+    height: 30px;
+    pointer-events: none;
+  }
+
+  #listen-count-range input[type="range"]::-moz-range-track,
+  #release-period-range input[type="range"]::-moz-range-track,
+  #duration-range input[type="range"]::-moz-range-track,
+  #track-count-range input[type="range"]::-moz-range-track {
+    background: transparent;
+    height: 4px;
+  }
+
+  #listen-count-range input[type="range"]::-moz-range-progress,
+  #release-period-range input[type="range"]::-moz-range-progress,
+  #duration-range input[type="range"]::-moz-range-progress,
+  #track-count-range input[type="range"]::-moz-range-progress {
+    background: transparent;
+    height: 4px;
+  }
+
+  #listen-count-range input[type="range"]::-moz-range-thumb,
+  #release-period-range input[type="range"]::-moz-range-thumb,
+  #duration-range input[type="range"]::-moz-range-thumb,
+  #track-count-range input[type="range"]::-moz-range-thumb {
+    -moz-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #84aafb;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+  }  
 }
   
 @media (max-width: 768px) {
@@ -3063,7 +3115,8 @@ textarea:focus {
         id="filters-container"
         style="display: none; align-items: center; gap: 10px; width: 100%; padding: 0 0 15px 0;"
       >
-        <button id="add-preset" class="add-preset-btn">+</button>
+        <button id="add-preset" class="add-preset-btn"><i class="fas fa-plus"></i></button>
+
         <button id="toggle-edit-presets">
           <i class="fas fa-pencil-alt"></i>
         </button>
