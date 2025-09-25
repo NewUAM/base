@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>Музична сцена України — ключові показники</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg:#111111;
+      --fg:#ffffff;
+      --muted:#aaaaaa;
+      --accent:#4A90E2;
+      --accent-2:#0F9D58;
+      --card:#1e1e1e;
+      --line:#2e2e2e;
+    }
+    body.light {
+      --bg:#ffffff;
+      --fg:#111111;
+      --muted:#666666;
+      --accent:#0B64FE;
+      --accent-2:#0F9D58;
+      --card:#F6F7F9;
+      --line:#E6E8EC;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;transition:background .3s,color .3s}
+    .wrap{max-width:1100px;margin:0 auto;padding:32px 20px}
+    .topbar{display:flex;justify-content:flex-end;align-items:center;margin-bottom:16px}
+    .theme-toggle{cursor:pointer;padding:8px 14px;border-radius:8px;background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--fg);transition:background .3s}
+    .theme-toggle:hover{background:var(--line)}
+    header h1{margin:0 0 6px 0;font-size:28px;letter-spacing:.2px}
+    header .sub{color:var(--muted);font-size:14px}
+    .note{margin-top:8px;color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;transition:background .3s,border .3s}
+    .kpi-title{font-size:13px;color:var(--muted);margin:0 0 8px}
+    .kpi-value{font-size:28px;font-weight:700;letter-spacing:.2px}
+    .kpi-sub{font-size:13px;color:var(--muted);margin-top:6px}
+    .section{margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
+    .section h2{margin:0 0 12px;font-size:18px}
+    .lang{display:grid;grid-template-columns:1fr 90px 80px;gap:10px;align-items:center}
+    .lang .bar{height:10px;background:#333;border-radius:6px;overflow:hidden}
+    body.light .lang .bar{background:#e9eefb}
+    .lang .fill{height:100%;background:var(--accent)}
+    .lang-label{font-size:14px}
+    .lang-num,.lang-pct{text-align:right;font-variant-numeric:tabular-nums}
+    .muted{color:var(--muted)}
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .placeholder{border:1px dashed var(--line);background:#181818;border-radius:12px;padding:16px}
+    body.light .placeholder{background:#fafafa}
+    footer{margin:28px 0 8px;color:var(--muted);font-size:12px}
+    @media (max-width:900px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .row-2{grid-template-columns:1fr}
+    }
+    @media (max-width:580px){
+      header h1{font-size:22px}
+      .grid{grid-template-columns:1fr}
+      .kpi-value{font-size:24px}
+      .wrap{padding:20px 16px}
+      .theme-toggle{padding:6px 10px;font-size:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <button class="theme-toggle" onclick="toggleTheme()">Світла/Темна</button>
+    </div>
+    <header>
+      <h1>Музична сцена України — ключові показники</h1>
+      <div class="sub">Дані актуальні на <strong>25.09.2025</strong></div>
+      <div class="note">Джерело даних: NUAM (Spotify як одна з платформ; для агрегованих прослуховувань враховано лише треки з ≥ 1000 відтворень).</div>
+    </header>
+
+    <section class="section">
+      <h2>Артисти</h2>
+      <div class="grid">
+        <div class="card">
+          <p class="kpi-title">Загальна кількість артистів</p>
+          <div class="kpi-value">15&nbsp;602</div>
+        </div>
+        <div class="card">
+          <p class="kpi-title">Активні у поточному році</p>
+          <div class="kpi-value">12&nbsp;017</div>
+        </div>
+        <div class="card">
+          <p class="kpi-title">Дебютні артисти у 2025</p>
+          <div class="kpi-value">881</div>
+          <div class="kpi-sub">Треків від дебютантів: <strong>3&nbsp;535</strong></div>
+        </div>
+        <div class="card">
+          <p class="kpi-title">Середній приріст артистів на тиждень</p>
+          <div class="kpi-value">+23</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Релізи та активність</h2>
+      <div class="row-2">
+        <div class="card">
+          <p class="kpi-title">Кількість треків у 2025 році</p>
+          <div class="kpi-value">60&nbsp;094</div>
+        </div>
+        <div class="card">
+          <p class="kpi-title">Середня кількість треків на тиждень</p>
+          <div class="kpi-value">1&nbsp;581</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Мова треків (частка у 2025)</h2>
+      <div class="card">
+        <div class="lang">
+          <div class="lang-label">Українська — <span class="muted">17&nbsp;224 треків</span></div>
+          <div class="bar"><div class="fill" style="width:78.1%"></div></div>
+          <div class="lang-pct">78,1%</div>
+
+          <div class="lang-label">Англійська — <span class="muted">2&nbsp;502</span></div>
+          <div class="bar"><div class="fill" style="width:11.4%"></div></div>
+          <div class="lang-pct">11,4%</div>
+
+          <div class="lang-label">Російська — <span class="muted">2&nbsp;105</span></div>
+          <div class="bar"><div class="fill" style="width:9.5%"></div></div>
+          <div class="lang-pct">9,5%</div>
+
+          <div class="lang-label">Інші мови — <span class="muted">222</span></div>
+          <div class="bar"><div class="fill" style="width:1.0%"></div></div>
+          <div class="lang-pct">1,0%</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Аудиторія та прослуховування</h2>
+      <div class="row-2">
+        <div class="card">
+          <p class="kpi-title">Загальна кількість прослуховувань треків</p>
+          <div class="kpi-value">894&nbsp;000&nbsp;202</div>
+          <div class="kpi-sub">Лише Spotify; враховано треки з ≥ 1000 відтворень</div>
+        </div>
+        <div class="card">
+          <p class="kpi-title">Середня кількість слухачів на місяць на артиста</p>
+          <div class="kpi-value">8&nbsp;330</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Міжнародна присутність</h2>
+      <div class="row-2">
+        <div class="placeholder">
+          <p class="kpi-title">Кількість артистів із аудиторією за межами України</p>
+          <div class="kpi-value">—</div>
+          <div class="kpi-sub">Дані будуть додані пізніше</div>
+        </div>
+        <div class="placeholder">
+          <p class="kpi-title">Кількість країн</p>
+          <div class="kpi-value">—</div>
+          <div class="kpi-sub">Дані будуть додані пізніше</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <script>
+    function toggleTheme(){
+      document.body.classList.toggle('light');
+    }
+  </script>
+</body>
+</html>
