@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#282626" />
+  <title>NUAM Albums — прес-сторінка</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --bg:#282626;
+      --fg:#f3f3f3;
+      --muted:#bababa;
+      --accent:#84aafb;
+      --border-50: 1px solid rgba(53, 53, 60, 0.55);
+      --card-bg: rgba(53,53,60,.55);
+      --grain-bg:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="4" seed="2"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23g)" opacity=".15"/></svg>');
+    }
+    @font-face {
+  font-family: "CustomFont";
+  src: url("https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2")
+    format("woff2");
+}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:"CustomFont",Arial,sans-serif;}
+    *{box-sizing:border-box}
+
+    body::-webkit-scrollbar{width:10px}
+    body::-webkit-scrollbar-track{background:#282626}
+    body::-webkit-scrollbar-thumb{background:#383838;border-radius:8px;border:2px solid #282626}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;}
+
+    .site-header{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  margin: 0 0 20px;
+  box-sizing: border-box;
+  background: rgba(53,53,60,.55);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+  border-bottom: 1px solid var(--border-50);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.site-header__inner{
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+    
+    .brand{display:flex;align-items:center;gap:10px;min-height:36px}
+    .brand img{height:28px;width:auto;display:block}
+
+.brand-name{letter-spacing:.2px;display:flex;align-items:center;gap:10px}
+.brand-name .sep{display:inline-block;width:1px;height:28px;background:#555}
+
+    .btn,.dl,.open-app {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  color: #f3f3f3;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "CustomFont";
+  cursor: pointer;
+  border: 1px solid rgba(132, 170, 251, 0);
+  background-color: rgba(132, 170, 251, 0.2);
+  text-decoration: none;
+  line-height: 1;
+  transition: border-color .3s ease;
+}
+
+.btn:hover,
+.dl:hover,
+.open-app:hover {
+  border: 1px solid #84aafb;
+}
+
+    .section{margin-top:20px}
+    .section h2{font-size:20px;margin:0 0 30px;display:flex;align-items:center;gap:8px}
+    .section h3{font-size:20px;margin: 40px 0px 20px 0px;display:flex;align-items:center;gap:8px}
+    .section h2.video-title { margin: 40px 0px 20px 0px; }
+
+    .card{
+      background:var(--card-bg);
+      border:1px solid var(--border-50);
+      border-radius:8px;
+      padding:20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%);
+      background-image:var(--grain-bg);background-size:160px 160px;background-blend-mode:overlay;
+    }
+    .card h1{font-size:22px;margin:0 0 20px}
+    .card p{margin:0 0 10px;line-height:1.4}
+
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center}
+    .hero .promo{
+  grid-column: 1 / -1;
+  grid-row: 1;
+      margin-bottom: 20px;
+}
+.hero > .card{
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+    .promo{width:100%;display:block}
+
+    .stats-grid{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+.stat-card{
+  background: var(--card-bg);
+  border: 1px solid var(--border-50);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.stat-card strong{color:var(--accent)}
+    
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid var(--border-50);border-radius:4px;font-size:12px;background:rgba(132,170,251,.08)}
+
+    .features{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:10px}
+    .feature{display:flex;gap:8px;align-items:flex-start}
+    .feature i{color:var(--accent);flex:0 0 18px;margin-top:2px}
+
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:12px}
+    .who-card{display:flex;gap:10px;align-items:flex-start}
+    .who-card i{color:var(--accent);flex:0 0 20px;margin-top:2px}
+
+    .media-grid{display:grid;grid-template-columns:repeat(2,minmax(280px,1fr));gap:12px}
+    .media-card{padding:10px}
+    .figure{display:flex;justify-content:center}
+    .figure.small-470{width:470px;max-width:100%}
+    .figure.small-486{width:486px;max-width:100%}
+    .figure.large{width:100%;max-width:100%}
+    .frame{
+  border-radius:8px;
+  overflow:hidden;
+  background:transparent;
+}
+    .frame video,.frame img{display:block;width:100%;height:auto;object-fit:contain}
+    .ar-470x586{aspect-ratio:470/586}
+    .ar-486x532{aspect-ratio:486/532}
+    .ar-486x368{aspect-ratio:486/368}
+    .ar-1920x944{aspect-ratio:1920/944}
+    .ar-1918x944{aspect-ratio:1918/944}
+
+    .cap{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:var(--muted);font-size:14px}
+    .dl{padding:6px 10px}
+
+    .contact p{margin:4px 0}
+    .contact a{color:var(--fg);text-decoration:none}
+    .contact a:hover{text-decoration:underline}
+
+    .section.card.contact {
+  margin-bottom:20px;
+}
+    
+    @media (max-width:360px){
+      html,body{font-size:14px}
+      .wrap{padding:0px 5px 0px}
+      .site-header{
+  padding: 6px 8px;
+  margin: 0 0 8px;
+}
+      .card {
+      padding: 10px;
+      }
+      
+      .stat-card {
+      padding: 10px;
+        font-size: 12px;
+      }
+      
+      .card h1 {
+      margin: 10px 0px 20px 0px;
+        font-size: 20px;
+      }
+      
+      .hero .promo {
+      margin-bottom: 10px;
+      }
+      
+      .section h2 {
+      margin: 10px 0px 20px 0px;
+      }
+      
+      .site-header__inner{ padding: 6px 8px; }
+
+      .brand-name{display:none}
+      .btn,.open-app{height:38px;width:100%;justify-content:center}
+
+      .hero{grid-template-columns:1fr;gap:10px}
+
+      .features{grid-template-columns:1fr;gap:8px}
+      .grid{grid-template-columns:1fr;gap:10px}
+      .media-grid{grid-template-columns:1fr;gap:10px}
+
+      .figure.large{width:100%}
+      .figure.small-470,.figure.small-486{width:100%}
+
+      .cap{flex-direction:column;align-items:flex-start;gap:6px;font-size:12px}
+      .dl{width:100%;justify-content:center}
+      
+      .media-card .figure,
+.media-card .frame,
+.media-card img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+}    
+    }
+  </style>
+</head>
+<body>
+  <div class="site-header">
+    <div class="site-header__inner">
+      <div class="brand">
+        <img src="https://static.wixstatic.com/media/c77f36_cef2e773aaa74a83af8c999d4e7bed59~mv2.png" alt="NUAM Albums" />
+        <div class="brand-name"><span class="sep"></span><span class="subtitle">для преси</span></div>
+      </div>
+      <a class="btn open-app" href="https://nuam.club/albums" target="_blank" rel="noopener">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> Відкрити застосунок
+      </a>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="section hero">
+      <div class="card">
+        <h1>NUAM оголошує про запуск NUAM Albums</h1>
+        <p>NUAM Albums — вебдодаток з автоматично оновлюваним каталогом українських музичних альбомів: повноформатних, міні-альбомів і компіляцій.</p>
+        <p>NUAM Albums — це централізований довідник української сцени з фокусом на детальну фільтрацію, зручний пошук і сортування більш ніж 8000 альбомів. База зростає щодня, а нові альбоми з’являються в день релізу.</p>
+        <div class="badges">
+          <div class="badge"><i class="fa-solid fa-circle-info"></i> Безкоштовно, без реєстрації — дані зберігаються на пристрої</div>
+          <div class="badge"><i class="fa-solid fa-desktop"></i> Зараз лише для комп’ютерів. Мобільна версія — в планах</div>
+        </div>
+      </div>
+      <img class="promo" src="https://static.wixstatic.com/media/c77f36_a45d766c45724d8e804db8d70ec59a8a~mv2.png" />
+    </section>
+
+<section class="section">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <strong>8000+ альбомів</strong>, випущених з 2024 року.  
+      Додавання релізів усіх попередніх років — у планах.
+    </div>
+    <div class="stat-card">
+      База NUAM враховує <strong>15000+ українських артистів</strong>,  
+      що стали основою для відбору релізів.
+    </div>
+  </div>
+</section>
+
+<section class="section card">
+      <h2><i class="fa-solid fa-bolt"></i> Ключові можливості</h2>
+      <div class="features">
+        <div class="feature"><i class="fa-solid fa-magnifying-glass"></i><p><strong>Пошук і фільтри:</strong> жанри, мова, тип альбому, лейбли, період релізу, популярність, тривалість, кількість треків. Комбінуйте будь-які фільтри.</p></div>
+        <div class="feature"><i class="fa-solid fa-arrow-down-wide-short"></i><p><strong>Сортування:</strong> новизна, популярність, тривалість та режим «Активне зростання слухачів».</p></div>
+        <div class="feature"><i class="fa-solid fa-headphones"></i><p><strong>Попереднє прослуховування:</strong> уривки треків у додатку та швидкі переходи на платформи.</p></div>
+        <div class="feature"><i class="fa-solid fa-sliders"></i><p><strong>Користувацькі сценарії:</strong> пресети фільтрів, вибрані, прослухані, чорний список.</p></div>
+        <div class="feature"><i class="fa-solid fa-chart-line"></i><p><strong>Статистика:</strong> різні графіки для досліджень.</p></div>
+        <div class="feature"><i class="fa-solid fa-shield-heart"></i><p><strong>Конфіденційність:</strong> без реєстрації; все зберігається локально.</p></div>
+      </div>
+    </section>
+
+    <section class="section card">
+  <h2><i class="fa-solid fa-users"></i> Для кого це?</h2>
+  <div class="grid">
+    <div class="who-card"><i class="fa-solid fa-music"></i><div><strong>Слухачі</strong><p>Швидке відкриття нових українських релізів за власними критеріями.</p></div></div>
+    <div class="who-card"><i class="fa-solid fa-bullhorn"></i><div><strong>Музичні медіа, блогери, радіо</strong><p>Добірки і швидка навігація по нішах та трендах.</p></div></div>
+    <div class="who-card"><i class="fa-solid fa-record-vinyl"></i><div><strong>Лейбли та менеджери</strong><p>Моніторинг релізів, потенційних хітів і динаміки за заданими критеріями.</p></div></div>
+    <div class="who-card"><i class="fa-solid fa-magnifying-glass-chart"></i><div><strong>Дослідники</strong><p>Перегляд структурованих даних та зрізів сцени.</p></div></div>
+  </div>
+</section>
+
+    <section class="section">
+  <h2 class="video-title"><i class="fa-solid fa-film"></i> Відео (прев’ю функцій)</h2>
+
+  <div class="media-grid">
+    <div class="card media-card">
+      <div class="figure small-470">
+        <div class="frame ar-470x586">
+          <video src="https://video.wixstatic.com/video/c77f36_9bef1e514acc4a4481e3b964401108a9/360p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        </div>
+      </div>
+      <div class="cap"><span>Навігація по лейблам</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_9bef1e514acc4a4481e3b964401108a9/360p/mp4/file.mp4" download="nuam-albums-labels.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+
+    <div class="card media-card">
+      <div class="figure small-486">
+        <div class="frame ar-486x532">
+          <video src="https://video.wixstatic.com/video/c77f36_35013c0f1a5f4341becc35d9dd0ca641/360p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        </div>
+      </div>
+      <div class="cap"><span>Фільтрація: жанри/мови/типи</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_35013c0f1a5f4341becc35d9dd0ca641/360p/mp4/file.mp4" download="nuam-albums-filters.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+
+    <div class="card media-card">
+      <div class="figure small-486">
+        <div class="frame ar-486x368">
+          <video src="https://video.wixstatic.com/video/c77f36_fbebd56982ad4dfaa90d751ed5e0d1f6/360p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        </div>
+      </div>
+      <div class="cap"><span>Розширені фільтри</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_fbebd56982ad4dfaa90d751ed5e0d1f6/360p/mp4/file.mp4" download="nuam-albums-advanced-filters.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+
+    <div class="card media-card">
+      <div class="figure large">
+        <div class="frame ar-1920x944">
+          <video src="https://video.wixstatic.com/video/c77f36_d3eca554973643e193ec8e38cc3d7504/1080p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        </div>
+      </div>
+      <div class="cap"><span>Робота з пресетами</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_d3eca554973643e193ec8e38cc3d7504/1080p/mp4/file.mp4" download="nuam-albums-presets.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+
+    <div class="card media-card">
+      <div class="figure large">
+        <div class="frame ar-1918x944">
+          <video src="https://video.wixstatic.com/video/c77f36_6e1aea5ca1194f97ad37bc174abc31fd/1080p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        </div>
+      </div>
+      <div class="cap"><span>Базове використання</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_6e1aea5ca1194f97ad37bc174abc31fd/1080p/mp4/file.mp4" download="nuam-albums-basics.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h3><i class="fa-solid fa-image"></i> Зображення</h3>
+  <div class="grid">
+    <div class="card media-card">
+      <div class="figure small-486" style="width:500px;max-width:100%">
+        <div class="frame" style="aspect-ratio:5000/1718">
+          <img src="https://static.wixstatic.com/media/c77f36_cef2e773aaa74a83af8c999d4e7bed59~mv2.png" alt="Логотип NUAM Albums" />
+        </div>
+      </div>
+      <div class="cap"><span>Логотип</span><a class="dl" data-dl href="https://static.wixstatic.com/media/c77f36_cef2e773aaa74a83af8c999d4e7bed59~mv2.png" download="nuam-albums-logo.png"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+
+    <div class="card media-card">
+      <div class="figure large">
+        <div class="frame" style="aspect-ratio:2560/1480">
+          <img src="https://static.wixstatic.com/media/c77f36_ef3d527bc6134a90b976549619403997~mv2.png" alt="Промо-банер NUAM Albums" />
+        </div>
+      </div>
+      <div class="cap"><span>Промо-банер</span><a class="dl" data-dl href="https://static.wixstatic.com/media/c77f36_ef3d527bc6134a90b976549619403997~mv2.png" download="nuam-albums-promo-banner.png"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+    
+    <div class="card media-card">
+      <div class="figure large">
+        <div class="frame" style="aspect-ratio:1350/929">
+          <img src="https://static.wixstatic.com/media/c77f36_297e7f8d60da446c8f4fbb4cffce13d3~mv2.png" alt="Інтерфейс NUAM Albums" />
+        </div>
+      </div>
+      <div class="cap"><span>Інтерфейс</span><a class="dl" data-dl href="https://static.wixstatic.com/media/c77f36_297e7f8d60da446c8f4fbb4cffce13d3~mv2.png" download="nuam-albums-Interface.png"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+  </div>
+</section>
+
+    <section class="section card contact">
+      <h2><i class="fa-solid fa-envelope"></i> Контакти</h2>
+      <p>Пошта: <a href="mailto:hi@nuam.club">hi@nuam.club</a></p>
+      <p>Telegram: <a href="https://t.me/livefimenko" target="_blank" rel="noopener">@livefimenko</a></p>
+      <p>Сайт: <a href="https://nuam.club" target="_blank" rel="noopener">nuam.club</a></p>
+    </section>
+
+  </div>
+  
+  <script>
+document.querySelectorAll('a.dl[data-dl]').forEach(link => {
+  link.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const url = link.getAttribute('href');
+    const name = link.getAttribute('download') || (url.split('/').pop() || 'download');
+    try {
+      const res = await fetch(url, { mode: 'cors' });
+      const blob = await res.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(a.href);
+      a.remove();
+    } catch (err) {
+      window.open(url, '_blank');
+    }
+  });
+});
+</script>
+  
+</body>
+</html>
