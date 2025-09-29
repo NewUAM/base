@@ -414,6 +414,25 @@ document.querySelectorAll('a.dl[data-dl]').forEach(link => {
     }
   });
 });
+
+    (() => {
+  try {
+    if (window !== window.top && window.frameElement) {
+      const f = window.frameElement;
+      const allow = (f.getAttribute('allow') || '').split(';').map(s=>s.trim()).filter(Boolean);
+      if (!allow.includes('fullscreen')) allow.push('fullscreen');
+      f.setAttribute('allow', allow.join('; '));
+      f.setAttribute('allowfullscreen', '');
+      f.setAttribute('webkitallowfullscreen', '');
+      f.setAttribute('mozallowfullscreen', '');
+    }
+  } catch (e) {}
+
+  document.querySelectorAll('video').forEach(v => {
+    v.setAttribute('playsinline', '');
+    v.setAttribute('controls', '');
+  });
+})();
 </script>
   
 </body>
