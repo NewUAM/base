@@ -120,6 +120,16 @@
 }
     .promo{width:100%;display:block}
 
+    .card.dashed{border:1px dashed var(--accent)}
+    
+    .card.dashed a{color:var(--accent)}
+.card.dashed a:visited{color:var(--accent)}
+.card.dashed a:hover{text-decoration:underline}
+    
+    .card.quote{border-left:3px dashed var(--accent); padding-left:16px; position:relative}
+.card.quote blockquote{margin:0; font-style:italic; line-height:1.5}
+.card.quote .quote-author{margin-top:10px; color:var(--muted); font-size:14px}
+    
     .stats-grid{
   display: grid;
   grid-template-columns: repeat(2,1fr);
@@ -206,6 +216,9 @@
       .hero .promo {
       margin-bottom: 10px;
       }
+      
+      .card.quote{padding-left:12px}
+  .card.quote .quote-author{font-size:12px}
       
       .section h2 {
       margin: 10px 0px 20px 0px;
@@ -301,19 +314,26 @@
   </div>
 </section>
 
+    <section class="section card quote">
+  <blockquote>
+    «Я не протиставляю формати: сингли підживлюють алгоритми та аудиторію, працюють на охоплення, імпульс і частоту. Це те, що потрібно артисту і його команді в конкурентному середовищі. Але мені, як слухачеві, важливіші контекст, зміст і цілісність роботи — а це частіше можна зустріти саме в альбомах. Тому NUAM Albums свідомо підсвічує альбом як основну одиницю музики.»
+  </blockquote>
+  <div class="quote-author">— Олексій Єфименко, засновник NUAM</div>
+</section>
+    
+    <section class="section card dashed">
+  <p><strong>NUAM</strong> — екосистема додатків для зручного відстеження та детального дослідження української музики.</p>
+  <p>NUAM Albums — третій важливий елемент екосистеми сервісу: раніше з’явилися
+    <a href="https://nuam.club/base" target="_blank" rel="noopener">NUAM Base</a> — база музикантів України та
+    <a href="https://nuam.club/echo" target="_blank" rel="noopener">NUAM Echo</a> — радар нових релізів української сцени.
+  </p>
+</section>
+    
     <section class="section">
   <h2 class="video-title"><i class="fa-solid fa-film"></i> Відео (прев’ю функцій)</h2>
 
   <div class="media-grid">
-    <div class="card media-card">
-      <div class="figure small-470">
-        <div class="frame ar-470x586">
-          <video src="https://video.wixstatic.com/video/c77f36_9bef1e514acc4a4481e3b964401108a9/360p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
-        </div>
-      </div>
-      <div class="cap"><span>Навігація по лейблам</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_9bef1e514acc4a4481e3b964401108a9/360p/mp4/file.mp4" download="nuam-albums-labels.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
-    </div>
-
+    
     <div class="card media-card">
       <div class="figure small-486">
         <div class="frame ar-486x532">
@@ -331,6 +351,17 @@
       </div>
       <div class="cap"><span>Розширені фільтри</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_fbebd56982ad4dfaa90d751ed5e0d1f6/360p/mp4/file.mp4" download="nuam-albums-advanced-filters.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
     </div>
+    
+    <div class="card media-card">
+      <div class="figure small-470">
+        <div class="frame ar-470x586">
+          <video src="https://video.wixstatic.com/video/c77f36_9bef1e514acc4a4481e3b964401108a9/360p/mp4/file.mp4" autoplay loop muted playsinline controls preload="metadata"></video>
+        </div>
+      </div>
+      <div class="cap"><span>Навігація по лейблам</span><a class="dl" data-dl href="https://video.wixstatic.com/video/c77f36_9bef1e514acc4a4481e3b964401108a9/360p/mp4/file.mp4" download="nuam-albums-labels.mp4"><i class="fa-solid fa-download"></i> Завантажити</a></div>
+    </div>
+
+    
 
     <div class="card media-card">
       <div class="figure large">
@@ -414,7 +445,7 @@ document.querySelectorAll('a.dl[data-dl]').forEach(link => {
     }
   });
 });
-
+    
     (() => {
   try {
     if (window !== window.top && window.frameElement) {
