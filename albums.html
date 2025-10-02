@@ -9102,35 +9102,55 @@ enlargedImg.addEventListener("transitionend", cleanup, { once: true });
         }
 
         if (autoPlayingAlbum === album.albumID) {
-          const clickedIndex = album.tracksIDs.indexOf(trackID);
-          if (clickedIndex >= 0) {
-            autoPlayIndex = clickedIndex;
+  const clickedIndex = album.tracksIDs.indexOf(trackID);
+  if (clickedIndex >= 0) {
+    autoPlayIndex = clickedIndex;
 
-            const hash = album.tracksMP3[autoPlayIndex];
-            previewPlayer.src = `https://p.scdn.co/mp3-preview/${hash}`;
-            previewPlayer.currentTime = 0;
-            previewPlayer.play().catch(() => {});
+    const token = ++playToken;
 
-            if (currentHighlightedCircle) {
-              currentHighlightedCircle.classList.remove("highlight");
-            }
-            const newCirc = tracksContainer.querySelector(
-              `.track-circle[data-track-id="${trackID}"]`,
-            );
-            if (newCirc) {
-              newCirc.classList.add("highlight");
-              currentHighlightedCircle = newCirc;
-            }
+    if (currentHighlightedCircle) {
+      currentHighlightedCircle.classList.remove("highlight");
+    }
+    const newCirc = tracksContainer.querySelector(
+      `.track-circle[data-track-id="${trackID}"]`,
+    );
+    if (newCirc) {
+      newCirc.classList.add("highlight");
+      currentHighlightedCircle = newCirc;
+    }
 
-            previewPlayer.ontimeupdate = () => {
-              const dur = previewPlayer.duration || 1;
-              const pct = (previewPlayer.currentTime / dur) * 100;
-              const fillEl = newCirc.querySelector(".progress-fill");
-              if (fillEl) fillEl.style.width = pct + "%";
-            };
-          }
-          return;
-        }
+    const fillEl = newCirc && newCirc.querySelector(".progress-fill");
+    previewPlayer.onended = null;
+    previewPlayer.onerror = null;
+    previewPlayer.ontimeupdate = null;
+
+    const hash = album.tracksMP3[autoPlayIndex];
+    const url = `https://p.scdn.co/mp3-preview/${hash}`;
+    previewPlayer.src = url;
+    previewPlayer.currentTime = 0;
+
+    if (fillEl) {
+      previewPlayer.ontimeupdate = () => {
+        const dur = previewPlayer.duration || 1;
+        fillEl.style.width = (previewPlayer.currentTime / dur) * 100 + "%";
+      };
+    }
+
+    const handleEnd = () => {
+      if (token !== playToken) return;
+      if (fillEl) fillEl.style.width = "0%";
+      previewPlayer.ontimeupdate = null;
+      autoPlayIndex = clickedIndex + 1;
+      if (typeof playAll.playNext === "function") playAll.playNext();
+    };
+
+    previewPlayer.onended = handleEnd;
+    previewPlayer.onerror = handleEnd;
+
+    previewPlayer.play().catch(() => {});
+  }
+  return;
+}
 
         if (!previewActivated) {
           togglePreview(true);
