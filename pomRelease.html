@@ -28,6 +28,7 @@
     #content{padding:96px 12px 24px;display:flex;flex-direction:column;align-items:center;gap:10px}
     .chart-wrap{width:100%;max-width:1200px}
     #chart{width:100%;height:70vh;max-height:700px}
+    #chartTracks{width:100%;height:70vh;max-height:700px}
 
     .note{color:#bababa;font-size:12px;line-height:1.3;margin-top:4px;width:100%;max-width:1200px;text-align:right}
 
@@ -57,16 +58,32 @@
     <div class="chart-wrap">
       <canvas id="chart"></canvas>
     </div>
-    <div class="note">Дані за 2025 рік станом на серпень</div>
+    <div class="chart-wrap">
+  <canvas id="chartTracks"></canvas>
+</div>
+
   </div>
 
   <script>
-    const labels = ['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024',['2025','(на серпень)']];
+const labels = [
+  '2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024',['2025','(на серпень)']
+];
 
-    const singles      = [504,646,829,1178,1691,2065,3203,5539,7997,13811,21133,24795,16762];
-    const eps          = [134,157,196,198,276,310,399,617,803,927,1446,2086,1214];
-    const albums       = [259,284,300,422,474,471,593,844,1036,1008,1412,2054,1310];
-    const compilations = [  3,  4,  6,  4,  24,  9,  6,  18,  11,  11,   15,  63,  21];
+const singles = [
+  519,671,905,1244,1792,2197,3470,5751,8295,14524,22317,26578,17563
+];
+
+const eps = [
+  145,167,211,215,293,333,427,655,846,977,1547,2161,1272
+];
+
+const albums = [
+  267,292,310,440,496,502,622,872,1098,1102,1491,2103,1328
+];
+
+const compilations = [
+  4,7,7,7,30,12,8,27,23,51,46,84,33
+];
 
     const totalsFull = labels.map((_, i) => singles[i] + eps[i] + albums[i] + compilations[i]);
 
@@ -127,25 +144,32 @@
                 }
                 return `${ctx.dataset.label}: ${fmtFull(cur)}${pct}`;
               },
-              footer(items){
-                const i = items[0].dataIndex;
-                const lab = labels[i];
-                const labelText = Array.isArray(lab) ? lab.join(' ') : lab;
-                return `Усього за ${labelText}: ${fmtFull(totalsFull[i])}`;
-              }
+
             },
             footerColor:'#ddd',
             footerFont:{weight:'bold'}
           }
         },
         scales: {
-          x: {
-            stacked:true,
-            title:{ display:!isMobile, text:'Рік', color:'#eee', padding:{top:10} },
-            ticks:{ color:'#eee', autoSkip:true, maxRotation:0, minRotation:0, font:{ size:isMobile?10:12 } },
-            grid:{ color:'#333' }
-          },
-          y: {
+  x: {
+    stacked: true,
+    offset: true,
+    title: { display: !isMobile, text: 'Рік', color: '#eee', padding: { top: 10 } },
+    ticks: {
+      color: '#eee',
+      autoSkip: false,
+      maxRotation: isMobile ? 50 : 0,
+      minRotation: isMobile ? 50 : 0,
+      font: { size: isMobile ? 10 : 10 },
+      padding: 4,
+      callback: (value, index) => {
+        const lab = labels[index];
+        return Array.isArray(lab) ? lab : String(lab);
+      }
+    },
+    grid: { color: '#333' }
+  },
+  y: {
   stacked: true,
   beginAtZero: true,
   title: { display: !isMobile, text: 'Кількість релізів', color: '#eee', padding: { bottom: 10 } },
@@ -159,9 +183,115 @@
   },
   grid: { color: '#333', drawTicks: false }
 }
-        }
+}
       }
     });
+    
+    const labelsTracks = [
+  '2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024',['2025','(на серпень)']
+];
+
+const tracksAll = [
+  5040,5265,6186,7786,9496,10586,13246,20231,25286,32861,48174,63098,40954
+];
+
+  const ctx2 = document.getElementById('chartTracks').getContext('2d');
+  const defaultLegendClick2 = Chart.defaults.plugins.legend.onClick;
+
+  const chartTracks = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: labelsTracks,
+      datasets: [
+        {
+          label: 'Усього треків',
+          data: tracksAll,
+          backgroundColor: '#84AAFB',
+          borderColor: '#84AAFB',
+          borderWidth: 1,
+          borderRadius: 4,
+          maxBarThickness: 36,
+          stack: 'tracks',
+          yAxisID: 'y'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+  legend: {
+    labels: {
+      color: '#eee',
+      boxWidth: 12,
+      boxHeight: 12,
+      usePointStyle: true,
+      pointStyle: 'rect',
+      font: { size: isMobile ? 11 : 12 }
+    },
+
+    onClick: (e) => { if (e?.native?.preventDefault) e.native.preventDefault(); },
+    onHover: (e) => { if (e?.native?.target) e.native.target.style.cursor = 'default'; }
+  },
+  tooltip: {
+    backgroundColor: 'rgba(0,0,0,.85)',
+    callbacks: {
+      title(items){
+        const i = items[0].dataIndex;
+        return [String(labelsTracks[i])];
+      },
+      label(ctx){
+        const cur  = ctx.parsed.y;
+        const prev = ctx.dataset.data[ctx.dataIndex-1] ?? null;
+        let pct = '';
+        if (ctx.dataIndex>0 && typeof prev === 'number'){
+          if (prev>0){
+            const diff = ((cur-prev)/prev*100);
+            const sign = diff>0?'+':'';
+            pct = ` (${sign}${diff.toFixed(1)}%)`;
+          } else { pct = ' (∞%)'; }
+        }
+        return `${ctx.dataset.label}: ${fmtFull(cur)}${pct}`;
+      }
+    }
+  }
+},
+      scales: {
+  x: {
+    stacked: true,
+    offset: true,
+    title: { display: !isMobile, text: 'Рік', color: '#eee', padding: { top: 10 } },
+    ticks: {
+      color: '#eee',
+      autoSkip: false,
+      maxRotation: isMobile ? 50 : 0,
+      minRotation: isMobile ? 50 : 0,
+      font: { size: isMobile ? 10 : 10 },
+      padding: 4,
+      callback: (value, index) => {
+        const lab = labelsTracks[index];
+        return Array.isArray(lab) ? lab : String(lab);
+      }
+    },
+    grid: { color: '#333' }
+  },
+  y: {
+  beginAtZero: true,
+  title: { display: !isMobile, text: 'Кількість треків', color: '#eee', padding: { bottom: 10 } },
+  ticks: {
+    color: '#eee',
+    callback: (v) => fmtK(v),
+    maxTicksLimit: isMobile ? 6 : 8,
+    padding: isMobile ? 2 : 4,
+    mirror: isMobile,
+    font: { size: isMobile ? 10 : 12 }
+  },
+  grid: { color: '#333', drawTicks: false }
+}
+}
+    }
+  });
   </script>
 </body>
 </html>
