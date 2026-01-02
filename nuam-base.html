@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -3008,7 +3009,7 @@ function initializeGenreCombinations(artists) {
       (hideRussian && artist['RuLang'] !== '') ||
       (filterYearRel && artist['YearRel'] !== '+') ||
       (filterMultiRel && artist['MultiRel'] !== '+') ||
-      (filterDebut && artist['Debut'] !== '+')
+      (filterDebut && artist['Debut25'] !== '+')
     ) {
       continue;
     }
@@ -3506,19 +3507,24 @@ async function fetchCachedCSV(url, cacheKey) {
 async function fetchTracksData() {
     const csv2024URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSejaB-g3vmBuNrp_3Bk6Rlp-z3DPMJTWNwRlT9qvh190uyqJKedIZM3RaQCEKzExSFaT-lRjetFwCM/pub?gid=537499945&single=true&output=csv';
     const csv2025URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=381944221&single=true&output=csv';
+    const csv2026URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQF8E3B7sRWEdfGxrRwQqtNvf4scBZexST0LGUbR7cXss53wcZw6UCZFHA9ChflUcDOJDTL1F1pJ3M8/pub?gid=75312314&single=true&output=csv';
+
     const cacheKey2024 = 'tracksDataCSV2024';
+    const cacheKey2025 = 'tracksDataCSV2025';
 
     try {
         const csvData2024 = await fetchCachedCSV(csv2024URL, cacheKey2024);
+        const csvData2025 = await fetchCachedCSV(csv2025URL, cacheKey2025);
 
-        const response2025 = await fetch(csv2025URL);
-        if (!response2025.ok) throw new Error("Помилка завантаження tracksDataCSV2025");
-        const csvData2025 = await response2025.text();
+        const response2026 = await fetch(csv2026URL);
+        if (!response2026.ok) throw new Error("Помилка завантаження tracksDataCSV2026");
+        const csvData2026 = await response2026.text();
 
         const parsedData2024 = Papa.parse(csvData2024, { header: true, skipEmptyLines: true }).data;
         const parsedData2025 = Papa.parse(csvData2025, { header: true, skipEmptyLines: true }).data;
+        const parsedData2026 = Papa.parse(csvData2026, { header: true, skipEmptyLines: true }).data;
 
-        const combinedData = [...parsedData2024, ...parsedData2025];
+        const combinedData = [...parsedData2024, ...parsedData2025, ...parsedData2026];
 
         tracksData = combinedData.map(row => ({
             track: row.track,
@@ -3971,7 +3977,7 @@ function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
         const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
         const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
-        const matchesDebut = !filterDebut || artist['Debut'] === '+';
+        const matchesDebut = !filterDebut || artist['Debut25'] === '+';
 
         return matchesSelectedGenres && matchesRemovedGenres && matchesSelectedLabels && matchesRemovedLabels &&
                matchesSelectedCities && matchesRemovedCities && matchesHideRussian && matchesListenersRange &&
@@ -4189,7 +4195,7 @@ function displayArtists(artists, reset = false) {
             ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(ico);
         }
-        if (artist['Debut'] === '+') {
+        if (artist['Debut25'] === '+') {
             const ico = document.createElement('div');
             ico.className = 'debut-icon';
             ico.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував&#10;у 2025 році"></i>';
@@ -5377,7 +5383,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const options = {
         steps: [
             {
-                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 15 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
+                intro: '<h2>Вітаємо в NUAM Base!</h2><p>Це найбільша і постійно зростаюча база українських артистів, що містить понад 16 000 імен. Досліджуйте музичну сцену України, використовуючи широкі можливості для пошуку. </p>',
                 disableInteraction: true
             },
             {
@@ -5964,7 +5970,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const matchesFilters = (!filterYearRel || artist['YearRel'] === '+') &&
                                    (!filterMultiRel || artist['MultiRel'] === '+') &&
-                                   (!filterDebut || artist['Debut'] === '+') &&
+                                   (!filterDebut || artist['Debut25'] === '+') &&
                                    (!hideRussian || !artist['RuLang']);
 
             return matchesGenre && matchesFilters;
