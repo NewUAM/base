@@ -483,6 +483,17 @@
         right: 16px;
         cursor: pointer;
       }
+      .chart-modal-title{
+  color:#84AAFB;
+  font-weight:700;
+  font-size:18px;
+  line-height:1.2;
+  text-align:center;
+  margin:0 0 12px 0;
+  padding:0 48px;
+  box-sizing:border-box;
+  white-space:normal;
+}
       .modal-chart-container {
         flex: 1;
         display: flex;
@@ -1171,6 +1182,8 @@
           <button type="button" id="closeModalMobileBtn" class="track-table-button">Закрити</button>
         </div>
 
+        <div id="chartModalTitle" class="chart-modal-title"></div>
+        
         <div class="modal-chart-container">
           <canvas id="modalChart"></canvas>
         </div>
@@ -1464,11 +1477,18 @@
         allCharts[id] = chartInstance;
       }
 
-      function openModalChart(id) {
+      function openModalChart(id, titleText) {
         const modal = document.getElementById('chartModal');
         modal.style.display = 'flex';
         document.body.classList.add('no-scroll');
 
+        const titleEl = document.getElementById('chartModalTitle');
+if (titleEl) {
+  const t = (titleText || '').trim();
+  titleEl.textContent = t;
+  titleEl.style.display = t ? 'block' : 'none';
+}
+        
         if (modalChartInstance) {
           modalChartInstance.destroy();
         }
@@ -1558,8 +1578,10 @@
         const canvas = block.querySelector('canvas');
         if (canvas && canvas.id !== 'weeklyReleases' && canvas.id !== 'languageChart' && canvas.id !== 'genreChart') {
           block.addEventListener('click', () => {
-            openModalChart(canvas.id);
-          });
+  const h3 = block.querySelector('h3');
+  const title = h3 ? h3.textContent : '';
+  openModalChart(canvas.id, title);
+});
         }
       });
 
