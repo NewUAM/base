@@ -1855,12 +1855,10 @@
 			<p class="special-text">Усі дані про треки беруться зі Spotify. Додаток не є комерційним і зроблений в умовах «я щось зробив і воно чомусь працює».<br/><br/> Якщо ви вважаєте, що NUAM Echo — це ваша найкраща знахідка за останні кілька хвилин, можете допомогти автору <a href="https://nuam.club/donate" target="_blank">не померти з голоду.</a><br/><br/> Зв'язатися з автором: <a href="https://t.me/NewUAM" target="_blank">Telegram</a> або <a href="mailto:hi@nuam.club">hi@nuam.club</a><br/><br/> Сайт проєкту: <a href="https://NUAM.club" target="_blank">NUAM.club</a><br/><br/> Соцмережі проєкту: <a href="https://t.me/NewUAM" target="_blank">Telegram</a>, <a href="https://instagram.com/NewUAM/" target="_blank">Instagram</a>, <a href="https://facebook.com/NewUAM" target="_blank">Facebook</a><br/><br/> NUAM на стрім. майданчиках: <a href="https://open.spotify.com/user/3urfeiouxf5veoticftl9npnn?si=aab807a4980a4187" target="_blank">Spotify</a>, <a href="https://music.apple.com/profile/newuam" target="_blank">Apple Music</a>, <a href="https://music.youtube.com/channel/UCRNHp4WdEHgxufye7XTLJLg?si=YNDRoE43tReI-qFs" target="_blank">YouTube Music</a>, <a href="https://www.deezer.com/uk/profile/5403791684/playlists" target="_blank">Deezer</a>, <a href="https://tidal.com/browse/user/192862354" target="_blank">TIDAL</a></p> <button id="closeModal">Закрити</button> </div>
 	</div> 
 	<script>
-	const clientId = 'fb4792c202674399bc4e39fd25def5ab';
-	    const clientSecret = 'a7817d89f103487fa470e3c7e8aca56b';
-	    const alternativeClientId = '5c27ff2084c34558a84f087847e2f191';
-	    const alternativeClientSecret = 'f37aff3b3b05439cbe2fa10f5ccf5209';
-	    let playlistId = '7MQJq6ESHq8Wwa2NGKtoYb';
-	    let accessToken = '';
+	const BROKER_BASE = 'https://spotify-broker.hi-f50.workers.dev';
+const BROKER_KEY  = '3622';
+
+let playlistId = '7MQJq6ESHq8Wwa2NGKtoYb';
 	    const gridContainer = document.getElementById('gridContainer');
 	    const loadMoreButton = document.getElementById('loadMoreButton');
 	    const randomButton = document.getElementById('randomButton');
@@ -1926,65 +1924,18 @@ async function loadCSV(csvUrl) {
 	    }
 	});
 	
-	    async function getAccessToken() {
-	      try {
-	        await fetchAccessToken(clientId, clientSecret);
-	      } catch (error) {
-	        try {
-	          await fetchAccessToken(alternativeClientId, alternativeClientSecret);
-	        } catch (altError) {
-	        }
-	      }
-	    }
-	
-	    let tokenExpiryTime = null;
-	
-	async function fetchAccessToken(id, secret) {
-	    const response = await fetch('https://accounts.spotify.com/api/token', {
-	        method: 'POST',
-	        headers: {
-	            'Authorization': `Basic ${btoa(id + ':' + secret)}`,
-	            'Content-Type': 'application/x-www-form-urlencoded'
-	        },
-	        body: 'grant_type=client_credentials'
-	    });
-	
-	    if (response.ok) {
-	        const data = await response.json();
-	        accessToken = data.access_token;
-	        
-	        tokenExpiryTime = Date.now() + (data.expires_in - 300) * 1000;
-	        setTokenRefreshTimer();
-	        
-	        createPlaylistGrid();
-	    } else {
-	        const data = await response.json();
-	        throw new Error(`Failed to fetch access token: ${data.error_description}`);
-	    }
-	}
-	
-	function setTokenRefreshTimer() {
-	    const currentTime = Date.now();
-	    const delay = tokenExpiryTime - currentTime;
-	
-	    setTimeout(() => {
-	        getAccessToken();
-	    }, delay);
-	} 
-	
 	    async function getPlaylistInfo(playlistId) {
-	      try {
-	        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
-	          headers: {
-	            'Authorization': `Bearer ${accessToken}`
-	          }
-	        });
-	        const data = await response.json();
-	        return data.tracks.total;
-	      } catch (error) {
-	        return 0;
-	      }
-	    }
+  try {
+    const response = await fetch(`${BROKER_BASE}/playlist-info?playlistId=${encodeURIComponent(playlistId)}`, {
+      headers: { 'X-NUAM-Key': BROKER_KEY }
+    });
+    if (!response.ok) return 0;
+    const data = await response.json();
+    return Number(data.total) || 0;
+  } catch (error) {
+    return 0;
+  }
+}
 	
 	    async function createPlaylistGrid(shouldScroll = false) {
 	      if (!hasMoreTracks) {
@@ -1995,11 +1946,9 @@ async function loadCSV(csvUrl) {
 	
 	      try {
 	        const timestamp = new Date().getTime();
-	        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${offset}&limit=50&_=${timestamp}`, {
-	          headers: {
-	            'Authorization': `Bearer ${accessToken}`
-	          }
-	        });
+	        const response = await fetch(`${BROKER_BASE}/playlist-tracks?playlistId=${encodeURIComponent(playlistId)}&offset=${offset}&limit=50&_=${timestamp}`, {
+  headers: { 'X-NUAM-Key': BROKER_KEY }
+});
 	
 	        const data = await response.json();
 	        const tracks = data.items;
@@ -2224,11 +2173,9 @@ async function loadCSV(csvUrl) {
         if (!isRandomizationActive) return;
 
         try {
-            const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?offset=${position - 1}&limit=1`, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
+            const response = await fetch(`${BROKER_BASE}/playlist-tracks?playlistId=${encodeURIComponent(playlistId)}&offset=${position - 1}&limit=1`, {
+  headers: { 'X-NUAM-Key': BROKER_KEY }
+});
 
             const data = await response.json();
             const track = data.items[0];
@@ -3170,8 +3117,8 @@ mobileCopyButton.addEventListener('click', () => {
 });
 
 loadCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1kyqGNj39nsRzCi6QSQecAk8uywNqTPRYTNNqLTOmjwvfThyqFYPWU4GYAPLoRzn9TEuIJaBjTECH/pub?gid=1712149070&single=true&output=csv').then(() => {
-    getAccessToken();
-    audioPlayer.load();
+  createPlaylistGrid();
+  audioPlayer.load();
 });
 	</script>
 </body>
