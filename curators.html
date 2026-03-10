@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>NUAM Playlists</title>
+  <style>
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('https://static.wixstatic.com/ufonts/c77f36_8e332f6e48954416a7131ece2e2fab0f/woff2/file.woff2') format('woff2');
+    }
+
+    :root {
+      --bg: #282626;
+      --panel: #383838;
+      --text: #f3f3f3;
+      --muted: #c6c6c6;
+      --accent: #84aafb;
+      --accent-2: #d7da8b;
+      --bad: #ff738a;
+      --line: #4a4a4a;
+      --panel-bg: rgba(56, 56, 56, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #282626;
+      color: var(--text);
+      font-family: 'CustomFont', sans-serif;
+    }
+
+    body {
+      padding: 10px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .wrap {
+      width: 100%;
+    }
+
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .top-slot {
+      position: relative;
+      min-height: 66px;
+      margin-bottom: 10px;
+    }
+
+    .top-card {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+    }
+
+    #progress-card {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.35s, visibility 0.35s;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+    }
+
+    #progress-card.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #search-card {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.35s, visibility 0.35s;
+    }
+
+    #search-card.ready {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .progress-wrap {
+      width: 100%;
+      height: 28px;
+      background: rgba(215, 218, 139, 0.18);
+      border: 1px solid rgba(215, 218, 139, 0.35);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .progress-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.10) 20%,
+        rgba(255,255,255,0.22) 50%,
+        rgba(255,255,255,0.10) 80%,
+        transparent 100%
+      );
+      transform: translateX(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #progress-card.loading .progress-wrap::after {
+      opacity: 1;
+      animation: progressShimmer 1.2s linear infinite;
+    }
+
+    .progress-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 12px 1px 12px;
+      color: #f3f3f3;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 14px;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    @keyframes progressShimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .search-row,
+    .catalog-top-row,
+    .catalog-filter-grid {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .catalog-filter-grid {
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .catalog-filter-grid .field {
+      flex: 1 1 150px;
+      min-width: 140px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+
+    .search-input,
+    .text-input,
+    .select-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid #6a6a6a;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'CustomFont', sans-serif;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-input.highlight,
+    .text-input.highlight {
+      border-color: var(--bad);
+    }
+
+    .button {
+      min-width: 110px;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'CustomFont', sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .button.secondary {
+      border-color: var(--line);
+    }
+
+    .button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .grow {
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 16px;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    #search-summary,
+    #playlist-summary {
+      display: none;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    #search-summary.show,
+    #playlist-summary.show {
+      display: block;
+    }
+
+    #search-no-results,
+    #playlist-no-results {
+      display: none;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+      margin-top: 10px;
+    }
+
+    #search-no-results.show,
+    #playlist-no-results.show {
+      display: block;
+    }
+
+    #search-results,
+    #playlist-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .result-card,
+    .playlist-card,
+    .artist-head,
+    .album-head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: var(--panel-bg);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .cover {
+      width: 78px;
+      height: 78px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex: 0 0 78px;
+      background: #222;
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .result-main,
+    .playlist-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .result-title,
+    .playlist-title,
+    .artist-head-title,
+    .album-head-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .album-head-title {
+      font-size: 18px;
+    }
+
+    .result-sub,
+    .playlist-sub,
+    .artist-head-sub,
+    .album-head-sub {
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .placement-table-block {
+      margin-top: 8px;
+    }
+
+    .placement-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+    }
+
+    .placement-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      font-size: 14px;
+    }
+
+    .placement-table th,
+    .placement-table td {
+      padding: 8px 10px;
+      text-align: left;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      vertical-align: top;
+    }
+
+    .placement-table thead th {
+      border-top: 0;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .placement-table tbody tr:first-child td {
+      border-top: 0;
+    }
+
+    .placement-table th.is-sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .placement-table th.is-sortable:hover {
+      color: var(--text);
+    }
+
+    .placement-sort-indicator {
+      margin-left: 4px;
+      color: var(--accent-2);
+    }
+
+    .placement-expand-col {
+      width: 44px;
+    }
+
+    .placement-expand-button {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'CustomFont', sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .placement-detail-row {
+      display: none;
+    }
+
+    .placement-detail-row.show {
+      display: table-row;
+    }
+
+    .placement-detail-cell {
+      padding: 10px !important;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .placement-detail-cell .playlist-card {
+      margin: 0;
+    }
+
+    .empty-note {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .playlist-description {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text);
+      opacity: 0.92;
+    }
+
+    .playlist-load-more-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    #playlist-load-more {
+      display: none;
+      min-width: 180px;
+    }
+
+    #playlist-load-more.show {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 9999;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(1100px, 100%);
+      max-height: min(88vh, 1000px);
+      overflow: auto;
+      background: rgba(40, 38, 38, 0.98);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stats-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .stats-card-title {
+      font-size: 15px;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .stats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stats-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 8px;
+    }
+
+    .stats-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .stats-rank {
+      width: 26px;
+      flex: 0 0 26px;
+      color: var(--accent-2);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .stats-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .stats-name {
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .stats-sub {
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .loading-note {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 8px;
+      }
+
+      .top-slot {
+        min-height: 116px;
+      }
+
+      .search-row,
+      .catalog-top-row,
+      .catalog-filter-grid {
+        flex-direction: column;
+      }
+
+      .button,
+      .search-input,
+      .text-input,
+      .select-input {
+        width: 100%;
+      }
+
+      .result-card,
+      .playlist-card,
+      .album-head,
+      .artist-head {
+        flex-direction: row;
+      }
+
+      .cover {
+        width: 66px;
+        height: 66px;
+        flex-basis: 66px;
+      }
+
+      .modal {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top-slot">
+      <div id="progress-card" class="card top-card">
+        <div class="progress-wrap">
+          <div id="progress-label" class="progress-label">Підключення до бази плейлістів...</div>
+        </div>
+      </div>
+
+      <div id="search-card" class="card top-card">
+        <div class="search-row">
+          <input id="search-query" class="search-input grow" type="text" placeholder="Вставте посилання Spotify на трек, альбом або артиста">
+          <button id="search-btn" class="button">Пошук</button>
+          <button id="stats-btn" class="button secondary">Статистика</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="search-summary"></div>
+    <div id="search-no-results"></div>
+    <div id="search-results"></div>
+
+    <div class="card">
+      <div class="section-title">Плейлісти</div>
+      <div class="section-subtitle">Каталог плейлістів з пошуком, сортуванням і фільтрами.</div>
+
+      <div class="catalog-top-row">
+        <div class="field grow">
+          <div class="field-label">Пошук за назвою та описом</div>
+          <input id="playlist-search" class="text-input" type="text" placeholder="Введіть назву або опис плейліста">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Сортування</div>
+          <select id="playlist-sort-by" class="select-input">
+            <option value="follower">За підписниками</option>
+            <option value="track_count">За кількістю треків</option>
+            <option value="last_update">За датою оновлення</option>
+            <option value="name">За назвою</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Напрямок</div>
+          <select id="playlist-sort-dir" class="select-input">
+            <option value="desc">За спаданням</option>
+            <option value="asc">За зростанням</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="catalog-filter-grid">
+        <div class="field">
+          <div class="field-label">Підписники від</div>
+          <input id="follower-min" class="text-input" type="text" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Підписники до</div>
+          <input id="follower-max" class="text-input" type="text" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Треків від</div>
+          <input id="track-min" class="text-input" type="text" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Треків до</div>
+          <input id="track-max" class="text-input" type="text" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Оновлено від</div>
+          <input id="updated-from" class="text-input" type="text" placeholder="01.01.2025">
+        </div>
+
+        <div class="field">
+          <div class="field-label">Оновлено до</div>
+          <input id="updated-to" class="text-input" type="text" placeholder="31.12.2025">
+        </div>
+
+        <div class="field">
+          <div class="field-label">&nbsp;</div>
+          <button id="playlist-apply" class="button">Застосувати</button>
+        </div>
+
+        <div class="field">
+          <div class="field-label">&nbsp;</div>
+          <button id="playlist-reset" class="button secondary">Скинути</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="playlist-summary"></div>
+    <div id="playlist-no-results"></div>
+    <div id="playlist-list"></div>
+
+    <div class="playlist-load-more-wrap">
+      <button id="playlist-load-more" class="button">Показати ще</button>
+    </div>
+  </div>
+
+  <div id="stats-modal" class="modal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div class="modal-title">Загальна статистика</div>
+        <button id="stats-close" class="button secondary">Закрити</button>
+      </div>
+      <div id="stats-content" class="loading-note">Завантаження статистики...</div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://backend-playlists.hi-f50.workers.dev';
+
+    const ui = {
+      progressCard: document.getElementById('progress-card'),
+      progressLabel: document.getElementById('progress-label'),
+
+      searchCard: document.getElementById('search-card'),
+      searchQuery: document.getElementById('search-query'),
+      searchBtn: document.getElementById('search-btn'),
+      statsBtn: document.getElementById('stats-btn'),
+      searchSummary: document.getElementById('search-summary'),
+      searchNoResults: document.getElementById('search-no-results'),
+      searchResults: document.getElementById('search-results'),
+
+      playlistSearch: document.getElementById('playlist-search'),
+      playlistSortBy: document.getElementById('playlist-sort-by'),
+      playlistSortDir: document.getElementById('playlist-sort-dir'),
+      followerMin: document.getElementById('follower-min'),
+      followerMax: document.getElementById('follower-max'),
+      trackMin: document.getElementById('track-min'),
+      trackMax: document.getElementById('track-max'),
+      updatedFrom: document.getElementById('updated-from'),
+      updatedTo: document.getElementById('updated-to'),
+      playlistApply: document.getElementById('playlist-apply'),
+      playlistReset: document.getElementById('playlist-reset'),
+      playlistSummary: document.getElementById('playlist-summary'),
+      playlistNoResults: document.getElementById('playlist-no-results'),
+      playlistList: document.getElementById('playlist-list'),
+      playlistLoadMore: document.getElementById('playlist-load-more'),
+
+      statsModal: document.getElementById('stats-modal'),
+      statsClose: document.getElementById('stats-close'),
+      statsContent: document.getElementById('stats-content')
+    };
+
+    const state = {
+      placementTables: new Map(),
+      placementTableCounter: 0,
+      playlist: {
+        limit: 50,
+        offset: 0,
+        total: 0,
+        hasMore: false,
+        items: [],
+        loading: false
+      },
+      statsLoaded: false,
+      statsHtml: ''
+    };
+
+    function escapeHtml(s) {
+      return String(s ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function formatUkNumber(n) {
+      return Number(n || 0).toLocaleString('uk-UA');
+    }
+
+    function getUkWordForm(n, one, few, many) {
+      const abs = Math.abs(Number(n)) % 100;
+      const last = abs % 10;
+
+      if (abs > 10 && abs < 20) return many;
+      if (last > 1 && last < 5) return few;
+      if (last === 1) return one;
+      return many;
+    }
+
+    function formatUkCount(n, one, few, many) {
+      return `${formatUkNumber(n)} ${getUkWordForm(n, one, few, many)}`;
+    }
+
+    function formatPlaylistsLocative(n) {
+      return formatUkCount(n, 'плейлісті', 'плейлістах', 'плейлістах');
+    }
+
+    function formatTracksGenitive(n) {
+      return formatUkCount(n, 'трек', 'треки', 'треків');
+    }
+
+    function round2(n) {
+      return Math.round(Number(n || 0) * 100) / 100;
+    }
+
+    function extractSpotifyId(input, type) {
+      const s = String(input || '').trim();
+      if (!s) return null;
+
+      if (/^[0-9A-Za-z]{22}$/.test(s)) return s;
+
+      try {
+        const u = new URL(s);
+        const parts = u.pathname.split('/').filter(Boolean);
+        const idx = parts.indexOf(type);
+        if (idx >= 0 && parts[idx + 1]) {
+          const id = parts[idx + 1];
+          if (/^[0-9A-Za-z]{22}$/.test(id)) return id;
+        }
+      } catch (e) {}
+
+      const m = s.match(new RegExp(type + '\\/([0-9A-Za-z]{22})'));
+      return m ? m[1] : null;
+    }
+
+    function detectInputTypeAndId(raw) {
+      const value = String(raw || '').trim();
+      if (!value) return null;
+
+      const trackId = extractSpotifyId(value, 'track');
+      if (trackId) return { type: 'track', id: trackId };
+
+      const albumId = extractSpotifyId(value, 'album');
+      if (albumId) return { type: 'album', id: albumId };
+
+      const artistId = extractSpotifyId(value, 'artist');
+      if (artistId) return { type: 'artist', id: artistId };
+
+      return null;
+    }
+
+    function buildApiUrl(path, params = {}) {
+      const url = new URL(API_BASE + path);
+
+      Object.entries(params).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === '') return;
+        url.searchParams.set(key, value);
+      });
+
+      return url.toString();
+    }
+
+    async function apiJson(path, params = {}) {
+      const response = await fetch(buildApiUrl(path, params));
+      const text = await response.text();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(text || `HTTP ${response.status}`);
+      }
+
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.error || `HTTP ${response.status}`);
+      }
+
+      return data;
+    }
+
+    function getPlaylistTrackCount(item) {
+      return Number(item?.track_count ?? 0) || 0;
+    }
+
+    function getPlaylistFollowerCount(item) {
+      return Number(item?.follower ?? 0) || 0;
+    }
+
+    function renderArtistLinks(artists) {
+      if (!Array.isArray(artists) || !artists.length) return '';
+      return artists.map((artist) => {
+        const url = artist.url || `https://open.spotify.com/artist/${artist.artist_id || ''}`;
+        return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(artist.name || artist.artist_id || '')}</a>`;
+      }).join(', ');
+    }
+
+    function clearSearchOutput() {
+      ui.searchResults.innerHTML = '';
+      ui.searchNoResults.className = '';
+      ui.searchNoResults.textContent = '';
+      ui.searchSummary.className = '';
+      ui.searchSummary.textContent = '';
+      state.placementTables.clear();
+      state.placementTableCounter = 0;
+    }
+
+    function showSearchNoResults(text) {
+      ui.searchResults.innerHTML = '';
+      ui.searchNoResults.className = 'show';
+      ui.searchNoResults.textContent = text;
+    }
+
+    function setSearchSummary(text) {
+      ui.searchSummary.className = 'show';
+      ui.searchSummary.textContent = text;
+    }
+
+    function setPlaylistSummary(text) {
+      ui.playlistSummary.className = 'show';
+      ui.playlistSummary.textContent = text;
+    }
+
+    function renderPlaylistCard(item) {
+      const followerCount = getPlaylistFollowerCount(item);
+      const trackCount = getPlaylistTrackCount(item);
+
+      return `
+        <div class="playlist-card">
+          <div class="cover">${item.cover ? `<img src="${escapeHtml(item.cover)}" alt="">` : ''}</div>
+          <div class="playlist-main">
+            <div class="playlist-title"><a href="${escapeHtml(item.url || `https://open.spotify.com/playlist/${item.playlist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name || item.playlist_id)}</a></div>
+            <div class="playlist-sub">
+              ${item.curator
+                ? `Куратор: ${item.curator_url
+                    ? `<a href="${escapeHtml(item.curator_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.curator)}</a>`
+                    : escapeHtml(item.curator)}`
+                : 'Куратор не вказаний'}
+            </div>
+            <div class="meta-line">
+              <span class="pill">Підписники: ${formatUkNumber(followerCount)}</span>
+              <span class="pill">Треки: ${formatUkNumber(trackCount)}</span>
+              <span class="pill">Оновлено: ${escapeHtml(item.last_update || '—')}</span>
+            </div>
+            ${item.description ? `<div class="playlist-description">${escapeHtml(item.description)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function getPlacementSortedItems(tableState) {
+      const items = [...tableState.items];
+      const dir = tableState.sortDir === 'asc' ? 1 : -1;
+
+      items.sort((a, b) => {
+        if (tableState.sortKey === 'follower') {
+          const av = getPlaylistFollowerCount(a);
+          const bv = getPlaylistFollowerCount(b);
+          if (av !== bv) return (av - bv) * dir;
+        }
+
+        if (tableState.sortKey === 'position') {
+          const av = Number(a.position || 0);
+          const bv = Number(b.position || 0);
+          if (av !== bv) return (av - bv) * dir;
+        }
+
+        const an = String(a.name || '').toLowerCase();
+        const bn = String(b.name || '').toLowerCase();
+        return an.localeCompare(bn, 'uk');
+      });
+
+      return items;
+    }
+
+    function getPlacementSortIndicator(tableState, key) {
+      if (tableState.sortKey !== key) return '';
+      return tableState.sortDir === 'asc' ? '↑' : '↓';
+    }
+
+    function renderPlacementTableRows(tableId, items, expandedSet) {
+      return items.map((item) => {
+        const expanded = expandedSet.has(item.playlist_id);
+
+        return `
+          <tr>
+            <td class="placement-expand-col">
+              <button
+                type="button"
+                class="placement-expand-button"
+                data-placement-toggle="1"
+                data-table-id="${escapeHtml(tableId)}"
+                data-playlist-id="${escapeHtml(item.playlist_id)}"
+              >${expanded ? '−' : '+'}</button>
+            </td>
+            <td>
+              <a href="${escapeHtml(item.url || `https://open.spotify.com/playlist/${item.playlist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name || item.playlist_id)}</a>
+            </td>
+            <td>
+              ${item.curator
+                ? item.curator_url
+                  ? `<a href="${escapeHtml(item.curator_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.curator)}</a>`
+                  : escapeHtml(item.curator)
+                : '—'}
+            </td>
+            <td>${formatUkNumber(getPlaylistFollowerCount(item))}</td>
+            <td>${formatUkNumber(getPlaylistTrackCount(item))}</td>
+            <td>${formatUkNumber(item.position || 0)}</td>
+          </tr>
+          <tr class="placement-detail-row ${expanded ? 'show' : ''}">
+            <td colspan="6" class="placement-detail-cell">
+              ${renderPlaylistCard(item)}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderPlacementTableInner(tableId) {
+      const tableState = state.placementTables.get(tableId);
+
+      if (!tableState || !tableState.items.length) {
+        return `<div class="empty-note">У жодному плейлісті не знайдено.</div>`;
+      }
+
+      const items = getPlacementSortedItems(tableState);
+
+      return `
+        <div class="placement-table-wrap">
+          <table class="placement-table">
+            <thead>
+              <tr>
+                <th class="placement-expand-col"></th>
+                <th>Плейліст</th>
+                <th>Куратор</th>
+                <th
+                  class="is-sortable"
+                  data-placement-sort="1"
+                  data-table-id="${escapeHtml(tableId)}"
+                  data-sort-key="follower"
+                >
+                  Підписники
+                  <span class="placement-sort-indicator">${getPlacementSortIndicator(tableState, 'follower')}</span>
+                </th>
+                <th>Треків</th>
+                <th
+                  class="is-sortable"
+                  data-placement-sort="1"
+                  data-table-id="${escapeHtml(tableId)}"
+                  data-sort-key="position"
+                >
+                  Позиція
+                  <span class="placement-sort-indicator">${getPlacementSortIndicator(tableState, 'position')}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              ${renderPlacementTableRows(tableId, items, tableState.expanded)}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderPlacementTable(playlists) {
+      if (!playlists.length) {
+        return `<div class="empty-note">У жодному плейлісті не знайдено.</div>`;
+      }
+
+      const tableId = `pt-${++state.placementTableCounter}`;
+
+      state.placementTables.set(tableId, {
+        items: [...playlists],
+        sortKey: 'position',
+        sortDir: 'asc',
+        expanded: new Set()
+      });
+
+      return `
+        <div class="placement-table-block" data-placement-table-id="${escapeHtml(tableId)}">
+          ${renderPlacementTableInner(tableId)}
+        </div>
+      `;
+    }
+
+    function rerenderPlacementTable(tableId) {
+      const wrap = ui.searchResults.querySelector(`[data-placement-table-id="${CSS.escape(tableId)}"]`);
+      if (!wrap) return;
+      wrap.innerHTML = renderPlacementTableInner(tableId);
+    }
+
+    function togglePlacementSort(tableId, sortKey) {
+      const tableState = state.placementTables.get(tableId);
+      if (!tableState) return;
+
+      if (tableState.sortKey === sortKey) {
+        tableState.sortDir = tableState.sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        tableState.sortKey = sortKey;
+        tableState.sortDir = sortKey === 'position' ? 'asc' : 'desc';
+      }
+
+      rerenderPlacementTable(tableId);
+    }
+
+    function togglePlacementDetails(tableId, playlistId) {
+      const tableState = state.placementTables.get(tableId);
+      if (!tableState) return;
+
+      if (tableState.expanded.has(playlistId)) {
+        tableState.expanded.delete(playlistId);
+      } else {
+        tableState.expanded.add(playlistId);
+      }
+
+      rerenderPlacementTable(tableId);
+    }
+
+    function renderSearchTrackCard(info) {
+      const cover = info.album_cover || '';
+      const albumName = info.album_name || '';
+      const artists = renderArtistLinks(info.artists || []);
+      const trackName = info.name || info.track_id;
+      const trackUrl = info.url || `https://open.spotify.com/track/${info.track_id}`;
+
+      return `
+        <div class="result-card">
+          <div class="cover">${cover ? `<img src="${escapeHtml(cover)}" alt="">` : ''}</div>
+          <div class="result-main">
+            <div class="result-title"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
+            <div class="result-sub">${artists}${albumName ? ` · <a href="${escapeHtml(info.album_url || `https://open.spotify.com/album/${info.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(albumName)}</a>` : ''}</div>
+            <div class="meta-line">
+              <span class="pill">Плейлісти: ${formatUkNumber(info.playlists_count)}</span>
+              <span class="pill">Появи: ${formatUkNumber(info.appearances_count)}</span>
+              <span class="pill">Середня позиція: ${round2(info.avg_position)}</span>
+            </div>
+            ${renderPlacementTable(info.playlists || [])}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAlbumHeader(summary) {
+      const cover = summary.album_cover || '';
+      const artists = renderArtistLinks(summary.artists || []);
+      const albumUrl = summary.album_url || `https://open.spotify.com/album/${summary.album_id}`;
+
+      return `
+        <div class="album-head">
+          <div class="cover">${cover ? `<img src="${escapeHtml(cover)}" alt="">` : ''}</div>
+          <div class="result-main">
+            <div class="album-head-title"><a href="${escapeHtml(albumUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(summary.album_name || summary.album_id)}</a></div>
+            <div class="album-head-sub">${artists}</div>
+            <div class="meta-line">
+              <span class="pill">Знайдено: ${formatTracksGenitive(summary.unique_tracks_count)}</span>
+              <span class="pill">Плейлісти: ${formatUkNumber(summary.playlists_count)}</span>
+              <span class="pill">Середня позиція: ${round2(summary.avg_position)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderArtistHeader(summary) {
+      return `
+        <div class="artist-head">
+          <div class="result-main">
+            <div class="artist-head-title"><a href="${escapeHtml(summary.url || `https://open.spotify.com/artist/${summary.artist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(summary.name || summary.artist_id)}</a></div>
+            <div class="meta-line">
+              <span class="pill">Унікальні треки: ${formatUkNumber(summary.unique_tracks_count)}</span>
+              <span class="pill">Плейлісти: ${formatUkNumber(summary.playlists_count)}</span>
+              <span class="pill">Появи: ${formatUkNumber(summary.appearances_count)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getPlaylistFiltersFromUi() {
+      return {
+        search: ui.playlistSearch.value.trim(),
+        sortBy: ui.playlistSortBy.value,
+        sortDir: ui.playlistSortDir.value,
+        followerMin: ui.followerMin.value.trim(),
+        followerMax: ui.followerMax.value.trim(),
+        trackMin: ui.trackMin.value.trim(),
+        trackMax: ui.trackMax.value.trim(),
+        updatedFrom: ui.updatedFrom.value.trim(),
+        updatedTo: ui.updatedTo.value.trim()
+      };
+    }
+
+    async function loadPlaylists(reset = false) {
+      if (state.playlist.loading) return;
+
+      state.playlist.loading = true;
+      ui.playlistLoadMore.disabled = true;
+      ui.playlistApply.disabled = true;
+      ui.playlistReset.disabled = true;
+
+      try {
+        const params = getPlaylistFiltersFromUi();
+        params.limit = state.playlist.limit;
+        params.offset = reset ? 0 : state.playlist.offset;
+
+        const data = await apiJson('/playlists', params);
+
+        if (reset) {
+          state.playlist.items = data.items || [];
+        } else {
+          state.playlist.items = state.playlist.items.concat(data.items || []);
+        }
+
+        state.playlist.total = Number(data.total || 0);
+        state.playlist.offset = Number(data.offset || 0) + (data.items?.length || 0);
+        state.playlist.hasMore = !!data.has_more;
+
+        ui.playlistList.innerHTML = state.playlist.items.map(renderPlaylistCard).join('');
+
+        if (!state.playlist.items.length) {
+          ui.playlistNoResults.className = 'show';
+          ui.playlistNoResults.textContent = 'Плейлісти за цими параметрами не знайдено.';
+        } else {
+          ui.playlistNoResults.className = '';
+          ui.playlistNoResults.textContent = '';
+        }
+
+        setPlaylistSummary(`Показано ${formatUkCount(state.playlist.items.length, 'плейліст', 'плейлісти', 'плейлістів')} із ${formatUkCount(state.playlist.total, 'плейліст', 'плейлісти', 'плейлістів')}.`);
+
+        if (state.playlist.hasMore) {
+          ui.playlistLoadMore.classList.add('show');
+        } else {
+          ui.playlistLoadMore.classList.remove('show');
+        }
+      } catch (error) {
+        ui.playlistNoResults.className = 'show';
+        ui.playlistNoResults.textContent = 'Не вдалося завантажити список плейлістів.';
+      } finally {
+        state.playlist.loading = false;
+        ui.playlistLoadMore.disabled = false;
+        ui.playlistApply.disabled = false;
+        ui.playlistReset.disabled = false;
+      }
+    }
+
+    async function runTrackSearch(trackId) {
+      setSearchSummary('Завантаження даних треку...');
+
+      const data = await apiJson('/search/track', { id: trackId });
+
+      if (!data.found || !data.result) {
+        showSearchNoResults('Трек не знайдено в жодному плейлісті бази.');
+        setSearchSummary('Збігів немає.');
+        return;
+      }
+
+      ui.searchResults.innerHTML = renderSearchTrackCard(data.result);
+      setSearchSummary(`Трек знайдено у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція — ${round2(data.result.avg_position)}.`);
+    }
+
+    async function runAlbumSearch(albumId) {
+      setSearchSummary('Завантаження треків альбому...');
+
+      const data = await apiJson('/search/album', { id: albumId });
+
+      if (!data.found || !data.result) {
+        showSearchNoResults('Жоден трек цього альбому не знайдено в плейлістах бази.');
+        setSearchSummary('Збігів немає.');
+        return;
+      }
+
+      const cards = (data.result.tracks || []).map((item) => renderSearchTrackCard(item)).join('');
+
+      ui.searchResults.innerHTML = `
+        ${renderAlbumHeader(data.result)}
+        ${cards}
+      `;
+
+      setSearchSummary(`Знайдено ${formatUkNumber(data.result.unique_tracks_count)} з ${formatTracksGenitive(data.result.unique_tracks_count)} альбому у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція — ${round2(data.result.avg_position)}.`);
+    }
+
+    async function runArtistSearch(artistId) {
+      setSearchSummary('Завантаження даних артиста...');
+
+      const data = await apiJson('/search/artist', { id: artistId });
+
+      if (!data.found || !data.result) {
+        showSearchNoResults('Треки цього артиста не знайдено в плейлістах бази.');
+        setSearchSummary('Збігів немає.');
+        return;
+      }
+
+      const cards = (data.result.tracks || []).map((item) => renderSearchTrackCard(item)).join('');
+
+      ui.searchResults.innerHTML = `
+        ${renderArtistHeader(data.result)}
+        ${cards}
+      `;
+
+      setSearchSummary(`Знайдено ${formatTracksGenitive(data.result.unique_tracks_count)} артиста у ${formatPlaylistsLocative(data.result.playlists_count)}.`);
+    }
+
+    async function runSearchSafe() {
+      clearSearchOutput();
+
+      const parsed = detectInputTypeAndId(ui.searchQuery.value.trim());
+
+      if (!parsed) {
+        ui.searchQuery.classList.add('highlight');
+        showSearchNoResults('Вставте коректне посилання Spotify на трек, альбом або артиста.');
+        return;
+      }
+
+      ui.searchQuery.classList.remove('highlight');
+
+      try {
+        if (parsed.type === 'track') {
+          await runTrackSearch(parsed.id);
+          return;
+        }
+
+        if (parsed.type === 'album') {
+          await runAlbumSearch(parsed.id);
+          return;
+        }
+
+        await runArtistSearch(parsed.id);
+      } catch (error) {
+        setSearchSummary('Сталася помилка під час пошуку.');
+        showSearchNoResults('Не вдалося виконати пошук.');
+      }
+    }
+
+    function renderStatsTrackList(title, rows) {
+      return `
+        <div class="stats-card">
+          <div class="stats-card-title">${escapeHtml(title)}</div>
+          <div class="stats-list">
+            ${rows.map((row, index) => {
+              const artists = renderArtistLinks(row.artists || []);
+              const trackName = row.name || row.track_id;
+              const trackUrl = row.url || `https://open.spotify.com/track/${row.track_id}`;
+
+              return `
+                <div class="stats-item">
+                  <div class="stats-rank">${index + 1}.</div>
+                  <div class="stats-main">
+                    <div class="stats-name"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
+                    <div class="stats-sub">${artists}${row.appearances_count !== undefined ? ` · Появи: ${formatUkNumber(row.appearances_count)}` : ''}${row.playlists_count !== undefined ? ` · Плейлісти: ${formatUkNumber(row.playlists_count)}` : ''}${row.avg_position !== undefined ? ` · Середня позиція: ${round2(row.avg_position)}` : ''}</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStatsArtistList(title, rows) {
+      return `
+        <div class="stats-card">
+          <div class="stats-card-title">${escapeHtml(title)}</div>
+          <div class="stats-list">
+            ${rows.map((row, index) => {
+              const artistUrl = row.url || `https://open.spotify.com/artist/${row.artist_id}`;
+
+              return `
+                <div class="stats-item">
+                  <div class="stats-rank">${index + 1}.</div>
+                  <div class="stats-main">
+                    <div class="stats-name"><a href="${escapeHtml(artistUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(row.name || row.artist_id)}</a></div>
+                    <div class="stats-sub">Появи: ${formatUkNumber(row.appearances_count)} · Плейлісти: ${formatUkNumber(row.playlists_count)} · Унікальні треки: ${formatUkNumber(row.unique_tracks_count)} · Середня позиція: ${round2(row.avg_position)}</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadStatsModal() {
+      ui.statsContent.innerHTML = '<div class="loading-note">Завантаження статистики...</div>';
+
+      const data = await apiJson('/stats/overview', { limit: 20 });
+
+      ui.statsContent.innerHTML = `
+        <div class="stats-grid">
+          ${renderStatsTrackList('Треки з найбільшою кількістю появ у плейлістах', data.top_tracks_by_appearances || [])}
+          ${renderStatsArtistList('Артисти з найбільшою кількістю появ у плейлістах', data.top_artists_by_appearances || [])}
+          ${renderStatsTrackList('Треки з найвищою середньою позицією в плейлістах', data.top_tracks_by_position || [])}
+          ${renderStatsArtistList('Артисти з найвищою середньою позицією в плейлістах', data.top_artists_by_position || [])}
+        </div>
+      `;
+
+      state.statsLoaded = true;
+      state.statsHtml = ui.statsContent.innerHTML;
+    }
+
+    async function openStatsModal() {
+      ui.statsModal.classList.add('show');
+
+      if (state.statsLoaded && state.statsHtml) {
+        ui.statsContent.innerHTML = state.statsHtml;
+        return;
+      }
+
+      try {
+        await loadStatsModal();
+      } catch (error) {
+        ui.statsContent.innerHTML = '<div class="loading-note">Не вдалося завантажити статистику.</div>';
+      }
+    }
+
+    function closeStatsModal() {
+      ui.statsModal.classList.remove('show');
+    }
+
+    async function initApp() {
+      try {
+        await loadPlaylists(true);
+        ui.progressCard.classList.add('hidden');
+        ui.searchCard.classList.add('ready');
+      } catch (error) {
+        ui.progressLabel.textContent = 'Помилка завантаження';
+      }
+    }
+
+    ui.searchBtn.addEventListener('click', () => {
+      runSearchSafe();
+    });
+
+    ui.searchQuery.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        runSearchSafe();
+      }
+    });
+
+    ui.searchQuery.addEventListener('paste', () => {
+      setTimeout(() => {
+        runSearchSafe();
+      }, 0);
+    });
+
+    ui.searchResults.addEventListener('click', (event) => {
+      const sortTrigger = event.target.closest('[data-placement-sort="1"]');
+      if (sortTrigger) {
+        togglePlacementSort(
+          sortTrigger.getAttribute('data-table-id'),
+          sortTrigger.getAttribute('data-sort-key')
+        );
+        return;
+      }
+
+      const toggleTrigger = event.target.closest('[data-placement-toggle="1"]');
+      if (toggleTrigger) {
+        togglePlacementDetails(
+          toggleTrigger.getAttribute('data-table-id'),
+          toggleTrigger.getAttribute('data-playlist-id')
+        );
+      }
+    });
+
+    ui.statsBtn.addEventListener('click', () => {
+      openStatsModal();
+    });
+
+    ui.statsClose.addEventListener('click', () => {
+      closeStatsModal();
+    });
+
+    ui.statsModal.addEventListener('click', (event) => {
+      if (event.target === ui.statsModal) {
+        closeStatsModal();
+      }
+    });
+
+    ui.playlistApply.addEventListener('click', () => {
+      loadPlaylists(true);
+    });
+
+    ui.playlistReset.addEventListener('click', () => {
+      ui.playlistSearch.value = '';
+      ui.playlistSortBy.value = 'follower';
+      ui.playlistSortDir.value = 'desc';
+      ui.followerMin.value = '';
+      ui.followerMax.value = '';
+      ui.trackMin.value = '';
+      ui.trackMax.value = '';
+      ui.updatedFrom.value = '';
+      ui.updatedTo.value = '';
+      loadPlaylists(true);
+    });
+
+    ui.playlistSearch.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        loadPlaylists(true);
+      }
+    });
+
+    [
+      ui.followerMin,
+      ui.followerMax,
+      ui.trackMin,
+      ui.trackMax,
+      ui.updatedFrom,
+      ui.updatedTo
+    ].forEach((input) => {
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          loadPlaylists(true);
+        }
+      });
+    });
+
+    ui.playlistLoadMore.addEventListener('click', () => {
+      loadPlaylists(false);
+    });
+
+    window.addEventListener('load', () => {
+      initApp();
+    });
+  </script>
+</body>
+</html>
