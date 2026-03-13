@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>NUAM Hub</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-echo.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-playlists.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-albums.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-base.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-debuts.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-chart.css"/>
+  <link rel="stylesheet" href="css/blocks/nuam-scope.css"/>
+</head>
+<body>
+
+  <header id="pageHeader">
+    <div class="header-logo">
+      <a href="https://nuam.club" target="_blank" rel="noopener noreferrer">
+        <span class="logo-mask" aria-label="NUAM"></span>
+      </a>
+      <div class="header-separator"></div>
+      <h1 class="header-title">НОВА<br>УКРАЇНСЬКА<br>МУЗИКА</h1>
+    </div>
+    <nav class="header-nav">
+      <a class="nav-btn" href="#">Нова музика</a>
+      <a class="nav-btn" href="#">Плейлісти</a>
+      <a class="nav-btn" href="#">Альбоми</a>
+      <a class="nav-btn" href="#">Артисти</a>
+      <a class="nav-btn" href="#">Дебюти</a>
+      <a class="nav-btn" href="#">Чарт</a>
+      <a class="nav-btn" href="#">Статистика</a>
+      <a class="nav-btn" href="#">Про проєкт</a>
+    </nav>
+    <div class="header-stats">
+      <div class="header-stats-left">
+        <div class="stat-line">
+          <span class="stat-label">Артистів у базі:</span>
+          <span class="stat-value" id="stat-artists">16 000</span>
+        </div>
+        <div class="stat-line">
+          <span class="stat-label">Треків у 2025 році:</span>
+          <span class="stat-value" id="stat-tracks-2025">70 000</span>
+        </div>
+        <div class="stat-line">
+          <span class="stat-label">Загальна тривалість:</span>
+          <span class="stat-value" id="stat-duration">3100 год 50 хв</span>
+        </div>
+      </div>
+
+      <div class="header-stats-separator"></div>
+
+      <div class="header-stats-right">
+        <div>Додати</div>
+        <div>артиста</div>
+      </div>
+    </div>
+
+  </header>
+
+  <main id="pageMain">
+    <div class="scroll-area">
+      <div class="main-container">
+        <section class="blocks" id="hub-blocks">
+          <div class="block" id="NUAM-Echo">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-music block-icon" aria-hidden="true"></i>Нова музика</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+
+          <div class="block" id="NUAM-Playlists">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-square-caret-right block-icon" aria-hidden="true"></i>Плейлісти</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+
+          <div class="block" id="NUAM-Albums">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-record-vinyl block-icon" aria-hidden="true"></i>Альбоми</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+
+          <div class="block" id="NUAM-Base">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-users block-icon" aria-hidden="true"></i>Артисти</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+
+          <div class="block" id="NUAM-Debuts">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-seedling block-icon" aria-hidden="true"></i>Дебюти</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+
+          <div class="block" id="NUAM-Chart">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-ranking-star block-icon" aria-hidden="true"></i>Чарт</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+
+          <div class="block" id="NUAM-Scope">
+            <div class="block-header">
+              <h2 class="block-title"><i class="fa-solid fa-chart-column block-icon" aria-hidden="true"></i>Статистика</h2>
+              <div class="block-actions"></div>
+            </div>
+            <div class="block-body"></div>
+          </div>
+          
+          <div class="block-buttons">
+            <button type="button">Live сесії</button>
+            <button type="button">Кураторські плейлісти</button>
+            <button type="button">YT-канали про музику</button>
+            <button type="button">Дослідження</button>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+  
+  <footer id="pageFooter">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a href="https://nuam.club" target="_blank" rel="noopener noreferrer" class="footer-link">© 2025 NUAM</a>
+      </div>
+      <div class="footer-center">
+        <a href="https://t.me/NewUAM" target="_blank" rel="noopener noreferrer" class="footer-icon"><i class="fab fa-telegram"></i></a>
+        <a href="https://instagram.com/newuam" target="_blank" rel="noopener noreferrer" class="footer-icon"><i class="fa-brands fa-square-instagram"></i></a>
+      </div>
+      <div class="footer-right">
+        <div class="footer-label">Зв'язок:</div>
+        <a href="https://t.me/livefimenko" target="_blank" rel="noopener noreferrer">t.me/livefimenko</a>
+        <a href="mailto:hi@nuam.club">hi@nuam.club</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="nuam-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nuam-modal-title">
+      <div class="modal-header">
+        <div id="nuam-modal-title">Додаання артиста до бази NUAM</div>
+        <button type="button" class="modal-close" id="nuam-modal-close" aria-label="Закрити">×</button>
+      </div>
+      <div class="modal-content" id="nuam-modal-content">
+        <div class="modal-body-grid">
+          <section class="modal-hero">
+            <p class="lead">
+              Артистам не потрібно надсилати NUAM пресрелізи. Достатньо бути в базі — система автоматично відстежить і зафіксує ваш новий трек у день релізу. Він буде прослуханий і занесений до радарних плейлістів, якщо відповідає мінімально необхідній якості.
+            </p>
+
+            <div class="modal-cta-stack">
+              <button type="button" class="modal-btn-primary">
+                <i class="fa-solid fa-user-plus"></i>
+                Додати артиста в базу
+              </button>
+              <div class="subnote">Це може зробити і слухач — не обов’язково бути представником артиста.</div>
+            </div>
+          </section>
+
+          <section class="modal-info">
+            <h3 class="h3">Чому це важливо</h3>
+            <ul class="feature-list">
+              <li class="feature"><i class="fa-solid fa-check"></i><span>Треки можуть потрапляти до плейлістів NUAM, які відстежують редактори музичних медіа, блогери та лейбли.</span></li>
+              <li class="feature"><i class="fa-solid fa-check"></i><span>Представлення у найбільшій базі українських артистів — <b>NUAM Base</b>.</span></li>
+              <li class="feature"><i class="fa-solid fa-check"></i><span>Повноформатні та мініальбоми автоматично з’являються у всеукраїнському каталозі <b>NUAM Albums</b>.</span></li>
+            </ul>
+
+            <h3 class="h3">Не залишайтеся осторонь</h3>
+            <p class="text">
+              Важливо бути частиною екосистеми, де вас знаходять слухачі, медіа й лейбли. Зробіть перший крок — додайте себе в базу. Далі NUAM усе зробить автоматично.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/layout/autoColumnsByHeight.js"></script>
+  <script src="js/modal/nuamModal.js"></script>
+
+  <script src="js/blocks/nuam-echo.js"></script>
+  <script src="js/blocks/nuam-playlists.js"></script>
+  <script src="js/blocks/nuam-albums.js"></script>
+  <script src="js/blocks/nuam-base.js"></script>
+  <script src="js/blocks/nuam-debuts.js"></script>
+  <script src="js/blocks/nuam-chart.js"></script>
+  <script src="js/blocks/nuam-scope.js"></script>
+</body>
+</html>
