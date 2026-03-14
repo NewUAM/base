@@ -907,11 +907,6 @@ input:-webkit-autofill:active {
   flex: 0 0 190px;
 }
 
-.playlist-search-field {
-  flex: 1.2 1 300px;
-  min-width: 280px;
-}
-
 .slider-field {
   flex: 1 1 240px;
   min-width: 230px;
@@ -1439,6 +1434,23 @@ input:-webkit-autofill:active {
   color: var(--muted);
   line-height: 1.4;
 }
+    
+    .stats-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.stats-toggle-group {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats-mode-btn.is-active {
+  background-color: rgba(132, 170, 251, 0.2);
+  border-color: rgba(132, 170, 251, 1);
+}
 
 .track-cover-thumb {
   width: 40px;
@@ -1647,7 +1659,6 @@ input:-webkit-autofill:active {
     align-items: stretch;
   } 
 
-  .playlist-search-field,
   .field.small,
   .slider-field {
     flex: 1 1 auto;
@@ -1813,10 +1824,6 @@ input:-webkit-autofill:active {
   </div>
 
   <div class="controls-row controls-row-filters">
-    <div class="field playlist-search-field">
-      <div class="field-label">Пошук плейліста</div>
-      <input id="playlist-search" class="text-input" type="text" placeholder="Введіть назву або опис плейліста">
-    </div>
 
     <div class="field small">
       <div class="field-label">Сортування</div>
@@ -1876,22 +1883,6 @@ input:-webkit-autofill:active {
       </div>
     </div>
 
-    <div class="field slider-field">
-      <div class="field-label">Дата оновлення</div>
-      <div class="range-box">
-        <div class="range-values">
-          <span id="updated-from-view">01.01.2024</span>
-          <span id="updated-to-view">31.12.2026</span>
-        </div>
-        <div class="dual-range">
-          <div id="updated-range-fill" class="dual-range-fill"></div>
-          <input id="updated-from-range" type="range" min="0" max="1095" step="1" value="0">
-          <input id="updated-to-range" type="range" min="0" max="1095" step="1" value="1095">
-        </div>
-        <input id="updated-from" type="hidden">
-        <input id="updated-to" type="hidden">
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1965,16 +1956,12 @@ input:-webkit-autofill:active {
 
             catalogShell: document.getElementById("playlist-catalog"),
       catalogBackBtn: document.getElementById("catalog-back-btn"),
-
-      playlistSearch: document.getElementById("playlist-search"),
       playlistSortBy: document.getElementById("playlist-sort-by"),
       playlistSortDir: document.getElementById("playlist-sort-dir"),
       followerMin: document.getElementById("follower-min"),
       followerMax: document.getElementById("follower-max"),
       trackMin: document.getElementById("track-min"),
       trackMax: document.getElementById("track-max"),
-      updatedFrom: document.getElementById("updated-from"),
-      updatedTo: document.getElementById("updated-to"),
       playlistSummary: document.getElementById("playlist-summary"),
       playlistNoResults: document.getElementById("playlist-no-results"),
       playlistList: document.getElementById("playlist-list"),
@@ -2014,7 +2001,8 @@ input:-webkit-autofill:active {
         pendingReload: false
       },
       statsLoaded: false,
-      statsHtml: "",
+statsData: null,
+statsMode: "recent",
       playlistModal: {
         limit: 100,
         currentId: "",
@@ -2106,15 +2094,6 @@ function renderPlaylistDescription(description) {
       const ss = String(date.getUTCSeconds()).padStart(2, "0");
       return `${dd}.${mm}.${yyyy} ${hh}:${mi}:${ss}`;
     }
-
-    function formatSliderDateByIndex(index) {
-  const baseUtc = Date.UTC(2024, 0, 1);
-  const date = new Date(baseUtc + Number(index) * 86400000);
-  const dd = String(date.getUTCDate()).padStart(2, "0");
-  const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const yyyy = date.getUTCFullYear();
-  return `${dd}.${mm}.${yyyy}`;
-}
 
 function initDualRange(config) {
   const minRange = document.getElementById(config.minRangeId);
@@ -2462,20 +2441,6 @@ parseManual: (value) => Number(String(value || "").replace(/[^\d]/g, ""))
 toLabel: (value) => formatUkNumber(value),
 editable: true,
 parseManual: (value) => Number(String(value || "").replace(/[^\d]/g, ""))
-  });
-
-  rangeControls.updated = initDualRange({
-    minRangeId: "updated-from-range",
-    maxRangeId: "updated-to-range",
-    minLabelId: "updated-from-view",
-    maxLabelId: "updated-to-view",
-    fillId: "updated-range-fill",
-    minInputId: "updated-from",
-    maxInputId: "updated-to",
-    defaultMin: 0,
-    defaultMax: 1095,
-    toInput: (value) => formatSliderDateByIndex(value),
-    toLabel: (value) => formatSliderDateByIndex(value)
   });
 }
     
@@ -3093,18 +3058,15 @@ function updateHoverMarquees(root = document) {
 }
 
     function getPlaylistFiltersFromUi() {
-      return {
-        search: ui.playlistSearch.value.trim(),
-        sortBy: ui.playlistSortBy.querySelector(".selected").dataset.value || "follower",
-        sortDir: ui.playlistSortDir.querySelector(".selected").dataset.value || "desc",
-        followerMin: ui.followerMin.value.trim(),
-        followerMax: ui.followerMax.value.trim(),
-        trackMin: ui.trackMin.value.trim(),
-        trackMax: ui.trackMax.value.trim(),
-        updatedFrom: ui.updatedFrom.value.trim(),
-        updatedTo: ui.updatedTo.value.trim()
-      };
-    }
+  return {
+    sortBy: ui.playlistSortBy.querySelector(".selected").dataset.value || "follower",
+    sortDir: ui.playlistSortDir.querySelector(".selected").dataset.value || "desc",
+    followerMin: ui.followerMin.value.trim(),
+    followerMax: ui.followerMax.value.trim(),
+    trackMin: ui.trackMin.value.trim(),
+    trackMax: ui.trackMax.value.trim()
+  };
+}
 
     function schedulePlaylistsReload() {
   if (playlistFiltersDebounce) {
@@ -3122,7 +3084,6 @@ function updateHoverMarquees(root = document) {
 }
 
 function initPlaylistAutoApply() {
-  ui.playlistSearch.addEventListener("input", schedulePlaylistsReload);
   ui.playlistSortBy.addEventListener("change", schedulePlaylistsReload);
   ui.playlistSortDir.addEventListener("change", schedulePlaylistsReload);
 
@@ -3130,9 +3091,7 @@ function initPlaylistAutoApply() {
     "follower-min-range",
     "follower-max-range",
     "track-min-range",
-    "track-max-range",
-    "updated-from-range",
-    "updated-to-range"
+    "track-max-range"
   ].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.addEventListener("input", schedulePlaylistsReload);
@@ -3357,29 +3316,29 @@ function initPlaylistAutoApply() {
     }
 
     function renderStatsTrackList(title, rows) {
-      return `
-        <div class="stats-card">
-          <div class="stats-card-title">${escapeHtml(title)}</div>
-          <div class="stats-list">
-            ${rows.map((row, index) => {
-              const artists = renderArtistLinks(row.artists || []);
-              const trackName = row.name || row.track_id;
-              const trackUrl = row.url || `https://open.spotify.com/track/${row.track_id}`;
+  return `
+    <div class="stats-card">
+      <div class="stats-card-title">${escapeHtml(title)}</div>
+      <div class="stats-list">
+        ${rows.map((row, index) => {
+          const artists = renderArtistLinks(row.artists || []);
+          const trackName = row.name || row.track_id;
+          const trackUrl = row.url || `https://open.spotify.com/track/${row.track_id}`;
 
-              return `
-                <div class="stats-item">
-                  <div class="stats-rank">${index + 1}.</div>
-                  <div class="stats-main">
-                    <div class="stats-name"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
-                    <div class="stats-sub">${artists}${row.appearances_count !== undefined ? ` · Появи: ${formatUkNumber(row.appearances_count)}` : ""}${row.playlists_count !== undefined ? ` · Плейлісти: ${formatUkNumber(row.playlists_count)}` : ""}${row.avg_position !== undefined ? ` · Середня позиція: ${round2(row.avg_position)}` : ""}</div>
-                  </div>
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </div>
-      `;
-    }
+          return `
+            <div class="stats-item">
+              <div class="stats-rank">${index + 1}.</div>
+              <div class="stats-main">
+                <div class="stats-name"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
+                <div class="stats-sub">${artists}${row.playlists_count !== undefined ? ` · Плейлісти: ${formatUkNumber(row.playlists_count)}` : ""}${row.avg_position !== undefined ? ` · Середня позиція: ${round2(row.avg_position)}` : ""}</div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
 
     function renderStatsArtistList(title, rows) {
       return `
@@ -3404,38 +3363,77 @@ function initPlaylistAutoApply() {
       `;
     }
 
-    async function loadStatsModal() {
-  ui.statsContent.innerHTML = '<div class="loading-note">Завантаження статистики...</div>';
-  const data = await apiJson("/stats/overview", { limit: 20 });
+    function renderStatsOverviewContent(data, mode) {
+  const isRecent = mode === "recent";
 
-  ui.statsContent.innerHTML = `
-    <div class="loading-note" style="margin-bottom: 10px;">Дані за останні 30 днів. Для двох нижніх блоків враховується сила присутності у топ-50 плейлістів.</div>
+  const tracksTitle = isRecent
+    ? "Треки у найбільшій кількості плейлістів за останні 30 днів"
+    : "Треки у найбільшій кількості плейлістів за весь час";
+
+  const artistsTitle = isRecent
+    ? "Артисти з найбільшою кількістю появ за останні 30 днів"
+    : "Артисти з найбільшою кількістю появ за весь час";
+
+  const tracksRows = isRecent
+    ? (data.top_tracks_by_appearances || [])
+    : (data.top_tracks_all_time || []);
+
+  const artistsRows = isRecent
+    ? (data.top_artists_by_appearances || [])
+    : (data.top_artists_all_time || []);
+
+  return `
+    <div class="stats-toolbar">
+      <div class="stats-toggle-group">
+        <button
+          type="button"
+          class="button secondary stats-mode-btn ${isRecent ? "is-active" : ""}"
+          data-stats-mode="recent"
+        >30 днів</button>
+        <button
+          type="button"
+          class="button secondary stats-mode-btn ${!isRecent ? "is-active" : ""}"
+          data-stats-mode="all_time"
+        >Весь час</button>
+      </div>
+    </div>
+
+    <div class="loading-note" style="margin-bottom: 10px;">
+      Для цих блоків враховуються тільки позиції 1-100 у плейлістах, що мають щонайменше 100 підписників.
+      ${isRecent ? "Для режиму 30 днів враховується дата додавання треку до плейліста." : ""}
+    </div>
+
     <div class="stats-grid">
-      ${renderStatsTrackList("Треки з найбільшою кількістю появ за останні 30 днів", data.top_tracks_by_appearances || [])}
-      ${renderStatsArtistList("Артисти з найбільшою кількістю появ за останні 30 днів", data.top_artists_by_appearances || [])}
-      ${renderStatsTrackList("Треки з найсильнішою присутністю у топ-50 за останні 30 днів", data.top_tracks_by_position || [])}
-      ${renderStatsArtistList("Артисти з найсильнішою присутністю у топ-50 за останні 30 днів", data.top_artists_by_position || [])}
+      ${renderStatsTrackList(tracksTitle, tracksRows)}
+      ${renderStatsArtistList(artistsTitle, artistsRows)}
     </div>
   `;
+}
+    
+    async function loadStatsModal() {
+  ui.statsContent.innerHTML = '<div class="loading-note">Завантаження статистики...</div>';
+
+  const data = await apiJson("/stats/overview", { limit: 20 });
 
   state.statsLoaded = true;
-  state.statsHtml = ui.statsContent.innerHTML;
+  state.statsData = data;
+  ui.statsContent.innerHTML = renderStatsOverviewContent(data, state.statsMode);
 }
 
     async function openStatsModal() {
-      ui.statsModal.classList.add("show");
+  ui.statsModal.classList.add("show");
 
-      if (state.statsLoaded && state.statsHtml) {
-        ui.statsContent.innerHTML = state.statsHtml;
-        return;
-      }
+  if (state.statsLoaded && state.statsData) {
+    ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode);
+    return;
+  }
 
-      try {
-        await loadStatsModal();
-      } catch (error) {
-        ui.statsContent.innerHTML = '<div class="loading-note">Не вдалося завантажити статистику.</div>';
-      }
-    }
+  try {
+    await loadStatsModal();
+  } catch (error) {
+    ui.statsContent.innerHTML = '<div class="loading-note">Не вдалося завантажити статистику.</div>';
+  }
+}
 
     function closeStatsModal() {
       ui.statsModal.classList.remove("show");
@@ -3928,13 +3926,24 @@ ui.searchQuery.addEventListener("click", () => {
     if (!state.playlistModal.currentId || state.playlistModal.loading) return;
     loadMoreTrigger.disabled = true;
     loadPlaylistModalPage(state.playlistModal.currentId, false);
-  }
+  } 
 });
 
     ui.statsBtn.addEventListener("click", () => {
       openStatsModal();
     });
 
+    ui.statsContent.addEventListener("click", (event) => {
+  const modeBtn = event.target.closest("[data-stats-mode]");
+  if (!modeBtn || !state.statsData) return;
+
+  const nextMode = modeBtn.getAttribute("data-stats-mode");
+  if (!nextMode || nextMode === state.statsMode) return;
+
+  state.statsMode = nextMode;
+  ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode);
+});
+    
     ui.statsClose.addEventListener("click", () => {
       closeStatsModal();
     });
@@ -3959,16 +3968,6 @@ ui.searchQuery.addEventListener("click", () => {
       if (!state.playlistModal.currentId) return;
       loadPlaylistModalPage(state.playlistModal.currentId, false);
     }); 
-
-    ui.playlistSearch.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    if (playlistFiltersDebounce) {
-      clearTimeout(playlistFiltersDebounce);
-      playlistFiltersDebounce = null;
-    }
-    loadPlaylists(true);
-  }
-});
 
 ui.playlistLoadMore.addEventListener("click", () => {
   loadPlaylists(false);
