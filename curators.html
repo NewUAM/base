@@ -49,7 +49,8 @@ body {
 body::-webkit-scrollbar,
 .custom-select .options-container::-webkit-scrollbar,
 .suggestions::-webkit-scrollbar,
-.modal-box::-webkit-scrollbar {
+.modal-box::-webkit-scrollbar,
+.playlist-modal-scroll-area::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
@@ -57,14 +58,16 @@ body::-webkit-scrollbar,
 body::-webkit-scrollbar-track,
 .custom-select .options-container::-webkit-scrollbar-track,
 .suggestions::-webkit-scrollbar-track,
-.modal-box::-webkit-scrollbar-track {
+.modal-box::-webkit-scrollbar-track,
+.playlist-modal-scroll-area::-webkit-scrollbar-track {
   background: #282626;
 }
 
 body::-webkit-scrollbar-thumb,
 .custom-select .options-container::-webkit-scrollbar-thumb,
 .suggestions::-webkit-scrollbar-thumb,
-.modal-box::-webkit-scrollbar-thumb {
+.modal-box::-webkit-scrollbar-thumb,
+.playlist-modal-scroll-area::-webkit-scrollbar-thumb {
   background-color: #383838;
   border-radius: 8px;
   border: 2px solid #282626;
@@ -73,7 +76,8 @@ body::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-button,
 .custom-select .options-container::-webkit-scrollbar-button,
 .suggestions::-webkit-scrollbar-button,
-.modal-box::-webkit-scrollbar-button {
+.modal-box::-webkit-scrollbar-button,
+.playlist-modal-scroll-area::-webkit-scrollbar-button {
   display: none;
 }
 
@@ -1655,7 +1659,8 @@ input:-webkit-autofill:active {
   body,
   .modal-box,
   .custom-select .options-container,
-  .suggestions {
+  .suggestions,
+  .playlist-modal-scroll-area {
     scrollbar-width: thin;
     scrollbar-color: #383838 #282626;
   }
