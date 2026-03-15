@@ -1545,24 +1545,35 @@ input:-webkit-autofill:active {
   overflow: hidden;
 }
 
-.playlist-modal-scroll-area {
-  position: relative;
+.playlist-modal-table-frame {
+  margin-top: 0;
   height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.playlist-modal-table-head-wrap {
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: #282626;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  --playlist-head-offset: 0px;
+}
+
+.playlist-modal-table-head-wrap .playlist-modal-table {
+  transform: translateX(var(--playlist-head-offset));
+  will-change: transform;
+}
+
+.playlist-modal-scroll-area {
+  flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-}
-
-.playlist-modal-scroll-area .placement-table-block {
-  margin-top: 0;
-}
-
-.playlist-modal-scroll-area .placement-table-wrap {
-  overflow: visible;
-  border: 0;
-  border-radius: 0;
 }
 
 #playlist-modal .playlist-modal-table {
@@ -1571,15 +1582,83 @@ input:-webkit-autofill:active {
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
+  margin: 0;
 }
 
 #playlist-modal .playlist-modal-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 5;
+  position: static;
   background: #282626;
   background-clip: padding-box;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: none;
+}
+
+#playlist-modal .playlist-modal-table-body tbody tr:first-child td {
+  border-top: 0;
+}
+
+#playlist-modal .playlist-modal-scroll-area .modal-load-more-wrap {
+  padding: 10px;
+  margin-top: 0;
+}.playlist-modal-table-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.playlist-modal-table-frame {
+  margin-top: 0;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.playlist-modal-table-head-wrap {
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: #282626;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  --playlist-head-offset: 0px;
+}
+
+.playlist-modal-table-head-wrap .playlist-modal-table {
+  transform: translateX(var(--playlist-head-offset));
+  will-change: transform;
+}
+
+.playlist-modal-scroll-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+#playlist-modal .playlist-modal-table {
+  width: 100%;
+  min-width: 1050px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+}
+
+#playlist-modal .playlist-modal-table thead th {
+  position: static;
+  background: #282626;
+  background-clip: padding-box;
+  box-shadow: none;
+}
+
+#playlist-modal .playlist-modal-table-body tbody tr:first-child td {
+  border-top: 0;
+}
+
+#playlist-modal .playlist-modal-scroll-area .modal-load-more-wrap {
+  padding: 10px;
+  margin-top: 0;
 }
 
 #playlist-modal .playlist-modal-table th:nth-child(1),
@@ -2562,6 +2641,20 @@ function updateHoverMarquees(root = document) {
   });
 }
     
+    function initPlaylistModalTableHeaderSync(root = document) {
+  const scrollArea = root.querySelector(".playlist-modal-scroll-area");
+  const headWrap = root.querySelector(".playlist-modal-table-head-wrap");
+
+  if (!scrollArea || !headWrap) return;
+
+  const syncHeader = () => {
+    headWrap.style.setProperty("--playlist-head-offset", `${-scrollArea.scrollLeft}px`);
+  };
+
+  syncHeader();
+  scrollArea.addEventListener("scroll", syncHeader, { passive: true });
+}
+    
     function normalizeSearchValueUi(value) {
       return String(value || "")
         .toLowerCase()
@@ -3488,82 +3581,85 @@ function initPlaylistAutoApply() {
       </div>
 
       <div class="playlist-modal-table-shell">
-        <div class="playlist-modal-scroll-area">
-          <div class="placement-table-block">
-            <div class="placement-table-wrap playlist-modal-table-wrap">
-              <table class="placement-table playlist-modal-table">
-                <thead>
-                  <tr>
-                    <th class="is-sortable" data-playlist-modal-sort="position">
-                      #
-                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("position")}</span>
-                    </th>
-                    <th class="is-sortable" data-playlist-modal-sort="artist">
-                      Трек
-                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("artist")}</span>
-                    </th>
-                    <th>Альбом</th>
-                    <th class="is-sortable" data-playlist-modal-sort="duration">
-                      Тривалість
-                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("duration")}</span>
-                    </th>
-                    <th class="is-sortable" data-playlist-modal-sort="playcount">
-                      Прослуховування
-                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("playcount")}</span>
-                    </th>
-                    <th class="is-sortable" data-playlist-modal-sort="added">
-                      Додано
-                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("added")}</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${(result.tracks || []).map((track) => `
-                    <tr>
-                      <td>${formatUkNumber(track.position || 0)}</td>
-                      <td>
-                        <div class="modal-track-cell">
-                          <div class="track-cover-thumb">
-                            ${track.album_cover ? `<img src="${escapeHtml(track.album_cover)}" alt="">` : ""}
-                          </div>
-                          <div class="modal-track-text">
-                            <div class="modal-track-title">
-                              ${renderHoverMarquee(`
-                                <a href="${escapeHtml(track.url || `https://open.spotify.com/track/${track.track_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.name || track.track_id)}</a>
-                              `)}
-                            </div>
-                            <div class="modal-track-sub">
-                              ${renderHoverMarquee(renderArtistLinks(track.artists || []))}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="playlist-modal-album-cell">
-                        ${renderHoverMarquee(`
-                          <a href="${escapeHtml(track.album_url || `https://open.spotify.com/album/${track.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.album_name || track.album_id)}</a>
-                        `)}
-                      </td>
-                      <td>${formatDurationMs(track.duration_ms || 0)}</td>
-                      <td>${formatUkNumber(track.playcount || 0)}</td>
-                      <td>${escapeHtml(formatIsoDateTime(track.added_at || ""))}</td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>
-            </div>
+        <div class="placement-table-block playlist-modal-table-frame">
+          <div class="playlist-modal-table-head-wrap">
+            <table class="placement-table playlist-modal-table playlist-modal-table-head">
+              <thead>
+                <tr>
+                  <th class="is-sortable" data-playlist-modal-sort="position">
+                    #
+                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("position")}</span>
+                  </th>
+                  <th class="is-sortable" data-playlist-modal-sort="artist">
+                    Трек
+                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("artist")}</span>
+                  </th>
+                  <th>Альбом</th>
+                  <th class="is-sortable" data-playlist-modal-sort="duration">
+                    Тривалість
+                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("duration")}</span>
+                  </th>
+                  <th class="is-sortable" data-playlist-modal-sort="playcount">
+                    Прослуховування
+                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("playcount")}</span>
+                  </th>
+                  <th class="is-sortable" data-playlist-modal-sort="added">
+                    Додано
+                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("added")}</span>
+                  </th>
+                </tr>
+              </thead>
+            </table>
           </div>
 
-          ${result.tracks_has_more ? `
-            <div class="modal-load-more-wrap">
-              <button
-  type="button"
-  class="button"
-  data-playlist-modal-load-more-inline="1"
->
-  Показати ще
-</button>
-            </div>
-          ` : ""}
+          <div class="playlist-modal-scroll-area">
+            <table class="placement-table playlist-modal-table playlist-modal-table-body">
+              <tbody>
+                ${(result.tracks || []).map((track) => `
+                  <tr>
+                    <td>${formatUkNumber(track.position || 0)}</td>
+                    <td>
+                      <div class="modal-track-cell">
+                        <div class="track-cover-thumb">
+                          ${track.album_cover ? `<img src="${escapeHtml(track.album_cover)}" alt="">` : ""}
+                        </div>
+                        <div class="modal-track-text">
+                          <div class="modal-track-title">
+                            ${renderHoverMarquee(`
+                              <a href="${escapeHtml(track.url || `https://open.spotify.com/track/${track.track_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.name || track.track_id)}</a>
+                            `)}
+                          </div>
+                          <div class="modal-track-sub">
+                            ${renderHoverMarquee(renderArtistLinks(track.artists || []))}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="playlist-modal-album-cell">
+                      ${renderHoverMarquee(`
+                        <a href="${escapeHtml(track.album_url || `https://open.spotify.com/album/${track.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.album_name || track.album_id)}</a>
+                      `)}
+                    </td>
+                    <td>${formatDurationMs(track.duration_ms || 0)}</td>
+                    <td>${formatUkNumber(track.playcount || 0)}</td>
+                    <td>${escapeHtml(formatIsoDateTime(track.added_at || ""))}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+
+            ${result.tracks_has_more ? `
+              <div class="modal-load-more-wrap">
+                <button
+                  type="button"
+                  class="button"
+                  data-playlist-modal-load-more-inline="1"
+                >
+                  Показати ще
+                </button>
+              </div>
+            ` : ""}
+          </div>
         </div>
       </div>
     </div>
@@ -3585,8 +3681,9 @@ function initPlaylistAutoApply() {
   ui.playlistModalLoadMore.disabled = state.playlistModal.loading;
 
   requestAnimationFrame(() => {
-    updateHoverMarquees(ui.playlistContent);
-  });
+  updateHoverMarquees(ui.playlistContent);
+  initPlaylistModalTableHeaderSync(ui.playlistContent);
+});
 }
 
     async function loadPlaylistModalPage(playlistId, reset = false) {
