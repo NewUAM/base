@@ -718,6 +718,15 @@ input:-webkit-autofill:active {
   background-blend-mode: overlay;
 }
 
+.playlist-card-side {
+  width: 78px;
+  flex: 0 0 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
 .cover {
   width: 78px;
   height: 78px;
@@ -732,6 +741,13 @@ input:-webkit-autofill:active {
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+.playlist-card-side .button {
+  width: 100%;
+  min-width: 0;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .result-main,
@@ -798,6 +814,165 @@ input:-webkit-autofill:active {
   opacity: 0.92;
 }
 
+    .playlist-genres-block {
+  margin-top: 10px;
+}
+
+.playlist-genres-label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.playlist-genres-trigger {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  outline: none;
+}
+
+.playlist-genres-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.playlist-genre-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.playlist-genres-more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  color: var(--accent-2);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.playlist-genres-tooltip {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  width: min(360px, calc(100vw - 48px));
+  max-height: 280px;
+  overflow: auto;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(53, 53, 60, 0.98);
+  border: 1px solid rgba(132, 170, 251, 0.45);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.32);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
+  z-index: 30;
+}
+
+.playlist-genres-trigger:hover .playlist-genres-tooltip,
+.playlist-genres-trigger:focus-within .playlist-genres-tooltip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.playlist-genres-tooltip-title {
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.playlist-genres-tooltip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playlist-genres-tooltip-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.playlist-genres-tooltip-name {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.playlist-genres-tooltip-percent {
+  flex: 0 0 auto;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--accent-2);
+  text-align: right;
+}
+
+.playlist-genres-tooltip-bar {
+  grid-column: 1 / -1;
+  position: relative;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.playlist-genres-tooltip-bar > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: rgba(132, 170, 251, 0.95);
+}
+
+.playlist-genres-tooltip::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.playlist-genres-tooltip::-webkit-scrollbar-track {
+  background: #282626;
+}
+
+.playlist-genres-tooltip::-webkit-scrollbar-thumb {
+  background-color: #383838;
+  border-radius: 8px;
+  border: 2px solid #282626;
+}
+
+.playlist-genres-tooltip::-webkit-scrollbar-button {
+  display: none;
+}
+    
 .playlist-load-more-wrap,
 .modal-load-more-wrap {
   display: flex;
@@ -1350,7 +1525,7 @@ input:-webkit-autofill:active {
 }
 
 .modal-box {
-  width: min(1100px, 100%);
+  width: min(1360px, 100%);
   max-height: min(88vh, 1000px);
   overflow: auto;
   background: #282626;
@@ -1509,6 +1684,7 @@ input:-webkit-autofill:active {
 }
 
     #playlist-modal .modal-box {
+  width: min(1360px, 100%);
   display: flex;
   flex-direction: column;
   height: min(88vh, 1000px);
@@ -1707,6 +1883,192 @@ input:-webkit-autofill:active {
   min-width: 0;
 }
 
+.playlist-modal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: stretch;
+  height: 100%;
+  min-height: 0;
+  gap: 10px;
+}
+
+.playlist-modal-main-shell {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.playlist-modal-fixed {
+  min-width: 0;
+}
+
+.playlist-modal-stats-shell {
+  min-width: 0;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playlist-stats-panel {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.playlist-stats-title {
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.playlist-chart-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.playlist-chart-card:hover {
+  border-color: rgba(132,170,251,0.5);
+}
+
+.playlist-chart-title {
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.playlist-chart-subtitle {
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.playlist-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.playlist-chart-preview-wrap,
+.playlist-chart-expanded-wrap {
+  position: relative;
+}
+
+.playlist-chart-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px));
+  background: #383838;
+  color: var(--text);
+  border: 1px solid rgba(132,170,251,0.42);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.playlist-chart-point-hit {
+  cursor: pointer;
+}
+
+.playlist-chart-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.playlist-chart-empty {
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.playlist-chart-modal-box {
+  width: min(1180px, 100%);
+  max-width: 1180px;
+}
+
+.playlist-chart-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.playlist-chart-expanded-note {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.playlist-chart-expanded-wrap {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+  padding: 12px;
+}
+
+.playlist-chart-expanded-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1180px) {
+  #playlist-modal .modal-box {
+    width: min(1180px, 100%);
+  }
+
+  .playlist-modal-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+  }
+}
+
+@media (max-width: 980px) {
+  .playlist-modal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .playlist-modal-main-shell {
+    order: 1;
+  }
+
+  .playlist-modal-stats-shell {
+    order: 2;
+  }
+
+  .playlist-modal-table-shell {
+    min-height: 360px;
+  }
+}
+
 .hover-marquee {
   position: relative;
   overflow: hidden;
@@ -1767,6 +2129,135 @@ input:-webkit-autofill:active {
   }
 }
 
+
+.curator-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.curator-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: #222;
+  flex: 0 0 96px;
+}
+
+.curator-head-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.curator-name {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.curator-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.curator-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.curator-stats span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.curator-link-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+} 
+
+.curator-link-pill:hover {
+  text-decoration: none;
+  color: var(--accent-2);
+  border-color: rgba(132, 170, 251, 1);
+  background: rgba(132, 170, 251, 0.08);
+  transform: translateY(-1px);
+}
+
+    .curator-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.curator-link-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+    
+.curator-sort-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.curator-sort-btn.active {
+  background-color: rgba(132, 170, 251, 0.2);
+  border-color: rgba(132, 170, 251, 1);
+}
+
+.curator-playlist-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.curator-empty-note {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.curator-inline-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.curator-inline-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .stats-grid {
     grid-template-columns: 1fr;
@@ -1806,6 +2297,11 @@ input:-webkit-autofill:active {
   .album-head,
   .artist-head {
     flex-direction: row;
+  }
+
+  .playlist-card-side {
+    width: 66px;
+    flex-basis: 66px;
   }
 
   .cover {
@@ -2020,6 +2516,26 @@ input:-webkit-autofill:active {
     </div>
   </div>
 
+  <div id="playlist-chart-modal" class="modal">
+    <div class="modal-box playlist-chart-modal-box">
+      <div class="modal-head">
+        <div id="playlist-chart-modal-title" class="modal-title">Статистика плейліста</div>
+        <button id="playlist-chart-close" class="button secondary">Закрити</button>
+      </div>
+      <div id="playlist-chart-content" class="playlist-chart-content"></div>
+    </div>
+  </div>
+
+  <div id="curator-modal" class="modal">
+    <div class="modal-box" style="max-width:900px;">
+      <div class="modal-head">
+        <div class="modal-title">Профіль куратора</div>
+        <button id="curator-close" class="button secondary">Закрити</button>
+      </div>
+      <div id="curator-content" class="loading-note">Завантаження профілю куратора...</div>
+    </div>
+  </div>
+
   <div id="about-modal" class="modal">
     <div class="modal-box" style="max-width:900px;">
       <div class="modal-head">
@@ -2071,6 +2587,14 @@ input:-webkit-autofill:active {
       playlistClose: document.getElementById("playlist-close"),
       playlistContent: document.getElementById("playlist-content"),
       playlistModalLoadMore: document.getElementById("playlist-modal-load-more"),
+      playlistChartModal: document.getElementById("playlist-chart-modal"),
+      playlistChartClose: document.getElementById("playlist-chart-close"),
+      playlistChartContent: document.getElementById("playlist-chart-content"),
+      playlistChartTitle: document.getElementById("playlist-chart-modal-title"),
+
+      curatorModal: document.getElementById("curator-modal"),
+      curatorClose: document.getElementById("curator-close"),
+      curatorContent: document.getElementById("curator-content"),
 
       aboutModal: document.getElementById("about-modal"),
       aboutClose: document.getElementById("about-close"),
@@ -2105,12 +2629,33 @@ statsMode: "recent",
         loading: false,
         cache: new Map(),
         sortKey: "position",
-        sortDir: "asc"
+        sortDir: "asc",
+        chartType: ""
+      },
+      curatorModal: {
+        currentId: "",
+        loading: false,
+        currentData: null,
+        sortKey: "follower"
       }
     };
 
     const rangeControls = {};
 let playlistFiltersDebounce = null;
+const MODAL_BASE_Z_INDEX = 9999;
+let modalZCounter = 0;
+
+    function showModal(modalEl) {
+      if (!modalEl) return;
+      modalZCounter += 1;
+      modalEl.style.zIndex = String(MODAL_BASE_Z_INDEX + modalZCounter);
+      modalEl.classList.add("show");
+    }
+
+    function hideModal(modalEl) {
+      if (!modalEl) return;
+      modalEl.classList.remove("show");
+    }
     
     function escapeHtml(s) {
       return String(s ?? "")
@@ -2137,6 +2682,51 @@ let playlistFiltersDebounce = null;
 function renderPlaylistDescription(description) {
   const normalized = normalizePlaylistDescription(description);
   return normalized ? `<div class="playlist-description">${normalized}</div>` : "";
+}
+    
+    function formatGenrePercent(value) {
+  return `${Number(value || 0).toLocaleString("uk-UA", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1
+  })}%`;
+}
+
+function renderPlaylistGenresBlock(item) {
+  const genres = Array.isArray(item?.genres) ? item.genres.filter(Boolean) : [];
+  if (!genres.length) return "";
+
+  const topGenres = genres.slice(0, 3);
+
+  return `
+    <div class="playlist-genres-block">
+      <div class="playlist-genres-label">Жанри</div>
+      <div class="playlist-genres-trigger" tabindex="0">
+        <div class="playlist-genres-top">
+          ${topGenres.map((genre) => `
+            <span class="playlist-genre-pill">
+              ${escapeHtml(genre.genre_name || genre.genre_slug || "—")} · ${escapeHtml(formatGenrePercent(genre.percent))}
+            </span>
+          `).join("")}
+        </div>
+        <span class="playlist-genres-more">${genres.length > 3 ? `Ще ${formatUkNumber(genres.length - 3)}` : "Усі жанри"}</span>
+
+        <div class="playlist-genres-tooltip">
+          <div class="playlist-genres-tooltip-title">Жанри плейліста</div>
+          <div class="playlist-genres-tooltip-list">
+            ${genres.map((genre) => `
+              <div class="playlist-genres-tooltip-row">
+                <div class="playlist-genres-tooltip-name">${escapeHtml(genre.genre_name || genre.genre_slug || "—")}</div>
+                <div class="playlist-genres-tooltip-percent">${escapeHtml(formatGenrePercent(genre.percent))}</div>
+                <div class="playlist-genres-tooltip-bar">
+                  <span style="width:${Math.max(1, Math.min(100, Number(genre.percent || 0)))}%"></span>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
     
     function formatUkNumber(n) {
@@ -2847,41 +3437,263 @@ function updateHoverMarquees(root = document) {
       ui.playlistSummary.textContent = text;
     }
 
+
+    function extractCuratorIdFromItem(item) {
+      const directId = String(item?.curator_id || "").trim();
+      if (directId) return directId;
+
+      const rawUrl = String(item?.curator_url || "").trim();
+      if (!rawUrl) return "";
+
+      try {
+        const u = new URL(rawUrl);
+        const parts = u.pathname.split("/").filter(Boolean);
+        const idx = parts.indexOf("user");
+        if (idx >= 0 && parts[idx + 1]) {
+          return parts[idx + 1];
+        }
+      } catch (e) {}
+
+      const match = rawUrl.match(/user\/([^/?#]+)/);
+      return match ? match[1] : "";
+    }
+
+    function renderCuratorLink(item) {
+      const curatorName = String(item?.curator || "").trim();
+      const curatorId = extractCuratorIdFromItem(item);
+
+      if (!curatorName) {
+        return "Куратор не вказаний";
+      }
+
+      if (!curatorId) {
+        return escapeHtml(curatorName);
+      }
+
+      return `<a href="#" class="curator-inline-link" data-curator-modal-btn="1" data-curator-id="${escapeHtml(curatorId)}">${escapeHtml(curatorName)}</a>`;
+    }
+
+    function parseDisplayDateToTime(value) {
+      const s = String(value || "").trim();
+      if (!s) return 0;
+      const match = s.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+      if (!match) return 0;
+      return Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+    }
+
+    function getSortedCuratorPlaylists(items, sortKey) {
+      const list = [...(Array.isArray(items) ? items : [])];
+
+      list.sort((a, b) => {
+        if (sortKey === "last_update") {
+          const av = parseDisplayDateToTime(a?.last_update);
+          const bv = parseDisplayDateToTime(b?.last_update);
+          if (av !== bv) return bv - av;
+        } else {
+          const av = Number(a?.follower || 0);
+          const bv = Number(b?.follower || 0);
+          if (av !== bv) return bv - av;
+        }
+
+        return String(a?.name || "").localeCompare(String(b?.name || ""), "uk");
+      });
+
+      return list;
+    }
+
+    function getCuratorLinkIconSvg(type) {
+  const icons = {
+    spotify: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 1.5A10.5 10.5 0 1 0 22.5 12 10.51 10.51 0 0 0 12 1.5Zm4.82 15.13a.66.66 0 0 1-.91.22 10.67 10.67 0 0 0-5.74-1.46 15.3 15.3 0 0 0-3.47.41.66.66 0 1 1-.31-1.29 16.7 16.7 0 0 1 3.78-.45 11.94 11.94 0 0 1 6.43 1.66.66.66 0 0 1 .22.91Zm1.3-2.89a.82.82 0 0 1-1.13.27 13.24 13.24 0 0 0-6.72-1.7 18.4 18.4 0 0 0-4.12.48.82.82 0 1 1-.37-1.6 20.16 20.16 0 0 1 4.49-.52 14.84 14.84 0 0 1 7.54 1.93.82.82 0 0 1 .31 1.14Zm.11-3.01A16.07 16.07 0 0 0 9.7 8.67a21.43 21.43 0 0 0-4.74.55.99.99 0 1 1-.43-1.93 23.23 23.23 0 0 1 5.17-.6 17.92 17.92 0 0 1 9.53 2.35.99.99 0 1 1-1 1.69Z"/>
+      </svg>
+    `,
+    instagram: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 1.8A3.7 3.7 0 0 0 3.8 7.5v9a3.7 3.7 0 0 0 3.7 3.7h9a3.7 3.7 0 0 0 3.7-3.7v-9a3.7 3.7 0 0 0-3.7-3.7Zm9.75 1.35a1.05 1.05 0 1 1-1.05 1.05 1.05 1.05 0 0 1 1.05-1.05ZM12 7a5 5 0 1 1-5 5 5 5 0 0 1 5-5Zm0 1.8A3.2 3.2 0 1 0 15.2 12 3.2 3.2 0 0 0 12 8.8Z"/>
+      </svg>
+    `,
+    telegram: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M20.67 4.33 3.9 10.78c-1.14.46-1.13 1.1-.2 1.39l4.3 1.34 1.66 5.18c.2.56.1.79.7.79.46 0 .67-.21.92-.46l2.09-2.03 4.35 3.21c.8.44 1.38.21 1.58-.74l2.86-13.47c.29-1.18-.45-1.71-1.49-1.26ZM9 13.2l8.42-5.31c.42-.26.8-.12.48.17l-6.92 6.25-.27 2.93L9 13.2Z"/>
+      </svg>
+    `,
+    tiktok: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M14.5 2h2.64a4.72 4.72 0 0 0 1.25 2.28A4.72 4.72 0 0 0 20.67 5.5v2.72a7.16 7.16 0 0 1-3.45-.89v6.15a5.48 5.48 0 1 1-5.48-5.48c.31 0 .61.03.9.08v2.84a2.69 2.69 0 1 0 1.86 2.56Z"/>
+      </svg>
+    `,
+    youtube: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M21.58 7.19a2.8 2.8 0 0 0-1.97-1.98C17.86 4.75 12 4.75 12 4.75s-5.86 0-7.61.46A2.8 2.8 0 0 0 2.42 7.2 29.5 29.5 0 0 0 2 12a29.5 29.5 0 0 0 .42 4.81 2.8 2.8 0 0 0 1.97 1.98c1.75.46 7.61.46 7.61.46s5.86 0 7.61-.46a2.8 2.8 0 0 0 1.97-1.98A29.5 29.5 0 0 0 22 12a29.5 29.5 0 0 0-.42-4.81ZM10 15.5v-7l6 3.5Z"/>
+      </svg>
+    `,
+    website: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm6.93 9h-3.06a15.7 15.7 0 0 0-1.22-5A8.04 8.04 0 0 1 18.93 11ZM12 4.07c.93 1.13 1.77 3.04 2.08 5.43H9.92C10.23 7.11 11.07 5.2 12 4.07ZM4.99 13h3.14a16.79 16.79 0 0 0 1.02 5.02A8.03 8.03 0 0 1 4.99 13Zm3.14-2H4.99a8.03 8.03 0 0 1 4.16-5.02A16.79 16.79 0 0 0 8.13 11Zm3.87 8.93c-.93-1.13-1.77-3.04-2.08-5.43h4.16c-.31 2.39-1.15 4.3-2.08 5.43ZM14.3 13H9.7a14.9 14.9 0 0 1 0-2h4.6a14.9 14.9 0 0 1 0 2Zm.55 5.02A16.79 16.79 0 0 0 15.87 13h3.14a8.03 8.03 0 0 1-4.16 5.02Z"/>
+      </svg>
+    `,
+    apple: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M16.37 12.72c.02 2.18 1.92 2.91 1.94 2.92-.02.05-.3 1.03-1 2.04-.6.88-1.23 1.76-2.22 1.78-.98.02-1.29-.58-2.41-.58-1.13 0-1.47.56-2.39.6-0.95.03-1.67-.95-2.28-1.82-1.24-1.79-2.18-5.05-.91-7.25.63-1.09 1.75-1.79 2.97-1.81.93-.02 1.81.63 2.41.63.59 0 1.7-.78 2.87-.66.49.02 1.86.2 2.74 1.49-.07.04-1.64.96-1.62 2.66ZM14.74 4.57c.5-.61.84-1.47.75-2.32-.72.03-1.59.48-2.11 1.09-.47.55-.88 1.43-.77 2.27.8.06 1.63-.41 2.13-1.04Z"/>
+      </svg>
+    `
+  };
+
+  return icons[type] || icons.website;
+}
+
+function renderCuratorSocialLinks(links) {
+  const items = Array.isArray(links) ? links.filter((x) => x && x.url) : [];
+  if (!items.length) return "";
+
+  return items.map((item) => `
+    <a
+      class="curator-link-pill"
+      href="${escapeHtml(item.url)}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="${escapeHtml(item.label || "Посилання")}"
+      title="${escapeHtml(item.label || "Посилання")}"
+    >
+      <span class="curator-link-icon">${getCuratorLinkIconSvg(String(item.type || "website").trim().toLowerCase())}</span>
+    </a>
+  `).join("");
+}
+
+    function renderCuratorPlaylistList(playlists) {
+      const sorted = getSortedCuratorPlaylists(playlists, state.curatorModal.sortKey);
+
+      if (!sorted.length) {
+        return '<div class="curator-empty-note">У цього куратора ще немає плейлістів у каталозі.</div>';
+      }
+
+      return `
+        <div class="curator-playlist-list">
+          ${sorted.map((item) => renderPlaylistCard(item, { showCuratorLine: false })).join("")}
+        </div>
+      `;
+    }
+
+    function renderCuratorModal(result) {
+  const playlists = Array.isArray(result.playlists) ? result.playlists : [];
+  const playlistsCount = Number(result?.playlists_count || playlists.length || 0);
+  const followersTotal = Number(
+    result?.total_followers ||
+    playlists.reduce((sum, item) => sum + Number(item?.follower || 0), 0)
+  );
+
+  const avatar = result?.avatar_url || result?.curator_avatar || "";
+  const curatorLinks = [
+    result?.url ? { type: "spotify", label: "Spotify", url: result.url } : null,
+    result?.instagram_url ? { type: "instagram", label: "Instagram", url: result.instagram_url } : null,
+    result?.telegram_url ? { type: "telegram", label: "Telegram", url: result.telegram_url } : null,
+    result?.tiktok_url ? { type: "tiktok", label: "TikTok", url: result.tiktok_url } : null,
+    result?.youtube_url ? { type: "youtube", label: "YouTube", url: result.youtube_url } : null,
+    result?.website_url ? { type: "website", label: "Сайт", url: result.website_url } : null,
+    result?.apple_url ? { type: "apple", label: "Apple Music", url: result.apple_url } : null
+  ].filter(Boolean);
+
+  return `
+    <div class="curator-head">
+      <div>${avatar ? `<img class="curator-avatar" src="${escapeHtml(avatar)}" alt="">` : `<div class="curator-avatar"></div>`}</div>
+      <div class="curator-head-main">
+        <div class="curator-name">${escapeHtml(result.name || result.curator_id || "Куратор")}</div>
+        <div class="curator-stats">
+          <span>Плейлісти: ${formatUkNumber(playlistsCount)}</span>
+          <span>Підписники: ${formatUkNumber(followersTotal)}</span>
+        </div>
+        <div class="curator-links">${renderCuratorSocialLinks(curatorLinks)}</div>
+      </div>
+    </div>
+
+    <div class="curator-sort-row">
+      <button type="button" class="button secondary curator-sort-btn ${state.curatorModal.sortKey === "follower" ? "active" : ""}" data-curator-sort="follower">За підписниками</button>
+      <button type="button" class="button secondary curator-sort-btn ${state.curatorModal.sortKey === "last_update" ? "active" : ""}" data-curator-sort="last_update">За датою оновлення</button>
+    </div>
+
+    ${renderCuratorPlaylistList(playlists)}
+  `;
+}
+
+    async function openCuratorModal(curatorId) {
+      const id = String(curatorId || "").trim();
+      if (!id || state.curatorModal.loading) return;
+
+      closeCuratorModal();
+      state.curatorModal.loading = true;
+      state.curatorModal.currentId = id;
+      state.curatorModal.currentData = null;
+      state.curatorModal.sortKey = "follower";
+
+      showModal(ui.curatorModal);
+      ui.curatorContent.className = "loading-note";
+      ui.curatorContent.textContent = "Завантаження профілю куратора...";
+
+      try {
+        const data = await apiJson("/curator-details", { id });
+
+        if (!data?.found || !data?.result) {
+          ui.curatorContent.className = "loading-note";
+          ui.curatorContent.textContent = "Профіль куратора не знайдено.";
+          return;
+        }
+
+        state.curatorModal.currentData = data.result;
+        ui.curatorContent.className = "";
+        ui.curatorContent.innerHTML = renderCuratorModal(data.result);
+      } catch (error) {
+        ui.curatorContent.className = "loading-note";
+        ui.curatorContent.textContent = "Не вдалося завантажити профіль куратора.";
+      } finally {
+        state.curatorModal.loading = false;
+      }
+    }
+
+    function closeCuratorModal() {
+      hideModal(ui.curatorModal);
+      state.curatorModal.currentId = "";
+      state.curatorModal.currentData = null;
+      state.curatorModal.loading = false;
+    }
+
     function renderPlaylistCard(item, options = {}) {
       const followerCount = getPlaylistFollowerCount(item);
       const trackCount = getPlaylistTrackCount(item);
       const showTracksButton = options.showTracksButton !== false;
+      const showCuratorLine = options.showCuratorLine !== false;
 
       return `
         <div class="playlist-card">
-          <div class="cover">${item.cover ? `<img src="${escapeHtml(item.cover)}" alt="">` : ""}</div>
+          <div class="playlist-card-side">
+            <div class="cover">${item.cover ? `<img src="${escapeHtml(item.cover)}" alt="">` : ""}</div>
+            ${showTracksButton ? `
+              <button
+                type="button"
+                class="button secondary"
+                data-playlist-modal-btn="1"
+                data-playlist-id="${escapeHtml(item.playlist_id)}"
+              >Усі треки</button>
+            ` : ""}
+          </div>
           <div class="playlist-main">
             <div class="playlist-title"><a href="${escapeHtml(item.url || `https://open.spotify.com/playlist/${item.playlist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name || item.playlist_id)}</a></div>
-            <div class="playlist-sub">
-              ${item.curator
-                ? `Куратор: ${item.curator_url
-                    ? `<a href="${escapeHtml(item.curator_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.curator)}</a>`
-                    : escapeHtml(item.curator)}`
-                : "Куратор не вказаний"}
-            </div>
-            <div class="meta-line">
-              <span class="pill">Підписники: ${formatUkNumber(followerCount)}</span>
-              <span class="pill">Треки: ${formatUkNumber(trackCount)}</span>
-              <span class="pill">Оновлено: ${escapeHtml(item.last_update || "—")}</span>
-              <span class="pill">Тривалість: ${formatDurationMs(item.total_duration_ms || 0)}</span>
-              <span class="pill">Прослуховування: ${formatUkNumber(item.total_playcount || 0)}</span>
-            </div>
-            ${renderPlaylistDescription(item.description)}
-            ${showTracksButton ? `
-              <div class="meta-line">
-                <button
-                  type="button"
-                  class="button secondary"
-                  data-playlist-modal-btn="1"
-                  data-playlist-id="${escapeHtml(item.playlist_id)}"
-                >Усі треки</button>
+            ${showCuratorLine ? `
+              <div class="playlist-sub">
+                ${item.curator
+                  ? `Куратор: ${renderCuratorLink(item)}`
+                  : "Куратор не вказаний"}
               </div>
             ` : ""}
+            <div class="meta-line">
+  <span class="pill">Підписники: ${formatUkNumber(followerCount)}</span>
+  <span class="pill">Треки: ${formatUkNumber(trackCount)}</span>
+  <span class="pill">Оновлено: ${escapeHtml(item.last_update || "—")}</span>
+  <span class="pill">Тривалість: ${formatDurationMs(item.total_duration_ms || 0)}</span>
+  <span class="pill">Прослуховування: ${formatUkNumber(item.total_playcount || 0)}</span>
+</div>
+${renderPlaylistGenresBlock(item)}
+${renderPlaylistDescription(item.description)}
           </div>
         </div>
       `;
@@ -2937,9 +3749,7 @@ function updateHoverMarquees(root = document) {
             </td>
             <td>
               ${item.curator
-                ? item.curator_url
-                  ? `<a href="${escapeHtml(item.curator_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.curator)}</a>`
-                  : escapeHtml(item.curator)
+                ? renderCuratorLink(item)
                 : "—"}
             </td>
             <td>${formatUkNumber(getPlaylistFollowerCount(item))}</td>
@@ -3426,11 +4236,16 @@ function initPlaylistAutoApply() {
     }
 
     function renderStatsTrackList(title, rows) {
+  const safeRows = Array.isArray(rows) ? rows : [];
+
   return `
     <div class="stats-card">
       <div class="stats-card-title">${escapeHtml(title)}</div>
+      ${
+        safeRows.length
+          ? `
       <div class="stats-list">
-        ${rows.map((row, index) => {
+        ${safeRows.map((row, index) => {
           const artists = renderArtistLinks(row.artists || []);
           const trackName = row.name || row.track_id;
           const trackUrl = row.url || `https://open.spotify.com/track/${row.track_id}`;
@@ -3440,57 +4255,87 @@ function initPlaylistAutoApply() {
               <div class="stats-rank">${index + 1}.</div>
               <div class="stats-main">
                 <div class="stats-name"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
-                <div class="stats-sub">${artists}${row.playlists_count !== undefined ? ` · Плейлісти: ${formatUkNumber(row.playlists_count)}` : ""}${row.avg_position !== undefined ? ` · Середня позиція: ${round2(row.avg_position)}` : ""}</div>
+                <div class="stats-sub">${artists}${row.appearances_count !== undefined ? ` · Появи: ${formatUkNumber(row.appearances_count)}` : ""}${row.playlists_count !== undefined ? ` · Плейлісти: ${formatUkNumber(row.playlists_count)}` : ""}${row.avg_position !== undefined ? ` · Середня позиція: ${round2(row.avg_position)}` : ""}</div>
               </div>
             </div>
           `;
         }).join("")}
       </div>
+          `
+          : `<div class="empty-note">Немає даних.</div>`
+      }
     </div>
   `;
 }
 
     function renderStatsArtistList(title, rows) {
-      return `
-        <div class="stats-card">
-          <div class="stats-card-title">${escapeHtml(title)}</div>
-          <div class="stats-list">
-            ${rows.map((row, index) => {
-              const artistUrl = row.url || `https://open.spotify.com/artist/${row.artist_id}`;
+  const safeRows = Array.isArray(rows) ? rows : [];
 
-              return `
-                <div class="stats-item">
-                  <div class="stats-rank">${index + 1}.</div>
-                  <div class="stats-main">
-                    <div class="stats-name"><a href="${escapeHtml(artistUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(row.name || row.artist_id)}</a></div>
-                    <div class="stats-sub">Появи: ${formatUkNumber(row.appearances_count)} · Плейлісти: ${formatUkNumber(row.playlists_count)} · Унікальні треки: ${formatUkNumber(row.unique_tracks_count)} · Середня позиція: ${round2(row.avg_position)}</div>
-                  </div>
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </div>
-      `;
-    }
+  return `
+    <div class="stats-card">
+      <div class="stats-card-title">${escapeHtml(title)}</div>
+      ${
+        safeRows.length
+          ? `
+      <div class="stats-list">
+        ${safeRows.map((row, index) => {
+          const artistUrl = row.url || `https://open.spotify.com/artist/${row.artist_id}`;
+
+          return `
+            <div class="stats-item">
+              <div class="stats-rank">${index + 1}.</div>
+              <div class="stats-main">
+                <div class="stats-name"><a href="${escapeHtml(artistUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(row.name || row.artist_id)}</a></div>
+                <div class="stats-sub">Появи: ${formatUkNumber(row.appearances_count)} · Плейлісти: ${formatUkNumber(row.playlists_count)} · Унікальні треки: ${formatUkNumber(row.unique_tracks_count)} · Середня позиція: ${round2(row.avg_position)}</div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+          `
+          : `<div class="empty-note">Немає даних.</div>`
+      }
+    </div>
+  `;
+}
+    
+    function getStatsOverviewModeData(data, mode) {
+  if (mode === "all_time") {
+    return data?.all_time || {
+      top_tracks_by_appearances: [],
+      top_artists_by_appearances: [],
+      top_tracks_by_position: [],
+      top_artists_by_position: []
+    };
+  }
+
+  return data?.recent || {
+    top_tracks_by_appearances: [],
+    top_artists_by_appearances: [],
+    top_tracks_by_position: [],
+    top_artists_by_position: []
+  };
+}
 
     function renderStatsOverviewContent(data, mode) {
   const isRecent = mode === "recent";
+  const source = getStatsOverviewModeData(data, mode);
 
-  const tracksTitle = isRecent
+  const tracksByAppearancesTitle = isRecent
     ? "Треки у найбільшій кількості плейлістів за останні 30 днів"
     : "Треки у найбільшій кількості плейлістів за весь час";
 
-  const artistsTitle = isRecent
+  const artistsByAppearancesTitle = isRecent
     ? "Артисти з найбільшою кількістю появ за останні 30 днів"
     : "Артисти з найбільшою кількістю появ за весь час";
 
-  const tracksRows = isRecent
-    ? (data.top_tracks_by_appearances || [])
-    : (data.top_tracks_all_time || []);
+  const tracksByPositionTitle = isRecent
+    ? "Треки з найкращими позиціями за останні 30 днів"
+    : "Треки з найкращими позиціями за весь час";
 
-  const artistsRows = isRecent
-    ? (data.top_artists_by_appearances || [])
-    : (data.top_artists_all_time || []);
+  const artistsByPositionTitle = isRecent
+    ? "Артисти з найкращими позиціями за останні 30 днів"
+    : "Артисти з найкращими позиціями за весь час";
 
   return `
     <div class="stats-toolbar">
@@ -3514,8 +4359,10 @@ function initPlaylistAutoApply() {
     </div>
 
     <div class="stats-grid">
-      ${renderStatsTrackList(tracksTitle, tracksRows)}
-      ${renderStatsArtistList(artistsTitle, artistsRows)}
+      ${renderStatsTrackList(tracksByAppearancesTitle, source.top_tracks_by_appearances || [])}
+      ${renderStatsArtistList(artistsByAppearancesTitle, source.top_artists_by_appearances || [])}
+      ${renderStatsTrackList(tracksByPositionTitle, source.top_tracks_by_position || [])}
+      ${renderStatsArtistList(artistsByPositionTitle, source.top_artists_by_position || [])}
     </div>
   `;
 }
@@ -3531,7 +4378,7 @@ function initPlaylistAutoApply() {
 }
 
     async function openStatsModal() {
-  ui.statsModal.classList.add("show");
+  showModal(ui.statsModal);
 
   if (state.statsLoaded && state.statsData) {
     ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode);
@@ -3546,7 +4393,7 @@ function initPlaylistAutoApply() {
 }
 
     function closeStatsModal() {
-      ui.statsModal.classList.remove("show");
+      hideModal(ui.statsModal);
     }
 
     function getPlaylistModalSortIndicator(key) {
@@ -3570,97 +4417,386 @@ function initPlaylistAutoApply() {
       await loadPlaylistModalPage(state.playlistModal.currentId, true);
     }
 
+    function formatShortDateLabel(value) {
+      const s = String(value || "").trim();
+      if (!s) return "";
+      const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) return `${m[3]}.${m[2]}`;
+      return s;
+    }
+
+    function getPlaylistHistoryRows(result) {
+      return (Array.isArray(result?.daily_history) ? result.daily_history : [])
+        .map((row) => ({
+          snapshot_date: String(row?.snapshot_date || "").trim(),
+          follower: Number(row?.follower || 0),
+          follower_diff: Number(row?.follower_diff || 0),
+          track_count: Number(row?.track_count || 0),
+          added_tracks_count: Number(row?.added_tracks_count || 0),
+          removed_tracks_count: Number(row?.removed_tracks_count || 0),
+          activity_total: Number(row?.activity_total || 0)
+        }))
+        .filter((row) => row.snapshot_date)
+        .sort((a, b) => a.snapshot_date.localeCompare(b.snapshot_date))
+        .map((row, index) => {
+          if (index === 0) {
+            return {
+              ...row,
+              added_tracks_count: 0,
+              removed_tracks_count: 0,
+              activity_total: 0
+            };
+          }
+          return row;
+        });
+    }
+
+    function getPlaylistWeekFollowerDiff(history) {
+      if (!Array.isArray(history) || !history.length) return 0;
+      const lastValue = Number(history[history.length - 1]?.follower || 0);
+      const baseIndex = Math.max(0, history.length - 8);
+      const baseValue = Number(history[baseIndex]?.follower || 0);
+      return lastValue - baseValue;
+    }
+
+    function formatSignedUkNumber(value) {
+      const n = Number(value || 0);
+      const formatted = formatUkNumber(Math.abs(n));
+      if (n > 0) return `+${formatted}`;
+      if (n < 0) return `-${formatted}`;
+      return formatted;
+    }
+
+    function buildLineChartSvg(points, options = {}) {
+      const width = Number(options.width || 220);
+      const height = Number(options.height || 110);
+      const padTop = Number(options.padTop || 10);
+      const padRight = Number(options.padRight || 10);
+      const padBottom = Number(options.padBottom || 18);
+      const padLeft = Number(options.padLeft || 10);
+      const chartWidth = Math.max(1, width - padLeft - padRight);
+      const chartHeight = Math.max(1, height - padTop - padBottom);
+      const values = points.map((point) => Number(point.value || 0));
+      const minValue = Math.min(...values);
+      const maxValue = Math.max(...values);
+      const range = Math.max(1, maxValue - minValue);
+      const baseY = padTop + chartHeight;
+
+      const coords = points.map((point, index) => {
+        const x = points.length === 1
+          ? padLeft + chartWidth / 2
+          : padLeft + (chartWidth * index) / Math.max(1, points.length - 1);
+        const y = baseY - ((Number(point.value || 0) - minValue) / range) * chartHeight;
+        return { x, y, value: point.value, label: point.label };
+      });
+
+      const polyline = coords.map((point) => `${point.x},${point.y}`).join(" ");
+      const area = coords.length
+        ? `${padLeft},${baseY} ${coords.map((point) => `${point.x},${point.y}`).join(" ")} ${coords[coords.length - 1].x},${baseY}`
+        : "";
+
+      const firstLabel = points[0]?.label || "";
+      const lastLabel = points[points.length - 1]?.label || "";
+
+      return `
+        <svg class="playlist-chart-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="${padLeft}" y1="${baseY}" x2="${width - padRight}" y2="${baseY}" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+          ${area ? `<polygon points="${area}" fill="rgba(132,170,251,0.18)"></polygon>` : ""}
+          ${polyline ? `<polyline points="${polyline}" fill="none" stroke="#84AAFB" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"></polyline>` : ""}
+          ${coords.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="2.8" fill="#84AAFB"></circle><circle class="playlist-chart-point-hit" data-chart-label="${escapeHtml(point.label || '')}" data-chart-value="${escapeHtml(`${formatUkNumber(point.value || 0)}`)}" cx="${point.x}" cy="${point.y}" r="10" fill="transparent"></circle>`).join("")}
+          <text x="${padLeft}" y="${height - 4}" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(firstLabel)}</text>
+          <text x="${width - padRight}" y="${height - 4}" text-anchor="end" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(lastLabel)}</text>
+        </svg>
+      `;
+    }
+
+    function buildBarChartSvg(points, options = {}) {
+      const width = Number(options.width || 220);
+      const height = Number(options.height || 110);
+      const padTop = Number(options.padTop || 10);
+      const padRight = Number(options.padRight || 10);
+      const padBottom = Number(options.padBottom || 18);
+      const padLeft = Number(options.padLeft || 10);
+      const chartWidth = Math.max(1, width - padLeft - padRight);
+      const chartHeight = Math.max(1, height - padTop - padBottom);
+      const values = points.map((point) => Number(point.value || 0));
+      const maxValue = Math.max(1, ...values);
+      const baseY = padTop + chartHeight;
+      const gap = Math.max(2, Math.floor(chartWidth / Math.max(10, points.length * 3)));
+      const barWidth = Math.max(3, (chartWidth - gap * Math.max(0, points.length - 1)) / Math.max(1, points.length));
+      const firstLabel = points[0]?.label || "";
+      const lastLabel = points[points.length - 1]?.label || "";
+
+      return `
+        <svg class="playlist-chart-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="${padLeft}" y1="${baseY}" x2="${width - padRight}" y2="${baseY}" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+          ${points.map((point, index) => {
+            const x = padLeft + index * (barWidth + gap);
+            const barHeight = (Number(point.value || 0) / maxValue) * chartHeight;
+            const y = baseY - barHeight;
+            return `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="2" fill="#64B743"></rect><rect class="playlist-chart-point-hit" data-chart-label="${escapeHtml(point.label || '')}" data-chart-value="${escapeHtml(`${formatUkNumber(point.value || 0)}`)}" x="${x}" y="${y}" width="${barWidth}" height="${Math.max(barHeight, 12)}" fill="transparent"></rect>`;
+          }).join("")}
+          <text x="${padLeft}" y="${height - 4}" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(firstLabel)}</text>
+          <text x="${width - padRight}" y="${height - 4}" text-anchor="end" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(lastLabel)}</text>
+        </svg>
+      `;
+    }
+
+    function renderPlaylistChartCard(type, title, subtitle, svg, footerLeft, footerRight) {
+      return `
+        <button type="button" class="playlist-chart-card" data-playlist-chart-open="${escapeHtml(type)}">
+          <div class="playlist-chart-title">${escapeHtml(title)}</div>
+          <div class="playlist-chart-subtitle">${escapeHtml(subtitle)}</div>
+          <div class="playlist-chart-preview-wrap">${svg}<div class="playlist-chart-tooltip"></div></div>
+          <div class="playlist-chart-footer">
+            <span>${escapeHtml(footerLeft)}</span>
+            <span>${escapeHtml(footerRight)}</span>
+          </div>
+        </button>
+      `;
+    }
+
+    function renderPlaylistStatsPanel(result) {
+      const history = getPlaylistHistoryRows(result);
+
+      if (!history.length) {
+        return `
+          <div class="playlist-stats-panel">
+            <div class="playlist-stats-title">Статистика</div>
+            <div class="playlist-chart-empty">Історія для цього плейліста ще не зібрана.</div>
+          </div>
+        `;
+      }
+
+      const followerPoints = history.map((row) => ({
+        label: formatShortDateLabel(row.snapshot_date),
+        value: row.follower
+      }));
+
+      const activityPoints = history.map((row) => ({
+        label: formatShortDateLabel(row.snapshot_date),
+        value: row.activity_total
+      }));
+
+      const weekFollowerDiff = getPlaylistWeekFollowerDiff(history);
+      const lastActivity = history[history.length - 1]?.activity_total || 0;
+
+      return `
+        <div class="playlist-stats-panel">
+          <div class="playlist-stats-title">Статистика</div>
+          ${renderPlaylistChartCard(
+            "followers",
+            "Підписники",
+            "Кількість підписників за кожен день",
+            buildLineChartSvg(followerPoints, { width: 300, height: 120 }),
+            history[0] ? formatShortDateLabel(history[0].snapshot_date) : "",
+            `7 днів: ${formatSignedUkNumber(weekFollowerDiff)}`
+          )}
+          ${renderPlaylistChartCard(
+            "activity",
+            "Активність оновлень",
+            "Додані та видалені треки за день",
+            buildBarChartSvg(activityPoints, { width: 300, height: 120 }),
+            history[0] ? formatShortDateLabel(history[0].snapshot_date) : "",
+            `Останній день: ${formatUkNumber(lastActivity)}`
+          )}
+        </div>
+      `;
+    }
+
+    function renderExpandedPlaylistChart(result, type) {
+      const history = getPlaylistHistoryRows(result);
+      if (!history.length) {
+        return '<div class="playlist-chart-empty">Історія для цього плейліста ще не зібрана.</div>';
+      }
+
+      if (type === "activity") {
+        const points = history.map((row) => ({
+          label: formatShortDateLabel(row.snapshot_date),
+          value: row.activity_total
+        }));
+
+        const maxActivity = Math.max(...points.map((point) => point.value), 0);
+
+        return `
+          <div class="playlist-chart-expanded-note">На графіку показано загальну кількість змін у плейлісті за кожен день: додані треки + видалені треки. Початковий день не враховується як активність.</div>
+          <div class="playlist-chart-expanded-wrap">
+            ${buildBarChartSvg(points, { width: 940, height: 320, padTop: 18, padBottom: 24, padLeft: 18, padRight: 18 }).replace('class="playlist-chart-svg"', 'class="playlist-chart-expanded-svg"')}
+            <div class="playlist-chart-tooltip"></div>
+          </div>
+          <div class="playlist-chart-expanded-note">Максимум за день: ${formatUkNumber(maxActivity)}.</div>
+        `;
+      }
+
+      const points = history.map((row) => ({
+        label: formatShortDateLabel(row.snapshot_date),
+        value: row.follower
+      }));
+      const weekDiff = getPlaylistWeekFollowerDiff(history);
+
+      return `
+        <div class="playlist-chart-expanded-note">На графіку показано повне число підписників плейліста на кожен збережений день.</div>
+        <div class="playlist-chart-expanded-wrap">
+          ${buildLineChartSvg(points, { width: 940, height: 320, padTop: 18, padBottom: 24, padLeft: 18, padRight: 18 }).replace('class="playlist-chart-svg"', 'class="playlist-chart-expanded-svg"')}
+          <div class="playlist-chart-tooltip"></div>
+        </div>
+        <div class="playlist-chart-expanded-note">Зміна за останні 7 днів: ${formatSignedUkNumber(weekDiff)}.</div>
+      `;
+    }
+
+    function openPlaylistChartModal(type) {
+      const playlistId = state.playlistModal.currentId;
+      const cached = state.playlistModal.cache.get(playlistId);
+      if (!cached) return;
+
+      state.playlistModal.chartType = type;
+      ui.playlistChartTitle.textContent = type === "activity" ? "Активність оновлень плейліста" : "Підписники плейліста";
+      ui.playlistChartContent.innerHTML = renderExpandedPlaylistChart(cached, type);
+      attachPlaylistChartTooltips(ui.playlistChartContent);
+      showModal(ui.playlistChartModal);
+    }
+
+    function closePlaylistChartModal() {
+      hideModal(ui.playlistChartModal);
+      state.playlistModal.chartType = "";
+    }
+
+    function attachPlaylistChartTooltips(root) {
+      if (!root) return;
+
+      root.querySelectorAll(".playlist-chart-svg, .playlist-chart-expanded-svg").forEach((svg) => {
+        if (svg.dataset.tooltipBound === "1") return;
+        svg.dataset.tooltipBound = "1";
+
+        const wrap = svg.parentElement;
+        const tooltip = wrap?.querySelector(".playlist-chart-tooltip");
+        if (!wrap || !tooltip) return;
+
+        const handleMove = (event) => {
+          const target = event.target.closest("[data-chart-label][data-chart-value]");
+          if (!target) {
+            tooltip.style.opacity = "0";
+            return;
+          }
+
+          tooltip.innerHTML = `<strong style="font-weight:700;">${escapeHtml(target.getAttribute("data-chart-label") || "")}</strong><br>${escapeHtml(target.getAttribute("data-chart-value") || "")}`;
+
+          const svgRect = svg.getBoundingClientRect();
+          const wrapRect = wrap.getBoundingClientRect();
+          const targetRect = target.getBoundingClientRect();
+          const rawLeft = targetRect.left - wrapRect.left + targetRect.width / 2;
+          const top = targetRect.top - wrapRect.top;
+          const clampedLeft = Math.max(32, Math.min(rawLeft, wrapRect.width - 32));
+
+          tooltip.style.left = `${clampedLeft}px`;
+          tooltip.style.top = `${top}px`;
+          tooltip.style.opacity = "1";
+        };
+
+        svg.addEventListener("mousemove", handleMove);
+        svg.addEventListener("mouseleave", () => {
+          tooltip.style.opacity = "0";
+        });
+      });
+    }
+
     function renderPlaylistTracksModal(result) {
   return `
     <div class="playlist-modal-layout">
-      <div class="playlist-modal-fixed">
-        ${renderPlaylistCard(result, { showTracksButton: false })}
-        <div id="playlist-modal-summary" class="section-subtitle" style="margin-top:10px; margin-bottom:0;">
-          Показано ${formatUkNumber(result.tracks_loaded || 0)} з ${formatUkNumber(result.tracks_total || 0)} треків.
+      <div class="playlist-modal-main-shell">
+        <div class="playlist-modal-fixed">
+          ${renderPlaylistCard(result, { showTracksButton: false })}
+          <div id="playlist-modal-summary" class="section-subtitle" style="margin-top:10px; margin-bottom:0;">
+            Показано ${formatUkNumber(result.tracks_loaded || 0)} з ${formatUkNumber(result.tracks_total || 0)} треків.
+          </div>
+        </div>
+
+        <div class="playlist-modal-table-shell">
+          <div class="placement-table-block playlist-modal-table-frame">
+            <div class="playlist-modal-table-head-wrap">
+              <table class="placement-table playlist-modal-table playlist-modal-table-head">
+                <thead>
+                  <tr>
+                    <th class="is-sortable" data-playlist-modal-sort="position">
+                      #
+                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("position")}</span>
+                    </th>
+                    <th class="is-sortable" data-playlist-modal-sort="artist">
+                      Трек
+                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("artist")}</span>
+                    </th>
+                    <th>Альбом</th>
+                    <th class="is-sortable" data-playlist-modal-sort="duration">
+                      Тривалість
+                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("duration")}</span>
+                    </th>
+                    <th class="is-sortable" data-playlist-modal-sort="playcount">
+                      Прослуховування
+                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("playcount")}</span>
+                    </th>
+                    <th class="is-sortable" data-playlist-modal-sort="added">
+                      Додано
+                      <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("added")}</span>
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div class="playlist-modal-scroll-area">
+              <table class="placement-table playlist-modal-table playlist-modal-table-body">
+                <tbody>
+                  ${(result.tracks || []).map((track) => `
+                    <tr>
+                      <td>${formatUkNumber(track.position || 0)}</td>
+                      <td>
+                        <div class="modal-track-cell">
+                          <div class="track-cover-thumb">
+                            ${track.album_cover ? `<img src="${escapeHtml(track.album_cover)}" alt="">` : ""}
+                          </div>
+                          <div class="modal-track-text">
+                            <div class="modal-track-title">
+                              ${renderHoverMarquee(`
+                                <a href="${escapeHtml(track.url || `https://open.spotify.com/track/${track.track_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.name || track.track_id)}</a>
+                              `)}
+                            </div>
+                            <div class="modal-track-sub">
+                              ${renderHoverMarquee(renderArtistLinks(track.artists || []))}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="playlist-modal-album-cell">
+                        ${renderHoverMarquee(`
+                          <a href="${escapeHtml(track.album_url || `https://open.spotify.com/album/${track.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.album_name || track.album_id)}</a>
+                        `)}
+                      </td>
+                      <td>${formatDurationMs(track.duration_ms || 0)}</td>
+                      <td>${formatUkNumber(track.playcount || 0)}</td>
+                      <td>${escapeHtml(formatIsoDateTime(track.added_at || ""))}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+
+              ${result.tracks_has_more ? `
+                <div class="modal-load-more-wrap">
+                  <button
+                    type="button"
+                    class="button"
+                    data-playlist-modal-load-more-inline="1"
+                  >
+                    Показати ще
+                  </button>
+                </div>
+              ` : ""}
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="playlist-modal-table-shell">
-        <div class="placement-table-block playlist-modal-table-frame">
-          <div class="playlist-modal-table-head-wrap">
-            <table class="placement-table playlist-modal-table playlist-modal-table-head">
-              <thead>
-                <tr>
-                  <th class="is-sortable" data-playlist-modal-sort="position">
-                    #
-                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("position")}</span>
-                  </th>
-                  <th class="is-sortable" data-playlist-modal-sort="artist">
-                    Трек
-                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("artist")}</span>
-                  </th>
-                  <th>Альбом</th>
-                  <th class="is-sortable" data-playlist-modal-sort="duration">
-                    Тривалість
-                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("duration")}</span>
-                  </th>
-                  <th class="is-sortable" data-playlist-modal-sort="playcount">
-                    Прослуховування
-                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("playcount")}</span>
-                  </th>
-                  <th class="is-sortable" data-playlist-modal-sort="added">
-                    Додано
-                    <span class="placement-sort-indicator">${getPlaylistModalSortIndicator("added")}</span>
-                  </th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-
-          <div class="playlist-modal-scroll-area">
-            <table class="placement-table playlist-modal-table playlist-modal-table-body">
-              <tbody>
-                ${(result.tracks || []).map((track) => `
-                  <tr>
-                    <td>${formatUkNumber(track.position || 0)}</td>
-                    <td>
-                      <div class="modal-track-cell">
-                        <div class="track-cover-thumb">
-                          ${track.album_cover ? `<img src="${escapeHtml(track.album_cover)}" alt="">` : ""}
-                        </div>
-                        <div class="modal-track-text">
-                          <div class="modal-track-title">
-                            ${renderHoverMarquee(`
-                              <a href="${escapeHtml(track.url || `https://open.spotify.com/track/${track.track_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.name || track.track_id)}</a>
-                            `)}
-                          </div>
-                          <div class="modal-track-sub">
-                            ${renderHoverMarquee(renderArtistLinks(track.artists || []))}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="playlist-modal-album-cell">
-                      ${renderHoverMarquee(`
-                        <a href="${escapeHtml(track.album_url || `https://open.spotify.com/album/${track.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(track.album_name || track.album_id)}</a>
-                      `)}
-                    </td>
-                    <td>${formatDurationMs(track.duration_ms || 0)}</td>
-                    <td>${formatUkNumber(track.playcount || 0)}</td>
-                    <td>${escapeHtml(formatIsoDateTime(track.added_at || ""))}</td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-
-            ${result.tracks_has_more ? `
-              <div class="modal-load-more-wrap">
-                <button
-                  type="button"
-                  class="button"
-                  data-playlist-modal-load-more-inline="1"
-                >
-                  Показати ще
-                </button>
-              </div>
-            ` : ""}
-          </div>
-        </div>
+      <div class="playlist-modal-stats-shell">
+        ${renderPlaylistStatsPanel(result)}
       </div>
     </div>
   `;
@@ -3674,16 +4810,17 @@ function initPlaylistAutoApply() {
     ui.playlistContent.innerHTML = '<div class="loading-note">Завантаження треків...</div>';
     ui.playlistModalLoadMore.classList.remove("show");
     return;
-  }
+  } 
 
   ui.playlistContent.innerHTML = renderPlaylistTracksModal(cached);
   ui.playlistModalLoadMore.classList.remove("show");
   ui.playlistModalLoadMore.disabled = state.playlistModal.loading;
 
   requestAnimationFrame(() => {
-  updateHoverMarquees(ui.playlistContent);
-  initPlaylistModalTableHeaderSync(ui.playlistContent);
-});
+    updateHoverMarquees(ui.playlistContent);
+    initPlaylistModalTableHeaderSync(ui.playlistContent);
+    attachPlaylistChartTooltips(ui.playlistContent);
+  });
 }
 
     async function loadPlaylistModalPage(playlistId, reset = false) {
@@ -3741,26 +4878,27 @@ function initPlaylistAutoApply() {
     }
 
     async function openPlaylistModal(playlistId) {
+      closePlaylistModal();
       state.playlistModal.currentId = playlistId;
       state.playlistModal.sortKey = "position";
       state.playlistModal.sortDir = "asc";
-      ui.playlistModal.classList.add("show");
+      showModal(ui.playlistModal);
       ui.playlistContent.innerHTML = '<div class="loading-note">Завантаження треків...</div>';
       ui.playlistModalLoadMore.classList.remove("show");
       await loadPlaylistModalPage(playlistId, true);
     }
 
     function closePlaylistModal() {
-      ui.playlistModal.classList.remove("show");
+      hideModal(ui.playlistModal);
       state.playlistModal.currentId = "";
     }
 
     function openAboutModal() {
-      ui.aboutModal.classList.add("show");
+      showModal(ui.aboutModal);
     }
 
     function closeAboutModal() {
-      ui.aboutModal.classList.remove("show");
+      hideModal(ui.aboutModal);
     }
 
     async function loadPlaylistFilterMeta() {
@@ -3998,6 +5136,13 @@ ui.searchQuery.addEventListener("click", () => {
         return;
       }
 
+      const curatorModalTrigger = event.target.closest("[data-curator-modal-btn='1']");
+      if (curatorModalTrigger) {
+        event.preventDefault();
+        openCuratorModal(curatorModalTrigger.getAttribute("data-curator-id"));
+        return;
+      }
+
       const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
       if (playlistModalTrigger) {
         openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"));
@@ -4023,12 +5168,26 @@ ui.searchQuery.addEventListener("click", () => {
     }); 
 
     ui.playlistList.addEventListener("click", (event) => {
+      const curatorModalTrigger = event.target.closest("[data-curator-modal-btn='1']");
+      if (curatorModalTrigger) {
+        event.preventDefault();
+        openCuratorModal(curatorModalTrigger.getAttribute("data-curator-id"));
+        return;
+      }
+
       const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
       if (!playlistModalTrigger) return;
       openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"));
     });
 
     ui.playlistContent.addEventListener("click", (event) => {
+  const curatorModalTrigger = event.target.closest("[data-curator-modal-btn='1']");
+  if (curatorModalTrigger) {
+    event.preventDefault();
+    openCuratorModal(curatorModalTrigger.getAttribute("data-curator-id"));
+    return;
+  }
+
   const sortTrigger = event.target.closest("[data-playlist-modal-sort]");
   if (sortTrigger) {
     togglePlaylistModalSort(sortTrigger.getAttribute("data-playlist-modal-sort"));
@@ -4040,7 +5199,13 @@ ui.searchQuery.addEventListener("click", () => {
     if (!state.playlistModal.currentId || state.playlistModal.loading) return;
     loadMoreTrigger.disabled = true;
     loadPlaylistModalPage(state.playlistModal.currentId, false);
-  } 
+    return;
+  }
+
+  const chartTrigger = event.target.closest("[data-playlist-chart-open]");
+  if (chartTrigger) {
+    openPlaylistChartModal(chartTrigger.getAttribute("data-playlist-chart-open") || "followers");
+  }
 });
 
     ui.statsBtn.addEventListener("click", () => {
@@ -4078,6 +5243,16 @@ ui.searchQuery.addEventListener("click", () => {
       }
     });
 
+    ui.playlistChartClose.addEventListener("click", () => {
+      closePlaylistChartModal();
+    });
+
+    ui.playlistChartModal.addEventListener("click", (event) => {
+      if (event.target === ui.playlistChartModal) {
+        closePlaylistChartModal();
+      }
+    });
+
     ui.playlistModalLoadMore.addEventListener("click", () => {
       if (!state.playlistModal.currentId) return;
       loadPlaylistModalPage(state.playlistModal.currentId, false);
@@ -4091,6 +5266,40 @@ ui.catalogBackBtn.addEventListener("click", () => {
   clearSearchOutput();
   setCatalogVisibility(true);
 });
+
+    ui.curatorContent.addEventListener("click", (event) => {
+      const sortTrigger = event.target.closest("[data-curator-sort]");
+      if (sortTrigger) {
+        state.curatorModal.sortKey = sortTrigger.getAttribute("data-curator-sort") || "follower";
+        if (state.curatorModal.currentData) {
+          ui.curatorContent.innerHTML = renderCuratorModal(state.curatorModal.currentData);
+        }
+        return;
+      }
+
+      const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
+      if (playlistModalTrigger) {
+        event.preventDefault();
+        openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"));
+        return;
+      }
+
+      const curatorModalTrigger = event.target.closest("[data-curator-modal-btn='1']");
+      if (curatorModalTrigger) {
+        event.preventDefault();
+        openCuratorModal(curatorModalTrigger.getAttribute("data-curator-id"));
+      }
+    });
+
+    ui.curatorClose.addEventListener("click", () => {
+      closeCuratorModal();
+    });
+
+    ui.curatorModal.addEventListener("click", (event) => {
+      if (event.target === ui.curatorModal) {
+        closeCuratorModal();
+      }
+    });
 
     ui.aboutBtn.addEventListener("click", () => {
       openAboutModal();
@@ -4120,6 +5329,24 @@ window.addEventListener("resize", () => {
   }, 80);
 });
     
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+
+      if (ui.playlistChartModal.classList.contains("show")) {
+        closePlaylistChartModal();
+        return;
+      }
+
+      if (ui.curatorModal.classList.contains("show")) {
+        closeCuratorModal();
+        return;
+      }
+
+      if (ui.playlistModal.classList.contains("show")) {
+        closePlaylistModal();
+      }
+    });
+
     window.addEventListener("load", () => {
       initApp();
     });
