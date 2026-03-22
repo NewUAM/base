@@ -806,12 +806,147 @@ input:-webkit-autofill:active {
   white-space: nowrap;
 }
 
-.playlist-description {
+    .playlist-description {
   margin-top: 8px;
   font-size: 14px;
   line-height: 1.45;
   color: var(--text);
   opacity: 0.92;
+}
+    
+.playlist-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  align-items: flex-start;
+}
+
+.playlist-meta-card,
+.playlist-genres-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 6px;
+  width: fit-content;
+  max-width: 100%;
+  flex: 0 0 auto;
+}
+
+.playlist-meta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px 8px;
+  height: 100%;
+}
+
+.playlist-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.playlist-meta-icon {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  color: var(--accent-2);
+  opacity: 0.95;
+}
+
+.playlist-meta-icon svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.playlist-meta-value {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.playlist-meta-tooltip-anchor,
+.playlist-genres-tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  outline: none;
+}
+
+.playlist-genres-tooltip-anchor::before,
+.playlist-genres-tooltip-anchor::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  height: 12px;
+  z-index: 29;
+}
+
+.playlist-genres-tooltip-anchor::after {
+  top: 100%;
+}
+
+.playlist-genres-tooltip-anchor::before {
+  bottom: 100%;
+}
+
+.playlist-genres-card {
+  display: flex;
+  align-items: center;
+}
+
+.playlist-genres-card .playlist-genres-row {
+  align-items: center;
+}
+
+.playlist-genres-card .playlist-genres-top {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 6px 12px;
+  align-items: center;
+}
+
+.playlist-genres-card .playlist-genres-tooltip-anchor {
+  margin-left: 0;
+}
+
+.playlist-genre-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.playlist-genre-name {
+  color: var(--text);
+}
+
+.playlist-genre-divider {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.playlist-genre-percent {
+  color: var(--muted);
+}
+    
+@media (max-width: 860px) {
+  .playlist-info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .playlist-meta-card,
+  .playlist-genres-card {
+    min-height: auto;
+  }
 }
 
     .playlist-genres-block {
@@ -825,14 +960,12 @@ input:-webkit-autofill:active {
   margin-bottom: 6px;
 }
 
-.playlist-genres-trigger {
-  position: relative;
+.playlist-genres-row {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   min-width: 0;
-  outline: none;
 }
 
 .playlist-genres-top {
@@ -842,35 +975,25 @@ input:-webkit-autofill:active {
   min-width: 0;
 }
 
-.playlist-genre-pill {
+.playlist-genres-tooltip-anchor {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: var(--text);
-  font-size: 12px;
-  line-height: 1.3;
-  white-space: nowrap;
+  min-width: 0;
+  outline: none;
 }
 
 .playlist-genres-more {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
   color: var(--accent-2);
-  font-size: 12px;
-  line-height: 1.3;
-  white-space: nowrap;
   cursor: default;
 }
 
 .playlist-genres-tooltip {
   position: absolute;
   left: 0;
-  top: calc(100% + 8px);
+  right: auto;
+  top: calc(100% + 4px);
+  bottom: auto;
   width: min(360px, calc(100vw - 48px));
   max-height: 280px;
   overflow: auto;
@@ -892,12 +1015,48 @@ input:-webkit-autofill:active {
   z-index: 30;
 }
 
-.playlist-genres-trigger:hover .playlist-genres-tooltip,
-.playlist-genres-trigger:focus-within .playlist-genres-tooltip {
+.playlist-genres-tooltip.is-align-right {
+  left: auto;
+  right: 0;
+}
+
+.playlist-genres-tooltip.is-open-up {
+  top: auto;
+  bottom: calc(100% + 4px);
+  transform: translateY(-6px);
+}
+
+.playlist-genres-tooltip-anchor:hover .playlist-genres-tooltip,
+.playlist-genres-tooltip-anchor:focus-within .playlist-genres-tooltip,
+.playlist-genres-tooltip-anchor.is-tooltip-open .playlist-genres-tooltip,
+.playlist-meta-tooltip-anchor:hover .playlist-genres-tooltip,
+.playlist-meta-tooltip-anchor:focus-within .playlist-genres-tooltip {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+.playlist-genres-tooltip-anchor:hover .playlist-genres-tooltip.is-open-up,
+.playlist-genres-tooltip-anchor:focus-within .playlist-genres-tooltip.is-open-up,
+.playlist-genres-tooltip-anchor.is-tooltip-open .playlist-genres-tooltip.is-open-up,
+.playlist-meta-tooltip-anchor:hover .playlist-genres-tooltip.is-open-up,
+.playlist-meta-tooltip-anchor:focus-within .playlist-genres-tooltip.is-open-up {
+  transform: translateY(0);
+}
+
+.playlist-genre-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
 .playlist-genres-tooltip-title {
@@ -908,6 +1067,20 @@ input:-webkit-autofill:active {
   margin-bottom: 8px;
 }
 
+    .playlist-meta-tooltip-anchor .playlist-genres-tooltip {
+  width: max-content;
+  min-width: 0;
+  max-width: 180px;
+  padding: 7px 9px;
+  white-space: nowrap;
+}
+
+.playlist-meta-tooltip-anchor .playlist-genres-tooltip-title {
+  font-size: 12px;
+  line-height: 1.2;
+  margin-bottom: 0;
+}
+    
 .playlist-genres-tooltip-list {
   display: flex;
   flex-direction: column;
@@ -961,12 +1134,19 @@ input:-webkit-autofill:active {
 
 .playlist-genres-tooltip::-webkit-scrollbar-track {
   background: #282626;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  background-clip: padding-box;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .playlist-genres-tooltip::-webkit-scrollbar-thumb {
   background-color: #383838;
-  border-radius: 8px;
   border: 2px solid #282626;
+  background-clip: padding-box;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .playlist-genres-tooltip::-webkit-scrollbar-button {
@@ -1957,39 +2137,35 @@ input:-webkit-autofill:active {
   margin-bottom: 8px;
 }
 
-.playlist-chart-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .playlist-chart-preview-wrap,
 .playlist-chart-expanded-wrap {
   position: relative;
+  width: 100%;
 }
 
-.playlist-chart-tooltip {
-  position: absolute;
-  left: 0;
-  top: 0;
-  pointer-events: none;
-  transform: translate(-50%, calc(-100% - 10px));
-  background: #383838;
-  color: var(--text);
-  border: 1px solid rgba(132,170,251,0.42);
+.playlist-echart-preview {
+  width: 100%;
+  height: 170px;
+}
+
+.playlist-echart-expanded {
+  width: 100%;
+  height: 420px;
+}
+
+.playlist-chart-empty {
+  border: 1px dashed rgba(255,255,255,0.12);
   border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 12px;
-  line-height: 1.35;
-  white-space: nowrap;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
-  z-index: 5;
-  opacity: 0;
-  transition: opacity 0.12s ease;
+  padding: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
-.playlist-chart-point-hit {
-  cursor: pointer;
+.playlist-chart-expanded-note {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 .playlist-chart-footer {
@@ -2187,6 +2363,27 @@ input:-webkit-autofill:active {
   white-space: nowrap;
 }
 
+    .curator-stats-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  margin: 10px 0 12px;
+}
+
+.curator-chart-card {
+  cursor: default;
+}
+
+.curator-chart-card:hover {
+  border-color: rgba(255,255,255,0.08);
+}
+
+@media (max-width: 860px) {
+  .curator-stats-panel {
+    grid-template-columns: 1fr;
+  }
+}
+    
 .curator-link-pill {
   display: inline-flex;
   align-items: center;
@@ -2222,6 +2419,22 @@ input:-webkit-autofill:active {
   width: 18px;
   height: 18px;
   display: block;
+}
+    
+    .curator-genres-block {
+  margin-bottom: 10px;
+}
+
+.curator-genres-tooltip {
+  width: min(420px, calc(100vw - 48px));
+  max-height: 300px;
+}
+
+.curator-genres-tooltip-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--muted);
 }
     
 .curator-sort-row {
@@ -2549,6 +2762,7 @@ input:-webkit-autofill:active {
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
   <script>
     const API_BASE = "https://backend-playlists.hi-f50.workers.dev";
 
@@ -2683,6 +2897,84 @@ function renderPlaylistDescription(description) {
   const normalized = normalizePlaylistDescription(description);
   return normalized ? `<div class="playlist-description">${normalized}</div>` : "";
 }
+   
+    function getPlaylistMetaIconSvg(type) {
+  const icons = {
+    followers: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 12.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Zm0 1.8c4.08 0 7.5 2.18 7.5 5v1H4.5v-1c0-2.82 3.42-5 7.5-5Z"/>
+      </svg>
+    `,
+    updated: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 3a9 9 0 1 0 9 9h-2a7 7 0 1 1-2.05-4.95L14 10h7V3l-2.62 2.62A8.96 8.96 0 0 0 12 3Zm-.75 4.5h1.5V12l3.25 1.95-.75 1.23-4-2.43Z"/>
+      </svg>
+    `,
+    tracks: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M17 3v11.2A3.3 3.3 0 1 1 15.5 11V6.2l-7 1.53V16.2A3.3 3.3 0 1 1 7 13V6.5L17 3Z"/>
+      </svg>
+    `,
+    duration: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 4a8 8 0 1 0 8 8 8.01 8.01 0 0 0-8-8Zm1 8.59 2.7 2.7-1.41 1.41L11 13V8h2Z"/>
+      </svg>
+    `
+  };
+
+  return icons[type] || "";
+}
+
+function renderPlaylistMetaBlock(item) {
+  const followerCount = getPlaylistFollowerCount(item);
+  const trackCount = getPlaylistTrackCount(item);
+
+  return `
+    <div class="playlist-meta-card">
+      <div class="playlist-meta-grid">
+        <span class="playlist-meta-tooltip-anchor" tabindex="0">
+          <div class="playlist-meta-item">
+            <span class="playlist-meta-icon">${getPlaylistMetaIconSvg("followers")}</span>
+            <span class="playlist-meta-value">${formatUkNumber(followerCount)}</span>
+          </div>
+          <div class="playlist-genres-tooltip">
+            <div class="playlist-genres-tooltip-title">Підписники</div>
+          </div>
+        </span>
+
+        <span class="playlist-meta-tooltip-anchor" tabindex="0">
+          <div class="playlist-meta-item">
+            <span class="playlist-meta-icon">${getPlaylistMetaIconSvg("tracks")}</span>
+            <span class="playlist-meta-value">${formatUkNumber(trackCount)}</span>
+          </div>
+          <div class="playlist-genres-tooltip">
+            <div class="playlist-genres-tooltip-title">Треки</div>
+          </div>
+        </span>
+
+        <span class="playlist-meta-tooltip-anchor" tabindex="0">
+          <div class="playlist-meta-item">
+            <span class="playlist-meta-icon">${getPlaylistMetaIconSvg("updated")}</span>
+            <span class="playlist-meta-value">${escapeHtml(item.last_update || "—")}</span>
+          </div>
+          <div class="playlist-genres-tooltip">
+            <div class="playlist-genres-tooltip-title">Дата оновлення</div>
+          </div>
+        </span>
+
+        <span class="playlist-meta-tooltip-anchor" tabindex="0">
+          <div class="playlist-meta-item">
+            <span class="playlist-meta-icon">${getPlaylistMetaIconSvg("duration")}</span>
+            <span class="playlist-meta-value">${formatDurationMs(item.total_duration_ms || 0)}</span>
+          </div>
+          <div class="playlist-genres-tooltip">
+            <div class="playlist-genres-tooltip-title">Тривалість</div>
+          </div>
+        </span>
+      </div>
+    </div>
+  `;
+}
     
     function formatGenrePercent(value) {
   return `${Number(value || 0).toLocaleString("uk-UA", {
@@ -2691,16 +2983,69 @@ function renderPlaylistDescription(description) {
   })}%`;
 }
 
-function renderPlaylistGenresBlock(item) {
-  const genres = Array.isArray(item?.genres) ? item.genres.filter(Boolean) : [];
+    function collectCuratorGenres(playlists) {
+  const items = Array.isArray(playlists) ? playlists : [];
+  const genreMap = new Map();
+
+  for (const playlist of items) {
+    const playlistId = String(playlist?.playlist_id || "").trim();
+    const genres = Array.isArray(playlist?.genres) ? playlist.genres : [];
+
+    for (const genre of genres) {
+      const genreSlug = String(genre?.genre_slug || genre?.genre_name || "").trim();
+      if (!genreSlug) continue;
+
+      const weightRaw = Number(genre?.weight_sum);
+      const fallbackWeight = Number(genre?.percent || 0) / 100;
+      const weight = Number.isFinite(weightRaw) && weightRaw > 0 ? weightRaw : fallbackWeight;
+
+      if (!genreMap.has(genreSlug)) {
+        genreMap.set(genreSlug, {
+          genre_slug: genreSlug,
+          genre_name: String(genre?.genre_name || genreSlug).trim(),
+          weight_sum: 0,
+          playlists_count: 0
+        });
+      }
+
+      const target = genreMap.get(genreSlug);
+      target.weight_sum += weight;
+      target.playlists_count += 1;
+      if (!target.genre_name && genre?.genre_name) {
+        target.genre_name = String(genre.genre_name).trim();
+      }
+    }
+  }
+
+  const list = [...genreMap.values()];
+  const totalWeight = list.reduce((sum, item) => sum + Number(item.weight_sum || 0), 0);
+
+  return list
+    .map((item) => ({
+      ...item,
+      percent: totalWeight > 0 ? (Number(item.weight_sum || 0) / totalWeight) * 100 : 0
+    }))
+    .sort((a, b) => {
+      const diff = Number(b.percent || 0) - Number(a.percent || 0);
+      if (Math.abs(diff) > 0.000001) return diff;
+      return String(a.genre_name || "").localeCompare(String(b.genre_name || ""), "uk");
+    });
+}
+
+function renderCuratorGenresBlock(playlists) {
+  const genres = collectCuratorGenres(playlists);
   if (!genres.length) return "";
 
   const topGenres = genres.slice(0, 3);
+  const tooltipGenres = genres.filter((genre) => Number(genre?.percent || 0) >= 1);
+  const otherPercent = genres
+    .filter((genre) => Number(genre?.percent || 0) < 1)
+    .reduce((sum, genre) => sum + Number(genre?.percent || 0), 0);
 
   return `
-    <div class="playlist-genres-block">
-      <div class="playlist-genres-label">Жанри</div>
-      <div class="playlist-genres-trigger" tabindex="0">
+    <div class="playlist-genres-block curator-genres-block">
+      <div class="playlist-genres-label">Жанри куратора</div>
+      <div class="playlist-genres-row">
         <div class="playlist-genres-top">
           ${topGenres.map((genre) => `
             <span class="playlist-genre-pill">
@@ -2708,26 +3053,398 @@ function renderPlaylistGenresBlock(item) {
             </span>
           `).join("")}
         </div>
-        <span class="playlist-genres-more">${genres.length > 3 ? `Ще ${formatUkNumber(genres.length - 3)}` : "Усі жанри"}</span>
+
+        <span class="playlist-genres-tooltip-anchor" tabindex="0">
+          <span class="playlist-genres-more">${genres.length > 3 ? `Ще ${formatUkNumber(genres.length - 3)}` : "Усі жанри"}</span>
+
+          <div class="playlist-genres-tooltip curator-genres-tooltip">
+            <div class="playlist-genres-tooltip-title">Жанри у плейлістах куратора</div>
+            <div class="playlist-genres-tooltip-list">
+              ${
+                tooltipGenres.length
+                  ? tooltipGenres.map((genre) => `
+                    <div class="playlist-genres-tooltip-row">
+                      <div class="playlist-genres-tooltip-name">
+                        ${escapeHtml(genre.genre_name || genre.genre_slug || "—")}
+                        <div class="curator-genres-tooltip-meta">У плейлістах: ${formatUkNumber(genre.playlists_count)}</div>
+                      </div>
+                      <div class="playlist-genres-tooltip-percent">${escapeHtml(formatGenrePercent(genre.percent))}</div>
+                      <div class="playlist-genres-tooltip-bar">
+                        <span style="width:${Math.max(1, Math.min(100, Number(genre.percent || 0)))}%"></span>
+                      </div>
+                    </div>
+                  `).join("")
+                  : ""
+              }
+
+              ${
+                otherPercent > 0
+                  ? `
+                    <div class="playlist-genres-tooltip-row">
+                      <div class="playlist-genres-tooltip-name">Інші жанри</div>
+                      <div class="playlist-genres-tooltip-percent">${escapeHtml(formatGenrePercent(otherPercent))}</div>
+                      <div class="playlist-genres-tooltip-bar">
+                        <span style="width:${Math.max(1, Math.min(100, Number(otherPercent || 0)))}%"></span>
+                      </div>
+                    </div>
+                  `
+                  : ""
+              }
+
+              ${
+                !tooltipGenres.length && otherPercent <= 0
+                  ? `<div class="empty-note">Немає жанрів.</div>`
+                  : ""
+              }
+            </div>
+          </div>
+        </span>
+      </div>
+    </div>
+  `;
+} 
+    
+    function formatSignedFollowersCount(value) {
+  const n = Number(value || 0);
+  if (n === 0) return "Без змін";
+  const abs = Math.abs(n);
+  return `${formatSignedUkNumber(n)} ${getUkWordForm(abs, "підписник", "підписники", "підписників")}`;
+}
+
+function getLastPeriodPoints(points, days = 30) {
+  const items = Array.isArray(points) ? points.filter(Boolean) : [];
+  if (!items.length) return [];
+  return items.slice(-Math.max(1, days));
+}
+
+function getAbsoluteSeriesMonthChange(points, days = 30) {
+  const items = Array.isArray(points) ? points.filter(Boolean) : [];
+  if (!items.length) return 0;
+
+  const period = getLastPeriodPoints(items, days);
+  const firstValue = Number(period[0]?.value ?? items[0]?.value ?? 0);
+  const lastValue = Number(items[items.length - 1]?.value || 0);
+
+  return lastValue - firstValue;
+}
+
+function getDiffSeriesMonthChange(points, days = 30) {
+  return getLastPeriodPoints(points, days).reduce((sum, point) => sum + Number(point?.value || 0), 0);
+}
+
+function getAverageSeriesPerDay(points, days = 30) {
+  const period = getLastPeriodPoints(points, days);
+  if (!period.length) return 0;
+  return Math.round(period.reduce((sum, point) => sum + Number(point?.value || 0), 0) / period.length);
+}
+
+function formatAverageTracksPerDay(value) {
+  const n = Math.round(Number(value || 0));
+  const abs = Math.abs(n);
+  return `У середньому ${formatSignedUkNumber(n)} ${getUkWordForm(abs, "трек", "треки", "треків")} на добу протягом останнього місяця`;
+}
+
+function buildCuratorContinuousSeriesPoints(rows, valueKey, formatter) {
+  const items = Array.isArray(rows) ? rows.filter(Boolean) : [];
+  if (!items.length) return [];
+
+  const sorted = [...items].sort((a, b) => String(a.snapshot_date || "").localeCompare(String(b.snapshot_date || "")));
+  const start = parseIsoDateUtc(sorted[0]?.snapshot_date);
+  const end = parseIsoDateUtc(sorted[sorted.length - 1]?.snapshot_date);
+  if (!start || !end) return [];
+
+  const valueMap = new Map(
+    sorted.map((row) => [
+      String(row.snapshot_date || "").trim(),
+      Number(row[valueKey] || 0)
+    ])
+  );
+
+  const points = [];
+  const cursor = new Date(start.getTime());
+
+  while (cursor.getTime() <= end.getTime()) {
+    const iso = formatIsoDateUtc(cursor);
+    const value = valueMap.get(iso) || 0;
+
+    points.push({
+      label: formatShortDateLabel(iso),
+      tooltipTitle: formatChartFullDate(iso),
+      tooltipValue: formatter(value),
+      value
+    });
+
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+
+  return points;
+}
+
+function renderCuratorChartCard(type, title, subtitle, payload, footerLeft, footerRight) {
+  return `
+    <button type="button" class="playlist-chart-card curator-chart-card" data-curator-chart-open="${escapeHtml(type)}">
+      <div class="playlist-chart-title">${escapeHtml(title)}</div>
+      <div class="playlist-chart-subtitle">${escapeHtml(subtitle)}</div>
+      ${renderPlaylistChartCanvas(payload, false)}
+      <div class="playlist-chart-footer">
+        <span>${escapeHtml(footerLeft)}</span>
+        <span>${escapeHtml(footerRight)}</span>
+      </div>
+    </button>
+  `;
+}
+
+function renderCuratorStatsPanel(result) {
+  const followerRows = Array.isArray(result?.followers_history) ? result.followers_history : [];
+  const activityRows = Array.isArray(result?.activity_history) ? result.activity_history : [];
+
+  if (!followerRows.length && !activityRows.length) {
+    return "";
+  }
+
+  const followerPoints = buildCuratorContinuousSeriesPoints(
+    followerRows,
+    "followers_diff",
+    formatSignedFollowersCount
+  );
+
+  const activityPoints = buildCuratorContinuousSeriesPoints(
+    activityRows,
+    "added_tracks_count",
+    formatTrackCountWithWord
+  );
+
+  const monthFollowersDiff = getDiffSeriesMonthChange(followerPoints, 30);
+  const monthActivityAverage = getAverageSeriesPerDay(activityPoints, 30);
+
+  const followersCard = followerPoints.length
+    ? renderCuratorChartCard(
+        "followers",
+        "Підписники",
+        "Сумарна зміна за день у всіх плейлістах куратора",
+        {
+          seriesType: "line",
+          allowNegative: true,
+          points: followerPoints,
+          visiblePoints: 92
+        },
+        "",
+        "За останній місяць: " + formatSignedFollowersCount(monthFollowersDiff)
+      )
+    : '<div class="playlist-chart-empty">Історія підписників куратора ще не зібрана.</div>';
+
+  const activityCard = activityPoints.length
+    ? renderCuratorChartCard(
+        "activity",
+        "Додавання треків",
+        "Унікальні треки, додані за день у всі плейлісти куратора",
+        {
+          seriesType: "bar",
+          points: activityPoints,
+          visiblePoints: 92
+        },
+        "",
+        formatAverageTracksPerDay(monthActivityAverage)
+      )
+    : '<div class="playlist-chart-empty">Історія додавання треків куратора ще не зібрана.</div>';
+
+  return `
+    <div class="curator-stats-panel">
+      ${followersCard}
+      ${activityCard}
+    </div>
+  `;
+}
+    
+function renderPlaylistGenresBlock(item) {
+  const genres = Array.isArray(item?.genres) ? item.genres.filter(Boolean) : [];
+  if (!genres.length) return "";
+
+  const topGenres = genres.slice(0, 3);
+  const tooltipGenres = genres.filter((genre) => Number(genre?.percent || 0) >= 1);
+  const otherPercent = genres
+    .filter((genre) => Number(genre?.percent || 0) < 1)
+    .reduce((sum, genre) => sum + Number(genre?.percent || 0), 0);
+
+  const inlineItems = topGenres.map((genre) => `
+    <span class="playlist-genre-inline">
+      <span class="playlist-genre-name">${escapeHtml(genre.genre_name || genre.genre_slug || "—")}</span>
+      <span class="playlist-genre-divider">|</span>
+      <span class="playlist-genre-percent">${escapeHtml(formatGenrePercent(genre.percent))}</span>
+    </span>
+  `);
+
+  if (genres.length > 3) {
+    inlineItems.push(`
+      <span class="playlist-genres-tooltip-anchor" tabindex="0">
+        <span class="playlist-genre-inline playlist-genres-more">Ще ${formatUkNumber(genres.length - 3)}</span>
 
         <div class="playlist-genres-tooltip">
           <div class="playlist-genres-tooltip-title">Жанри плейліста</div>
           <div class="playlist-genres-tooltip-list">
-            ${genres.map((genre) => `
-              <div class="playlist-genres-tooltip-row">
-                <div class="playlist-genres-tooltip-name">${escapeHtml(genre.genre_name || genre.genre_slug || "—")}</div>
-                <div class="playlist-genres-tooltip-percent">${escapeHtml(formatGenrePercent(genre.percent))}</div>
-                <div class="playlist-genres-tooltip-bar">
-                  <span style="width:${Math.max(1, Math.min(100, Number(genre.percent || 0)))}%"></span>
-                </div>
-              </div>
-            `).join("")}
+            ${
+              tooltipGenres.length
+                ? tooltipGenres.map((genre) => `
+                  <div class="playlist-genres-tooltip-row">
+                    <div class="playlist-genres-tooltip-name">${escapeHtml(genre.genre_name || genre.genre_slug || "—")}</div>
+                    <div class="playlist-genres-tooltip-percent">${escapeHtml(formatGenrePercent(genre.percent))}</div>
+                    <div class="playlist-genres-tooltip-bar">
+                      <span style="width:${Math.max(1, Math.min(100, Number(genre.percent || 0)))}%"></span>
+                    </div>
+                  </div>
+                `).join("")
+                : ""
+            }
+
+            ${
+              otherPercent > 0
+                ? `
+                  <div class="playlist-genres-tooltip-row">
+                    <div class="playlist-genres-tooltip-name">Інші жанри</div>
+                    <div class="playlist-genres-tooltip-percent">${escapeHtml(formatGenrePercent(otherPercent))}</div>
+                    <div class="playlist-genres-tooltip-bar">
+                      <span style="width:${Math.max(1, Math.min(100, Number(otherPercent || 0)))}%"></span>
+                    </div>
+                  </div>
+                `
+                : ""
+            }
+
+            ${
+              !tooltipGenres.length && otherPercent <= 0
+                ? `<div class="empty-note">Немає жанрів.</div>`
+                : ""
+            }
           </div>
+        </div>
+      </span>
+    `);
+  }
+
+  return `
+    <div class="playlist-genres-card">
+      <div class="playlist-genres-row">
+        <div class="playlist-genres-top">
+          ${inlineItems.join("")}
         </div>
       </div>
     </div>
   `;
 }
+    
+    function initAdaptiveGenreTooltips() {
+  if (window.__adaptiveGenreTooltipsInited) return;
+  window.__adaptiveGenreTooltipsInited = true;
+
+  let activeGenreAnchor = null;
+
+  const getGenreAnchor = (target) => {
+    if (!target) return null;
+    const el = target instanceof Element ? target : target.parentElement;
+    if (!el || typeof el.closest !== "function") return null;
+    return el.closest(".playlist-genres-tooltip-anchor");
+  };
+
+  const closeGenreTooltip = (anchor) => {
+    if (!anchor) return;
+    anchor.classList.remove("is-tooltip-open");
+    if (typeof anchor.blur === "function") {
+      anchor.blur();
+    }
+    if (activeGenreAnchor === anchor) {
+      activeGenreAnchor = null;
+    }
+  };
+
+  const closeAllGenreTooltips = (exceptAnchor = null) => {
+    document.querySelectorAll(".playlist-genres-tooltip-anchor.is-tooltip-open").forEach((anchor) => {
+      if (anchor !== exceptAnchor) {
+        closeGenreTooltip(anchor);
+      }
+    });
+  };
+
+  const updateTooltipPosition = (anchor) => {
+    if (!anchor) return;
+
+    const tooltip = anchor.querySelector(".playlist-genres-tooltip");
+    if (!tooltip) return;
+
+    tooltip.classList.remove("is-align-right", "is-open-up");
+
+    const rect = tooltip.getBoundingClientRect();
+
+    if (rect.right > window.innerWidth - 8) {
+      tooltip.classList.add("is-align-right");
+    }
+
+    if (rect.bottom > window.innerHeight - 8) {
+      tooltip.classList.add("is-open-up");
+    }
+
+    const rectAfter = tooltip.getBoundingClientRect();
+
+    if (rectAfter.left < 8) {
+      tooltip.classList.remove("is-align-right");
+    }
+  };
+
+  document.addEventListener("mouseenter", (event) => {
+    const anchor = getGenreAnchor(event.target);
+    if (!anchor) return;
+
+    if (activeGenreAnchor && activeGenreAnchor !== anchor) {
+      closeGenreTooltip(activeGenreAnchor);
+    }
+
+    updateTooltipPosition(anchor);
+  }, true);
+
+  document.addEventListener("focusin", (event) => {
+    const anchor = getGenreAnchor(event.target);
+    if (!anchor) return;
+
+    closeAllGenreTooltips(anchor);
+    activeGenreAnchor = anchor;
+    anchor.classList.add("is-tooltip-open");
+    updateTooltipPosition(anchor);
+  });
+
+  document.addEventListener("click", (event) => {
+    const anchor = getGenreAnchor(event.target);
+
+    if (!anchor) {
+      closeAllGenreTooltips();
+      activeGenreAnchor = null;
+      return;
+    }
+
+    if (activeGenreAnchor === anchor && anchor.classList.contains("is-tooltip-open")) {
+      closeGenreTooltip(anchor);
+      return;
+    }
+
+    closeAllGenreTooltips(anchor);
+    activeGenreAnchor = anchor;
+    anchor.classList.add("is-tooltip-open");
+    updateTooltipPosition(anchor);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAllGenreTooltips();
+      activeGenreAnchor = null;
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    document.querySelectorAll(".playlist-genres-tooltip-anchor").forEach(updateTooltipPosition);
+  });
+}
+
+initAdaptiveGenreTooltips();
+
+initAdaptiveGenreTooltips();
     
     function formatUkNumber(n) {
       return Number(n || 0).toLocaleString("uk-UA");
@@ -3603,6 +4320,8 @@ function renderCuratorSocialLinks(links) {
           <span>Плейлісти: ${formatUkNumber(playlistsCount)}</span>
           <span>Підписники: ${formatUkNumber(followersTotal)}</span>
         </div>
+        ${renderCuratorStatsPanel(result)}
+        ${renderCuratorGenresBlock(playlists)}
         <div class="curator-links">${renderCuratorSocialLinks(curatorLinks)}</div>
       </div>
     </div>
@@ -3642,6 +4361,7 @@ function renderCuratorSocialLinks(links) {
         state.curatorModal.currentData = data.result;
         ui.curatorContent.className = "";
         ui.curatorContent.innerHTML = renderCuratorModal(data.result);
+        initPlaylistCharts(ui.curatorContent);
       } catch (error) {
         ui.curatorContent.className = "loading-note";
         ui.curatorContent.textContent = "Не вдалося завантажити профіль куратора.";
@@ -3658,46 +4378,40 @@ function renderCuratorSocialLinks(links) {
     }
 
     function renderPlaylistCard(item, options = {}) {
-      const followerCount = getPlaylistFollowerCount(item);
-      const trackCount = getPlaylistTrackCount(item);
-      const showTracksButton = options.showTracksButton !== false;
-      const showCuratorLine = options.showCuratorLine !== false;
+  const showTracksButton = options.showTracksButton !== false;
+  const showCuratorLine = options.showCuratorLine !== false;
 
-      return `
-        <div class="playlist-card">
-          <div class="playlist-card-side">
-            <div class="cover">${item.cover ? `<img src="${escapeHtml(item.cover)}" alt="">` : ""}</div>
-            ${showTracksButton ? `
-              <button
-                type="button"
-                class="button secondary"
-                data-playlist-modal-btn="1"
-                data-playlist-id="${escapeHtml(item.playlist_id)}"
-              >Усі треки</button>
-            ` : ""}
+  return `
+    <div class="playlist-card">
+      <div class="playlist-card-side">
+        <div class="cover">${item.cover ? `<img src="${escapeHtml(item.cover)}" alt="">` : ""}</div>
+        ${showTracksButton ? `
+          <button
+            type="button"
+            class="button secondary"
+            data-playlist-modal-btn="1"
+            data-playlist-id="${escapeHtml(item.playlist_id)}"
+          >Усі треки</button>
+        ` : ""}
+      </div>
+      <div class="playlist-main">
+        <div class="playlist-title"><a href="${escapeHtml(item.url || `https://open.spotify.com/playlist/${item.playlist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name || item.playlist_id)}</a></div>
+        ${showCuratorLine ? `
+          <div class="playlist-sub">
+            ${item.curator
+              ? `Куратор: ${renderCuratorLink(item)}`
+              : "Куратор не вказаний"}
           </div>
-          <div class="playlist-main">
-            <div class="playlist-title"><a href="${escapeHtml(item.url || `https://open.spotify.com/playlist/${item.playlist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name || item.playlist_id)}</a></div>
-            ${showCuratorLine ? `
-              <div class="playlist-sub">
-                ${item.curator
-                  ? `Куратор: ${renderCuratorLink(item)}`
-                  : "Куратор не вказаний"}
-              </div>
-            ` : ""}
-            <div class="meta-line">
-  <span class="pill">Підписники: ${formatUkNumber(followerCount)}</span>
-  <span class="pill">Треки: ${formatUkNumber(trackCount)}</span>
-  <span class="pill">Оновлено: ${escapeHtml(item.last_update || "—")}</span>
-  <span class="pill">Тривалість: ${formatDurationMs(item.total_duration_ms || 0)}</span>
-  <span class="pill">Прослуховування: ${formatUkNumber(item.total_playcount || 0)}</span>
-</div>
-${renderPlaylistGenresBlock(item)}
-${renderPlaylistDescription(item.description)}
-          </div>
+        ` : ""}
+        <div class="playlist-info-row">
+          ${renderPlaylistMetaBlock(item)}
+          ${renderPlaylistGenresBlock(item)}
         </div>
-      `;
-    }
+        ${renderPlaylistDescription(item.description)}
+      </div>
+    </div>
+  `;
+}
 
     function getPlacementSortedItems(tableState) {
       const items = [...tableState.items];
@@ -3880,7 +4594,7 @@ ${renderPlaylistDescription(item.description)}
             <div class="meta-line">
               <span class="pill">Плейлісти: ${formatUkNumber(info.playlists_count)}</span>
               <span class="pill">Появи: ${formatUkNumber(info.appearances_count)}</span>
-              <span class="pill">Середня позиція: ${round2(info.avg_position)}</span>
+              <span class="pill" title="Усі позиції: ${round2(info.avg_position_all)}">Середня позиція (топ-50): ${round2(info.avg_position)}</span>
               <span class="pill">Тривалість: ${formatDurationMs(info.duration_ms || 0)}</span>
               <span class="pill">Прослуховування: ${formatUkNumber(info.playcount || 0)}</span>
             </div>
@@ -3904,7 +4618,7 @@ ${renderPlaylistDescription(item.description)}
             <div class="meta-line">
               <span class="pill">Знайдено: ${formatTracksGenitive(summary.unique_tracks_count)}</span>
               <span class="pill">Плейлісти: ${formatUkNumber(summary.playlists_count)}</span>
-              <span class="pill">Середня позиція: ${round2(summary.avg_position)}</span>
+              <span class="pill" title="Усі позиції: ${round2(summary.avg_position_all)}">Середня позиція (топ-50): ${round2(summary.avg_position)}</span>
             </div>
           </div>
         </div>
@@ -3920,7 +4634,7 @@ ${renderPlaylistDescription(item.description)}
               <span class="pill">Унікальні треки: ${formatUkNumber(summary.unique_tracks_count)}</span>
               <span class="pill">Плейлісти: ${formatUkNumber(summary.playlists_count)}</span>
               <span class="pill">Появи: ${formatUkNumber(summary.appearances_count)}</span>
-              <span class="pill">Середня позиція: ${round2(summary.avg_position)}</span>
+              <span class="pill" title="Усі позиції: ${round2(summary.avg_position_all)}">Середня позиція (топ-50): ${round2(summary.avg_position)}</span>
             </div>
           </div>
         </div>
@@ -4082,7 +4796,7 @@ function initPlaylistAutoApply() {
       }
 
       ui.searchResults.innerHTML = renderSearchTrackCard(data.result);
-      setSearchSummary(`Трек знайдено у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція — ${round2(data.result.avg_position)}.`);
+      setSearchSummary(`Трек знайдено у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція у топ-50 — ${round2(data.result.avg_position)}.`);
     }
 
     async function runAlbumSearch(albumId) {
@@ -4102,7 +4816,7 @@ function initPlaylistAutoApply() {
         ${cards}
       `;
 
-      setSearchSummary(`Знайдено ${formatUkNumber(data.result.unique_tracks_count)} ${getUkWordForm(data.result.unique_tracks_count, "трек", "треки", "треків")} альбому у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція — ${round2(data.result.avg_position)}.`);
+      setSearchSummary(`Знайдено ${formatUkNumber(data.result.unique_tracks_count)} ${getUkWordForm(data.result.unique_tracks_count, "трек", "треки", "треків")} альбому у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція у топ-50 — ${round2(data.result.avg_position)}.`);
     }
 
     async function runArtistSearch(artistId) {
@@ -4122,7 +4836,7 @@ function initPlaylistAutoApply() {
         ${cards}
       `;
 
-      setSearchSummary(`Знайдено ${formatTracksGenitive(data.result.unique_tracks_count)} артиста у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція — ${round2(data.result.avg_position)}.`);
+      setSearchSummary(`Знайдено ${formatTracksGenitive(data.result.unique_tracks_count)} артиста у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція у топ-50 — ${round2(data.result.avg_position)}.`);
     }
 
     async function runPlaylistSearch(playlistId) {
@@ -4418,38 +5132,102 @@ function initPlaylistAutoApply() {
     }
 
     function formatShortDateLabel(value) {
-      const s = String(value || "").trim();
-      if (!s) return "";
-      const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-      if (m) return `${m[3]}.${m[2]}`;
-      return s;
-    }
+  const s = String(value || "").trim();
+  if (!s) return "";
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (m) return `${m[3]}.${m[2]}`;
+  return s;
+}
+
+function formatChartFullDate(value) {
+  const s = String(value || "").trim();
+  if (!s) return "";
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (m) return `${m[3]}.${m[2]}.${m[1]}`;
+  return s;
+}
+
+function formatTrackCountWithWord(value) {
+  const n = Number(value || 0);
+  return `${formatUkNumber(n)} ${getUkWordForm(n, "трек", "треки", "треків")}`;
+}
+
+function formatFollowerCountWithWord(value) {
+  const n = Number(value || 0);
+  return `${formatUkNumber(n)} ${getUkWordForm(n, "підписник", "підписники", "підписників")}`;
+}
+
+function parseIsoDateUtc(value) {
+  const s = String(value || "").trim();
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+  return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+}
+
+function formatIsoDateUtc(date) {
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function buildContinuousActivityPoints(activityHistory) {
+  const rows = Array.isArray(activityHistory) ? activityHistory.filter(Boolean) : [];
+  if (!rows.length) return [];
+
+  const sorted = [...rows].sort((a, b) => String(a.snapshot_date || "").localeCompare(String(b.snapshot_date || "")));
+  const start = parseIsoDateUtc(sorted[0]?.snapshot_date);
+  const end = parseIsoDateUtc(sorted[sorted.length - 1]?.snapshot_date);
+  if (!start || !end) return [];
+
+  const valueMap = new Map(
+    sorted.map((row) => [
+      String(row.snapshot_date || "").trim(),
+      Number(row.added_tracks_count || 0)
+    ])
+  );
+
+  const points = [];
+  const cursor = new Date(start.getTime());
+
+  while (cursor.getTime() <= end.getTime()) {
+    const iso = formatIsoDateUtc(cursor);
+    const value = valueMap.get(iso) || 0;
+
+    points.push({
+      label: formatShortDateLabel(iso),
+      tooltipTitle: formatChartFullDate(iso),
+      tooltipValue: formatTrackCountWithWord(value),
+      value
+    });
+
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+
+  return points;
+}
 
     function getPlaylistHistoryRows(result) {
-      return (Array.isArray(result?.daily_history) ? result.daily_history : [])
-        .map((row) => ({
-          snapshot_date: String(row?.snapshot_date || "").trim(),
-          follower: Number(row?.follower || 0),
-          follower_diff: Number(row?.follower_diff || 0),
-          track_count: Number(row?.track_count || 0),
-          added_tracks_count: Number(row?.added_tracks_count || 0),
-          removed_tracks_count: Number(row?.removed_tracks_count || 0),
-          activity_total: Number(row?.activity_total || 0)
-        }))
-        .filter((row) => row.snapshot_date)
-        .sort((a, b) => a.snapshot_date.localeCompare(b.snapshot_date))
-        .map((row, index) => {
-          if (index === 0) {
-            return {
-              ...row,
-              added_tracks_count: 0,
-              removed_tracks_count: 0,
-              activity_total: 0
-            };
-          }
-          return row;
-        });
-    }
+  return (Array.isArray(result?.daily_history) ? result.daily_history : [])
+    .map((row) => ({
+      snapshot_date: String(row?.snapshot_date || "").trim(),
+      follower: Number(row?.follower || 0),
+      follower_diff: Number(row?.follower_diff || 0),
+      track_count: Number(row?.track_count || 0)
+    }))
+    .filter((row) => row.snapshot_date)
+    .sort((a, b) => a.snapshot_date.localeCompare(b.snapshot_date));
+}
+
+function getPlaylistActivityRows(result) {
+  return (Array.isArray(result?.activity_history) ? result.activity_history : [])
+    .map((row) => ({
+      snapshot_date: String(row?.snapshot_date || "").trim(),
+      added_tracks_count: Number(row?.added_tracks_count || 0)
+    }))
+    .filter((row) => row.snapshot_date)
+    .sort((a, b) => a.snapshot_date.localeCompare(b.snapshot_date));
+}
 
     function getPlaylistWeekFollowerDiff(history) {
       if (!Array.isArray(history) || !history.length) return 0;
@@ -4467,237 +5245,584 @@ function initPlaylistAutoApply() {
       return formatted;
     }
 
-    function buildLineChartSvg(points, options = {}) {
-      const width = Number(options.width || 220);
-      const height = Number(options.height || 110);
-      const padTop = Number(options.padTop || 10);
-      const padRight = Number(options.padRight || 10);
-      const padBottom = Number(options.padBottom || 18);
-      const padLeft = Number(options.padLeft || 10);
-      const chartWidth = Math.max(1, width - padLeft - padRight);
-      const chartHeight = Math.max(1, height - padTop - padBottom);
-      const values = points.map((point) => Number(point.value || 0));
-      const minValue = Math.min(...values);
-      const maxValue = Math.max(...values);
-      const range = Math.max(1, maxValue - minValue);
-      const baseY = padTop + chartHeight;
+    function encodeChartPayload(payload) {
+  return encodeURIComponent(JSON.stringify(payload));
+}
 
-      const coords = points.map((point, index) => {
-        const x = points.length === 1
-          ? padLeft + chartWidth / 2
-          : padLeft + (chartWidth * index) / Math.max(1, points.length - 1);
-        const y = baseY - ((Number(point.value || 0) - minValue) / range) * chartHeight;
-        return { x, y, value: point.value, label: point.label };
-      });
+function getPlaylistChartStartIndex(total, visiblePoints = 92) {
+  return Math.max(0, Number(total || 0) - Number(visiblePoints || 92));
+}
 
-      const polyline = coords.map((point) => `${point.x},${point.y}`).join(" ");
-      const area = coords.length
-        ? `${padLeft},${baseY} ${coords.map((point) => `${point.x},${point.y}`).join(" ")} ${coords[coords.length - 1].x},${baseY}`
-        : "";
+function renderPlaylistChartCanvas(payload, expanded = false) {
+  return `
+    <div class="${expanded ? "playlist-chart-expanded-wrap" : "playlist-chart-preview-wrap"}">
+      <div
+        class="${expanded ? "playlist-echart-expanded" : "playlist-echart-preview"}"
+        data-playlist-chart="${escapeHtml(encodeChartPayload(payload))}"
+      ></div>
+    </div>
+  `;
+}
 
-      const firstLabel = points[0]?.label || "";
-      const lastLabel = points[points.length - 1]?.label || "";
+function buildPlaylistChartOption(payload) {
+  const allPoints = Array.isArray(payload?.points) ? payload.points : [];
+  const expanded = !!payload?.expanded;
+  const visiblePoints = Math.max(14, Number(payload?.visiblePoints || 92));
+  const points = expanded ? allPoints : allPoints.slice(-visiblePoints);
+  const startValue = getPlaylistChartStartIndex(allPoints.length, visiblePoints);
+  const axisText = "rgba(255,255,255,0.68)";
+  const splitLine = "rgba(255,255,255,0.08)";
+  const accent = payload?.seriesType === "bar" ? "#64B743" : "#84AAFB";
+  const isSignedBar = payload?.seriesType === "bar" && !!payload?.barSigned;
+  const allowNegative = !!payload?.allowNegative;
 
-      return `
-        <svg class="playlist-chart-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="${padLeft}" y1="${baseY}" x2="${width - padRight}" y2="${baseY}" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
-          ${area ? `<polygon points="${area}" fill="rgba(132,170,251,0.18)"></polygon>` : ""}
-          ${polyline ? `<polyline points="${polyline}" fill="none" stroke="#84AAFB" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"></polyline>` : ""}
-          ${coords.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="2.8" fill="#84AAFB"></circle><circle class="playlist-chart-point-hit" data-chart-label="${escapeHtml(point.label || '')}" data-chart-value="${escapeHtml(`${formatUkNumber(point.value || 0)}`)}" cx="${point.x}" cy="${point.y}" r="10" fill="transparent"></circle>`).join("")}
-          <text x="${padLeft}" y="${height - 4}" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(firstLabel)}</text>
-          <text x="${width - padRight}" y="${height - 4}" text-anchor="end" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(lastLabel)}</text>
-        </svg>
-      `;
+  return {
+    animation: false,
+    textStyle: {
+      fontFamily: "CustomFont, Arial, sans-serif"
+    },
+    grid: payload?.seriesType === "bar"
+      ? (expanded
+          ? { left: 42, right: 18, top: 18, bottom: 108 }
+          : { left: 34, right: 12, top: 10, bottom: 64 })
+      : (expanded
+          ? { left: 42, right: 18, top: 18, bottom: 76 }
+          : { left: 34, right: 12, top: 10, bottom: 40 }),
+    tooltip: expanded
+      ? {
+          trigger: "axis",
+          confine: false,
+          backgroundColor: "rgba(53, 53, 60, 0.98)",
+          borderColor: "rgba(132,170,251,0.42)",
+          borderWidth: 1,
+          textStyle: {
+            color: "#f3f3f3",
+            fontSize: 12,
+            lineHeight: 18
+          },
+          padding: [10, 12],
+          extraCssText: "border-radius:10px; box-shadow:0 10px 28px rgba(0,0,0,0.28);",
+          axisPointer: {
+            type: payload?.seriesType === "bar" ? "shadow" : "line",
+            shadowStyle: {
+              color: "rgba(255,255,255,0.05)"
+            },
+            lineStyle: {
+              color: "rgba(255,255,255,0.18)",
+              width: 1
+            }
+          },
+          position(pos, params, dom, rect, size) {
+            const viewW = window.innerWidth;
+            const viewH = window.innerHeight;
+            const boxW = size.contentSize[0];
+            const boxH = size.contentSize[1];
+
+            let x = pos[0] - boxW / 2;
+            let y = pos[1] - boxH - 14;
+
+            if (x < 12) x = 12;
+            if (x + boxW > viewW - 12) x = viewW - boxW - 12;
+            if (y < 12) y = Math.min(viewH - boxH - 12, pos[1] + 14);
+
+            return [x, y];
+          },
+          formatter(params) {
+            const item = Array.isArray(params) ? params[0] : params;
+            const point = points[item?.dataIndex] || {};
+            return `
+              <div style="font-size:12px; line-height:1.35; color:#bababa; margin-bottom:4px;">
+                ${escapeHtml(point.tooltipTitle || point.label || "")}
+              </div>
+              <div style="font-size:13px; line-height:1.35; color:#f3f3f3; font-weight:700;">
+                ${escapeHtml(point.tooltipValue || "")}
+              </div>
+            `;
+          }
+        }
+      : {
+          show: false
+        },
+    xAxis: {
+      type: "category",
+      data: points.map((point) => point.label || ""),
+      boundaryGap: payload?.seriesType === "bar",
+      axisLine: {
+        lineStyle: { color: "rgba(255,255,255,0.12)" }
+      },
+      axisTick: { show: false },
+      axisLabel: payload?.seriesType === "bar"
+        ? {
+            color: axisText,
+            fontSize: 8,
+            margin: 12,
+            interval: "auto",
+            rotate: 0,
+            hideOverlap: true
+          }
+        : {
+            color: axisText,
+            fontSize: expanded ? 10 : 9,
+            margin: 10,
+            hideOverlap: true
+          }
+    },
+    yAxis: {
+      type: "value",
+      min: payload?.seriesType === "line"
+        ? function (value) {
+            const span = Math.max(1, value.max - value.min);
+            return allowNegative
+              ? Math.floor(value.min - span * 0.18)
+              : Math.max(0, Math.floor(value.min - span * 0.18));
+          }
+        : (isSignedBar
+            ? function (value) {
+                const span = Math.max(1, value.max - value.min);
+                return Math.floor(value.min - span * 0.12);
+              }
+            : 0),
+      max: payload?.seriesType === "line"
+        ? function (value) {
+            const span = Math.max(1, value.max - value.min);
+            return Math.ceil(value.max + span * 0.18);
+          }
+        : (isSignedBar
+            ? function (value) {
+                const span = Math.max(1, value.max - value.min);
+                return Math.ceil(value.max + span * 0.12);
+              }
+            : null),
+      scale: payload?.seriesType === "line" || isSignedBar || allowNegative,
+      axisLine: { show: false },
+      axisTick: { show: false },
+      axisLabel: {
+        color: axisText,
+        fontSize: expanded ? 10 : 9,
+        formatter(value) {
+          return formatUkNumber(value);
+        }
+      },
+      splitLine: {
+        lineStyle: { color: splitLine }
+      }
+    },
+    dataZoom: expanded
+      ? [
+          {
+            type: "inside",
+            xAxisIndex: 0,
+            startValue,
+            endValue: Math.max(0, allPoints.length - 1),
+            zoomOnMouseWheel: false,
+            moveOnMouseWheel: true,
+            moveOnMouseMove: true
+          },
+          {
+            type: "slider",
+            xAxisIndex: 0,
+            startValue,
+            endValue: Math.max(0, allPoints.length - 1),
+            height: 18,
+            bottom: 18,
+            brushSelect: false,
+            showDetail: false,
+            borderColor: "rgba(255,255,255,0.08)",
+            backgroundColor: "rgba(255,255,255,0.03)",
+            fillerColor: "rgba(132,170,251,0.16)",
+            dataBackground: {
+              lineStyle: { color: "rgba(255,255,255,0.18)" },
+              areaStyle: { color: "rgba(255,255,255,0.06)" }
+            },
+            selectedDataBackground: {
+              lineStyle: { color: "#84AAFB" },
+              areaStyle: { color: "rgba(132,170,251,0.12)" }
+            },
+            handleStyle: {
+              color: "#84AAFB",
+              borderColor: "#84AAFB"
+            },
+            moveHandleStyle: {
+              color: "#84AAFB"
+            },
+            textStyle: {
+              color: "rgba(255,255,255,0.55)",
+              fontSize: 10
+            }
+          }
+        ]
+      : [],
+    series: [
+      payload?.seriesType === "bar"
+        ? {
+            type: "bar",
+            silent: !expanded,
+            data: points.map((point) => Number(point.value || 0)),
+            barMaxWidth: expanded ? 14 : 10,
+            itemStyle: isSignedBar
+              ? {
+                  color(params) {
+                    return Number(params.value || 0) >= 0
+                      ? (payload?.positiveColor || "#64B743")
+                      : (payload?.negativeColor || "#FF776B");
+                  },
+                  borderRadius: [3, 3, 3, 3]
+                }
+              : {
+                  color: accent,
+                  borderRadius: [3, 3, 0, 0]
+                }
+          }
+        : {
+            type: "line",
+            silent: !expanded,
+            data: points.map((point) => Number(point.value || 0)),
+            smooth: false,
+            symbol: expanded ? "circle" : "none",
+            symbolSize: expanded ? 7 : 5,
+            lineStyle: {
+              width: 2.25,
+              color: accent
+            },
+            itemStyle: {
+              color: accent
+            },
+            areaStyle: allowNegative
+              ? undefined
+              : { color: "rgba(132,170,251,0.14)" }
+          }
+    ]
+  };
+}
+
+function initPlaylistCharts(root) {
+  if (!root || !window.echarts) return;
+
+  root.querySelectorAll("[data-playlist-chart]").forEach((node) => {
+    let payload = null;
+
+    try {
+      payload = JSON.parse(decodeURIComponent(node.getAttribute("data-playlist-chart") || ""));
+    } catch (error) {
+      return;
     }
 
-    function buildBarChartSvg(points, options = {}) {
-      const width = Number(options.width || 220);
-      const height = Number(options.height || 110);
-      const padTop = Number(options.padTop || 10);
-      const padRight = Number(options.padRight || 10);
-      const padBottom = Number(options.padBottom || 18);
-      const padLeft = Number(options.padLeft || 10);
-      const chartWidth = Math.max(1, width - padLeft - padRight);
-      const chartHeight = Math.max(1, height - padTop - padBottom);
-      const values = points.map((point) => Number(point.value || 0));
-      const maxValue = Math.max(1, ...values);
-      const baseY = padTop + chartHeight;
-      const gap = Math.max(2, Math.floor(chartWidth / Math.max(10, points.length * 3)));
-      const barWidth = Math.max(3, (chartWidth - gap * Math.max(0, points.length - 1)) / Math.max(1, points.length));
-      const firstLabel = points[0]?.label || "";
-      const lastLabel = points[points.length - 1]?.label || "";
-
-      return `
-        <svg class="playlist-chart-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="${padLeft}" y1="${baseY}" x2="${width - padRight}" y2="${baseY}" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
-          ${points.map((point, index) => {
-            const x = padLeft + index * (barWidth + gap);
-            const barHeight = (Number(point.value || 0) / maxValue) * chartHeight;
-            const y = baseY - barHeight;
-            return `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="2" fill="#64B743"></rect><rect class="playlist-chart-point-hit" data-chart-label="${escapeHtml(point.label || '')}" data-chart-value="${escapeHtml(`${formatUkNumber(point.value || 0)}`)}" x="${x}" y="${y}" width="${barWidth}" height="${Math.max(barHeight, 12)}" fill="transparent"></rect>`;
-          }).join("")}
-          <text x="${padLeft}" y="${height - 4}" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(firstLabel)}</text>
-          <text x="${width - padRight}" y="${height - 4}" text-anchor="end" fill="rgba(255,255,255,0.55)" font-size="10">${escapeHtml(lastLabel)}</text>
-        </svg>
-      `;
+    const prev = echarts.getInstanceByDom(node);
+    if (prev) {
+      prev.dispose();
     }
 
-    function renderPlaylistChartCard(type, title, subtitle, svg, footerLeft, footerRight) {
-      return `
-        <button type="button" class="playlist-chart-card" data-playlist-chart-open="${escapeHtml(type)}">
-          <div class="playlist-chart-title">${escapeHtml(title)}</div>
-          <div class="playlist-chart-subtitle">${escapeHtml(subtitle)}</div>
-          <div class="playlist-chart-preview-wrap">${svg}<div class="playlist-chart-tooltip"></div></div>
-          <div class="playlist-chart-footer">
-            <span>${escapeHtml(footerLeft)}</span>
-            <span>${escapeHtml(footerRight)}</span>
-          </div>
-        </button>
-      `;
-    }
+    const chart = echarts.init(node, null, { renderer: "canvas" });
+    chart.setOption(buildPlaylistChartOption(payload));
+    requestAnimationFrame(() => chart.resize());
+  });
+}
+    
+    function renderPlaylistChartCard(type, title, subtitle, payload, footerLeft, footerRight) {
+  return `
+    <button type="button" class="playlist-chart-card" data-playlist-chart-open="${escapeHtml(type)}">
+      <div class="playlist-chart-title">${escapeHtml(title)}</div>
+      <div class="playlist-chart-subtitle">${escapeHtml(subtitle)}</div>
+      ${renderPlaylistChartCanvas(payload, false)}
+      <div class="playlist-chart-footer">
+        <span>${escapeHtml(footerLeft)}</span>
+        <span>${escapeHtml(footerRight)}</span>
+      </div>
+    </button>
+  `;
+}
 
     function renderPlaylistStatsPanel(result) {
-      const history = getPlaylistHistoryRows(result);
+  const history = getPlaylistHistoryRows(result);
+  const activityHistory = getPlaylistActivityRows(result);
 
-      if (!history.length) {
-        return `
-          <div class="playlist-stats-panel">
-            <div class="playlist-stats-title">Статистика</div>
-            <div class="playlist-chart-empty">Історія для цього плейліста ще не зібрана.</div>
-          </div>
-        `;
-      }
+  if (!history.length && !activityHistory.length) {
+    return `
+      <div class="playlist-stats-panel">
+        <div class="playlist-stats-title">Статистика</div>
+        <div class="playlist-chart-empty">Історія для цього плейліста ще не зібрана.</div>
+      </div>
+    `;
+  }
 
-      const followerPoints = history.map((row) => ({
-        label: formatShortDateLabel(row.snapshot_date),
-        value: row.follower
-      }));
+  const followerPoints = history.map((row) => ({
+    label: formatShortDateLabel(row.snapshot_date),
+    tooltipTitle: formatChartFullDate(row.snapshot_date),
+    tooltipValue: formatFollowerCountWithWord(row.follower),
+    value: row.follower
+  }));
 
-      const activityPoints = history.map((row) => ({
-        label: formatShortDateLabel(row.snapshot_date),
-        value: row.activity_total
-      }));
+  const activityPoints = buildContinuousActivityPoints(activityHistory);
 
-      const weekFollowerDiff = getPlaylistWeekFollowerDiff(history);
-      const lastActivity = history[history.length - 1]?.activity_total || 0;
+  const monthFollowerDiff = getAbsoluteSeriesMonthChange(followerPoints, 30);
+  const monthActivityAverage = getAverageSeriesPerDay(activityPoints, 30);
 
-      return `
-        <div class="playlist-stats-panel">
-          <div class="playlist-stats-title">Статистика</div>
-          ${renderPlaylistChartCard(
-            "followers",
-            "Підписники",
-            "Кількість підписників за кожен день",
-            buildLineChartSvg(followerPoints, { width: 300, height: 120 }),
-            history[0] ? formatShortDateLabel(history[0].snapshot_date) : "",
-            `7 днів: ${formatSignedUkNumber(weekFollowerDiff)}`
-          )}
-          ${renderPlaylistChartCard(
-            "activity",
-            "Активність оновлень",
-            "Додані та видалені треки за день",
-            buildBarChartSvg(activityPoints, { width: 300, height: 120 }),
-            history[0] ? formatShortDateLabel(history[0].snapshot_date) : "",
-            `Останній день: ${formatUkNumber(lastActivity)}`
-          )}
-        </div>
-      `;
-    }
+  const followersCard = history.length
+    ? renderPlaylistChartCard(
+        "followers",
+        "Підписники",
+        "Кількість підписників",
+        {
+          seriesType: "line",
+          points: followerPoints,
+          visiblePoints: 92
+        },
+        "",
+        `За останній місяць: ${formatSignedFollowersCount(monthFollowerDiff)}`
+      )
+    : `<div class="playlist-chart-empty">Історія підписників для цього плейліста ще не зібрана.</div>`;
+
+  const activityCard = activityHistory.length
+    ? renderPlaylistChartCard(
+        "activity",
+        "Додавання треків",
+        "Додавання треків за датою їх додавання",
+        {
+          seriesType: "bar",
+          points: activityPoints,
+          visiblePoints: 92
+        },
+        "",
+        formatAverageTracksPerDay(monthActivityAverage)
+      )
+    : `<div class="playlist-chart-empty">Історія додавання треків для цього плейліста ще не зібрана.</div>`;
+
+  return `
+    <div class="playlist-stats-panel">
+      <div class="playlist-stats-title">Статистика</div>
+      ${followersCard}
+      ${activityCard}
+    </div>
+  `;
+}
 
     function renderExpandedPlaylistChart(result, type) {
-      const history = getPlaylistHistoryRows(result);
-      if (!history.length) {
-        return '<div class="playlist-chart-empty">Історія для цього плейліста ще не зібрана.</div>';
-      }
+  const history = getPlaylistHistoryRows(result);
+  const activityHistory = getPlaylistActivityRows(result);
 
-      if (type === "activity") {
-        const points = history.map((row) => ({
-          label: formatShortDateLabel(row.snapshot_date),
-          value: row.activity_total
-        }));
-
-        const maxActivity = Math.max(...points.map((point) => point.value), 0);
-
-        return `
-          <div class="playlist-chart-expanded-note">На графіку показано загальну кількість змін у плейлісті за кожен день: додані треки + видалені треки. Початковий день не враховується як активність.</div>
-          <div class="playlist-chart-expanded-wrap">
-            ${buildBarChartSvg(points, { width: 940, height: 320, padTop: 18, padBottom: 24, padLeft: 18, padRight: 18 }).replace('class="playlist-chart-svg"', 'class="playlist-chart-expanded-svg"')}
-            <div class="playlist-chart-tooltip"></div>
-          </div>
-          <div class="playlist-chart-expanded-note">Максимум за день: ${formatUkNumber(maxActivity)}.</div>
-        `;
-      }
-
-      const points = history.map((row) => ({
-        label: formatShortDateLabel(row.snapshot_date),
-        value: row.follower
-      }));
-      const weekDiff = getPlaylistWeekFollowerDiff(history);
-
-      return `
-        <div class="playlist-chart-expanded-note">На графіку показано повне число підписників плейліста на кожен збережений день.</div>
-        <div class="playlist-chart-expanded-wrap">
-          ${buildLineChartSvg(points, { width: 940, height: 320, padTop: 18, padBottom: 24, padLeft: 18, padRight: 18 }).replace('class="playlist-chart-svg"', 'class="playlist-chart-expanded-svg"')}
-          <div class="playlist-chart-tooltip"></div>
-        </div>
-        <div class="playlist-chart-expanded-note">Зміна за останні 7 днів: ${formatSignedUkNumber(weekDiff)}.</div>
-      `;
+  if (type === "activity") {
+    if (!activityHistory.length) {
+      return '<div class="playlist-chart-empty">Історія додавання треків для цього плейліста ще не зібрана.</div>';
     }
 
+    const points = buildContinuousActivityPoints(activityHistory);
+
+    const monthActivityAverage = getAverageSeriesPerDay(points, 30);
+
+    return `
+      <div class="playlist-chart-expanded-note">На графіку показано кількість доданих треків за весь час плейліста. Внизу — навігатор поточного вікна.</div>
+      ${renderPlaylistChartCanvas(
+        {
+          seriesType: "bar",
+          points,
+          visiblePoints: 92,
+          expanded: true
+        },
+        true
+      )}
+      <div class="playlist-chart-expanded-note">${formatAverageTracksPerDay(monthActivityAverage)}.</div>
+    `;
+  }
+
+  if (!history.length) {
+    return '<div class="playlist-chart-empty">Історія підписників для цього плейліста ще не зібрана.</div>';
+  }
+
+  const points = history.map((row) => ({
+    label: formatShortDateLabel(row.snapshot_date),
+    tooltipTitle: formatChartFullDate(row.snapshot_date),
+    tooltipValue: formatFollowerCountWithWord(row.follower),
+    value: row.follower
+  }));
+  const monthFollowerDiff = getAbsoluteSeriesMonthChange(points, 30);
+
+  return `
+    <div class="playlist-chart-expanded-note">На графіку показано число підписників за весь час спостереження. Внизу — навігатор поточного вікна.</div>
+    ${renderPlaylistChartCanvas(
+      {
+        seriesType: "line",
+        points,
+        visiblePoints: 92,
+        expanded: true
+      },
+      true
+    )}
+    <div class="playlist-chart-expanded-note">За останній місяць: ${formatSignedFollowersCount(monthFollowerDiff)}.</div>
+  `;
+}
+
+    function renderExpandedCuratorChart(result, type) {
+  const followerRows = Array.isArray(result?.followers_history) ? result.followers_history : [];
+  const activityRows = Array.isArray(result?.activity_history) ? result.activity_history : [];
+
+  if (type === "activity") {
+    if (!activityRows.length) {
+      return '<div class="playlist-chart-empty">Історія додавання треків куратора ще не зібрана.</div>';
+    }
+
+    const points = buildCuratorContinuousSeriesPoints(
+      activityRows,
+      "added_tracks_count",
+      formatTrackCountWithWord
+    );
+
+    const monthActivityAverage = getAverageSeriesPerDay(points, 30);
+
+    return `
+      <div class="playlist-chart-expanded-note">На графіку показано кількість унікальних треків, доданих за день у всі плейлісти куратора. Внизу — навігатор поточного вікна.</div>
+      ${renderPlaylistChartCanvas(
+        {
+          seriesType: "bar",
+          points,
+          visiblePoints: 92,
+          expanded: true
+        },
+        true
+      )}
+      <div class="playlist-chart-expanded-note">${formatAverageTracksPerDay(monthActivityAverage)}.</div>
+    `;
+  }
+
+  if (!followerRows.length) {
+    return '<div class="playlist-chart-empty">Історія підписників куратора ще не зібрана.</div>';
+  }
+
+  const points = buildCuratorContinuousSeriesPoints(
+    followerRows,
+    "followers_diff",
+    formatSignedFollowersCount
+  );
+
+  const monthFollowersDiff = getDiffSeriesMonthChange(points, 30);
+
+  return `
+    <div class="playlist-chart-expanded-note">На графіку показано сумарну денну зміну підписників у всіх плейлістах куратора. Внизу — навігатор поточного вікна.</div>
+    ${renderPlaylistChartCanvas(
+      {
+        seriesType: "line",
+        allowNegative: true,
+        points,
+        visiblePoints: 92,
+        expanded: true
+      },
+      true
+    )}
+    <div class="playlist-chart-expanded-note">За останній місяць: ${formatSignedFollowersCount(monthFollowersDiff)}.</div>
+  `;
+}
+
+function openCuratorChartModal(type) {
+  const cached = state.curatorModal.currentData;
+  if (!cached) return;
+
+  ui.playlistChartTitle.textContent =
+    type === "activity"
+      ? "Додавання треків у плейлісти куратора"
+      : "Підписники куратора";
+
+  ui.playlistChartContent.innerHTML = renderExpandedCuratorChart(cached, type);
+  showModal(ui.playlistChartModal);
+
+  requestAnimationFrame(() => {
+    initPlaylistCharts(ui.playlistChartContent);
+  });
+}
+    
+    function renderCuratorStatsPanel(result) {
+  const followerRows = Array.isArray(result?.followers_history) ? result.followers_history : [];
+  const activityRows = Array.isArray(result?.activity_history) ? result.activity_history : [];
+
+  if (!followerRows.length && !activityRows.length) {
+    return "";
+  }
+
+  const followerPoints = buildCuratorContinuousSeriesPoints(
+    followerRows,
+    "followers_diff",
+    formatSignedFollowersCount
+  );
+
+  const activityPoints = buildCuratorContinuousSeriesPoints(
+    activityRows,
+    "added_tracks_count",
+    formatTrackCountWithWord
+  );
+
+  const monthFollowersDiff = getDiffSeriesMonthChange(followerPoints, 30);
+  const monthActivityAverage = getAverageSeriesPerDay(activityPoints, 30);
+
+  const followersCard = followerPoints.length
+    ? renderCuratorChartCard(
+        "followers",
+        "Підписники",
+        "Сумарна зміна за день у всіх плейлістах куратора",
+        {
+          seriesType: "line",
+          allowNegative: true,
+          points: followerPoints,
+          visiblePoints: 92
+        },
+        "",
+        "За останній місяць: " + formatSignedFollowersCount(monthFollowersDiff)
+      )
+    : '<div class="playlist-chart-empty">Історія підписників куратора ще не зібрана.</div>';
+
+  const activityCard = activityPoints.length
+    ? renderCuratorChartCard(
+        "activity",
+        "Додавання треків",
+        "Унікальні треки, додані за день у всі плейлісти куратора",
+        {
+          seriesType: "bar",
+          points: activityPoints,
+          visiblePoints: 92
+        },
+        "",
+        formatAverageTracksPerDay(monthActivityAverage)
+      )
+    : '<div class="playlist-chart-empty">Історія додавання треків куратора ще не зібрана.</div>';
+
+  return `
+    <div class="curator-stats-panel">
+      ${followersCard}
+      ${activityCard}
+    </div>
+  `;
+}
+
+function openCuratorChartModal(type) {
+  const cached = state.curatorModal.currentData;
+  if (!cached) return;
+
+  ui.playlistChartTitle.textContent = type === "activity"
+    ? "Додавання треків у плейлісти куратора"
+    : "Підписники куратора";
+
+  ui.playlistChartContent.innerHTML = renderExpandedCuratorChart(cached, type);
+  showModal(ui.playlistChartModal);
+
+  requestAnimationFrame(() => {
+    initPlaylistCharts(ui.playlistChartContent);
+  });
+}
+    
     function openPlaylistChartModal(type) {
-      const playlistId = state.playlistModal.currentId;
-      const cached = state.playlistModal.cache.get(playlistId);
-      if (!cached) return;
+  const playlistId = state.playlistModal.currentId;
+  const cached = state.playlistModal.cache.get(playlistId);
+  if (!cached) return;
 
-      state.playlistModal.chartType = type;
-      ui.playlistChartTitle.textContent = type === "activity" ? "Активність оновлень плейліста" : "Підписники плейліста";
-      ui.playlistChartContent.innerHTML = renderExpandedPlaylistChart(cached, type);
-      attachPlaylistChartTooltips(ui.playlistChartContent);
-      showModal(ui.playlistChartModal);
-    }
+  state.playlistModal.chartType = type;
+  ui.playlistChartTitle.textContent = type === "activity" ? "Додавання треків у плейліст" : "Підписники плейліста";
+  ui.playlistChartContent.innerHTML = renderExpandedPlaylistChart(cached, type);
+  showModal(ui.playlistChartModal);
+  requestAnimationFrame(() => {
+    initPlaylistCharts(ui.playlistChartContent);
+  });
+}
 
     function closePlaylistChartModal() {
       hideModal(ui.playlistChartModal);
       state.playlistModal.chartType = "";
-    }
-
-    function attachPlaylistChartTooltips(root) {
-      if (!root) return;
-
-      root.querySelectorAll(".playlist-chart-svg, .playlist-chart-expanded-svg").forEach((svg) => {
-        if (svg.dataset.tooltipBound === "1") return;
-        svg.dataset.tooltipBound = "1";
-
-        const wrap = svg.parentElement;
-        const tooltip = wrap?.querySelector(".playlist-chart-tooltip");
-        if (!wrap || !tooltip) return;
-
-        const handleMove = (event) => {
-          const target = event.target.closest("[data-chart-label][data-chart-value]");
-          if (!target) {
-            tooltip.style.opacity = "0";
-            return;
-          }
-
-          tooltip.innerHTML = `<strong style="font-weight:700;">${escapeHtml(target.getAttribute("data-chart-label") || "")}</strong><br>${escapeHtml(target.getAttribute("data-chart-value") || "")}`;
-
-          const svgRect = svg.getBoundingClientRect();
-          const wrapRect = wrap.getBoundingClientRect();
-          const targetRect = target.getBoundingClientRect();
-          const rawLeft = targetRect.left - wrapRect.left + targetRect.width / 2;
-          const top = targetRect.top - wrapRect.top;
-          const clampedLeft = Math.max(32, Math.min(rawLeft, wrapRect.width - 32));
-
-          tooltip.style.left = `${clampedLeft}px`;
-          tooltip.style.top = `${top}px`;
-          tooltip.style.opacity = "1";
-        };
-
-        svg.addEventListener("mousemove", handleMove);
-        svg.addEventListener("mouseleave", () => {
-          tooltip.style.opacity = "0";
-        });
-      });
     }
 
     function renderPlaylistTracksModal(result) {
@@ -4819,7 +5944,7 @@ function initPlaylistAutoApply() {
   requestAnimationFrame(() => {
     updateHoverMarquees(ui.playlistContent);
     initPlaylistModalTableHeaderSync(ui.playlistContent);
-    attachPlaylistChartTooltips(ui.playlistContent);
+    initPlaylistCharts(ui.playlistContent);
   });
 }
 
@@ -5273,10 +6398,18 @@ ui.catalogBackBtn.addEventListener("click", () => {
         state.curatorModal.sortKey = sortTrigger.getAttribute("data-curator-sort") || "follower";
         if (state.curatorModal.currentData) {
           ui.curatorContent.innerHTML = renderCuratorModal(state.curatorModal.currentData);
+          initPlaylistCharts(ui.curatorContent);
         }
         return;
       }
 
+            const curatorChartTrigger = event.target.closest("[data-curator-chart-open]");
+      if (curatorChartTrigger) {
+        event.preventDefault();
+        openCuratorChartModal(curatorChartTrigger.getAttribute("data-curator-chart-open") || "followers");
+        return;
+      }
+      
       const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
       if (playlistModalTrigger) {
         event.preventDefault();
