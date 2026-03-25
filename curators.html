@@ -690,14 +690,25 @@ input:-webkit-autofill:active {
 }
 
 #playlist-list {
+  display: block;
+}
+
+.playlist-list-columns {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
   align-items: start;
 }
 
+.playlist-list-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
 @media (min-width: 1280px) {
-  #playlist-list {
+  .playlist-list-columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -2450,9 +2461,13 @@ input:-webkit-autofill:active {
 }
 
 .curator-playlist-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+  display: block;
+}
+
+@media (min-width: 1280px) {
+  .curator-playlist-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .curator-empty-note {
@@ -4277,20 +4292,43 @@ function renderCuratorSocialLinks(links) {
     </a>
   `).join("");
 }
+    
+    function renderPlaylistColumns(items, renderItem) {
+  const list = Array.isArray(items) ? items : [];
+  if (!list.length) return "";
+
+  const left = [];
+  const right = [];
+
+  list.forEach((item, index) => {
+    if (index % 2 === 0) {
+      left.push(renderItem(item, index));
+    } else {
+      right.push(renderItem(item, index));
+    }
+  });
+
+  return `
+    <div class="playlist-list-columns">
+      <div class="playlist-list-column">${left.join("")}</div>
+      <div class="playlist-list-column">${right.join("")}</div>
+    </div>
+  `;
+}
 
     function renderCuratorPlaylistList(playlists) {
-      const sorted = getSortedCuratorPlaylists(playlists, state.curatorModal.sortKey);
+  const sorted = getSortedCuratorPlaylists(playlists, state.curatorModal.sortKey);
 
-      if (!sorted.length) {
-        return '<div class="curator-empty-note">У цього куратора ще немає плейлістів у каталозі.</div>';
-      }
+  if (!sorted.length) {
+    return '<div class="curator-empty-note">У цього куратора ще немає плейлістів у каталозі.</div>';
+  }
 
-      return `
-        <div class="curator-playlist-list">
-          ${sorted.map((item) => renderPlaylistCard(item, { showCuratorLine: false })).join("")}
-        </div>
-      `;
-    }
+  return `
+    <div class="curator-playlist-list">
+      ${renderPlaylistColumns(sorted, (item) => renderPlaylistCard(item, { showCuratorLine: false }))}
+    </div>
+  `;
+}
 
     function renderCuratorModal(result) {
   const playlists = Array.isArray(result.playlists) ? result.playlists : [];
@@ -4759,7 +4797,7 @@ function initPlaylistAutoApply() {
     state.playlist.offset = Number(data.offset || 0) + (data.items?.length || 0);
     state.playlist.hasMore = !!data.has_more;
 
-    ui.playlistList.innerHTML = state.playlist.items.map((item) => renderPlaylistCard(item)).join("");
+    ui.playlistList.innerHTML = renderPlaylistColumns(state.playlist.items, (item) => renderPlaylistCard(item));
 
     if (!state.playlist.items.length) {
       ui.playlistNoResults.className = "show";
