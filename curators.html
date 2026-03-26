@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -38,6 +40,9 @@ html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: "CustomFont", Arial, sans-serif;
@@ -51,7 +56,8 @@ body::-webkit-scrollbar,
 .custom-select .options-container::-webkit-scrollbar,
 .suggestions::-webkit-scrollbar,
 .modal-box::-webkit-scrollbar,
-.playlist-modal-scroll-area::-webkit-scrollbar {
+.playlist-modal-scroll-area::-webkit-scrollbar,
+.tab-pane::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
@@ -60,7 +66,8 @@ body::-webkit-scrollbar-track,
 .custom-select .options-container::-webkit-scrollbar-track,
 .suggestions::-webkit-scrollbar-track,
 .modal-box::-webkit-scrollbar-track,
-.playlist-modal-scroll-area::-webkit-scrollbar-track {
+.playlist-modal-scroll-area::-webkit-scrollbar-track,
+.tab-pane::-webkit-scrollbar-track {
   background: #282626;
 }
 
@@ -68,7 +75,8 @@ body::-webkit-scrollbar-thumb,
 .custom-select .options-container::-webkit-scrollbar-thumb,
 .suggestions::-webkit-scrollbar-thumb,
 .modal-box::-webkit-scrollbar-thumb,
-.playlist-modal-scroll-area::-webkit-scrollbar-thumb {
+.playlist-modal-scroll-area::-webkit-scrollbar-thumb,
+.tab-pane::-webkit-scrollbar-thumb {
   background-color: #383838;
   border-radius: 8px;
   border: 2px solid #282626;
@@ -78,7 +86,8 @@ body::-webkit-scrollbar-button,
 .custom-select .options-container::-webkit-scrollbar-button,
 .suggestions::-webkit-scrollbar-button,
 .modal-box::-webkit-scrollbar-button,
-.playlist-modal-scroll-area::-webkit-scrollbar-button {
+.playlist-modal-scroll-area::-webkit-scrollbar-button,
+.tab-pane::-webkit-scrollbar-button {
   display: none;
 }
 
@@ -93,6 +102,12 @@ a:hover {
 
 .wrap {
   width: 100%;
+  height: calc(100vh - 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .card {
@@ -110,7 +125,7 @@ a:hover {
 
 .controls-card {
   position: relative;
-  margin-bottom: 10px;
+  z-index: 20;
   background: transparent;
   border-color: transparent;
   box-shadow: none;
@@ -1276,6 +1291,248 @@ input:-webkit-autofill:active {
 
 .catalog-shell.hidden {
   display: none;
+}
+
+.tabs-shell {
+  --tabs-strip-bg: rgba(132, 170, 251, 0.2);
+  --tabs-strip-separator: rgba(255, 255, 255, 0.22);
+  --tabs-hover-bg: rgba(53, 53, 60, 0.55);
+  --tabs-pane-bg: rgba(53, 53, 60, 0.55);
+  --pseudo: rgba(53, 53, 60, 1);
+  --pseudo-hover: rgba(53, 53, 60, 0.55);
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+
+.tabs-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 0;
+  flex: 0 0 auto;
+  min-height: 50px;
+  padding: 6px 12px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.tabs-btn {
+  position: relative;
+  flex: 0 0 auto;
+  align-self: stretch;
+  min-width: 118px;
+  max-width: 190px;
+  height: 44px;
+  margin: 0;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible;
+  isolation: isolate;
+  text-decoration: none !important;
+}
+
+.tabs-btn + .tabs-btn {
+  margin-left: -1px;
+}
+
+.tabs-btn::before,
+.tabs-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 18px;
+  background: var(--tabs-strip-separator);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tabs-btn::before {
+  left: 0;
+}
+
+.tabs-btn::after {
+  right: 0;
+}
+
+.tabs-btn:first-child::before,
+.tabs-btn:last-child::after,
+.tabs-btn:hover::before,
+.tabs-btn:hover::after,
+.tabs-btn.is-active::before,
+.tabs-btn.is-active::after,
+.tabs-btn:hover + .tabs-btn::before,
+.tabs-btn.is-active + .tabs-btn::before,
+.tabs-btn:has(+ .tabs-btn:hover)::after,
+.tabs-btn:has(+ .tabs-btn.is-active)::after {
+  opacity: 0;
+}
+
+.tabs-btn:focus-visible {
+  outline: none;
+}
+
+.tabs-btn-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 18px;
+  border-radius: 12px 12px 0 0;
+  color: var(--text);
+  background: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.tabs-btn-inner::before,
+.tabs-btn-inner::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.tabs-btn-inner::before {
+  left: -12px;
+}
+
+.tabs-btn-inner::after {
+  right: -12px;
+}
+
+.tabs-btn-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabs-btn:hover .tabs-btn-inner {
+  background: var(--pseudo-hover);
+}
+
+.tabs-btn:hover .tabs-btn-inner::before,
+.tabs-btn:hover .tabs-btn-inner::after {
+  opacity: 1;
+}
+
+.tabs-btn:hover .tabs-btn-inner::before {
+  background: radial-gradient(circle at 0 0, transparent 12px, var(--tabs-hover-bg) 12.5px);
+}
+
+.tabs-btn:hover .tabs-btn-inner::after {
+  background: radial-gradient(circle at 100% 0, transparent 12px, var(--tabs-hover-bg) 12.5px);
+}
+
+.tabs-btn.is-active {
+  z-index: 5;
+}
+
+.tabs-btn.is-active .tabs-btn-inner {
+  transform: translateY(1px);
+  color: var(--text);
+  background: var(--tabs-pane-bg);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+.tabs-btn.is-active .tabs-btn-inner::before,
+.tabs-btn.is-active .tabs-btn-inner::after {
+  opacity: 1;
+}
+
+.tabs-btn.is-active .tabs-btn-inner::before {
+  background: radial-gradient(circle at 0 0, transparent 12px, var(--pseudo) 12.5px);
+}
+
+.tabs-btn.is-active .tabs-btn-inner::after {
+  background: radial-gradient(circle at 100% 0, transparent 12px, var(--pseudo) 12.5px);
+}
+
+.tabs-panels {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  margin-top: -1px;
+}
+
+.tab-pane {
+  display: none;
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--tabs-pane-bg);
+  border: 1px solid var(--tabs-pane-bg);
+  border-radius: 12px;
+  padding: 12px;
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+.tab-pane.is-active {
+  display: block;
+}
+
+.tab-pane-section {
+  min-height: 100%;
+}
+
+#tab-playlists .controls-row-filters {
+  margin-bottom: 10px;
+}
+
+.search-intro {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.search-intro.hidden {
+  display: none;
+}
+
+#tab-curators .curators-catalog-controls {
+  margin-bottom: 14px;
 }
 
 .field {
@@ -2454,11 +2711,11 @@ input:-webkit-autofill:active {
 }
     
 @supports (-moz-appearance: none) {
-  body,
   .modal-box,
   .custom-select .options-container,
   .suggestions,
-  .playlist-modal-scroll-area {
+  .playlist-modal-scroll-area,
+  .tab-pane {
     scrollbar-width: thin;
     scrollbar-color: #383838 #282626;
   }
@@ -2878,6 +3135,10 @@ input:-webkit-autofill:active {
     padding: 8px;
   }
 
+  .wrap {
+    height: calc(100vh - 16px);
+  }
+
   .controls-row-top {
     flex-direction: column;
   }
@@ -3034,195 +3295,194 @@ input:-webkit-autofill:active {
       </div>
     </div>
 
-    <button id="stats-btn" class="button secondary controls-stats-btn">Чарти</button>
-<button id="dashboard-btn" class="button secondary controls-stats-btn">Статистика</button>
-<button id="curators-btn" class="button secondary controls-stats-btn">Куратори</button>
-<button id="catalog-back-btn" class="action-btn secondary">Повернути каталог</button>
   </div>
 
-  <div class="controls-row controls-row-filters">
-
-    <div class="field small">
-      <div class="field-label">Сортування</div>
-      <div class="custom-select" id="playlist-sort-by">
-        <div class="selected" data-value="follower">За підписниками</div>
-        <div class="options-container">
-          <div class="option" data-value="follower">За підписниками</div>
-          <div class="option" data-value="track_count">За кількістю треків</div>
-          <div class="option" data-value="last_update">За датою оновлення</div>
-          <div class="option" data-value="name">За назвою</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="field small">
-      <div class="field-label">Напрямок</div>
-      <div class="custom-select" id="playlist-sort-dir">
-        <div class="selected" data-value="desc">За спаданням</div>
-        <div class="options-container">
-          <div class="option" data-value="desc">За спаданням</div>
-          <div class="option" data-value="asc">За зростанням</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="field slider-field">
-      <div class="field-label">Підписники</div>
-      <div class="range-box">
-        <div class="range-values">
-          <span id="follower-min-view">0</span>
-          <span id="follower-max-view">5 000 000</span>
-        </div>
-        <div class="dual-range">
-          <div id="follower-range-fill" class="dual-range-fill"></div>
-          <input id="follower-min-range" type="range" min="0" max="5000000" step="1000" value="0">
-          <input id="follower-max-range" type="range" min="0" max="5000000" step="1000" value="5000000">
-        </div>
-        <input id="follower-min" type="hidden">
-        <input id="follower-max" type="hidden">
-      </div>
-    </div>
-
-    <div class="field slider-field">
-      <div class="field-label">Кількість треків</div>
-      <div class="range-box">
-        <div class="range-values">
-          <span id="track-min-view">0</span>
-          <span id="track-max-view">5 000</span>
-        </div>
-        <div class="dual-range">
-          <div id="track-range-fill" class="dual-range-fill"></div>
-          <input id="track-min-range" type="range" min="0" max="5000" step="1" value="0">
-          <input id="track-max-range" type="range" min="0" max="5000" step="1" value="5000">
-        </div>
-        <input id="track-min" type="hidden">
-        <input id="track-max" type="hidden">
-      </div>
-    </div>
-
-  </div>
 </div>
 
-    <div id="search-summary"></div>
-    <div id="search-no-results"></div>
-    <div id="search-results"></div>
-
-    <div id="playlist-catalog" class="catalog-shell">
-  <div id="playlist-summary"></div>
-  <div id="playlist-no-results"></div>
-  <div id="playlist-list"></div>
-
-  <div class="playlist-load-more-wrap">
-    <button id="playlist-load-more" class="button">Показати ще</button>
-  </div>
-</div>
-  </div>
-
-  <div id="stats-modal" class="modal">
-    <div class="modal-box">
-      <div class="modal-head">
-        <div class="modal-title">Чарти</div>
-        <button id="stats-close" class="button secondary">Закрити</button>
-      </div>
-      <div id="stats-content" class="loading-note">Завантаження статистики...</div>
-    </div>
-  </div>
-
-  <div id="dashboard-modal" class="modal">
-  <div class="modal-box dashboard-modal-box">
-    <div class="modal-head">
-      <div class="modal-title">Статистика</div>
-      <button id="dashboard-close" class="button secondary">Закрити</button>
-    </div>
-    <div id="dashboard-content" class="loading-note">Завантаження статистики...</div>
-  </div>
-</div>
-  
-
-  <div id="curators-catalog-modal" class="modal">
-    <div class="modal-box curators-catalog-modal-box">
-      <div class="modal-head">
-        <div class="modal-title">Куратори</div>
-        <button id="curators-catalog-close" class="button secondary">Закрити</button>
+    <div class="tabs-shell">
+      <div class="tabs-bar">
+        <button id="tab-playlists-btn" class="button secondary tabs-btn is-active" type="button" data-main-tab-btn="playlists" aria-selected="true"><span class="tabs-btn-inner"><span class="tabs-btn-label">Плейлісти</span></span></button>
+        <button id="curators-btn" class="button secondary tabs-btn" type="button" data-main-tab-btn="curators" aria-selected="false"><span class="tabs-btn-inner"><span class="tabs-btn-label">Куратори</span></span></button>
+        <button id="stats-btn" class="button secondary tabs-btn" type="button" data-main-tab-btn="stats" aria-selected="false"><span class="tabs-btn-inner"><span class="tabs-btn-label">Чарти</span></span></button>
+        <button id="dashboard-btn" class="button secondary tabs-btn" type="button" data-main-tab-btn="dashboard" aria-selected="false"><span class="tabs-btn-inner"><span class="tabs-btn-label">Статистика</span></span></button>
+        <button id="tab-search-btn" class="button secondary tabs-btn" type="button" data-main-tab-btn="search" aria-selected="false"><span class="tabs-btn-inner"><span class="tabs-btn-label">Пошук</span></span></button>
       </div>
 
-      <div class="curators-catalog-controls">
-        <div class="curators-catalog-panel">
-          <div class="curators-catalog-row">
-            <div class="field" style="flex:1 1 100%;">
-              <div class="field-label">Пошук куратора</div>
-              <div class="search-row">
-                <input id="curators-search-query" class="search-input" type="text" placeholder="Введіть ім’я куратора або вставте посилання Spotify на профіль">
-                <button id="curators-search-btn" class="button controls-main-search-btn">Пошук</button>
+      <div class="tabs-panels">
+        <section id="tab-playlists" class="tab-pane is-active" data-main-tab="playlists">
+          <div class="tab-pane-section">
+            <div class="controls-row controls-row-filters">
+
+              <div class="field small">
+                <div class="field-label">Сортування</div>
+                <div class="custom-select" id="playlist-sort-by">
+                  <div class="selected" data-value="follower">За підписниками</div>
+                  <div class="options-container">
+                    <div class="option" data-value="follower">За підписниками</div>
+                    <div class="option" data-value="track_count">За кількістю треків</div>
+                    <div class="option" data-value="last_update">За датою оновлення</div>
+                    <div class="option" data-value="name">За назвою</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field small">
+                <div class="field-label">Напрямок</div>
+                <div class="custom-select" id="playlist-sort-dir">
+                  <div class="selected" data-value="desc">За спаданням</div>
+                  <div class="options-container">
+                    <div class="option" data-value="desc">За спаданням</div>
+                    <div class="option" data-value="asc">За зростанням</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field slider-field">
+                <div class="field-label">Підписники</div>
+                <div class="range-box">
+                  <div class="range-values">
+                    <span id="follower-min-view">0</span>
+                    <span id="follower-max-view">5 000 000</span>
+                  </div>
+                  <div class="dual-range">
+                    <div id="follower-range-fill" class="dual-range-fill"></div>
+                    <input id="follower-min-range" type="range" min="0" max="5000000" step="1000" value="0">
+                    <input id="follower-max-range" type="range" min="0" max="5000000" step="1000" value="5000000">
+                  </div>
+                  <input id="follower-min" type="hidden">
+                  <input id="follower-max" type="hidden">
+                </div>
+              </div>
+
+              <div class="field slider-field">
+                <div class="field-label">Кількість треків</div>
+                <div class="range-box">
+                  <div class="range-values">
+                    <span id="track-min-view">0</span>
+                    <span id="track-max-view">5 000</span>
+                  </div>
+                  <div class="dual-range">
+                    <div id="track-range-fill" class="dual-range-fill"></div>
+                    <input id="track-min-range" type="range" min="0" max="5000" step="1" value="0">
+                    <input id="track-max-range" type="range" min="0" max="5000" step="1" value="5000">
+                  </div>
+                  <input id="track-min" type="hidden">
+                  <input id="track-max" type="hidden">
+                </div>
+              </div>
+
+            </div>
+
+            <div id="playlist-catalog" class="catalog-shell">
+              <div id="playlist-summary"></div>
+              <div id="playlist-no-results"></div>
+              <div id="playlist-list"></div>
+
+              <div class="playlist-load-more-wrap">
+                <button id="playlist-load-more" class="button">Показати ще</button>
               </div>
             </div>
           </div>
+        </section>
 
-          <div class="curators-catalog-row">
-            <div class="field small">
-              <div class="field-label">Сортування</div>
-              <div class="custom-select" id="curators-sort-by">
-                <div class="selected" data-value="total_followers">За підписниками</div>
-                <div class="options-container">
-                  <div class="option" data-value="total_followers">За підписниками</div>
-                  <div class="option" data-value="playlists_count">За кількістю плейлістів</div>
-                  <div class="option" data-value="unique_tracks_count">За унікальними треками</div>
-                  <div class="option" data-value="added_unique_tracks_30d">За доданими треками за 30 днів</div>
-                  <div class="option" data-value="followers_diff_30d">За приростом підписників за 30 днів</div>
-                  <div class="option" data-value="last_update">За датою оновлення</div>
+        <section id="tab-curators" class="tab-pane" data-main-tab="curators">
+          <div class="tab-pane-section">
+            <div class="curators-catalog-controls">
+              <div class="curators-catalog-panel">
+                <div class="curators-catalog-row">
+                  <div class="field" style="flex:1 1 100%;">
+                    <div class="field-label">Пошук куратора</div>
+                    <div class="search-row">
+                      <input id="curators-search-query" class="search-input" type="text" placeholder="Введіть ім’я куратора або вставте посилання Spotify на профіль">
+                      <button id="curators-search-btn" class="button controls-main-search-btn">Пошук</button>
+                    </div>
+                  </div>
                 </div>
+
+                <div class="curators-catalog-row">
+                  <div class="field small">
+                    <div class="field-label">Сортування</div>
+                    <div class="custom-select" id="curators-sort-by">
+                      <div class="selected" data-value="total_followers">За підписниками</div>
+                      <div class="options-container">
+                        <div class="option" data-value="total_followers">За підписниками</div>
+                        <div class="option" data-value="playlists_count">За кількістю плейлістів</div>
+                        <div class="option" data-value="unique_tracks_count">За унікальними треками</div>
+                        <div class="option" data-value="added_unique_tracks_30d">За доданими треками за 30 днів</div>
+                        <div class="option" data-value="followers_diff_30d">За приростом підписників за 30 днів</div>
+                        <div class="option" data-value="last_update">За датою оновлення</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field small">
+                    <div class="field-label">Напрямок</div>
+                    <div class="custom-select" id="curators-sort-dir">
+                      <div class="selected" data-value="desc">За спаданням</div>
+                      <div class="options-container">
+                        <div class="option" data-value="desc">За спаданням</div>
+                        <div class="option" data-value="asc">За зростанням</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field slider-field">
+                    <div class="field-label">Загальна кількість підписників</div>
+                    <div class="range-box">
+                      <div class="range-values">
+                        <span id="curators-follower-min-view">0</span>
+                        <span id="curators-follower-max-view">0</span>
+                      </div>
+                      <div class="dual-range">
+                        <div id="curators-follower-range-fill" class="dual-range-fill"></div>
+                        <input id="curators-follower-min-range" type="range" min="0" max="0" step="1" value="0">
+                        <input id="curators-follower-max-range" type="range" min="0" max="0" step="1" value="0">
+                      </div>
+                      <input id="curators-follower-min" type="hidden">
+                      <input id="curators-follower-max" type="hidden">
+                    </div>
+                  </div>
+
+                  <div class="curators-reset-wrap">
+                    <button id="curators-reset-btn" class="button secondary">Скинути</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="curators-catalog-panel">
+                <div class="field-label" style="margin-bottom:8px;">Жанри (лише якщо у куратора 20%+)</div>
+                <div id="curators-genre-filters" class="curators-genre-filters"></div>
               </div>
             </div>
 
-            <div class="field small">
-              <div class="field-label">Напрямок</div>
-              <div class="custom-select" id="curators-sort-dir">
-                <div class="selected" data-value="desc">За спаданням</div>
-                <div class="options-container">
-                  <div class="option" data-value="desc">За спаданням</div>
-                  <div class="option" data-value="asc">За зростанням</div>
-                </div>
-              </div>
-            </div>
+            <div id="curators-summary" class="curators-summary"></div>
+            <div id="curators-no-results" class="curators-no-results"></div>
+            <div id="curators-list" class="curators-list"></div>
 
-            <div class="field slider-field">
-              <div class="field-label">Загальна кількість підписників</div>
-              <div class="range-box">
-                <div class="range-values">
-                  <span id="curators-follower-min-view">0</span>
-                  <span id="curators-follower-max-view">0</span>
-                </div>
-                <div class="dual-range">
-                  <div id="curators-follower-range-fill" class="dual-range-fill"></div>
-                  <input id="curators-follower-min-range" type="range" min="0" max="0" step="1" value="0">
-                  <input id="curators-follower-max-range" type="range" min="0" max="0" step="1" value="0">
-                </div>
-                <input id="curators-follower-min" type="hidden">
-                <input id="curators-follower-max" type="hidden">
-              </div>
-            </div>
-
-            <div class="curators-reset-wrap">
-              <button id="curators-reset-btn" class="button secondary">Скинути</button>
+            <div class="playlist-load-more-wrap">
+              <button id="curators-load-more" class="button">Показати ще</button>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="curators-catalog-panel">
-          <div class="field-label" style="margin-bottom:8px;">Жанри (лише якщо у куратора 20%+)</div>
-          <div id="curators-genre-filters" class="curators-genre-filters"></div>
-        </div>
-      </div>
+        <section id="tab-stats" class="tab-pane" data-main-tab="stats">
+          <div id="stats-content" class="tab-pane-section loading-note">Завантаження статистики...</div>
+        </section>
 
-      <div id="curators-summary" class="curators-summary"></div>
-      <div id="curators-no-results" class="curators-no-results"></div>
-      <div id="curators-list" class="curators-list"></div>
+        <section id="tab-dashboard" class="tab-pane" data-main-tab="dashboard">
+          <div id="dashboard-content" class="tab-pane-section loading-note">Завантаження статистики...</div>
+        </section>
 
-      <div class="playlist-load-more-wrap">
-        <button id="curators-load-more" class="button">Показати ще</button>
+        <section id="tab-search" class="tab-pane" data-main-tab="search">
+          <div class="tab-pane-section">
+            <div id="search-intro" class="search-intro">Введіть пошуковий запит у верхній частині сторінки. Ви можете шукати за треком, альбомом, виконавцем, плейлістом або куратором. Ви також можете вставити посилання на Spotify.</div>
+            <div id="search-summary"></div>
+            <div id="search-no-results"></div>
+            <div id="search-results"></div>
+          </div>
+        </section>
       </div>
     </div>
-  </div>
 
   <div id="playlist-modal" class="modal">
     <div class="modal-box">
@@ -3281,16 +3541,23 @@ input:-webkit-autofill:active {
       searchCard: document.getElementById("search-card"),
       searchQuery: document.getElementById("search-query"),
       searchBtn: document.getElementById("search-btn"),
-      statsBtn: document.getElementById("stats-btn"),
-      curatorsBtn: document.getElementById("curators-btn"),
       searchAutocomplete: document.getElementById("search-autocomplete"),
       searchSuggestions: document.getElementById("search-suggestions"),
+      searchIntro: document.getElementById("search-intro"),
       searchSummary: document.getElementById("search-summary"),
       searchNoResults: document.getElementById("search-no-results"),
       searchResults: document.getElementById("search-results"),
 
-            catalogShell: document.getElementById("playlist-catalog"),
-      catalogBackBtn: document.getElementById("catalog-back-btn"),
+      tabPlaylistsBtn: document.getElementById("tab-playlists-btn"),
+      statsBtn: document.getElementById("stats-btn"),
+      dashboardBtn: document.getElementById("dashboard-btn"),
+      curatorsBtn: document.getElementById("curators-btn"),
+      tabSearchBtn: document.getElementById("tab-search-btn"),
+      mainTabButtons: Array.from(document.querySelectorAll("[data-main-tab-btn]")),
+      mainTabPanes: Array.from(document.querySelectorAll("[data-main-tab]")),
+      curatorsPane: document.getElementById("tab-curators"),
+
+      catalogShell: document.getElementById("playlist-catalog"),
       playlistSortBy: document.getElementById("playlist-sort-by"),
       playlistSortDir: document.getElementById("playlist-sort-dir"),
       followerMin: document.getElementById("follower-min"),
@@ -3302,17 +3569,9 @@ input:-webkit-autofill:active {
       playlistList: document.getElementById("playlist-list"),
       playlistLoadMore: document.getElementById("playlist-load-more"),
 
-      statsModal: document.getElementById("stats-modal"),
-      statsClose: document.getElementById("stats-close"),
       statsContent: document.getElementById("stats-content"),
+      dashboardContent: document.getElementById("dashboard-content"),
 
-      dashboardBtn: document.getElementById("dashboard-btn"),
-dashboardModal: document.getElementById("dashboard-modal"),
-dashboardClose: document.getElementById("dashboard-close"),
-dashboardContent: document.getElementById("dashboard-content"),
-
-      curatorsCatalogModal: document.getElementById("curators-catalog-modal"),
-      curatorsCatalogClose: document.getElementById("curators-catalog-close"),
       curatorsSortBy: document.getElementById("curators-sort-by"),
       curatorsSortDir: document.getElementById("curators-sort-dir"),
       curatorsSearchQuery: document.getElementById("curators-search-query"),
@@ -3343,7 +3602,6 @@ dashboardContent: document.getElementById("dashboard-content"),
       aboutClose: document.getElementById("about-close"),
       aboutBtn: document.getElementById("ld-about-btn")
     };
-
     const state = {
       placementTables: new Map(),
       placementTableCounter: 0,
@@ -3404,6 +3662,7 @@ let playlistFiltersDebounce = null;
 let curatorFiltersDebounce = null;
 const MODAL_BASE_Z_INDEX = 9999;
 let modalZCounter = 0;
+let activeMainTab = "playlists";
 
     function showModal(modalEl) {
       if (!modalEl) return;
@@ -4744,9 +5003,35 @@ function updateHoverMarquees(root = document) {
   });
 }
     
+    function updateSearchIntroVisibility() {
+      if (!ui.searchIntro) return;
+
+      const hasSummary = !!ui.searchSummary.textContent.trim();
+      const hasNoResults = ui.searchNoResults.classList.contains("show") && !!ui.searchNoResults.textContent.trim();
+      const hasResults = !!ui.searchResults.innerHTML.trim();
+
+      ui.searchIntro.classList.toggle("hidden", hasSummary || hasNoResults || hasResults);
+    }
+
+    function activateMainTab(tabName) {
+      const nextTab = tabName || "playlists";
+      activeMainTab = nextTab;
+
+      ui.mainTabButtons.forEach((button) => {
+        const isActive = button.getAttribute("data-main-tab-btn") === nextTab;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      ui.mainTabPanes.forEach((pane) => {
+        pane.classList.toggle("is-active", pane.getAttribute("data-main-tab") === nextTab);
+      });
+
+      updateSearchIntroVisibility();
+    }
+
     function setCatalogVisibility(show) {
-      ui.catalogShell.classList.toggle("hidden", !show);
-      ui.catalogBackBtn.classList.toggle("show", !show);
+      activateMainTab(show ? "playlists" : "search");
     }
 
     function clearSearchOutput() {
@@ -4757,17 +5042,20 @@ function updateHoverMarquees(root = document) {
       ui.searchSummary.textContent = "";
       state.placementTables.clear();
       state.placementTableCounter = 0;
+      updateSearchIntroVisibility();
     }
 
     function showSearchNoResults(text) {
       ui.searchResults.innerHTML = "";
       ui.searchNoResults.className = "show";
       ui.searchNoResults.textContent = text;
+      updateSearchIntroVisibility();
     }
 
     function setSearchSummary(text) {
       ui.searchSummary.className = "show";
       ui.searchSummary.textContent = text;
+      updateSearchIntroVisibility();
     }
 
     function setPlaylistSummary(text) {
@@ -5593,6 +5881,7 @@ function initPlaylistAutoApply() {
 
     async function runSearchSafe() {
       clearSearchOutput();
+      setCatalogVisibility(false);
 
       const raw = ui.searchQuery.value.trim();
       const parsed = detectInputTypeAndId(raw);
@@ -5652,6 +5941,7 @@ function initPlaylistAutoApply() {
         }
 
         ui.searchResults.innerHTML = renderTextSearchResults(items, raw);
+        updateSearchIntroVisibility();
         setSearchSummary("Оберіть потрібний результат зі знайдених варіантів.");
       } catch (error) {
         setSearchSummary("Сталася помилка під час пошуку.");
@@ -5907,7 +6197,7 @@ function buildDashboardGenreOption(data) {
 }
 
     async function openStatsModal() {
-  showModal(ui.statsModal);
+  activateMainTab("stats");
 
   if (state.statsLoaded && state.statsData) {
     ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode);
@@ -5922,7 +6212,7 @@ function buildDashboardGenreOption(data) {
 }
 
     function closeStatsModal() {
-      hideModal(ui.statsModal);
+      activateMainTab("playlists");
     }
 
     async function loadDashboardModal() {
@@ -5937,7 +6227,7 @@ function buildDashboardGenreOption(data) {
 }
 
 async function openDashboardModal() {
-  showModal(ui.dashboardModal);
+  activateMainTab("dashboard");
 
   if (state.dashboardLoaded && state.dashboardData) {
     ui.dashboardContent.innerHTML = renderDashboardContent(state.dashboardData);
@@ -5953,7 +6243,7 @@ async function openDashboardModal() {
 }
 
 function closeDashboardModal() {
-  hideModal(ui.dashboardModal);
+  activateMainTab("playlists");
 }
     
     function getPlaylistModalSortIndicator(key) {
@@ -7161,7 +7451,7 @@ async function initCuratorsCatalogIfNeeded() {
 }
 
 async function openCuratorsCatalogModal() {
-  showModal(ui.curatorsCatalogModal);
+  activateMainTab("curators");
 
   if (!state.curatorsCatalog.initialized) {
     await initCuratorsCatalogIfNeeded();
@@ -7169,7 +7459,7 @@ async function openCuratorsCatalogModal() {
 }
 
 function closeCuratorsCatalogModal() {
-  hideModal(ui.curatorsCatalogModal);
+  activateMainTab("playlists");
 }
 
     async function loadPlaylistFilterMeta() {
@@ -7201,6 +7491,9 @@ function closeCuratorsCatalogModal() {
 }
     
     async function initApp() {
+  activateMainTab("playlists");
+  updateSearchIntroVisibility();
+
   initBasicCustomSelect(ui.playlistSortBy);
   initBasicCustomSelect(ui.playlistSortDir);
 
@@ -7479,13 +7772,21 @@ ui.searchQuery.addEventListener("click", () => {
   }
 });
 
+    ui.tabPlaylistsBtn.addEventListener("click", () => {
+      activateMainTab("playlists");
+    });
+
+    ui.tabSearchBtn.addEventListener("click", () => {
+      activateMainTab("search");
+    });
+
     ui.statsBtn.addEventListener("click", () => {
       openStatsModal();
     });
 
     ui.dashboardBtn.addEventListener("click", () => {
-  openDashboardModal();
-});
+      openDashboardModal();
+    });
     
     ui.statsContent.addEventListener("click", (event) => {
   const modeBtn = event.target.closest("[data-stats-mode]");
@@ -7497,27 +7798,6 @@ ui.searchQuery.addEventListener("click", () => {
   state.statsMode = nextMode;
   ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode);
 }); 
-    
-    ui.statsClose.addEventListener("click", () => {
-      closeStatsModal();
-    });
-
-    ui.statsModal.addEventListener("click", (event) => {
-      if (event.target === ui.statsModal) {
-        closeStatsModal();
-      }
-    });
-
-    ui.dashboardClose.addEventListener("click", () => {
-  closeDashboardModal();
-});
-
-ui.dashboardModal.addEventListener("click", (event) => {
-  if (event.target === ui.dashboardModal) {
-    closeDashboardModal();
-  }
-});
-
 
     ui.curatorsBtn.addEventListener("click", () => {
       openCuratorsCatalogModal().catch(() => {
@@ -7525,16 +7805,6 @@ ui.dashboardModal.addEventListener("click", (event) => {
         setCuratorsSummary("");
         showCuratorsNoResults("Не вдалося підготувати каталог кураторів.");
       });
-    });
-
-    ui.curatorsCatalogClose.addEventListener("click", () => {
-      closeCuratorsCatalogModal();
-    });
-
-    ui.curatorsCatalogModal.addEventListener("click", (event) => {
-      if (event.target === ui.curatorsCatalogModal) {
-        closeCuratorsCatalogModal();
-      }
     });
 
     ui.curatorsLoadMore.addEventListener("click", () => {
@@ -7545,7 +7815,7 @@ ui.dashboardModal.addEventListener("click", (event) => {
       resetCuratorsFilters();
     });
 
-    ui.curatorsCatalogModal.addEventListener("click", (event) => {
+    ui.curatorsPane.addEventListener("click", (event) => {
       const genreTrigger = event.target.closest("[data-curators-genre]");
       if (genreTrigger) {
         toggleCuratorGenreFilter(genreTrigger.getAttribute("data-curators-genre"));
@@ -7588,10 +7858,6 @@ ui.playlistLoadMore.addEventListener("click", () => {
   loadPlaylists(false);
 });
 
-ui.catalogBackBtn.addEventListener("click", () => {
-  clearSearchOutput();
-  setCatalogVisibility(true);
-});
 
     ui.curatorContent.addEventListener("click", (event) => {
       const sortTrigger = event.target.closest("[data-curator-sort]");
@@ -7688,11 +7954,6 @@ window.addEventListener("resize", () => {
 
       if (ui.curatorModal.classList.contains("show")) {
         closeCuratorModal();
-        return;
-      }
-
-      if (ui.curatorsCatalogModal.classList.contains("show")) {
-        closeCuratorsCatalogModal();
         return;
       }
 
