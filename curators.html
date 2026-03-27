@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -91,6 +88,18 @@ body::-webkit-scrollbar-button,
   display: none;
 }
 
+    .tab-pane::-webkit-scrollbar-track {
+  background: #282626;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.tab-pane::-webkit-scrollbar-thumb {
+  background-color: #383838;
+  border-radius: 8px;
+  border: 2px solid #282626;
+}
+    
 a {
   color: #84aafb;
   text-decoration: none;
@@ -714,6 +723,15 @@ input:-webkit-autofill:active {
   align-items: start;
 }
 
+    #playlist-list,
+.curator-playlist-list,
+.playlist-list-columns,
+.tab-pane-section {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+    
 .playlist-list-column {
   display: flex;
   flex-direction: column;
@@ -853,9 +871,10 @@ input:-webkit-autofill:active {
   border-radius: 10px;
   background: rgba(255,255,255,0.03);
   padding: 6px;
-  width: fit-content;
+  width: auto;
+  min-width: 0;
   max-width: 100%;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
 }
 
 .playlist-meta-grid {
@@ -1297,9 +1316,8 @@ input:-webkit-autofill:active {
   --tabs-strip-bg: rgba(132, 170, 251, 0.2);
   --tabs-strip-separator: rgba(255, 255, 255, 0.22);
   --tabs-hover-bg: rgba(53, 53, 60, 0.55);
-  --tabs-pane-bg: rgba(53, 53, 60, 0.55);
-  --pseudo: rgba(53, 53, 60, 1);
-  --pseudo-hover: rgba(53, 53, 60, 0.55);
+  --tabs-pane-bg: rgb(47 46 50);
+  --pseudo-hover: rgba(53, 53, 60, 1);
   position: relative;
   z-index: 1;
   flex: 1 1 auto;
@@ -1446,11 +1464,11 @@ input:-webkit-autofill:active {
 }
 
 .tabs-btn:hover .tabs-btn-inner::before {
-  background: radial-gradient(circle at 0 0, transparent 12px, var(--tabs-hover-bg) 12.5px);
+  background: radial-gradient(circle at 0 0, transparent 12px, var(--pseudo-hover) 12.5px);
 }
 
 .tabs-btn:hover .tabs-btn-inner::after {
-  background: radial-gradient(circle at 100% 0, transparent 12px, var(--tabs-hover-bg) 12.5px);
+  background: radial-gradient(circle at 100% 0, transparent 12px, var(--pseudo-hover) 12.5px);
 }
 
 .tabs-btn.is-active {
@@ -1461,12 +1479,6 @@ input:-webkit-autofill:active {
   transform: translateY(1px);
   color: var(--text);
   background: var(--tabs-pane-bg);
-  background-image: var(--grain-bg);
-  background-size: 20px 20px;
-  background-blend-mode: overlay;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px) saturate(140%);
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 .tabs-btn.is-active .tabs-btn-inner::before,
@@ -1475,11 +1487,11 @@ input:-webkit-autofill:active {
 }
 
 .tabs-btn.is-active .tabs-btn-inner::before {
-  background: radial-gradient(circle at 0 0, transparent 12px, var(--pseudo) 12.5px);
+  background: radial-gradient(circle at 0 0, transparent 12px, var(--tabs-pane-bg) 12.5px);
 }
 
 .tabs-btn.is-active .tabs-btn-inner::after {
-  background: radial-gradient(circle at 100% 0, transparent 12px, var(--pseudo) 12.5px);
+  background: radial-gradient(circle at 100% 0, transparent 12px, var(--tabs-pane-bg) 12.5px);
 }
 
 .tabs-panels {
@@ -1495,18 +1507,14 @@ input:-webkit-autofill:active {
   position: absolute;
   inset: 0;
   min-height: 0;
-  overflow: auto;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   background: var(--tabs-pane-bg);
   border: 1px solid var(--tabs-pane-bg);
   border-radius: 12px;
   padding: 12px;
-  background-image: var(--grain-bg);
-  background-size: 20px 20px;
-  background-blend-mode: overlay;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px) saturate(140%);
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 .tab-pane.is-active {
@@ -2917,65 +2925,547 @@ input:-webkit-autofill:active {
   max-width: 1180px;
 }
 
-.curators-catalog-controls {
+#tab-curators {
+  overflow: hidden;
+}
+
+#tab-curators > .tab-pane-section {
   display: flex;
   flex-direction: column;
+  min-height: 100%;
+  height: 100%;
   gap: 12px;
-  margin-bottom: 14px;
+}
+
+.curators-catalog-controls {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 3;
+  padding-top: 2px;
 }
 
 .curators-catalog-panel {
+  display: grid;
+  grid-template-columns: 230px 56px minmax(220px, 0.95fr) minmax(320px, 1.15fr) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: end;
   background: rgba(53, 53, 60, 0.55);
   border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 12px;
   background-image: var(--grain-bg);
   background-size: 20px 20px;
   background-blend-mode: overlay;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+.curators-catalog-panel .search-input,
+.curators-catalog-panel .custom-select,
+.curators-catalog-panel .custom-select .selected,
+.curators-catalog-panel .curators-sort-dir-btn,
+.curators-catalog-panel .curators-genre-trigger,
+.curators-catalog-panel .curators-follower-range-box {
+  height: 42px;
+}
+
+.curators-catalog-panel .custom-select .selected,
+.curators-catalog-panel .curators-genre-trigger,
+.curators-catalog-panel .curators-sort-dir-btn,
+.curators-catalog-panel .search-input,
+.curators-catalog-panel .curators-follower-range-box {
+  box-sizing: border-box;
 }
 
 .curators-catalog-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: flex-end;
+  display: contents;
 }
 
-.curators-catalog-row .field.small {
-  flex-basis: 220px;
+.curators-search-field,
+.curators-sort-field,
+.curators-sort-dir-field,
+.curators-followers-field,
+.curators-genres-field {
+  min-width: 220px;
 }
 
-.curators-reset-wrap {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: flex-end;
+.curators-genres-field .field-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.curators-reset-wrap .button {
-  width: auto;
+.curators-search-wrap {
+  position: relative;
+  width: 100%;
 }
 
-.curators-genre-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  max-height: 168px;
-  overflow: auto;
-  padding-right: 4px;
+.curators-search-wrap .search-input {
+  padding-right: 42px;
 }
 
-.curator-filter-chip {
+.curators-search-inline-btn {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255,255,255,0.68);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+.curators-search-inline-btn::before,
+.curators-search-inline-btn::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.curators-search-inline-btn::before {
+  transform: rotate(45deg);
+}
+
+.curators-search-inline-btn::after {
+  transform: rotate(-45deg);
+}
+
+.curators-search-wrap.has-value .curators-search-inline-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.curators-search-inline-btn:hover,
+.curators-search-inline-btn:focus-visible {
+  color: #f3f3f3;
+  background: rgba(132, 170, 251, 0.14);
+  outline: none;
+}
+
+.curators-sort-dir-btn {
+  position: relative;
+  width: 56px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 8px;
+  background: rgba(53, 53, 60, 0.55);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.curators-sort-dir-btn:hover,
+.curators-sort-dir-btn:focus-visible {
+  border-color: rgba(132, 170, 251, 1);
+  outline: none;
+}
+
+.curators-sort-dir-btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(132, 170, 251, 0.18);
+}
+
+.curators-sort-dir-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.curators-sort-dir-btn[data-value="desc"] .curators-sort-dir-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 4v14" stroke="%2384aafb" stroke-width="3.2" stroke-linecap="round"/><path d="M6.5 13.5 12 19l5.5-5.5" stroke="%2384aafb" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+}
+
+.curators-sort-dir-btn[data-value="asc"] .curators-sort-dir-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 20V6" stroke="%2384aafb" stroke-width="3.2" stroke-linecap="round"/><path d="M17.5 10.5 12 5 6.5 10.5" stroke="%2384aafb" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+}
+
+.curators-sort-dir-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, 6px);
+  min-width: max-content;
+  padding: 7px 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(53, 53, 60, 0.98);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  color: #f3f3f3;
+  font-size: 12px;
+  line-height: 1.2;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  z-index: 30;
+  white-space: nowrap;
+}
+
+.curators-sort-dir-tooltip::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(53, 53, 60, 0.98);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.curators-sort-dir-btn:hover .curators-sort-dir-tooltip,
+.curators-sort-dir-btn:focus-visible .curators-sort-dir-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.curators-follower-range-box {
+  min-height: 42px;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.curators-range-inline {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.curators-range-value {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #f3f3f3;
+  white-space: nowrap;
+}
+
+.curators-range-value--max {
+  text-align: right;
+}
+
+.curators-range-value.range-value-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: text;
   transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
 }
 
-.curator-filter-chip.is-active {
-  background: rgba(132, 170, 251, 0.18);
+.curators-range-value.range-value-button:hover {
+  border-color: rgba(132, 170, 251, 0.45);
+  background: rgba(132, 170, 251, 0.08);
+}
+
+.curators-range-value.range-value-button:focus-visible {
+  outline: none;
+  border-color: rgba(132, 170, 251, 0.8);
+  background: rgba(132, 170, 251, 0.12);
+}
+
+.curators-range-value.range-value-button.is-editing {
+  border-color: rgba(132, 170, 251, 0.8);
+  background: rgba(132, 170, 251, 0.12);
+}
+
+.curators-range-value--max .range-value-edit {
+  text-align: right;
+}
+
+.curators-genre-select {
+  position: relative;
+  min-width: 0;
+}
+
+.curators-genre-trigger {
+  position: relative;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 30px 0 10px;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 8px;
+  background-color: rgba(53, 53, 60, 0.55);
+  background-image: var(--grain-bg);
+  background-size: 160px 160px;
+  background-blend-mode: overlay;
+  color: #f3f3f3;
+  font-family: "CustomFont", Arial, sans-serif;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  cursor: pointer;
+  transition: border-color 0.18s ease, border-radius 0.18s ease, background-color 0.18s ease;
+}
+
+.curators-genre-trigger:hover,
+.curators-genre-select.is-open .curators-genre-trigger {
+  border-color: rgba(132, 170, 251, 1);
+}
+
+.curators-genre-select.is-open .curators-genre-trigger {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: rgba(132, 170, 251, 0.2);
+}
+
+.curators-genre-trigger::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  background: no-repeat center / contain url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path d="M7 9l5 6 5-6" fill="none" stroke="%2384aafb" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  opacity: 0.95;
+  transition: transform 0.18s ease;
+}
+
+.curators-genre-select.is-open .curators-genre-trigger::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.curators-genre-trigger-values {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.curators-genre-trigger-values::-webkit-scrollbar {
+  display: none;
+}
+
+.curators-genre-trigger-tag,
+.curators-genre-trigger-empty,
+.curators-genre-trigger-text {
+  flex: 0 0 auto;
+}
+
+.curators-genre-trigger-text,
+.curators-genre-trigger-empty {
+  color: #f3f3f3;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.curators-genre-trigger-tag {
+  display: none;
+}
+
+.curators-genre-dropdown {
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  width: calc(100% + 2px);
+  min-width: 0;
+  padding: 8px;
+  border-top: none;
+  border-left: 1px solid rgba(132, 170, 251, 1);
+  border-right: 1px solid rgba(132, 170, 251, 1);
+  border-bottom: 1px solid rgba(132, 170, 251, 1);
+  border-radius: 0 0 8px 8px;
+  background: rgba(53, 53, 60, 0.96);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  box-shadow: none;
+  display: none;
+  z-index: 35;
+}
+
+.curators-genre-select.is-open .curators-genre-dropdown {
+  display: block;
+}
+
+.curators-genre-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: row;
+  gap: 8px 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px 2px 6px 2px;
+  min-width: 0;
+  align-content: start;
+}
+
+    .curators-genre-filters > * {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .curators-genre-filters {
+    grid-template-columns: 1fr;
+  }
+}
+    
+.curators-genre-filters::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.curators-genre-filters::-webkit-scrollbar-track {
+  background: #282626;
+  border-radius: 999px;
+}
+
+.curators-genre-filters::-webkit-scrollbar-thumb {
+  background: #383838;
+  border-radius: 999px;
+  border: 2px solid #282626;
+}
+
+.curators-genre-filters::-webkit-scrollbar-button {
+  display: none;
+}
+
+.curator-genre-option {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  color: #f3f3f3;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+  box-sizing: border-box;
+}
+
+.curator-genre-option:hover {
+  border-color: rgba(132, 170, 251, 0.65);
+}
+
+.curator-genre-option.is-active {
+  border-color: rgba(132, 170, 251, 0.95);
+  background: rgba(132, 170, 251, 0.16);
+}
+
+.curator-genre-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.curator-genre-checkbox {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(132, 170, 251, 0.55);
+  background: #282626;
+  box-sizing: border-box;
+}
+
+.curator-genre-option.is-active .curator-genre-checkbox {
+  background: rgba(132, 170, 251, 0.22);
   border-color: rgba(132, 170, 251, 0.95);
 }
 
-.curator-filter-chip:hover {
-  border-color: rgba(132, 170, 251, 0.65);
+.curator-genre-option.is-active .curator-genre-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border-right: 2px solid #84aafb;
+  border-bottom: 2px solid #84aafb;
+  transform: rotate(45deg);
+}
+
+.curator-genre-option-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.curator-genre-option-count {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.curators-results-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  scrollbar-gutter: stable;
+}
+
+.curators-results-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.curators-results-scroll::-webkit-scrollbar-track {
+  background: #282626;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.curators-results-scroll::-webkit-scrollbar-thumb {
+  background: #383838;
+  border-radius: 8px;
+  border: 2px solid #282626;
+}
+
+.curators-results-scroll::-webkit-scrollbar-button {
+  display: none;
 }
 
 .curators-summary,
@@ -3011,6 +3501,40 @@ input:-webkit-autofill:active {
   }
 }
 
+@media (max-width: 1500px) {
+  .curators-catalog-panel {
+    grid-template-columns: 220px 56px minmax(200px, 0.9fr) minmax(280px, 1.05fr) minmax(240px, 0.95fr);
+  }
+}
+
+@media (max-width: 1320px) {
+  .curators-catalog-panel {
+    grid-template-columns: 220px 56px minmax(200px, 0.9fr) minmax(280px, 1fr) minmax(220px, 0.9fr);
+  }
+}
+
+@media (max-width: 980px) {
+  .curators-catalog-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .curators-sort-dir-field {
+    width: 56px;
+  }
+
+  .curators-genre-filters {
+    grid-template-rows: none;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    grid-auto-columns: auto;
+    max-height: 220px;
+  }
+
+  .curators-results-scroll {
+    padding: 12px;
+  }
+}
+
 .curator-catalog-card {
   display: flex;
   gap: 12px;
@@ -3028,6 +3552,16 @@ input:-webkit-autofill:active {
 .curator-catalog-avatar-wrap {
   width: 74px;
   flex: 0 0 74px;
+}
+
+.curator-catalog-avatar-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .curator-catalog-avatar {
@@ -3054,16 +3588,21 @@ input:-webkit-autofill:active {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 8px;
+}
+
+.curator-catalog-title-wrap {
+  min-width: 0;
+  flex: 1;
 }
 
 .curator-catalog-name {
   font-size: 16px;
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.3;
   color: #f3f3f3;
-  margin-bottom: 4px;
+  margin: 0;
 }
 
 .curator-catalog-name a {
@@ -3075,53 +3614,260 @@ input:-webkit-autofill:active {
   text-decoration: underline;
 }
 
-.curator-catalog-sub {
-  font-size: 13px;
-  line-height: 1.35;
-  color: var(--muted);
-}
-
-.curator-catalog-sub a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.curator-catalog-sub a:hover {
-  text-decoration: underline;
-}
-
-.button.curator-catalog-open {
+.curator-catalog-socials-card {
   flex: 0 0 auto;
-  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px;
+  min-width: 86px;
+}
+
+.curator-catalog-socials {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+  justify-items: center;
+}
+
+.curator-catalog-socials.is-count-1 {
+  grid-template-columns: 1fr;
+}
+
+.curator-catalog-socials.is-count-2 {
+  grid-template-columns: 1fr;
+}
+
+.curator-catalog-socials.is-count-3plus {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.curator-catalog-socials .playlist-meta-tooltip-anchor {
+  display: inline-flex;
+}
+
+.curator-catalog-socials .curator-link-pill {
+  width: 34px;
+  height: 34px;
+}
+
+.curator-catalog-socials.is-count-1 .curator-link-pill {
+  width: 46px;
+  height: 46px;
+}
+
+.curator-catalog-socials .curator-link-icon,
+.curator-catalog-socials .curator-link-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.curator-catalog-socials.is-count-1 .curator-link-icon,
+.curator-catalog-socials.is-count-1 .curator-link-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.curator-catalog-info-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) fit-content(150px) auto;
+  gap: 6px;
+  margin-top: 10px;
+  align-items: stretch;
+}
+
+.curator-catalog-stats-card,
+.curator-catalog-genres-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.curator-catalog-stats-card {
   min-width: 0;
 }
 
-.curator-catalog-stats {
+.curator-catalog-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.curator-catalog-stats-grid .playlist-meta-tooltip-anchor {
+  display: block;
+  min-width: 0;
+}
+
+.curator-catalog-stat-item {
+  width: 100%;
+  min-width: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
-.curator-catalog-stats .pill {
-  min-height: 30px;
+.curator-catalog-stat-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  color: var(--accent-2);
 }
 
-.curator-catalog-diff.is-positive {
+.curator-catalog-stat-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.curator-catalog-stat-value {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.curator-catalog-stat-value.curator-catalog-diff.is-positive {
   color: #a9c8ff;
 }
 
-.curator-catalog-diff.is-negative {
+.curator-catalog-stat-value.curator-catalog-diff.is-negative {
   color: #f5a9a9;
 }
 
-.curator-catalog-genres {
-  margin-top: 10px;
+.curator-catalog-genres-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+  width: fit-content;
+  max-width: 150px;
+  justify-self: start;
+}
+
+.curator-catalog-genres-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+
+.curator-catalog-genres-label-inline,
+.curator-catalog-genre-line {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.curator-catalog-genres-label-inline {
+  color: var(--muted);
+}
+
+.curator-catalog-card .playlist-meta-tooltip-anchor .playlist-genres-tooltip {
+  width: max-content;
+  min-width: 0;
+  max-width: 220px;
+  padding: 7px 9px;
+  white-space: nowrap;
+}
+
+.curator-catalog-card .playlist-meta-tooltip-anchor .playlist-genres-tooltip-title {
+  font-size: 12px;
+  line-height: 1.2;
+  margin-bottom: 0;
 }
 
 .curator-catalog-empty-genres {
   font-size: 13px;
   line-height: 1.35;
   color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .curator-catalog-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 1400px) {
+  .curator-catalog-info-row {
+    grid-template-columns: minmax(0, 1fr) fit-content(132px) auto;
+    gap: 5px;
+  }
+
+  .curator-catalog-stats-grid {
+    gap: 5px;
+  }
+
+  .curator-catalog-stat-item {
+    min-height: 30px;
+    padding: 0 6px;
+    gap: 5px;
+  }
+
+  .curator-catalog-stat-icon,
+  .curator-catalog-stat-icon svg {
+    width: 13px;
+    height: 13px;
+    flex-basis: 13px;
+  }
+
+  .curator-catalog-stat-value,
+  .curator-catalog-genres-label-inline,
+  .curator-catalog-genre-line {
+    font-size: 11px;
+  }
+
+  .curator-catalog-socials-card {
+    min-width: 68px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 1080px) {
+  .curator-catalog-info-row {
+    grid-template-columns: minmax(0, 1fr) fit-content(118px) auto;
+  }
+
+  .curator-catalog-stats-grid {
+    gap: 4px;
+  }
+
+  .curator-catalog-stat-item {
+    min-height: 29px;
+    padding: 0 5px;
+    gap: 4px;
+  }
+
+  .curator-catalog-stat-value,
+  .curator-catalog-genres-label-inline,
+  .curator-catalog-genre-line {
+    font-size: 10px;
+  }
+
+  .curator-catalog-socials-card {
+    min-width: 64px;
+    padding: 5px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -3389,78 +4135,78 @@ input:-webkit-autofill:active {
           <div class="tab-pane-section">
             <div class="curators-catalog-controls">
               <div class="curators-catalog-panel">
-                <div class="curators-catalog-row">
-                  <div class="field" style="flex:1 1 100%;">
-                    <div class="field-label">Пошук куратора</div>
-                    <div class="search-row">
-                      <input id="curators-search-query" class="search-input" type="text" placeholder="Введіть ім’я куратора або вставте посилання Spotify на профіль">
-                      <button id="curators-search-btn" class="button controls-main-search-btn">Пошук</button>
+                <div class="field small curators-sort-field">
+                  <div class="field-label">Сортування</div>
+                  <div class="custom-select" id="curators-sort-by">
+                    <div class="selected" data-value="total_followers">За підписниками</div>
+                    <div class="options-container">
+                      <div class="option" data-value="total_followers">За підписниками</div>
+                      <div class="option" data-value="playlists_count">За кількістю плейлістів</div>
+                      <div class="option" data-value="unique_tracks_count">За унікальними треками</div>
+                      <div class="option" data-value="added_unique_tracks_30d">За доданими треками за 30 днів</div>
+                      <div class="option" data-value="followers_diff_30d">За приростом підписників за 30 днів</div>
+                      <div class="option" data-value="last_update">За датою оновлення</div>
                     </div>
                   </div>
                 </div>
 
-                <div class="curators-catalog-row">
-                  <div class="field small">
-                    <div class="field-label">Сортування</div>
-                    <div class="custom-select" id="curators-sort-by">
-                      <div class="selected" data-value="total_followers">За підписниками</div>
-                      <div class="options-container">
-                        <div class="option" data-value="total_followers">За підписниками</div>
-                        <div class="option" data-value="playlists_count">За кількістю плейлістів</div>
-                        <div class="option" data-value="unique_tracks_count">За унікальними треками</div>
-                        <div class="option" data-value="added_unique_tracks_30d">За доданими треками за 30 днів</div>
-                        <div class="option" data-value="followers_diff_30d">За приростом підписників за 30 днів</div>
-                        <div class="option" data-value="last_update">За датою оновлення</div>
-                      </div>
+                <div class="field curators-sort-dir-field">
+                  <div class="field-label">Напрямок</div>
+                  <button id="curators-sort-dir-btn" class="curators-sort-dir-btn" type="button" data-value="desc" aria-label="За спаданням">
+                    <span class="curators-sort-dir-icon" aria-hidden="true"></span>
+                    <span class="curators-sort-dir-tooltip">За спаданням</span>
+                  </button>
+                </div>
+
+                <div class="field curators-genres-field">
+                  <div class="field-label">Жанри (лише якщо у куратора 20%+)</div>
+                  <div id="curators-genre-select" class="curators-genre-select">
+                    <button id="curators-genre-trigger" class="curators-genre-trigger" type="button" aria-expanded="false">
+                      <span id="curators-genre-trigger-values" class="curators-genre-trigger-values">
+                        <span class="curators-genre-trigger-empty">Усі жанри</span>
+                      </span>
+                    </button>
+                    <div id="curators-genre-dropdown" class="curators-genre-dropdown">
+                      <div id="curators-genre-filters" class="curators-genre-filters"></div>
                     </div>
                   </div>
+                </div>
 
-                  <div class="field small">
-                    <div class="field-label">Напрямок</div>
-                    <div class="custom-select" id="curators-sort-dir">
-                      <div class="selected" data-value="desc">За спаданням</div>
-                      <div class="options-container">
-                        <div class="option" data-value="desc">За спаданням</div>
-                        <div class="option" data-value="asc">За зростанням</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="field slider-field">
-                    <div class="field-label">Загальна кількість підписників</div>
-                    <div class="range-box">
-                      <div class="range-values">
-                        <span id="curators-follower-min-view">0</span>
-                        <span id="curators-follower-max-view">0</span>
-                      </div>
+                <div class="field slider-field curators-followers-field">
+                  <div class="field-label">Загальна кількість підписників</div>
+                  <div class="range-box curators-follower-range-box">
+                    <div class="curators-range-inline">
+                      <span id="curators-follower-min-view" class="curators-range-value curators-range-value--min">0</span>
                       <div class="dual-range">
                         <div id="curators-follower-range-fill" class="dual-range-fill"></div>
                         <input id="curators-follower-min-range" type="range" min="0" max="0" step="1" value="0">
                         <input id="curators-follower-max-range" type="range" min="0" max="0" step="1" value="0">
                       </div>
-                      <input id="curators-follower-min" type="hidden">
-                      <input id="curators-follower-max" type="hidden">
+                      <span id="curators-follower-max-view" class="curators-range-value curators-range-value--max">0</span>
                     </div>
+                    <input id="curators-follower-min" type="hidden">
+                    <input id="curators-follower-max" type="hidden">
                   </div>
+                </div>
 
-                  <div class="curators-reset-wrap">
-                    <button id="curators-reset-btn" class="button secondary">Скинути</button>
+                <div class="field curators-search-field">
+                  <div class="field-label">Пошук куратора</div>
+                  <div id="curators-search-wrap" class="curators-search-wrap">
+                    <input id="curators-search-query" class="search-input" type="text" placeholder="Введіть ім’я куратора або вставте посилання Spotify на профіль">
+                    <button id="curators-search-btn" class="curators-search-inline-btn" type="button" aria-label="Очистити пошук"></button>
                   </div>
                 </div>
               </div>
-
-              <div class="curators-catalog-panel">
-                <div class="field-label" style="margin-bottom:8px;">Жанри (лише якщо у куратора 20%+)</div>
-                <div id="curators-genre-filters" class="curators-genre-filters"></div>
-              </div>
             </div>
 
-            <div id="curators-summary" class="curators-summary"></div>
-            <div id="curators-no-results" class="curators-no-results"></div>
-            <div id="curators-list" class="curators-list"></div>
+            <div id="curators-results-scroll" class="curators-results-scroll">
+              <div id="curators-summary" class="curators-summary"></div>
+              <div id="curators-no-results" class="curators-no-results"></div>
+              <div id="curators-list" class="curators-list"></div>
 
-            <div class="playlist-load-more-wrap">
-              <button id="curators-load-more" class="button">Показати ще</button>
+              <div class="playlist-load-more-wrap">
+                <button id="curators-load-more" class="button">Показати ще</button>
+              </div>
             </div>
           </div>
         </section>
@@ -3573,17 +4319,22 @@ input:-webkit-autofill:active {
       dashboardContent: document.getElementById("dashboard-content"),
 
       curatorsSortBy: document.getElementById("curators-sort-by"),
-      curatorsSortDir: document.getElementById("curators-sort-dir"),
+      curatorsSortDirBtn: document.getElementById("curators-sort-dir-btn"),
       curatorsSearchQuery: document.getElementById("curators-search-query"),
+      curatorsSearchWrap: document.getElementById("curators-search-wrap"),
       curatorsSearchBtn: document.getElementById("curators-search-btn"),
       curatorsFollowerMin: document.getElementById("curators-follower-min"),
       curatorsFollowerMax: document.getElementById("curators-follower-max"),
+      curatorsGenreSelect: document.getElementById("curators-genre-select"),
+      curatorsGenreTrigger: document.getElementById("curators-genre-trigger"),
+      curatorsGenreTriggerValues: document.getElementById("curators-genre-trigger-values"),
+      curatorsGenreDropdown: document.getElementById("curators-genre-dropdown"),
       curatorsGenreFilters: document.getElementById("curators-genre-filters"),
       curatorsSummary: document.getElementById("curators-summary"),
       curatorsNoResults: document.getElementById("curators-no-results"),
       curatorsList: document.getElementById("curators-list"),
+      curatorsResultsScroll: document.getElementById("curators-results-scroll"),
       curatorsLoadMore: document.getElementById("curators-load-more"),
-      curatorsResetBtn: document.getElementById("curators-reset-btn"),
       
       playlistModal: document.getElementById("playlist-modal"),
       playlistClose: document.getElementById("playlist-close"),
@@ -3955,8 +4706,19 @@ function buildCuratorContinuousSeriesPoints(rows, valueKey, formatter) {
 
   const sorted = [...items].sort((a, b) => String(a.snapshot_date || "").localeCompare(String(b.snapshot_date || "")));
   const start = parseIsoDateUtc(sorted[0]?.snapshot_date);
-  const end = parseIsoDateUtc(sorted[sorted.length - 1]?.snapshot_date);
-  if (!start || !end) return [];
+  const lastRecordedDate = parseIsoDateUtc(sorted[sorted.length - 1]?.snapshot_date);
+  if (!start || !lastRecordedDate) return [];
+
+  const now = new Date();
+  const todayUtc = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate()
+  ));
+
+  const end = lastRecordedDate.getTime() > todayUtc.getTime()
+    ? lastRecordedDate
+    : todayUtc;
 
   const valueMap = new Map(
     sorted.map((row) => [
@@ -6313,8 +7075,19 @@ function buildContinuousActivityPoints(activityHistory) {
 
   const sorted = [...rows].sort((a, b) => String(a.snapshot_date || "").localeCompare(String(b.snapshot_date || "")));
   const start = parseIsoDateUtc(sorted[0]?.snapshot_date);
-  const end = parseIsoDateUtc(sorted[sorted.length - 1]?.snapshot_date);
-  if (!start || !end) return [];
+  const lastRecordedDate = parseIsoDateUtc(sorted[sorted.length - 1]?.snapshot_date);
+  if (!start || !lastRecordedDate) return [];
+
+  const now = new Date();
+  const todayUtc = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate()
+  ));
+
+  const end = lastRecordedDate.getTime() > todayUtc.getTime()
+    ? lastRecordedDate
+    : todayUtc;
 
   const valueMap = new Map(
     sorted.map((row) => [
@@ -7094,18 +7867,93 @@ function renderCuratorCatalogGenres(topGenres) {
   const genres = Array.isArray(topGenres) ? topGenres.filter(Boolean).slice(0, 3) : [];
 
   if (!genres.length) {
-    return '<div class="curator-catalog-empty-genres">Жанри поки що не визначені.</div>';
+    return `
+      <div class="curator-catalog-genres-card">
+        <div class="curator-catalog-genres-stack">
+          <div class="curator-catalog-genres-label-inline">ТОП-3 жанри</div>
+          <div class="curator-catalog-empty-genres">Жанри поки що не визначені.</div>
+        </div>
+      </div>
+    `;
   }
 
   return `
-    <div class="playlist-genres-block curator-catalog-genres">
-      <div class="playlist-genres-label">ТОП-3 жанри</div>
-      <div class="playlist-genres-top">
+    <div class="curator-catalog-genres-card">
+      <div class="curator-catalog-genres-stack">
+        <div class="curator-catalog-genres-label-inline">ТОП-3 жанри</div>
         ${genres.map((genre) => `
-          <span class="playlist-genre-pill">
-            <span class="playlist-genre-name">${escapeHtml(genre.genre_name || genre.genre_slug || "")}</span>
-            <span class="playlist-genre-divider">·</span>
-            <span class="playlist-genre-percent">${round2(genre.percent || 0)}%</span>
+          <div class="curator-catalog-genre-line">${escapeHtml(genre.genre_name || genre.genre_slug || "")} ${round2(genre.percent || 0)}%</div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function getCuratorCatalogStatIconSvg(type) {
+  const icons = {
+    followers: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Zm0 1.8c4.08 0 7.5 2.18 7.5 5v1H4.5v-1c0-2.82 3.42-5 7.5-5Z"/></svg>`,
+    playlists: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 6.5A1.5 1.5 0 0 1 6.5 5h11A1.5 1.5 0 0 1 19 6.5v11a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 17.5v-11Zm3 1.5v2h8V8H8Zm0 4v2h8v-2H8Z"/></svg>`,
+    tracks: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17 3v11.2A3.3 3.3 0 1 1 15.5 11V6.2l-7 1.53V16.2A3.3 3.3 0 1 1 7 13V6.5L17 3Z"/></svg>`,
+    added: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>`,
+    growth: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 17.5V19h14v-1.5H5Zm1.5-2.5 4.32-4.32 2.7 2.7 4.23-5.17 1.16.94-5.18 6.34-2.8-2.8L7.56 16.1 6.5 15Z"/></svg>`,
+    updated: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 4a8 8 0 1 0 8 8 8.01 8.01 0 0 0-8-8Zm1 8.59 2.7 2.7-1.41 1.41L11 13V8h2Z"/></svg>`
+  };
+
+  return icons[type] || "";
+}
+
+function renderCuratorCatalogStatsBlock(item) {
+  const stats = [
+    {
+      key: "followers",
+      label: "Підписники",
+      value: formatUkNumber(item?.total_followers || 0),
+      className: ""
+    },
+    {
+      key: "playlists",
+      label: "Плейлісти",
+      value: formatUkNumber(item?.playlists_count || 0),
+      className: ""
+    },
+    {
+      key: "tracks",
+      label: "Унікальні треки",
+      value: formatUkNumber(item?.unique_tracks_count || 0),
+      className: ""
+    },
+    {
+      key: "added",
+      label: "Додано за 30 днів",
+      value: formatUkNumber(item?.added_unique_tracks_30d || 0),
+      className: ""
+    },
+    {
+      key: "growth",
+      label: "Приріст за 30 днів",
+      value: formatSignedUkNumber(item?.followers_diff_30d || 0),
+      className: `curator-catalog-diff ${getCuratorCatalogDiffClass(item?.followers_diff_30d)}`
+    },
+    {
+      key: "updated",
+      label: "Оновлено",
+      value: escapeHtml(formatIsoDate(item?.last_playlist_update_date || "")),
+      className: ""
+    }
+  ];
+
+  return `
+    <div class="curator-catalog-stats-card">
+      <div class="curator-catalog-stats-grid">
+        ${stats.map((stat) => `
+          <span class="playlist-meta-tooltip-anchor" tabindex="0">
+            <div class="curator-catalog-stat-item">
+              <span class="curator-catalog-stat-icon">${getCuratorCatalogStatIconSvg(stat.key)}</span>
+              <div class="curator-catalog-stat-value ${stat.className}">${stat.value}</div>
+            </div>
+            <div class="playlist-genres-tooltip">
+              <div class="playlist-genres-tooltip-title">${escapeHtml(stat.label)}</div>
+            </div>
           </span>
         `).join("")}
       </div>
@@ -7127,47 +7975,153 @@ function getCuratorCatalogDiffClass(value) {
   return "";
 }
 
+function getCuratorCatalogSocialSizeClass(count) {
+  if (count <= 1) return "is-count-1";
+  if (count === 2) return "is-count-2";
+  return "is-count-3plus";
+}
+
+function renderCuratorCatalogSocialLinks(item) {
+  const links = [
+    item?.url ? { type: "spotify", label: "Spotify", url: item.url } : null,
+    item?.apple_url ? { type: "apple", label: "Apple Music", url: item.apple_url } : null,
+    item?.instagram_url ? { type: "instagram", label: "Instagram", url: item.instagram_url } : null,
+    item?.telegram_url ? { type: "telegram", label: "Telegram", url: item.telegram_url } : null,
+    item?.tiktok_url ? { type: "tiktok", label: "TikTok", url: item.tiktok_url } : null,
+    item?.youtube_url ? { type: "youtube", label: "YouTube", url: item.youtube_url } : null,
+    item?.website_url ? { type: "website", label: "Сайт", url: item.website_url } : null
+  ].filter(Boolean);
+
+  if (!links.length) return "";
+
+  const sizeClass = getCuratorCatalogSocialSizeClass(links.length);
+
+  return `
+    <div class="curator-catalog-socials-card">
+      <div class="curator-catalog-socials ${sizeClass}">
+        ${links.map((link) => `
+          <span class="playlist-meta-tooltip-anchor" tabindex="0">
+            <a
+              class="curator-link-pill"
+              href="${escapeHtml(link.url)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="${escapeHtml(link.label || "Посилання")}" 
+            >
+              <span class="curator-link-icon">${getCuratorLinkIconSvg(String(link.type || "website").trim().toLowerCase())}</span>
+            </a>
+            <div class="playlist-genres-tooltip">
+              <div class="playlist-genres-tooltip-title">${escapeHtml(link.label || "Посилання")}</div>
+            </div>
+          </span>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
 function renderCuratorCatalogCard(item) {
   const curatorId = String(item?.curator_id || "").trim();
   const name = String(item?.name || curatorId || "Куратор").trim();
-  const url = String(item?.url || `https://open.spotify.com/user/${curatorId}`).trim();
   const avatar = String(item?.avatar_url || "").trim();
 
   return `
     <div class="curator-catalog-card">
       <div class="curator-catalog-avatar-wrap">
-        <div class="curator-catalog-avatar">
-          ${avatar ? `<img src="${escapeHtml(avatar)}" alt="">` : ""}
-        </div>
+        <button type="button" class="curator-catalog-avatar-btn" data-curator-modal-btn="1" data-curator-id="${escapeHtml(curatorId)}" aria-label="Відкрити профіль куратора ${escapeHtml(name)}">
+          <div class="curator-catalog-avatar">
+            ${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}">` : ""}
+          </div>
+        </button>
       </div>
 
       <div class="curator-catalog-main">
         <div class="curator-catalog-top">
-          <div>
+          <div class="curator-catalog-title-wrap">
             <div class="curator-catalog-name">
               <a href="#" data-curator-modal-btn="1" data-curator-id="${escapeHtml(curatorId)}">${escapeHtml(name)}</a>
             </div>
-            <div class="curator-catalog-sub">
-              <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Відкрити в Spotify</a>
-            </div>
           </div>
-
-          <button type="button" class="button secondary curator-catalog-open" data-curator-modal-btn="1" data-curator-id="${escapeHtml(curatorId)}">Профіль</button>
         </div>
 
-        <div class="curator-catalog-stats">
-          <span class="pill">Підписники: ${formatUkNumber(item?.total_followers || 0)}</span>
-          <span class="pill">Плейлісти: ${formatUkNumber(item?.playlists_count || 0)}</span>
-          <span class="pill">Унікальні треки: ${formatUkNumber(item?.unique_tracks_count || 0)}</span>
-          <span class="pill">Додано за 30 днів: ${formatUkNumber(item?.added_unique_tracks_30d || 0)}</span>
-          <span class="pill curator-catalog-diff ${getCuratorCatalogDiffClass(item?.followers_diff_30d)}">Приріст за 30 днів: ${formatSignedUkNumber(item?.followers_diff_30d || 0)}</span>
-          <span class="pill">Оновлено: ${escapeHtml(formatIsoDate(item?.last_playlist_update_date || ""))}</span>
+        <div class="curator-catalog-info-row">
+          ${renderCuratorCatalogStatsBlock(item)}
+          ${renderCuratorCatalogGenres(item?.top_genres || [])}
+          ${renderCuratorCatalogSocialLinks(item)}
         </div>
-
-        ${renderCuratorCatalogGenres(item?.top_genres || [])}
       </div>
     </div>
   `;
+}
+
+function getCuratorsSelectedGenreNames() {
+  const selected = new Set(getCuratorsSelectedGenres());
+  const genres = Array.isArray(state.curatorsCatalog.filterMeta?.genres)
+    ? state.curatorsCatalog.filterMeta.genres
+    : [];
+
+  return genres
+    .filter((genre) => selected.has(String(genre?.genre_slug || "").trim()))
+    .map((genre) => String(genre?.genre_name || genre?.genre_slug || "").trim())
+    .filter(Boolean);
+}
+
+function updateCuratorsGenreTriggerLabel() {
+  const names = getCuratorsSelectedGenreNames();
+
+  if (!ui.curatorsGenreTriggerValues) return;
+
+  if (!names.length) {
+    ui.curatorsGenreTriggerValues.innerHTML = '<span class="curators-genre-trigger-empty">Усі жанри</span>';
+    return;
+  }
+
+  ui.curatorsGenreTriggerValues.innerHTML = `<span class="curators-genre-trigger-text">${escapeHtml(names.join(" · "))}</span>`;
+}
+
+function setCuratorsSearchUiState() {
+  if (!ui.curatorsSearchWrap) return;
+  ui.curatorsSearchWrap.classList.toggle("has-value", !!ui.curatorsSearchQuery.value.trim());
+}
+
+function setCuratorsSortDirValue(value, notify = false) {
+  const nextValue = value === "asc" ? "asc" : "desc";
+  const tooltip = nextValue === "asc" ? "За зростанням" : "За спаданням";
+
+  if (!ui.curatorsSortDirBtn) return;
+
+  ui.curatorsSortDirBtn.dataset.value = nextValue;
+  ui.curatorsSortDirBtn.setAttribute("aria-label", tooltip);
+
+  const tooltipEl = ui.curatorsSortDirBtn.querySelector(".curators-sort-dir-tooltip");
+  if (tooltipEl) {
+    tooltipEl.textContent = tooltip;
+  }
+
+  if (notify) {
+    scheduleCuratorsReload();
+  }
+}
+
+function closeCuratorsGenreDropdown() {
+  if (!ui.curatorsGenreSelect || !ui.curatorsGenreTrigger) return;
+  ui.curatorsGenreSelect.classList.remove("is-open");
+  ui.curatorsGenreTrigger.setAttribute("aria-expanded", "false");
+}
+
+function toggleCuratorsGenreDropdown(force) {
+  if (!ui.curatorsGenreSelect || !ui.curatorsGenreTrigger) return;
+
+  const shouldOpen = typeof force === "boolean"
+    ? force
+    : !ui.curatorsGenreSelect.classList.contains("is-open");
+
+  ui.curatorsGenreSelect.classList.toggle("is-open", shouldOpen);
+  ui.curatorsGenreTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+}
+
+function reorderCuratorGenreOptionsForTwoRows(list) {
+  return Array.isArray(list) ? list.slice() : [];
 }
 
 function renderCuratorsList() {
@@ -7189,21 +8143,44 @@ function renderCuratorsGenreFilters() {
 
   if (!genres.length) {
     ui.curatorsGenreFilters.innerHTML = '<div class="curator-empty-note">Жанри 20%+ поки що недоступні.</div>';
+    updateCuratorsGenreTriggerLabel();
     return;
   }
 
-  ui.curatorsGenreFilters.innerHTML = genres.map((genre) => `
-    <button
-      type="button"
-      class="playlist-genre-pill curator-filter-chip ${selectedGenres.has(genre.genre_slug) ? "is-active" : ""}"
-      data-curators-genre="${escapeHtml(genre.genre_slug)}"
-      aria-pressed="${selectedGenres.has(genre.genre_slug) ? "true" : "false"}"
-    >
-      <span class="playlist-genre-name">${escapeHtml(genre.genre_name || genre.genre_slug)}</span>
-      <span class="playlist-genre-divider">·</span>
-      <span class="playlist-genre-percent">${formatUkNumber(genre.curators_count || 0)}</span>
-    </button>
-  `).join("");
+  const options = [
+    {
+      isAll: true,
+      label: "Усі жанри",
+      count: state.curatorsCatalog.total || 0,
+      slug: ""
+    },
+    ...genres.map((genre) => ({
+      isAll: false,
+      label: String(genre?.genre_name || genre?.genre_slug || "").trim(),
+      count: Number(genre?.curators_count || 0),
+      slug: String(genre?.genre_slug || "").trim()
+    }))
+  ];
+
+  const orderedOptions = reorderCuratorGenreOptionsForTwoRows(options);
+
+  ui.curatorsGenreFilters.innerHTML = orderedOptions.map((item) => {
+    const isActive = item.isAll ? selectedGenres.size === 0 : selectedGenres.has(item.slug);
+    const dataAttr = item.isAll
+      ? 'data-curators-genre-all="1"'
+      : `data-curators-genre="${escapeHtml(item.slug)}"`;
+
+    return `
+      <label class="curator-genre-option ${isActive ? "is-active" : ""}" ${dataAttr}>
+        <input class="curator-genre-checkbox-input" type="checkbox" ${isActive ? "checked" : ""} tabindex="-1" aria-hidden="true">
+        <span class="curator-genre-checkbox"></span>
+        <span class="curator-genre-option-text">${escapeHtml(item.label)}</span>
+        <span class="curator-genre-option-count">${formatUkNumber(item.count || 0)}</span>
+      </label>
+    `;
+  }).join("");
+
+  updateCuratorsGenreTriggerLabel();
 }
 
 function toggleCuratorGenreFilter(genreSlug) {
@@ -7223,11 +8200,17 @@ function toggleCuratorGenreFilter(genreSlug) {
   scheduleCuratorsReload();
 }
 
+function clearCuratorGenreFilters() {
+  state.curatorsCatalog.selectedGenres = [];
+  renderCuratorsGenreFilters();
+  scheduleCuratorsReload();
+}
+
 function getCuratorsFiltersFromUi() {
   return {
     search: ui.curatorsSearchQuery.value.trim(),
     sortBy: ui.curatorsSortBy.querySelector(".selected")?.dataset.value || "total_followers",
-    sortDir: ui.curatorsSortDir.querySelector(".selected")?.dataset.value || "desc",
+    sortDir: ui.curatorsSortDirBtn?.dataset.value || "desc",
     followerMin: ui.curatorsFollowerMin.value.trim(),
     followerMax: ui.curatorsFollowerMax.value.trim(),
     genre: getCuratorsSelectedGenres().join(",")
@@ -7251,14 +8234,20 @@ function scheduleCuratorsReload() {
 
 function initCuratorsAutoApply() {
   ui.curatorsSortBy.addEventListener("change", scheduleCuratorsReload);
-  ui.curatorsSortDir.addEventListener("change", scheduleCuratorsReload);
-  ui.curatorsSearchQuery.addEventListener("input", scheduleCuratorsReload);
+  ui.curatorsSearchQuery.addEventListener("input", () => {
+    setCuratorsSearchUiState();
+    scheduleCuratorsReload();
+  });
   ui.curatorsSearchBtn.addEventListener("click", () => {
+    if (!ui.curatorsSearchQuery.value.trim()) return;
+    ui.curatorsSearchQuery.value = "";
+    setCuratorsSearchUiState();
     if (curatorFiltersDebounce) {
       clearTimeout(curatorFiltersDebounce);
       curatorFiltersDebounce = null;
     }
     loadCuratorsCatalog(true);
+    ui.curatorsSearchQuery.focus();
   });
   ui.curatorsSearchQuery.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return;
@@ -7271,12 +8260,23 @@ function initCuratorsAutoApply() {
   });
   ui.curatorsSearchQuery.addEventListener("paste", () => {
     setTimeout(() => {
+      setCuratorsSearchUiState();
       if (curatorFiltersDebounce) {
         clearTimeout(curatorFiltersDebounce);
         curatorFiltersDebounce = null;
       }
       loadCuratorsCatalog(true);
     }, 0);
+  });
+
+  ui.curatorsSortDirBtn.addEventListener("click", () => {
+    const nextValue = ui.curatorsSortDirBtn.dataset.value === "asc" ? "desc" : "asc";
+    setCuratorsSortDirValue(nextValue, true);
+  });
+
+  ui.curatorsGenreTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    toggleCuratorsGenreDropdown();
   });
 
   [
@@ -7286,25 +8286,9 @@ function initCuratorsAutoApply() {
     const el = document.getElementById(id);
     if (el) el.addEventListener("input", scheduleCuratorsReload);
   });
-}
 
-function resetCuratorsFilters() {
-  state.curatorsCatalog.selectedGenres = [];
-  ui.curatorsSearchQuery.value = "";
-  setBasicCustomSelectValue(ui.curatorsSortBy, "total_followers");
-  setBasicCustomSelectValue(ui.curatorsSortDir, "desc");
-
-  if (rangeControls.curatorFollowers) {
-    rangeControls.curatorFollowers.reset();
-  }
-
-  if (curatorFiltersDebounce) {
-    clearTimeout(curatorFiltersDebounce);
-    curatorFiltersDebounce = null;
-  }
-
-  renderCuratorsGenreFilters();
-  loadCuratorsCatalog(true);
+  setCuratorsSearchUiState();
+  setCuratorsSortDirValue(ui.curatorsSortDirBtn?.dataset.value || "desc");
 }
 
 function initCuratorRangeControls(filterMeta) {
@@ -7322,6 +8306,7 @@ function initCuratorRangeControls(filterMeta) {
   maxRange.max = String(followerScale.length > 1 ? followerScale.length - 1 : safeMax);
   maxRange.value = String(followerScale.length > 1 ? followerScale.length - 1 : safeMax);
   document.getElementById("curators-follower-max-view").textContent = formatUkNumber(safeMax);
+  setCuratorsSearchUiState();
 
   rangeControls.curatorFollowers = initDualRange({
     minRangeId: "curators-follower-min-range",
@@ -7398,6 +8383,7 @@ async function loadCuratorsCatalog(reset = false) {
     state.curatorsCatalog.offset = Number(data.offset || 0) + (data.items?.length || 0);
     state.curatorsCatalog.hasMore = !!data.has_more;
 
+    renderCuratorsGenreFilters();
     renderCuratorsList();
 
     if (!state.curatorsCatalog.items.length) {
@@ -7434,7 +8420,7 @@ async function initCuratorsCatalogIfNeeded() {
 
   try {
     initBasicCustomSelect(ui.curatorsSortBy);
-    initBasicCustomSelect(ui.curatorsSortDir);
+    setCuratorsSortDirValue(ui.curatorsSortDirBtn?.dataset.value || "desc");
 
     const filterMeta = await loadCuratorsFilterMeta();
     state.curatorsCatalog.filterMeta = filterMeta;
@@ -7811,13 +8797,17 @@ ui.searchQuery.addEventListener("click", () => {
       loadCuratorsCatalog(false);
     });
 
-    ui.curatorsResetBtn.addEventListener("click", () => {
-      resetCuratorsFilters();
-    });
-
     ui.curatorsPane.addEventListener("click", (event) => {
+      const genreAllTrigger = event.target.closest("[data-curators-genre-all]");
+      if (genreAllTrigger) {
+        event.preventDefault();
+        clearCuratorGenreFilters();
+        return;
+      }
+
       const genreTrigger = event.target.closest("[data-curators-genre]");
       if (genreTrigger) {
+        event.preventDefault();
         toggleCuratorGenreFilter(genreTrigger.getAttribute("data-curators-genre"));
         return;
       }
@@ -7827,6 +8817,12 @@ ui.searchQuery.addEventListener("click", () => {
         event.preventDefault();
         openCuratorModal(curatorModalTrigger.getAttribute("data-curator-id"));
       }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!ui.curatorsGenreSelect) return;
+      if (ui.curatorsGenreSelect.contains(event.target)) return;
+      closeCuratorsGenreDropdown();
     });
     
     ui.playlistClose.addEventListener("click", () => {
@@ -7946,6 +8942,8 @@ window.addEventListener("resize", () => {
     
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
+
+      closeCuratorsGenreDropdown();
 
       if (ui.playlistChartModal.classList.contains("show")) {
         closePlaylistChartModal();
