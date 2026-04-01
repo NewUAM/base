@@ -2844,7 +2844,7 @@ background: #282626;
     <label class="custom-checkbox" for="debut-checkbox">
         <input type="checkbox" id="debut-checkbox" class="checkbox" />
         <div class="checkbox-icon"></div>
-        <span class="checkbox-text">Показати тільки артистів, які дебютували у 2025 році</span>
+        <span class="checkbox-text">Показати тільки артистів, які дебютували у 2026 році</span>
     </label>
 </section>
 
@@ -3007,7 +3007,7 @@ function initializeGenreCombinations(artists) {
       (hideRussian && artist['RuLang'] !== '') ||
       (filterYearRel && artist['YearRel'] !== '+') ||
       (filterMultiRel && artist['MultiRel'] !== '+') ||
-      (filterDebut && artist['Debut25'] !== '+')
+      (filterDebut && artist['Debut'] !== '+')
     ) {
       continue;
     }
@@ -3882,7 +3882,7 @@ function updateFilterTags() {
     if (filterDebut) {
         const filterTag = document.createElement('span');
         filterTag.className = 'filter-tag check';
-        filterTag.textContent = 'дебют 2025 року';
+        filterTag.textContent = 'дебют 2026 року';
         const removeTag = document.createElement('span');
         removeTag.className = 'remove-tag';
         removeTag.textContent = '×';
@@ -3975,7 +3975,7 @@ function applyFilters(artists, minListeners = 0, maxListeners = Infinity) {
         const matchesListenersRange = currentListeners >= minListeners && currentListeners <= maxListeners;
         const matchesYearRel = !filterYearRel || artist['YearRel'] === '+';
         const matchesMultiRel = !filterMultiRel || artist['MultiRel'] === '+';
-        const matchesDebut = !filterDebut || artist['Debut25'] === '+';
+        const matchesDebut = !filterDebut || artist['Debut'] === '+';
 
         return matchesSelectedGenres && matchesRemovedGenres && matchesSelectedLabels && matchesRemovedLabels &&
                matchesSelectedCities && matchesRemovedCities && matchesHideRussian && matchesListenersRange &&
@@ -4193,10 +4193,10 @@ function displayArtists(artists, reset = false) {
             ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(ico);
         }
-        if (artist['Debut25'] === '+') {
+        if (artist['Debut'] === '+') {
             const ico = document.createElement('div');
             ico.className = 'debut-icon';
-            ico.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував&#10;у 2025 році"></i>';
+            ico.innerHTML = '<i class="fa fa-fire" data-tooltip="Артист дебютував&#10;у 2026 році"></i>';
             ico.style.color = '#d5da8d';
             ico.style.textShadow = '0 0 3px rgba(0, 0, 0, 0.3)';
             iconContainer.appendChild(ico);
@@ -5968,7 +5968,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const matchesFilters = (!filterYearRel || artist['YearRel'] === '+') &&
                                    (!filterMultiRel || artist['MultiRel'] === '+') &&
-                                   (!filterDebut || artist['Debut25'] === '+') &&
+                                   (!filterDebut || artist['Debut'] === '+') &&
                                    (!hideRussian || !artist['RuLang']);
 
             return matchesGenre && matchesFilters;
