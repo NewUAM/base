@@ -844,12 +844,16 @@ input:-webkit-autofill:active {
   gap: 12px;
   align-items: flex-start;
   background: rgba(53, 53, 60, 0.55);
-  border: 1px solid rgba(132, 170, 251, 0.28);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 8px;
   padding: 12px;
   background-image: var(--grain-bg);
   background-size: 20px 20px;
   background-blend-mode: overlay;
+}
+
+.playlist-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .playlist-card-side {
@@ -974,6 +978,82 @@ input:-webkit-autofill:active {
   min-width: 0;
   padding-left: 8px;
   padding-right: 8px;
+}
+
+.playlist-cover-flags {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.playlist-cover-flag-anchor {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  outline: none;
+}
+
+.playlist-cover-flag-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.playlist-cover-flag-badge i,
+.playlist-cover-flag-badge .ti,
+.playlist-cover-flag-badge .bi {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.playlist-cover-flag-badge--bad {
+  color: #ff738a;
+  background: rgba(255, 115, 138, 0.14);
+  border-color: rgba(255, 115, 138, 0.34);
+}
+
+.playlist-cover-flag-badge--good {
+  color: #90ee90;
+  background: rgba(144, 238, 144, 0.14);
+  border-color: rgba(144, 238, 144, 0.34);
+}
+
+.playlist-cover-flag-badge--text {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.playlist-meta-tooltip-anchor .playlist-genres-tooltip.playlist-cover-flag-tooltip {
+  width: max-content;
+  min-width: 0;
+  max-width: min(420px, calc(100vw - 24px));
+  max-height: none;
+  overflow: visible;
+  padding: 8px 10px;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.playlist-meta-tooltip-anchor .playlist-genres-tooltip.playlist-cover-flag-tooltip .playlist-genres-tooltip-title {
+  margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
 }
 
 .result-main,
@@ -1266,7 +1346,7 @@ input:-webkit-autofill:active {
   pointer-events: none;
   transform: translate3d(0, 6px, 0);
   transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
-  z-index: 3000;
+  z-index: 25000;
 }
 
 .playlist-genres-tooltip-anchor > .playlist-genres-tooltip {
@@ -1479,6 +1559,27 @@ input:-webkit-autofill:active {
   border-radius: 8px;
 }
 
+.placement-table-wrap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.placement-table-wrap::-webkit-scrollbar-track {
+  background: #282626;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.placement-table-wrap::-webkit-scrollbar-thumb {
+  background-color: #383838;
+  border-radius: 8px;
+  border: 2px solid #282626;
+}
+
+.placement-table-wrap::-webkit-scrollbar-button {
+  display: none;
+}
+
 .placement-table {
   width: 100%;
   border-collapse: collapse;
@@ -1501,8 +1602,25 @@ input:-webkit-autofill:active {
   font-weight: 400;
 }
 
+.search-free-scroll-shell .placement-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #282626;
+  background-clip: padding-box;
+}
+
 .placement-table tbody tr:first-child td {
   border-top: 0;
+}
+
+.placement-table tbody td {
+  vertical-align: middle;
+}
+
+.placement-table tbody td > .placement-playlist-button,
+.placement-table tbody td > .curator-inline-link {
+  vertical-align: middle;
 }
 
 .placement-table th.is-sortable {
@@ -1935,11 +2053,71 @@ input:-webkit-autofill:active {
   padding-top: 2px;
 }
 
-.playlist-catalog-panel {
-  display: grid;
-  grid-template-columns: 190px 190px minmax(260px, 1fr) minmax(260px, 1fr);
+
+.catalog-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  align-items: end;
+  margin-top: 12px;
+}
+
+.catalog-summary-row > * {
+  min-width: 0;
+}
+
+.catalog-sort-dir-inline {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.catalog-sort-dir-label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.catalog-sort-dir-select {
+  width: auto;
+  min-width: 168px;
+  flex: 0 0 auto;
+}
+
+.catalog-sort-dir-select,
+.catalog-sort-dir-select .selected {
+  height: 34px;
+  min-height: 34px;
+}
+
+.catalog-sort-dir-select {
+  display: flex;
+  align-items: center;
+}
+
+.catalog-sort-dir-select .selected {
+  padding: 0 30px 0 12px;
+  font-size: 14px;
+  line-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+.catalog-sort-dir-select .selected::after {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.playlist-catalog-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
   background: rgba(53, 53, 60, 0.55);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 12px;
@@ -1952,9 +2130,118 @@ input:-webkit-autofill:active {
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
-.playlist-catalog-panel .field.small,
+.playlist-catalog-panel .field.small {
+  flex: 0 0 240px;
+  min-width: 240px;
+}
+
+.playlist-genres-field {
+  flex: 0 0 320px;
+  min-width: 280px;
+}
+
 .playlist-catalog-panel .slider-field {
+  flex: 0 0 auto;
   min-width: 0;
+}
+
+.playlist-catalog-panel .playlist-toggle-field {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.playlist-toggle-tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.playlist-toggle-row {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 8px;
+  background: #282626;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.playlist-toggle-tooltip-anchor:hover .playlist-toggle-row,
+.playlist-toggle-tooltip-anchor:focus-within .playlist-toggle-row,
+.playlist-toggle-tooltip-anchor.is-tooltip-open .playlist-toggle-row {
+  border-color: rgba(132, 170, 251, 0.9);
+  background: rgba(40, 38, 38, 0.98);
+}
+
+.playlist-flag-toggle-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.playlist-flag-toggle-box {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(132, 170, 251, 0.55);
+  background: #282626;
+  box-sizing: border-box;
+}
+
+.playlist-flag-toggle-input:checked + .playlist-flag-toggle-box {
+  border-color: rgba(132, 170, 251, 0.95);
+  background: rgba(132, 170, 251, 0.14);
+}
+
+.playlist-flag-toggle-input:checked + .playlist-flag-toggle-box::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid #84aafb;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.playlist-flag-toggle-text {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #f3f3f3;
+}
+
+.playlist-meta-tooltip-anchor.playlist-toggle-tooltip-anchor .playlist-genres-tooltip.playlist-toggle-tooltip {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  right: auto;
+  bottom: auto;
+  width: 224px;
+  min-width: 0;
+  max-width: min(224px, calc(100vw - 24px));
+  padding: 8px 10px;
+  white-space: normal;
+  transform: translateX(-50%) translateY(6px);
+}
+
+.playlist-meta-tooltip-anchor.playlist-toggle-tooltip-anchor:hover > .playlist-genres-tooltip.playlist-toggle-tooltip,
+.playlist-meta-tooltip-anchor.playlist-toggle-tooltip-anchor:focus-within > .playlist-genres-tooltip.playlist-toggle-tooltip,
+.playlist-meta-tooltip-anchor.playlist-toggle-tooltip-anchor.is-tooltip-open > .playlist-genres-tooltip.playlist-toggle-tooltip {
+  transform: translateX(-50%) translateY(0);
+}
+
+.playlist-meta-tooltip-anchor.playlist-toggle-tooltip-anchor .playlist-genres-tooltip.playlist-toggle-tooltip .playlist-genres-tooltip-title {
+  margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 .playlist-catalog-panel .custom-select,
@@ -1968,35 +2255,132 @@ input:-webkit-autofill:active {
   box-sizing: border-box;
 }
 
-.playlist-range-box {
+.playlist-catalog-panel .playlist-range-box,
+.curators-catalog-panel .curators-follower-range-box {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.range-tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+  width: auto;
+  max-width: 100%;
+}
+
+.range-tooltip-anchor::before,
+.range-tooltip-anchor::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  height: 12px;
+  z-index: 79;
+}
+
+.range-tooltip-anchor::after {
+  top: 100%;
+}
+
+.range-tooltip-anchor::before {
+  bottom: 100%;
+}
+
+.playlist-meta-tooltip-anchor.range-tooltip-anchor > .playlist-genres-tooltip {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 6px);
+  width: auto;
+  max-width: calc(100vw - 16px);
+}
+
+.range-tooltip-trigger,
+.playlist-range-inline.range-tooltip-trigger,
+.curators-range-inline.range-tooltip-trigger {
+  min-height: 42px;
+  width: auto;
+  max-width: 100%;
+  padding: 0 12px;
+  border: 1px solid rgba(132, 170, 251, 0.5);
+  border-radius: 8px;
+  background: #282626;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  cursor: default;
+  white-space: nowrap;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.range-tooltip-anchor:hover .range-tooltip-trigger,
+.range-tooltip-anchor:focus-within .range-tooltip-trigger,
+.range-tooltip-anchor.is-tooltip-open .range-tooltip-trigger {
+  border-color: rgba(132, 170, 251, 0.9);
+  background: rgba(40, 38, 38, 0.98);
+}
+
+.range-tooltip-word {
+  flex: 0 0 auto;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.range-slider-tooltip {
+  display: inline-block;
+  padding: 12px;
+  z-index: 80;
+}
+
+.range-slider-tooltip .dual-range {
+  width: min(320px, calc(100vw - 40px));
+  margin-top: 4px;
+}
+
+.playlist-range-box,
+.curators-follower-range-box {
   min-height: 42px;
   padding-top: 0;
   padding-bottom: 0;
   display: flex;
   align-items: center;
+  width: auto;
 }
 
-.playlist-range-inline {
-  display: grid;
-  grid-template-columns: var(--range-side-width, auto) minmax(0, 1fr) var(--range-side-width, auto);
-  gap: 10px;
+.playlist-range-inline,
+.curators-range-inline {
+  display: inline-flex;
   align-items: center;
-  width: 100%;
+  flex-wrap: nowrap;
+  gap: 8px;
+  width: auto;
+  max-width: 100%;
 }
 
-.playlist-range-value {
-  min-width: 0;
-  width: 100%;
-  max-width: 100%;
+.playlist-range-value,
+.curators-range-value {
+  min-width: var(--range-side-width, 0px);
+  width: var(--range-side-width, auto);
+  min-height: 26px;
+  padding: 0 8px;
+  border: 1px solid rgba(132, 170, 251, 0.225);
+  border-radius: 6px;
+  background: rgba(132, 170, 251, 0.04);
   font-size: 13px;
   line-height: 1.2;
   color: #f3f3f3;
   white-space: nowrap;
   text-align: center;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  justify-self: stretch;
+  flex: 0 0 auto;
+  box-sizing: border-box;
 }
 
 .playlist-range-value--min,
@@ -2004,15 +2388,15 @@ input:-webkit-autofill:active {
   text-align: center;
 }
 
-.playlist-range-value.range-value-button {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+.playlist-range-value.range-value-button,
+.curators-range-value.range-value-button {
+  width: var(--range-side-width, auto);
+  max-width: none;
+  min-width: var(--range-side-width, 0px);
   min-height: 26px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  justify-self: stretch;
   padding: 0 8px;
   box-sizing: border-box;
   overflow: hidden;
@@ -2023,26 +2407,33 @@ input:-webkit-autofill:active {
   transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
 }
 
-.playlist-range-value.range-value-button:hover {
+.playlist-range-value.range-value-button:hover,
+.curators-range-value.range-value-button:hover {
   border-color: rgba(132, 170, 251, 0.45);
   background: rgba(132, 170, 251, 0.08);
 }
 
-.playlist-range-value.range-value-button:focus-visible {
+.playlist-range-value.range-value-button:focus-visible,
+.curators-range-value.range-value-button:focus-visible {
   outline: none;
   border-color: rgba(132, 170, 251, 0.8);
   background: rgba(132, 170, 251, 0.12);
 }
 
-.playlist-range-value.range-value-button.is-editing {
+.playlist-range-value.range-value-button.is-editing,
+.curators-range-value.range-value-button.is-editing {
+  padding: 0 8px;
   border-color: rgba(132, 170, 251, 0.8);
   background: rgba(132, 170, 251, 0.12);
 }
 
 .playlist-range-value .range-value-edit,
-.playlist-range-value--max .range-value-edit {
+.playlist-range-value--max .range-value-edit,
+.curators-range-value .range-value-edit,
+.curators-range-value--max .range-value-edit {
   width: 100%;
   min-width: 0;
+  height: 100%;
   text-align: center;
   box-sizing: border-box;
 }
@@ -2083,24 +2474,49 @@ input:-webkit-autofill:active {
 }
 
 .playlist-catalog-controls #playlist-summary {
-  margin: 10px 0 0;
+  margin: 0;
+  flex: 1 1 auto;
 }
 
 .playlist-results-scroll #playlist-no-results {
   margin: 0 0 12px;
 }
 
-@media (max-width: 1320px) {
-  .playlist-catalog-panel {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (max-width: 1180px) {
+  .playlist-catalog-panel .field.small,
+  .playlist-catalog-panel .slider-field,
+  .playlist-genres-field,
+  .playlist-catalog-panel .playlist-toggle-field {
+    flex: 1 1 280px;
+    min-width: 220px;
   }
 }
 
-@media (max-width: 760px) {
-  .playlist-catalog-panel {
-    grid-template-columns: 1fr;
+@media (max-width: 980px) {
+  .catalog-summary-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .catalog-sort-dir-inline {
+    justify-content: flex-start;
+  }
+
+  .playlist-catalog-panel .field.small,
+  .playlist-catalog-panel .slider-field,
+  .playlist-genres-field,
+  .playlist-catalog-panel .playlist-toggle-field {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .playlist-range-inline.range-tooltip-trigger,
+  .curators-range-inline.range-tooltip-trigger {
+    width: 100%;
+    justify-content: space-between;
   }
 }
+
 
 .search-intro {
   width: min(100%, 760px);
@@ -2268,6 +2684,12 @@ input:-webkit-autofill:active {
   scrollbar-gutter: stable;
 }
 
+.search-entity-scroll.track-search-scroll {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .search-free-scroll-shell::-webkit-scrollbar,
 .search-entity-scroll::-webkit-scrollbar {
   width: 12px;
@@ -2283,7 +2705,10 @@ input:-webkit-autofill:active {
 .search-free-scroll-shell::-webkit-scrollbar-thumb,
 .search-entity-scroll::-webkit-scrollbar-thumb {
   background: #383838;
-  border-radius: 8px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 0;
   border: 2px solid #282626;
 }
 
@@ -2310,6 +2735,193 @@ input:-webkit-autofill:active {
   flex-direction: column;
   gap: 10px;
   min-width: 0;
+}
+
+.search-paginated-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.search-entity-list.track-search-list-root {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.search-track-playlists-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.search-track-playlists-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.search-track-playlists-list [data-search-pagination-items="1"] {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-track-playlists-list .placement-table-block.is-split-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-track-playlists-list .placement-table-wrap.is-split-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-track-playlists-list .placement-table-head {
+  flex: 0 0 auto;
+}
+
+.search-track-playlists-list .placement-table-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+.search-track-playlists-list .placement-table-body::-webkit-scrollbar {
+  width: 12px;
+}
+
+.search-track-playlists-list .placement-table-body::-webkit-scrollbar-track {
+  background: #282626;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 0;
+}
+
+.search-track-playlists-list .placement-table-body::-webkit-scrollbar-thumb {
+  background: #383838;
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 0;
+  border: 2px solid #282626;
+}
+
+.search-track-playlists-list .placement-table-body::-webkit-scrollbar-button {
+  display: none;
+}
+
+.search-track-playlists-list .placement-table-head .placement-table,
+.search-track-playlists-list .placement-table-body .placement-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 760px;
+}
+
+.search-track-playlists-list .placement-table-head .placement-table {
+  margin-bottom: 0;
+}
+
+.search-track-playlists-list .placement-table-head th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #282626;
+  background-clip: padding-box;
+}
+
+.search-track-playlists-list .placement-table-body td {
+  vertical-align: middle;
+}
+
+.search-stat-tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.search-stat-tooltip-anchor::before,
+.search-stat-tooltip-anchor::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  height: 12px;
+  z-index: 29;
+}
+
+.search-stat-tooltip-anchor::after {
+  top: 100%;
+}
+
+.search-stat-tooltip-anchor::before {
+  bottom: 100%;
+}
+
+.search-stat-tooltip {
+  width: max-content;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(53, 53, 60, 0.98);
+  border: 1px solid rgba(132, 170, 251, 0.45);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.32);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  color: #f3f3f3;
+  font-size: 13px;
+  line-height: 1.35;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 6px);
+  transform: translate3d(0, 6px, 0);
+  transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
+  z-index: 3000;
+}
+
+.search-stat-tooltip-anchor:hover > .search-stat-tooltip,
+.search-stat-tooltip-anchor:focus-within > .search-stat-tooltip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+}
+
+.search-stat-tooltip.is-open-up {
+  top: auto;
+  bottom: calc(100% + 6px);
+  transform: translate3d(0, -6px, 0);
+}
+
+.search-stat-tooltip.is-align-right {
+  left: auto;
+  right: 0;
+}
+
+.search-stat-tooltip-anchor:hover > .search-stat-tooltip.is-open-up,
+.search-stat-tooltip-anchor:focus-within > .search-stat-tooltip.is-open-up {
+  transform: translate3d(0, 0, 0);
 }
 
 .search-entity-shell a,
@@ -2438,20 +3050,26 @@ input:-webkit-autofill:active {
 .search-head-subtitle,
 .artist-head-sub,
 .album-head-sub {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 10px;
+  display: block;
   font-size: 14px;
   line-height: 1.45;
   color: var(--muted);
   min-width: 0;
 }
 
+.artist-separator {
+  white-space: pre;
+}
+
 .search-head-subtitle a,
 .artist-head-sub a,
 .album-head-sub a {
   color: #f3f3f3;
+}
+
+.search-head-action-anchor {
+  flex: 0 0 auto;
+  align-self: flex-start;
 }
 
 .search-head-action {
@@ -2487,6 +3105,15 @@ input:-webkit-autofill:active {
   gap: 10px;
   min-width: 0;
   align-items: flex-start;
+}
+
+
+.search-head-stats > .playlist-meta-tooltip-anchor,
+.search-head-stats > .search-stat-tooltip-anchor {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  align-self: flex-start;
 }
 
 .search-head-stat,
@@ -2585,6 +3212,142 @@ input:-webkit-autofill:active {
 
 .search-track-result .placement-table-block {
   margin-top: 10px;
+}
+
+
+.search-track-result {
+  align-items: stretch;
+}
+
+.search-track-accordion-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-track-accordion-toggle:hover .search-track-chevron,
+.search-track-accordion-toggle:focus-visible .search-track-chevron,
+.search-track-result.is-expanded .search-track-chevron {
+  border-color: rgba(132, 170, 251, 0.75);
+  background: rgba(132, 170, 251, 0.12);
+}
+
+.search-track-accordion-toggle:focus-visible {
+  outline: none;
+}
+
+.search-track-accordion-main {
+  min-width: 0;
+}
+
+.search-track-chevron {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+  flex: 0 0 auto;
+}
+
+.search-track-chevron .ti {
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.18s ease;
+}
+
+.search-track-result.is-expanded .search-track-chevron .ti {
+  transform: rotate(180deg);
+}
+
+.search-track-playlists-collapse {
+  display: none;
+}
+
+.search-track-result.is-expanded .search-track-playlists-collapse {
+  display: block;
+}
+
+.placement-playlist-button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f3f3f3;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.placement-playlist-button:hover {
+  text-decoration: none;
+}
+
+.placement-playlist-cover {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.05);
+  flex: 0 0 40px;
+  order: 0;
+}
+
+.placement-playlist-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.placement-playlist-cover-fallback {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-2);
+  background: rgba(132, 170, 251, 0.08);
+}
+
+.placement-playlist-cover-fallback .ti {
+  font-size: 11px;
+}
+
+.placement-playlist-label {
+  min-width: 0;
+  flex: 1 1 auto;
+  line-height: 1.35;
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  order: 1;
+}
+
+.placement-playlist-label-text {
+  display: block;
+  color: #f3f3f3;
+}
+
+.placement-playlist-button:hover .placement-playlist-label-text {
+  text-decoration: underline;
 }
 
 .search-entity-list > .placement-table-block:first-child {
@@ -3285,8 +4048,8 @@ input:-webkit-autofill:active {
   min-width: 38px;
   flex: 0 0 38px;
   border-radius: 12px;
-  border: 1px solid rgba(132, 170, 251, 0.28);
-  background: linear-gradient(180deg, rgba(132, 170, 251, 0.16) 0%, rgba(132, 170, 251, 0.04) 100%);
+  border: 1px solid rgba(132, 170, 251, 0.22);
+  background: rgba(132, 170, 251, 0.10);
   color: var(--accent-2);
   font-size: 14px;
   font-weight: 700;
@@ -3517,9 +4280,14 @@ input:-webkit-autofill:active {
 }
 
 .chart-list-shell {
-  display: flex;
-  flex-direction: column;
+  min-width: 0;
+}
+
+.chart-list-shell .local-lazy-list-items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  min-width: 0;
 }
 
 .chart-entry {
@@ -3538,7 +4306,7 @@ input:-webkit-autofill:active {
   gap: 12px;
   padding: 10px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(132, 170, 251, 0.18);
   background: rgba(40, 38, 38, 0.78);
   transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
@@ -3569,7 +4337,7 @@ input:-webkit-autofill:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(132, 170, 251, 0.14);
   background: linear-gradient(180deg, rgba(132, 170, 251, 0.16) 0%, rgba(132, 170, 251, 0.05) 100%);
   color: var(--accent-2);
 }
@@ -3646,7 +4414,10 @@ input:-webkit-autofill:active {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 6px;
   min-height: 26px;
+  min-width: 34px;
   padding: 0 10px;
   border-radius: 999px;
   border: 1px solid rgba(132, 170, 251, 0.26);
@@ -3655,6 +4426,74 @@ input:-webkit-autofill:active {
   line-height: 1;
   color: #f3f3f3;
   white-space: nowrap;
+}
+
+.chart-entry-tooltip-anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  outline: none;
+  z-index: 1;
+}
+
+.chart-entry-tooltip-anchor > .chart-entry-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translate3d(-50%, 6px, 0);
+  width: max-content;
+  min-width: 0;
+  max-width: min(260px, calc(100vw - 24px));
+  padding: 7px 9px;
+  border-radius: 10px;
+  background: rgba(53, 53, 60, 0.98);
+  border: 1px solid rgba(132, 170, 251, 0.45);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.32);
+  background-image: var(--grain-bg);
+  background-size: 20px 20px;
+  background-blend-mode: overlay;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
+  z-index: 32000;
+  white-space: nowrap;
+}
+
+.chart-entry-tooltip-anchor > .chart-entry-tooltip .chart-entry-tooltip-title {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--text);
+  margin: 0;
+}
+
+.chart-entry-tooltip-anchor:hover,
+.chart-entry-tooltip-anchor:focus-within {
+  z-index: 32001;
+}
+
+.chart-entry-tooltip-anchor:hover > .chart-entry-tooltip,
+.chart-entry-tooltip-anchor:focus-within > .chart-entry-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.chart-entry-metric i,
+.chart-entry-chip i {
+  font-size: 13px;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.chart-entry-pill-value {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  line-height: 1;
 }
 
 .chart-entry-sub {
@@ -3674,14 +4513,25 @@ input:-webkit-autofill:active {
 .chart-entry-chip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 6px;
   min-height: 24px;
+  min-width: 30px;
   padding: 0 8px;
   border-radius: 999px;
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(132, 170, 251, 0.14);
   color: var(--muted);
   font-size: 12px;
   line-height: 1.2;
+}
+
+.chart-entry-thumb .preview-cover-trigger,
+.chart-entry-thumb .preview-cover-static {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 .chart-entry-card.is-track .chart-entry-thumb {
@@ -4139,6 +4989,25 @@ input:-webkit-autofill:active {
 }
 
 #playlist-modal .playlist-modal-added-time {
+  display: block;
+  margin-top: 2px;
+  color: #bababa;
+}
+
+
+.compact-added-datetime {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.compact-added-datetime > span {
+  display: block;
+}
+
+.compact-added-datetime-time {
   display: block;
   margin-top: 2px;
   color: #bababa;
@@ -4723,10 +5592,10 @@ input:-webkit-autofill:active {
 }
 
 .curators-catalog-panel {
-  display: grid;
-  grid-template-columns: 230px 56px minmax(220px, 0.95fr) minmax(320px, 1.15fr) minmax(260px, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
   gap: 12px;
-  align-items: end;
   background: rgba(53, 53, 60, 0.55);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 12px;
@@ -4742,7 +5611,6 @@ input:-webkit-autofill:active {
 .curators-catalog-panel .search-input,
 .curators-catalog-panel .custom-select,
 .curators-catalog-panel .custom-select .selected,
-.curators-catalog-panel .curators-sort-dir-btn,
 .curators-catalog-panel .curators-genre-trigger,
 .curators-catalog-panel .curators-follower-range-box {
   height: 42px;
@@ -4750,7 +5618,6 @@ input:-webkit-autofill:active {
 
 .curators-catalog-panel .custom-select .selected,
 .curators-catalog-panel .curators-genre-trigger,
-.curators-catalog-panel .curators-sort-dir-btn,
 .curators-catalog-panel .search-input,
 .curators-catalog-panel .curators-follower-range-box {
   box-sizing: border-box;
@@ -4760,12 +5627,24 @@ input:-webkit-autofill:active {
   display: contents;
 }
 
-.curators-search-field,
-.curators-sort-field,
-.curators-sort-dir-field,
-.curators-followers-field,
+.curators-sort-field {
+  flex: 0 0 240px;
+  min-width: 240px;
+}
+
 .curators-genres-field {
-  min-width: 220px;
+  flex: 0 0 320px;
+  min-width: 280px;
+}
+
+.curators-followers-field {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.curators-search-field {
+  flex: 1 1 320px;
+  min-width: 280px;
 }
 
 .curators-genres-field .field-label {
@@ -5079,63 +5958,7 @@ input:-webkit-autofill:active {
   transform: translate(-50%, 0);
 }
 
-.curators-follower-range-box {
-  min-height: 42px;
-  padding-top: 0;
-  padding-bottom: 0;
-  display: flex;
-  align-items: center;
-}
 
-.curators-range-inline {
-  display: grid;
-  grid-template-columns: var(--range-side-width, auto) minmax(0, 1fr) var(--range-side-width, auto);
-  gap: 10px;
-  align-items: center;
-  width: 100%;
-}
-
-.curators-range-value {
-  min-width: 0;
-  font-size: 13px;
-  line-height: 1.2;
-  color: #f3f3f3;
-  white-space: nowrap;
-  text-align: center;
-}
-
-.curators-range-value--max {
-  text-align: center;
-}
-
-.curators-range-value.range-value-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 26px;
-  padding: 0 8px;
-  border: 1px solid rgba(132, 170, 251, 0.225);
-  border-radius: 6px;
-  cursor: text;
-  background: rgba(132, 170, 251, 0.04);
-  transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
-}
-
-.curators-range-value.range-value-button:hover {
-  border-color: rgba(132, 170, 251, 0.45);
-  background: rgba(132, 170, 251, 0.08);
-}
-
-.curators-range-value.range-value-button:focus-visible {
-  outline: none;
-  border-color: rgba(132, 170, 251, 0.8);
-  background: rgba(132, 170, 251, 0.12);
-}
-
-.curators-range-value.range-value-button.is-editing {
-  border-color: rgba(132, 170, 251, 0.8);
-  background: rgba(132, 170, 251, 0.12);
-}
 
 .curators-range-value .range-value-edit,
 .curators-range-value--max .range-value-edit {
@@ -5332,27 +6155,27 @@ input:-webkit-autofill:active {
   position: relative;
   width: 16px;
   height: 16px;
-  border-radius: 4px;
+  border-radius: 50%;
   border: 1px solid rgba(132, 170, 251, 0.55);
   background: #282626;
   box-sizing: border-box;
 }
 
 .curator-genre-option.is-active .curator-genre-checkbox {
-  background: rgba(132, 170, 251, 0.22);
+  background: #282626;
   border-color: rgba(132, 170, 251, 0.95);
 }
 
 .curator-genre-option.is-active .curator-genre-checkbox::after {
   content: "";
   position: absolute;
-  left: 4px;
-  top: 1px;
-  width: 4px;
+  left: 50%;
+  top: 50%;
+  width: 8px;
   height: 8px;
-  border-right: 2px solid #84aafb;
-  border-bottom: 2px solid #84aafb;
-  transform: rotate(45deg);
+  border-radius: 50%;
+  background: #84aafb;
+  transform: translate(-50%, -50%);
 }
 
 .curator-genre-option-text {
@@ -5414,7 +6237,8 @@ input:-webkit-autofill:active {
 }
 
 .curators-catalog-controls .curators-summary {
-  margin: 10px 0 0;
+  margin: 0;
+  flex: 1 1 auto;
 }
 
 .curators-results-scroll .curators-no-results {
@@ -5446,25 +6270,23 @@ input:-webkit-autofill:active {
   }
 }
 
-@media (max-width: 1500px) {
-  .curators-catalog-panel {
-    grid-template-columns: 220px 56px minmax(200px, 0.9fr) minmax(280px, 1.05fr) minmax(240px, 0.95fr);
-  }
-}
-
-@media (max-width: 1320px) {
-  .curators-catalog-panel {
-    grid-template-columns: 220px 56px minmax(200px, 0.9fr) minmax(280px, 1fr) minmax(220px, 0.9fr);
+@media (max-width: 1180px) {
+  .curators-sort-field,
+  .curators-genres-field,
+  .curators-followers-field,
+  .curators-search-field {
+    flex: 1 1 280px;
+    min-width: 220px;
   }
 }
 
 @media (max-width: 980px) {
-  .curators-catalog-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .curators-sort-dir-field {
-    width: 56px;
+  .curators-sort-field,
+  .curators-genres-field,
+  .curators-followers-field,
+  .curators-search-field {
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .curators-genre-filters {
@@ -5831,6 +6653,10 @@ input:-webkit-autofill:active {
   .stats-grid,
   .charts-panels-grid,
   .charts-leaders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-list-shell .local-lazy-list-items {
     grid-template-columns: 1fr;
   }
 }
@@ -6410,6 +7236,43 @@ input:-webkit-autofill:active {
   }
 }
 
+
+
+
+
+.catalog-sort-dir-inline {
+  margin-left: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.custom-select.catalog-sort-dir-select {
+  width: fit-content;
+  min-width: 0;
+  flex: 0 0 auto;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.custom-select.catalog-sort-dir-select .selected {
+  width: auto;
+  min-width: 0;
+  padding: 0 34px 0 12px;
+  height: 34px;
+  min-height: 34px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.custom-select.catalog-sort-dir-select .options-container {
+  width: max-content;
+  min-width: 100%;
+  left: auto;
+  right: 0;
+}
+
 </style>
 </head>
 <body>
@@ -6543,13 +7406,16 @@ input:-webkit-autofill:active {
             </div>
           </div>
 
-          <div class="field small">
-            <div class="field-label">Напрямок</div>
-            <div class="custom-select" id="playlist-sort-dir">
-              <div class="selected" data-value="desc">За спаданням</div>
-              <div class="options-container">
-                <div class="option" data-value="desc">За спаданням</div>
-                <div class="option" data-value="asc">За зростанням</div>
+          <div class="field curators-genres-field playlist-genres-field">
+            <div class="field-label">Жанри (лише якщо у плейліста 20%+)</div>
+            <div id="playlist-genre-select" class="curators-genre-select playlist-genre-select">
+              <button id="playlist-genre-trigger" class="curators-genre-trigger playlist-genre-trigger" type="button" aria-expanded="false">
+                <span id="playlist-genre-trigger-values" class="curators-genre-trigger-values playlist-genre-trigger-values">
+                  <span class="curators-genre-trigger-empty">Усі жанри</span>
+                </span>
+              </button>
+              <div id="playlist-genre-dropdown" class="curators-genre-dropdown playlist-genre-dropdown">
+                <div id="playlist-genre-filters" class="curators-genre-filters playlist-genre-filters"></div>
               </div>
             </div>
           </div>
@@ -6557,14 +7423,21 @@ input:-webkit-autofill:active {
           <div class="field slider-field">
             <div class="field-label">Підписники</div>
             <div class="range-box playlist-range-box">
-              <div class="playlist-range-inline">
-                <span id="follower-min-view" class="playlist-range-value playlist-range-value--min">0</span>
-                <div class="dual-range">
-                  <div id="follower-range-fill" class="dual-range-fill"></div>
-                  <input id="follower-min-range" type="range" min="0" max="5000000" step="1000" value="0">
-                  <input id="follower-max-range" type="range" min="0" max="5000000" step="1000" value="5000000">
+              <div class="playlist-meta-tooltip-anchor range-tooltip-anchor">
+                <div class="playlist-range-inline range-tooltip-trigger">
+                  <span class="range-tooltip-word">Від</span>
+                  <span id="follower-min-view" class="playlist-range-value playlist-range-value--min">0</span>
+                  <span class="range-tooltip-word">до</span>
+                  <span id="follower-max-view" class="playlist-range-value playlist-range-value--max">5 000 000</span>
                 </div>
-                <span id="follower-max-view" class="playlist-range-value playlist-range-value--max">5 000 000</span>
+                <div class="playlist-genres-tooltip range-slider-tooltip">
+                  <div class="playlist-genres-tooltip-title">Підписники</div>
+                  <div class="dual-range">
+                    <div id="follower-range-fill" class="dual-range-fill"></div>
+                    <input id="follower-min-range" type="range" min="0" max="5000000" step="1000" value="0">
+                    <input id="follower-max-range" type="range" min="0" max="5000000" step="1000" value="5000000">
+                  </div>
+                </div>
               </div>
               <input id="follower-min" type="hidden">
               <input id="follower-max" type="hidden">
@@ -6574,22 +7447,54 @@ input:-webkit-autofill:active {
           <div class="field slider-field">
             <div class="field-label">Кількість треків</div>
             <div class="range-box playlist-range-box">
-              <div class="playlist-range-inline">
-                <span id="track-min-view" class="playlist-range-value playlist-range-value--min">0</span>
-                <div class="dual-range">
-                  <div id="track-range-fill" class="dual-range-fill"></div>
-                  <input id="track-min-range" type="range" min="0" max="5000" step="1" value="0">
-                  <input id="track-max-range" type="range" min="0" max="5000" step="1" value="5000">
+              <div class="playlist-meta-tooltip-anchor range-tooltip-anchor">
+                <div class="playlist-range-inline range-tooltip-trigger">
+                  <span class="range-tooltip-word">Від</span>
+                  <span id="track-min-view" class="playlist-range-value playlist-range-value--min">0</span>
+                  <span class="range-tooltip-word">до</span>
+                  <span id="track-max-view" class="playlist-range-value playlist-range-value--max">5 000</span>
                 </div>
-                <span id="track-max-view" class="playlist-range-value playlist-range-value--max">5 000</span>
+                <div class="playlist-genres-tooltip range-slider-tooltip">
+                  <div class="playlist-genres-tooltip-title">Кількість треків</div>
+                  <div class="dual-range">
+                    <div id="track-range-fill" class="dual-range-fill"></div>
+                    <input id="track-min-range" type="range" min="0" max="5000" step="1" value="0">
+                    <input id="track-max-range" type="range" min="0" max="5000" step="1" value="5000">
+                  </div>
+                </div>
               </div>
               <input id="track-min" type="hidden">
               <input id="track-max" type="hidden">
             </div>
           </div>
+
+          <div class="field playlist-toggle-field">
+            <div class="playlist-meta-tooltip-anchor is-hover-only-tooltip playlist-toggle-tooltip-anchor" tabindex="0">
+              <label class="playlist-toggle-row" for="playlist-exclude-inactive">
+                <input id="playlist-exclude-inactive" class="playlist-flag-toggle-input" type="checkbox">
+                <span class="playlist-flag-toggle-box"></span>
+                <span class="playlist-flag-toggle-text">Прибрати неактивні</span>
+              </label>
+              <div class="playlist-genres-tooltip playlist-toggle-tooltip">
+                <div class="playlist-genres-tooltip-title">Плейлісти, список треків яких<br>не оновлювався понад місяць</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div id="playlist-summary"></div>
+        <div class="catalog-summary-row">
+          <div id="playlist-summary"></div>
+          <div class="catalog-sort-dir-inline">
+            <div class="catalog-sort-dir-label">Напрямок:</div>
+            <div class="custom-select catalog-sort-dir-select" id="playlist-sort-dir">
+              <div class="selected" data-value="desc">За спаданням</div>
+              <div class="options-container">
+                <div class="option" data-value="desc">За спаданням</div>
+                <div class="option" data-value="asc">За зростанням</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="playlist-results-scroll" class="playlist-results-scroll">
@@ -6622,14 +7527,6 @@ input:-webkit-autofill:active {
                   </div>
                 </div>
 
-                <div class="field curators-sort-dir-field">
-                  <div class="field-label">Напрямок</div>
-                  <button id="curators-sort-dir-btn" class="curators-sort-dir-btn" type="button" data-value="desc" aria-label="За спаданням">
-                    <span class="curators-sort-dir-icon" aria-hidden="true"></span>
-                    <span class="curators-sort-dir-tooltip">За спаданням</span>
-                  </button>
-                </div>
-
                 <div class="field curators-genres-field">
                   <div class="field-label">Жанри (лише якщо у куратора 20%+)</div>
                   <div id="curators-genre-select" class="curators-genre-select">
@@ -6647,14 +7544,21 @@ input:-webkit-autofill:active {
                 <div class="field slider-field curators-followers-field">
                   <div class="field-label">Загальна кількість підписників</div>
                   <div class="range-box curators-follower-range-box">
-                    <div class="curators-range-inline">
-                      <span id="curators-follower-min-view" class="curators-range-value curators-range-value--min">0</span>
-                      <div class="dual-range">
-                        <div id="curators-follower-range-fill" class="dual-range-fill"></div>
-                        <input id="curators-follower-min-range" type="range" min="0" max="0" step="1" value="0">
-                        <input id="curators-follower-max-range" type="range" min="0" max="0" step="1" value="0">
+                    <div class="playlist-meta-tooltip-anchor range-tooltip-anchor">
+                      <div class="curators-range-inline range-tooltip-trigger">
+                        <span class="range-tooltip-word">Від</span>
+                        <span id="curators-follower-min-view" class="curators-range-value curators-range-value--min">0</span>
+                        <span class="range-tooltip-word">до</span>
+                        <span id="curators-follower-max-view" class="curators-range-value curators-range-value--max">0</span>
                       </div>
-                      <span id="curators-follower-max-view" class="curators-range-value curators-range-value--max">0</span>
+                      <div class="playlist-genres-tooltip range-slider-tooltip">
+                        <div class="playlist-genres-tooltip-title">Загальна кількість підписників</div>
+                        <div class="dual-range">
+                          <div id="curators-follower-range-fill" class="dual-range-fill"></div>
+                          <input id="curators-follower-min-range" type="range" min="0" max="0" step="1" value="0">
+                          <input id="curators-follower-max-range" type="range" min="0" max="0" step="1" value="0">
+                        </div>
+                      </div>
                     </div>
                     <input id="curators-follower-min" type="hidden">
                     <input id="curators-follower-max" type="hidden">
@@ -6670,7 +7574,19 @@ input:-webkit-autofill:active {
                 </div>
               </div>
               
-              <div id="curators-summary" class="curators-summary"></div>
+              <div class="catalog-summary-row">
+                <div id="curators-summary" class="curators-summary"></div>
+                <div class="catalog-sort-dir-inline">
+                  <div class="catalog-sort-dir-label">Напрямок:</div>
+                  <div class="custom-select catalog-sort-dir-select" id="curators-sort-dir">
+                    <div class="selected" data-value="desc">За спаданням</div>
+                    <div class="options-container">
+                      <div class="option" data-value="desc">За спаданням</div>
+                      <div class="option" data-value="asc">За зростанням</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               
             </div>
 
@@ -6831,6 +7747,12 @@ input:-webkit-autofill:active {
       catalogShell: document.getElementById("playlist-catalog"),
       playlistSortBy: document.getElementById("playlist-sort-by"),
       playlistSortDir: document.getElementById("playlist-sort-dir"),
+      playlistGenreSelect: document.getElementById("playlist-genre-select"),
+      playlistGenreTrigger: document.getElementById("playlist-genre-trigger"),
+      playlistGenreTriggerValues: document.getElementById("playlist-genre-trigger-values"),
+      playlistGenreDropdown: document.getElementById("playlist-genre-dropdown"),
+      playlistGenreFilters: document.getElementById("playlist-genre-filters"),
+      playlistExcludeInactive: document.getElementById("playlist-exclude-inactive"),
       followerMin: document.getElementById("follower-min"),
       followerMax: document.getElementById("follower-max"),
       trackMin: document.getElementById("track-min"),
@@ -6845,7 +7767,7 @@ input:-webkit-autofill:active {
       dashboardContent: document.getElementById("dashboard-content"),
 
       curatorsSortBy: document.getElementById("curators-sort-by"),
-      curatorsSortDirBtn: document.getElementById("curators-sort-dir-btn"),
+      curatorsSortDir: document.getElementById("curators-sort-dir"),
       curatorsSearchQuery: document.getElementById("curators-search-query"),
       curatorsSearchWrap: document.getElementById("curators-search-wrap"),
       curatorsSearchBtn: document.getElementById("curators-search-btn"),
@@ -6905,13 +7827,16 @@ input:-webkit-autofill:active {
         requestToken: 0
       },
             playlist: {
-        limit: 24,
+        limit: 50,
         offset: 0,
         total: 0,
         hasMore: false,
         items: [],
         loading: false,
-        pendingReload: false
+        pendingReload: false,
+        filterMeta: null,
+        selectedGenres: [],
+        excludeInactive: false
       },
       statsLoaded: false,
 statsData: null,
@@ -6933,7 +7858,12 @@ dashboardData: null,
         searchDebounceTimer: null,
         searchResults: null,
         searchError: "",
-        searchMeta: { isUrl: false, entityType: "", entityId: "", resolvedLabel: "" }
+        searchMeta: { isUrl: false, entityType: "", entityId: "", resolvedLabel: "" },
+        initialOffset: 0,
+        focusTrackPosition: 0,
+        focusTrackApplied: false,
+        prependLoading: false,
+        appendLoading: false
       },
             curatorModal: {
         currentId: "",
@@ -6951,7 +7881,7 @@ dashboardData: null,
         initialized: false,
         metaLoading: false,
         filterMeta: null,
-        limit: 24,
+        limit: 50,
         offset: 0,
         total: 0,
         hasMore: false,
@@ -6960,6 +7890,25 @@ dashboardData: null,
         pendingReload: false,
         selectedGenres: []
       }
+    };
+
+
+
+    const searchPaginationState = {
+      type: "",
+      endpoint: "",
+      id: "",
+      limit: 50,
+      offset: 0,
+      total: 0,
+      hasMore: false,
+      loading: false,
+      requestToken: 0,
+      observer: null,
+      source: "",
+      items: [],
+      placementTableId: "",
+      appendJobId: 0
     };
 
     const rangeControls = {};
@@ -7946,6 +8895,46 @@ function handlePreviewTriggerClick(event) {
   return true;
 }
 
+function handlePreviewTriggerHover(event) {
+  const trigger = event.target.closest("[data-preview-play='1']");
+  if (!trigger) return false;
+
+  if (typeof event.pointerType === "string" && event.pointerType && event.pointerType !== "mouse") {
+    return false;
+  }
+
+  if (event.relatedTarget && trigger.contains(event.relatedTarget)) {
+    return false;
+  }
+
+  const source = String(trigger.getAttribute("data-preview-source") || "").trim();
+  const index = Number(trigger.getAttribute("data-preview-index") || "-1");
+  if (!source || !Number.isInteger(index) || index < 0) {
+    return false;
+  }
+
+  const queue = getPreviewQueueBySource(source);
+  const targetTrack = queue[index];
+  if (!targetTrack || !isPlayablePreviewItem(targetTrack)) {
+    return false;
+  }
+
+  const currentTrack = previewPlayerState.currentTrack;
+  const currentTrackId = String(currentTrack?.track_id || currentTrack?.id || "").trim();
+  const targetTrackId = String(targetTrack.track_id || targetTrack.id || "").trim();
+  const isSameTrack = !!currentTrack && source === previewPlayerState.source && currentTrackId && targetTrackId && currentTrackId === targetTrackId;
+
+  if (isSameTrack) {
+    if (previewPlayerState.audio && previewPlayerState.audio.paused) {
+      togglePreviewPlayback();
+    }
+    return true;
+  }
+
+  playPreviewTrackFromSource(source, index);
+  return true;
+}
+
 
     function showModal(modalEl) {
       if (!modalEl) return;
@@ -8005,7 +8994,9 @@ function ti(name) {
     "plus": "plus-lg",
     "trending-up": "graph-up-arrow",
     "external-link": "box-arrow-up-right",
-    "chevron-down": "chevron-down"
+    "chevron-down": "chevron-down",
+    "robot": "robot",
+    "leaf": "leaf-fill"
   };
 
   const mapped = iconMap[name] || "";
@@ -8021,6 +9012,49 @@ function ti(name) {
   };
 
   return ti(icons[type] || "");
+}
+
+function renderPlaylistFlagsBlock(item) {
+  const flags = [];
+
+  if (item?.has_ai_genre_over_10) {
+    flags.push(`
+      <span class="playlist-meta-tooltip-anchor is-hover-only-tooltip playlist-cover-flag-anchor" tabindex="0">
+        <span class="playlist-cover-flag-badge playlist-cover-flag-badge--bad" aria-hidden="true">${ti("robot")}</span>
+        <div class="playlist-genres-tooltip playlist-cover-flag-tooltip">
+          <div class="playlist-genres-tooltip-title">У плейлісті понад 10% виконавців<br>випускають музику, створену штучним інтелектом</div>
+        </div>
+      </span>
+    `);
+  }
+
+  if (item?.has_ru_lang_artists_over_10) {
+    flags.push(`
+      <span class="playlist-meta-tooltip-anchor is-hover-only-tooltip playlist-cover-flag-anchor" tabindex="0">
+        <span class="playlist-cover-flag-badge playlist-cover-flag-badge--bad playlist-cover-flag-badge--text" aria-hidden="true">#@!</span>
+        <div class="playlist-genres-tooltip playlist-cover-flag-tooltip">
+          <div class="playlist-genres-tooltip-title">У плейлисті понад 10% виконавців<br>виконували пісні російською мовою з 2024 року</div>
+        </div>
+      </span>
+    `);
+  }
+
+  if (item?.has_debut_artists_current_year_10plus) {
+    flags.push(`
+      <span class="playlist-meta-tooltip-anchor is-hover-only-tooltip playlist-cover-flag-anchor" tabindex="0">
+        <span class="playlist-cover-flag-badge playlist-cover-flag-badge--good" aria-hidden="true">${ti("leaf")}</span>
+        <div class="playlist-genres-tooltip playlist-cover-flag-tooltip">
+          <div class="playlist-genres-tooltip-title">У плейлисті понад 10 виконавців,<br>які дебютували цього року</div>
+        </div>
+      </span>
+    `);
+  }
+
+  if (!flags.length) {
+    return "";
+  }
+
+  return `<div class="playlist-cover-flags">${flags.join("")}</div>`;
 }
 
 function renderPlaylistMetaBlock(item) {
@@ -8532,8 +9566,8 @@ function renderPlaylistGenresBlock(item) {
   if (window.__adaptiveGenreTooltipsInited) return;
   window.__adaptiveGenreTooltipsInited = true;
 
-  const tooltipAnchorSelector = ".playlist-meta-tooltip-anchor, .playlist-genres-tooltip-anchor";
-  const tooltipOpenSelector = ".playlist-meta-tooltip-anchor.is-tooltip-open, .playlist-genres-tooltip-anchor.is-tooltip-open";
+  const tooltipAnchorSelector = ".playlist-meta-tooltip-anchor:not(.range-tooltip-anchor):not(.playlist-toggle-tooltip-anchor), .playlist-genres-tooltip-anchor";
+  const tooltipOpenSelector = ".playlist-meta-tooltip-anchor:not(.range-tooltip-anchor):not(.playlist-toggle-tooltip-anchor).is-tooltip-open, .playlist-genres-tooltip-anchor.is-tooltip-open";
   let activeTooltipAnchor = null;
 
   const getTooltipAnchor = (target) => {
@@ -8644,12 +9678,29 @@ function renderPlaylistGenresBlock(item) {
     tooltip.style.top = `${Math.round(top)}px`;
   };
 
+  const scheduleTooltipPosition = (anchor) => {
+    if (!anchor) return;
+
+    requestAnimationFrame(() => {
+      if (!anchor.isConnected) return;
+      if (!isAnchorStillActive(anchor) && document.activeElement !== anchor) return;
+      updateTooltipPosition(anchor);
+
+      requestAnimationFrame(() => {
+        if (!anchor.isConnected) return;
+        if (!isAnchorStillActive(anchor) && document.activeElement !== anchor) return;
+        updateTooltipPosition(anchor);
+      });
+    });
+  };
+
   document.addEventListener("mouseenter", (event) => {
     const anchor = getTooltipAnchor(event.target);
     if (!anchor) return;
 
     activeTooltipAnchor = anchor;
     updateTooltipPosition(anchor);
+    scheduleTooltipPosition(anchor);
   }, true);
 
   let suppressFocusAnchor = null;
@@ -8669,6 +9720,7 @@ function renderPlaylistGenresBlock(item) {
     activeTooltipAnchor = anchor;
     anchor.classList.add("is-tooltip-open");
     updateTooltipPosition(anchor);
+    scheduleTooltipPosition(anchor);
   });
 
   document.addEventListener("mousedown", (event) => {
@@ -8684,6 +9736,7 @@ function renderPlaylistGenresBlock(item) {
 
       activeTooltipAnchor = anchor;
       updateTooltipPosition(anchor);
+      scheduleTooltipPosition(anchor);
 
       requestAnimationFrame(() => {
         if (suppressFocusAnchor === anchor) {
@@ -8735,6 +9788,22 @@ function renderPlaylistGenresBlock(item) {
 }
 
 initAdaptiveGenreTooltips();
+
+document.addEventListener('click', (event) => {
+  const chartTooltipAnchor = event.target instanceof Element
+    ? event.target.closest('.chart-entry-tooltip-anchor')
+    : null;
+
+  if (!chartTooltipAnchor) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+}, true);
+
+
+
+
+
     
     function formatUkNumber(n) {
       const value = Number(n || 0);
@@ -8824,7 +9893,23 @@ function formatIsoDateTimeCompactHtml(iso) {
   const mi = String(date.getUTCMinutes()).padStart(2, "0");
   const ss = String(date.getUTCSeconds()).padStart(2, "0");
 
-  return `<span class="playlist-modal-added"><span>${dd}.${mm}.${yy}</span><span class="playlist-modal-added-time">${hh}:${mi}:${ss}</span></span>`;
+  return `<span class="compact-added-datetime"><span>${dd}.${mm}.${yy}</span><span class="compact-added-datetime-time">${hh}:${mi}:${ss}</span></span>`;
+}
+
+function formatIsoDateTimeHeadInline(iso) {
+  const value = String(iso || "").trim();
+  if (!value) return "—";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  const dd = String(date.getUTCDate()).padStart(2, "0");
+  const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const yy = String(date.getUTCFullYear()).slice(-2);
+  const hh = String(date.getUTCHours()).padStart(2, "0");
+  const mi = String(date.getUTCMinutes()).padStart(2, "0");
+
+  return `${dd}.${mm}.${yy} о ${hh}:${mi}`;
 }
 
 function getPlaylistModalSearchQuery() {
@@ -8851,6 +9936,26 @@ function getPlaylistModalDisplayedTracks(result) {
   }
 
   return Array.isArray(result?.tracks) ? result.tracks : [];
+}
+
+function dedupePlaylistModalTracks(tracks) {
+  const seen = new Set();
+  return (Array.isArray(tracks) ? tracks : []).filter((track) => {
+    const position = Number(track?.position || 0);
+    const fallback = String(track?.track_id || track?.id || track?.added_at || Math.random());
+    const key = position > 0 ? `pos:${position}` : `fallback:${fallback}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).sort((a, b) => Number(a?.position || 0) - Number(b?.position || 0));
+}
+
+function getPlaylistModalInitialOffset() {
+  return Math.max(0, Number(state.playlistModal.initialOffset || 0) || 0);
+}
+
+function getPlaylistModalFocusPosition() {
+  return Math.max(0, Number(state.playlistModal.focusTrackPosition || 0) || 0);
 }
 
 function getPlaylistModalSearchMeta() {
@@ -9017,8 +10122,15 @@ function renderPlaylistModalTableState(result) {
   const showSearchEmpty = searchQuery && !state.playlistModal.searchLoading && !state.playlistModal.searchError && !displayedTracks.length;
   const showSearchError = searchQuery && !state.playlistModal.searchLoading && !!state.playlistModal.searchError;
 
-  const domNeedsMore = !searchQuery && Array.isArray(result?.tracks) && Number(result?._domRenderedCount || 0) < displayedTracks.length;
-  const apiNeedsMore = !searchQuery && !!result?.tracks_has_more;
+  const canLoadPrev = !searchQuery && !!result?.tracks_has_prev;
+  const canLoadNext = !searchQuery && !!result?.tracks_has_more;
+  const moreHint = canLoadPrev && canLoadNext
+    ? 'Є ще треки вище й нижче — прокрутіть список.'
+    : canLoadPrev
+      ? 'Є ще треки вище — прокрутіть список вгору.'
+      : canLoadNext
+        ? 'Є ще треки нижче — прокрутіть список вниз.'
+        : '';
 
   return `${state.playlistModal.searchLoading ? `
     <div class="playlist-modal-empty-state">Шукаю треки у цьому плейлісті...</div>
@@ -9026,8 +10138,8 @@ function renderPlaylistModalTableState(result) {
     <div class="playlist-modal-empty-state">${escapeHtml(state.playlistModal.searchError)}</div>
   ` : ""}${showSearchEmpty ? `
     <div class="playlist-modal-empty-state">Нічого не знайдено за цим запитом.</div>
-  ` : ""}${domNeedsMore || apiNeedsMore ? `
-    <div class="playlist-modal-empty-state playlist-modal-more-hint" data-playlist-modal-sentinel="1">Підвантаження треків — прокрутіть нижче…</div>
+  ` : ""}${moreHint ? `
+    <div class="playlist-modal-empty-state playlist-modal-more-hint" data-playlist-modal-sentinel="1">${escapeHtml(moreHint)}</div>
   ` : ""}`;
 }
 
@@ -9078,7 +10190,7 @@ function refreshPlaylistModalSearchView(options = {}) {
 
 function renderPlaylistModalTrackRows(tracks, startIndex = 0) {
   return (Array.isArray(tracks) ? tracks : []).map((track, index) => `
-    <tr>
+    <tr data-playlist-track-position="${escapeHtml(String(track.position || 0))}">
       <td>${formatUkNumber(track.position || 0)}</td>
       <td>
         <div class="modal-track-cell">
@@ -9532,6 +10644,8 @@ label.style.flex = "";
       return;
     }
 
+    const prevMinValue = currentMinValue;
+    const prevMaxValue = currentMaxValue;
     let nextMinValue = currentMinValue;
     let nextMaxValue = currentMaxValue;
 
@@ -9549,6 +10663,7 @@ label.style.flex = "";
 
     const nextMinPos = valueToPosition(nextMinValue);
     const nextMaxPos = valueToPosition(nextMaxValue);
+    const didChange = nextMinValue !== prevMinValue || nextMaxValue !== prevMaxValue;
 
     currentMinValue = nextMinValue;
     currentMaxValue = nextMaxValue;
@@ -9560,6 +10675,11 @@ label.style.flex = "";
     closeEditor(maxLabel, true);
 
     draw(nextMinPos, nextMaxPos, currentMinValue, currentMaxValue);
+
+    if (!didChange) {
+      return;
+    }
+
     const onChange = typeof config.onChange === "function" ? config.onChange : schedulePlaylistsReload;
     onChange();
   }
@@ -9574,33 +10694,73 @@ label.style.flex = "";
     if (label.dataset.editing === "1") return;
 
     const currentValue = which === "min" ? currentMinValue : currentMaxValue;
-const labelWidth = Math.ceil(label.getBoundingClientRect().width);
+    const computedWidth = parseFloat(window.getComputedStyle(label).width || "0");
+    const labelWidth = Math.max(label.offsetWidth || 0, Math.ceil(computedWidth || 0));
 
-label.style.minWidth = `${labelWidth}px`;
-label.style.width = "auto";
-label.style.flex = "0 0 auto";
-label.dataset.editing = "1";
-label.classList.add("is-editing");
-label.innerHTML = `<input class="range-value-edit" type="text" inputmode="numeric" value="${escapeHtml(String(currentValue))}">`;
+    label.style.minWidth = `${labelWidth}px`;
+    label.style.width = `${labelWidth}px`;
+    label.style.flex = `0 0 ${labelWidth}px`;
+    label.dataset.editing = "1";
+    label.classList.add("is-editing");
+    label.innerHTML = `<input class="range-value-edit" type="text" inputmode="numeric" value="${escapeHtml(String(currentValue))}">`;
 
     const input = label.querySelector(".range-value-edit");
+    const measure = document.createElement("span");
+    measure.style.position = "absolute";
+    measure.style.visibility = "hidden";
+    measure.style.pointerEvents = "none";
+    measure.style.whiteSpace = "nowrap";
+    document.body.appendChild(measure);
+
+    const syncMeasureStyles = () => {
+      const styles = window.getComputedStyle(input);
+      measure.style.fontFamily = styles.fontFamily;
+      measure.style.fontSize = styles.fontSize;
+      measure.style.fontWeight = styles.fontWeight;
+      measure.style.fontStyle = styles.fontStyle;
+      measure.style.letterSpacing = styles.letterSpacing;
+      measure.style.lineHeight = styles.lineHeight;
+      measure.style.textTransform = styles.textTransform;
+      measure.style.fontVariant = styles.fontVariant;
+      measure.style.fontVariantNumeric = styles.fontVariantNumeric;
+      measure.style.fontFeatureSettings = styles.fontFeatureSettings;
+    };
+
     const resizeEditor = () => {
-  const text = input.value || input.placeholder || "";
-  const chars = Math.max(String(text).length, 1);
-  input.style.width = `${Math.max(labelWidth, chars * 8 + 4)}px`;
-};
- 
-resizeEditor();
+      syncMeasureStyles();
+      const text = input.value || input.placeholder || "";
+      measure.textContent = text || "0";
+      const styles = window.getComputedStyle(input);
+      const horizontalExtras =
+        parseFloat(styles.paddingLeft || "0") +
+        parseFloat(styles.paddingRight || "0") +
+        parseFloat(styles.borderLeftWidth || "0") +
+        parseFloat(styles.borderRightWidth || "0") + 2;
+      const neededWidth = Math.ceil(measure.getBoundingClientRect().width + horizontalExtras);
+      const nextWidth = Math.max(labelWidth, neededWidth);
+      label.style.minWidth = `${labelWidth}px`;
+      label.style.width = `${nextWidth}px`;
+      label.style.flex = `0 0 ${nextWidth}px`;
+      input.style.width = "100%";
+    };
+
+    resizeEditor();
     editingLabel = label;
 
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
+        if (measure.isConnected) {
+          measure.remove();
+        }
         applyManualValue(which, input.value);
       }
 
       if (e.key === "Escape") {
         e.preventDefault();
+        if (measure.isConnected) {
+          measure.remove();
+        }
         closeEditor(label, true);
       }
     });
@@ -9608,6 +10768,9 @@ resizeEditor();
     input.addEventListener("input", resizeEditor);
     
     input.addEventListener("blur", () => {
+      if (measure.isConnected) {
+        measure.remove();
+      }
       applyManualValue(which, input.value);
     });
 
@@ -9646,6 +10809,47 @@ resizeEditor();
     draw(minPos, maxPos, currentMinValue, currentMaxValue);
   }
 
+  function dispatchRangeInput(which) {
+    const target = which === "min" ? minRange : maxRange;
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
+  function positionFromClientX(clientX) {
+    const rangeRoot = minRange.closest(".dual-range");
+    if (!rangeRoot) return null;
+
+    const rect = rangeRoot.getBoundingClientRect();
+    if (!rect.width) return null;
+
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const rawPos = absoluteMinPos + ratio * (absoluteMaxPos - absoluteMinPos);
+
+    if (useScale) {
+      return Math.max(absoluteMinPos, Math.min(absoluteMaxPos, Math.round(rawPos)));
+    }
+
+    const step = Number(minRange.step || maxRange.step || 1) || 1;
+    const snapped = absoluteMinPos + Math.round((rawPos - absoluteMinPos) / step) * step;
+    return Math.max(absoluteMinPos, Math.min(absoluteMaxPos, snapped));
+  }
+
+  function moveClosestThumbTo(clientX) {
+    const nextPos = positionFromClientX(clientX);
+    if (nextPos === null) return;
+
+    const currentMinPos = Number(minRange.value);
+    const currentMaxPos = Number(maxRange.value);
+    const which = Math.abs(nextPos - currentMinPos) <= Math.abs(nextPos - currentMaxPos) ? "min" : "max";
+
+    if (which === "min") {
+      minRange.value = String(nextPos);
+    } else {
+      maxRange.value = String(nextPos);
+    }
+
+    dispatchRangeInput(which);
+  }
+
   if (config.editable) {
     [minLabel, maxLabel].forEach((label) => {
       label.classList.add("range-value-button");
@@ -9673,6 +10877,17 @@ resizeEditor();
 
   minRange.addEventListener("input", () => sync("min"));
   maxRange.addEventListener("input", () => sync("max"));
+
+  const rangeRoot = minRange.closest(".dual-range");
+  if (rangeRoot) {
+    rangeRoot.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      if (event.target === minRange || event.target === maxRange) return;
+      if (event.target instanceof Element && event.target.closest(".range-value-edit")) return;
+      event.preventDefault();
+      moveClosestThumbTo(event.clientX);
+    });
+  }
 
   minRange.value = String(defaultMinPos);
   maxRange.value = String(defaultMaxPos);
@@ -9868,19 +11083,373 @@ function initPlaylistRangeControls(filterMeta) {
       return url.toString();
     }
 
-    async function apiJson(path, params = {}) {
-      const response = await fetch(buildApiUrl(path, params));
+    const CACHEABLE_API_PATHS = new Set([
+      "/search/track",
+      "/search/artist",
+      "/search/album",
+      "/search/playlist",
+      "/search/text",
+      "/suggest",
+      "/playlists",
+      "/curators",
+      "/playlist-details",
+      "/curator-details",
+      "/playlists/filter-meta",
+      "/curators/filter-meta",
+      "/stats/overview",
+      "/stats/dashboard"
+    ]);
+
+    const API_CACHE_DB_NAME = "nuam-api-response-cache";
+    const API_CACHE_DB_VERSION = 1;
+    const API_CACHE_STORE = "responses";
+    const API_CACHE_MAX_ENTRIES_PER_DATASET = 350;
+
+    const apiCacheState = {
+      dbPromise: null,
+      datasetId: "",
+      datasetPromise: null,
+      cleanupTimer: null,
+      cleanupDatasetId: "",
+      inFlightResponses: new Map()
+    };
+
+    function isCacheableApiPath(path) {
+      return CACHEABLE_API_PATHS.has(String(path || "").trim());
+    }
+
+    function normalizeCacheDatasetId(value) {
+      return typeof value === "string" ? value.trim() : "";
+    }
+
+    function extractDatasetIdFromPayload(payload) {
+      if (!payload || typeof payload !== "object") return "";
+
+      const directDatasetId = normalizeCacheDatasetId(payload.dataset_id);
+      if (directDatasetId) return directDatasetId;
+
+      const resultDatasetId = payload.result && typeof payload.result === "object"
+        ? normalizeCacheDatasetId(payload.result.dataset_id)
+        : "";
+      if (resultDatasetId) return resultDatasetId;
+
+      const dataDatasetId = payload.data && typeof payload.data === "object"
+        ? normalizeCacheDatasetId(payload.data.dataset_id)
+        : "";
+      if (dataDatasetId) return dataDatasetId;
+
+      return "";
+    }
+
+    function buildApiCacheKey(datasetId, fullUrl) {
+      const safeDatasetId = normalizeCacheDatasetId(datasetId);
+      const safeUrl = String(fullUrl || "").trim();
+      return safeDatasetId && safeUrl ? `${safeDatasetId}::${safeUrl}` : "";
+    }
+
+    function idbRequestToPromise(request) {
+      return new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error("IndexedDB request failed."));
+      });
+    }
+
+    function idbTransactionToPromise(transaction) {
+      return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error || new Error("IndexedDB transaction failed."));
+        transaction.onabort = () => reject(transaction.error || new Error("IndexedDB transaction aborted."));
+      });
+    }
+
+    function openApiCacheDb() {
+      if (!("indexedDB" in window)) {
+        return Promise.resolve(null);
+      }
+
+      if (apiCacheState.dbPromise) {
+        return apiCacheState.dbPromise;
+      }
+
+      apiCacheState.dbPromise = new Promise((resolve) => {
+        try {
+          const request = indexedDB.open(API_CACHE_DB_NAME, API_CACHE_DB_VERSION);
+
+          request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains(API_CACHE_STORE)) {
+              db.createObjectStore(API_CACHE_STORE, { keyPath: "cacheKey" });
+            }
+          };
+
+          request.onsuccess = () => {
+            const db = request.result;
+            db.onversionchange = () => {
+              try {
+                db.close();
+              } catch (error) {}
+              apiCacheState.dbPromise = null;
+            };
+            resolve(db);
+          };
+
+          request.onerror = () => resolve(null);
+          request.onblocked = () => resolve(null);
+        } catch (error) {
+          resolve(null);
+        }
+      }).then((db) => {
+        if (!db) {
+          apiCacheState.dbPromise = null;
+        }
+        return db;
+      });
+
+      return apiCacheState.dbPromise;
+    }
+
+    async function readApiCacheRecord(cacheKey) {
+      if (!cacheKey) return null;
+
+      const db = await openApiCacheDb();
+      if (!db) return null;
+
+      try {
+        const transaction = db.transaction(API_CACHE_STORE, "readwrite");
+        const store = transaction.objectStore(API_CACHE_STORE);
+        const record = await idbRequestToPromise(store.get(cacheKey));
+
+        if (record && typeof record === "object") {
+          record.accessedAt = Date.now();
+          store.put(record);
+        }
+
+        await idbTransactionToPromise(transaction);
+        return record && record.data !== undefined ? record.data : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    async function writeApiCacheRecord(cacheKey, datasetId, fullUrl, data) {
+      if (!cacheKey || !datasetId) return;
+
+      const db = await openApiCacheDb();
+      if (!db) return;
+
+      try {
+        const now = Date.now();
+        const transaction = db.transaction(API_CACHE_STORE, "readwrite");
+        const store = transaction.objectStore(API_CACHE_STORE);
+
+        store.put({
+          cacheKey,
+          datasetId,
+          fullUrl,
+          data,
+          updatedAt: now,
+          accessedAt: now
+        });
+
+        await idbTransactionToPromise(transaction);
+        scheduleApiCacheCleanup(datasetId);
+      } catch (error) {}
+    }
+
+    async function cleanupApiCache(currentDatasetId) {
+      const safeDatasetId = normalizeCacheDatasetId(currentDatasetId);
+      if (!safeDatasetId) return;
+
+      const db = await openApiCacheDb();
+      if (!db) return;
+
+      try {
+        await new Promise((resolve) => {
+          const entries = [];
+          const transaction = db.transaction(API_CACHE_STORE, "readwrite");
+          const store = transaction.objectStore(API_CACHE_STORE);
+          const request = store.openCursor();
+
+          request.onsuccess = () => {
+            const cursor = request.result;
+            if (!cursor) {
+              const overflow = entries.length - API_CACHE_MAX_ENTRIES_PER_DATASET;
+              if (overflow > 0) {
+                entries.sort((a, b) => {
+                  const aAccess = Number(a.accessedAt) || Number(a.updatedAt) || 0;
+                  const bAccess = Number(b.accessedAt) || Number(b.updatedAt) || 0;
+                  if (aAccess !== bAccess) return aAccess - bAccess;
+                  return (Number(a.updatedAt) || 0) - (Number(b.updatedAt) || 0);
+                });
+
+                for (let index = 0; index < overflow; index += 1) {
+                  store.delete(entries[index].cacheKey);
+                }
+              }
+              return;
+            }
+
+            const record = cursor.value || {};
+            const cacheKey = String(record.cacheKey || cursor.primaryKey || "").trim();
+            const recordDatasetId = normalizeCacheDatasetId(record.datasetId);
+
+            if (!cacheKey) {
+              cursor.continue();
+              return;
+            }
+
+            if (recordDatasetId && recordDatasetId !== safeDatasetId) {
+              store.delete(cacheKey);
+              cursor.continue();
+              return;
+            }
+
+            entries.push({
+              cacheKey,
+              accessedAt: Number(record.accessedAt) || 0,
+              updatedAt: Number(record.updatedAt) || 0
+            });
+
+            cursor.continue();
+          };
+
+          request.onerror = () => resolve();
+          transaction.oncomplete = () => resolve();
+          transaction.onerror = () => resolve();
+          transaction.onabort = () => resolve();
+        });
+      } catch (error) {}
+    }
+
+    function scheduleApiCacheCleanup(currentDatasetId) {
+      const safeDatasetId = normalizeCacheDatasetId(currentDatasetId);
+      if (!safeDatasetId) return;
+
+      apiCacheState.cleanupDatasetId = safeDatasetId;
+
+      if (apiCacheState.cleanupTimer !== null) {
+        return;
+      }
+
+      apiCacheState.cleanupTimer = window.setTimeout(async () => {
+        const datasetId = apiCacheState.cleanupDatasetId;
+        apiCacheState.cleanupDatasetId = "";
+        apiCacheState.cleanupTimer = null;
+        await cleanupApiCache(datasetId);
+      }, 500);
+    }
+
+    async function fetchApiJsonFromNetworkByUrl(fullUrl) {
+      const response = await fetch(fullUrl, { cache: "no-store" });
       const text = await response.text();
       let data;
+
       try {
         data = JSON.parse(text);
-      } catch (e) {
+      } catch (error) {
         throw new Error(text || `HTTP ${response.status}`);
       }
+
       if (!response.ok || data.ok === false) {
         throw new Error(data.error || `HTTP ${response.status}`);
       }
+
       return data;
+    }
+
+    async function fetchCurrentDatasetIdFromBackend() {
+      const response = await fetch(buildApiUrl("/data-version"), {
+        cache: "no-store"
+      });
+
+      const text = await response.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch (error) {
+        throw new Error(text || `HTTP ${response.status}`);
+      }
+
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.error || `HTTP ${response.status}`);
+      }
+
+      const datasetId = extractDatasetIdFromPayload(data);
+      if (!datasetId) {
+        throw new Error("Не вдалося отримати актуальний dataset_id.");
+      }
+
+      apiCacheState.datasetId = datasetId;
+      scheduleApiCacheCleanup(datasetId);
+      return datasetId;
+    }
+
+    async function getCurrentDatasetIdForCache() {
+      if (apiCacheState.datasetPromise) {
+        return apiCacheState.datasetPromise;
+      }
+
+      apiCacheState.datasetPromise = fetchCurrentDatasetIdFromBackend().finally(() => {
+        apiCacheState.datasetPromise = null;
+      });
+
+      return apiCacheState.datasetPromise;
+    }
+
+    async function fetchApiJsonAndMaybeCache(path, fullUrl, currentDatasetId = "") {
+      const safeDatasetId = normalizeCacheDatasetId(currentDatasetId);
+      const inFlightKey = buildApiCacheKey(safeDatasetId, fullUrl) || `network::${fullUrl}`;
+
+      if (apiCacheState.inFlightResponses.has(inFlightKey)) {
+        return apiCacheState.inFlightResponses.get(inFlightKey);
+      }
+
+      const requestPromise = (async () => {
+        const data = await fetchApiJsonFromNetworkByUrl(fullUrl);
+        const responseDatasetId = extractDatasetIdFromPayload(data);
+
+        if (isCacheableApiPath(path) && responseDatasetId) {
+          const responseCacheKey = buildApiCacheKey(responseDatasetId, fullUrl);
+          if (responseCacheKey) {
+            await writeApiCacheRecord(responseCacheKey, responseDatasetId, fullUrl, data);
+          }
+          apiCacheState.datasetId = responseDatasetId;
+          scheduleApiCacheCleanup(responseDatasetId);
+        }
+
+        return data;
+      })().finally(() => {
+        apiCacheState.inFlightResponses.delete(inFlightKey);
+      });
+
+      apiCacheState.inFlightResponses.set(inFlightKey, requestPromise);
+      return requestPromise;
+    }
+
+    async function apiJson(path, params = {}) {
+      const fullUrl = buildApiUrl(path, params);
+
+      if (!isCacheableApiPath(path)) {
+        return fetchApiJsonFromNetworkByUrl(fullUrl);
+      }
+
+      let currentDatasetId = "";
+      try {
+        currentDatasetId = await getCurrentDatasetIdForCache();
+      } catch (error) {
+        currentDatasetId = "";
+      }
+
+      if (currentDatasetId) {
+        const cacheKey = buildApiCacheKey(currentDatasetId, fullUrl);
+        const cachedData = await readApiCacheRecord(cacheKey);
+        if (cachedData) {
+          return cachedData;
+        }
+      }
+
+      return fetchApiJsonAndMaybeCache(path, fullUrl, currentDatasetId);
     }
 
     function getPlaylistTrackCount(item) {
@@ -10186,6 +11755,7 @@ function updateHoverMarquees(root = document) {
       ui.searchSummary.textContent = "";
       state.placementTables.clear();
       state.placementTableCounter = 0;
+      resetSearchPaginationState();
       clearSearchPreviewSource();
       updateSearchIntroVisibility();
     }
@@ -10194,6 +11764,7 @@ function updateHoverMarquees(root = document) {
       ui.searchResults.innerHTML = "";
       ui.searchNoResults.className = "show";
       ui.searchNoResults.textContent = text;
+      resetSearchPaginationState();
       clearSearchPreviewSource();
       updateSearchIntroVisibility();
     }
@@ -10210,10 +11781,10 @@ function updateHoverMarquees(root = document) {
     }
 
     function extractCuratorIdFromItem(item) {
-      const directId = String(item?.curator_id || "").trim();
+      const directId = String(item?.curator_id || item?.curator?.curator_id || item?.curator?.id || "").trim();
       if (directId) return directId;
 
-      const rawUrl = String(item?.curator_url || "").trim();
+      const rawUrl = String(item?.curator_url || item?.curator?.curator_url || item?.curator?.url || "").trim();
       if (!rawUrl) return "";
 
       try {
@@ -10230,7 +11801,7 @@ function updateHoverMarquees(root = document) {
     }
 
     function renderCuratorLink(item) {
-      const curatorName = String(item?.curator || "").trim();
+      const curatorName = String(item?.curator?.name || item?.curator_name || item?.curator || "").trim();
       const curatorId = extractCuratorIdFromItem(item);
 
       if (!curatorName) {
@@ -10354,6 +11925,7 @@ let curatorListRenderJobId = 0;
 let playlistModalRowsRenderJobId = 0;
 const pendingLocalLazyLists = new Map();
 let localLazyListCounter = 0;
+let searchTrackAccordionCounter = 0;
 
 function createPendingLocalLazyList(config = {}) {
   const id = `local-lazy-${++localLazyListCounter}`;
@@ -10462,23 +12034,7 @@ function activatePendingLocalLazyLists(root = document) {
 }
 
 function getPlaylistModalRenderedTracks(result) {
-  const displayedTracks = getPlaylistModalDisplayedTracks(result);
-
-  if (isPlaylistModalSearchActive()) {
-    return displayedTracks;
-  }
-
-  const total = displayedTracks.length;
-  if (!total) return [];
-
-  const current = Math.max(0, Math.min(Number(result?._domRenderedCount || 0), total));
-  const ensured = current > 0 ? current : Math.min(total, PLAYLIST_MODAL_INITIAL_DOM_BATCH);
-
-  if (result && typeof result === 'object') {
-    result._domRenderedCount = ensured;
-  }
-
-  return displayedTracks.slice(0, ensured);
+  return getPlaylistModalDisplayedTracks(result);
 }
 
 function appendPlaylistModalTracksChunked(newTracks, startIndex) {
@@ -10487,46 +12043,36 @@ function appendPlaylistModalTracksChunked(newTracks, startIndex) {
 
   const list = Array.isArray(newTracks) ? newTracks : [];
   if (!list.length) return;
+  tbody.insertAdjacentHTML('beforeend', renderPlaylistModalTrackRows(list, startIndex));
+  requestAnimationFrame(() => {
+    updateHoverMarquees(tbody);
+    syncPreviewButtons(tbody);
+  });
+}
 
-  const jobId = ++playlistModalRowsRenderJobId;
-  let cursor = 0;
+function rerenderPlaylistModalRows(cached, options = {}) {
+  const tbody = ui.playlistContent.querySelector('#playlist-modal-track-rows');
+  const scrollArea = ui.playlistContent.querySelector('.playlist-modal-scroll-area');
+  if (!tbody || !scrollArea || !cached) return;
 
-  const step = () => {
-    if (jobId !== playlistModalRowsRenderJobId) return;
-    if (cursor >= list.length) return;
+  const preserveBottomAnchor = !!options.preserveBottomAnchor;
+  const prevScrollHeight = scrollArea.scrollHeight;
+  tbody.innerHTML = renderPlaylistModalTrackRows(getPlaylistModalRenderedTracks(cached), 0);
 
-    const nextCursor = Math.min(cursor + PLAYLIST_MODAL_APPEND_DOM_BATCH, list.length);
-    const slice = list.slice(cursor, nextCursor);
-    tbody.insertAdjacentHTML('beforeend', renderPlaylistModalTrackRows(slice, startIndex + cursor));
-    cursor = nextCursor;
-
-    requestAnimationFrame(() => {
-      updateHoverMarquees(tbody);
-      syncPreviewButtons(tbody);
-    });
-
-    if (cursor < list.length) {
-      requestAnimationFrame(step);
+  requestAnimationFrame(() => {
+    if (preserveBottomAnchor) {
+      const delta = scrollArea.scrollHeight - prevScrollHeight;
+      if (delta > 0) {
+        scrollArea.scrollTop += delta;
+      }
     }
-  };
-
-  step();
+    updateHoverMarquees(tbody);
+    syncPreviewButtons(tbody);
+  });
 }
 
 function appendNextPlaylistModalDomBatch(cached) {
-  if (!cached || isPlaylistModalSearchActive()) return false;
-
-  const tracks = Array.isArray(cached.tracks) ? cached.tracks : [];
-  const alreadyRendered = Math.max(0, Math.min(Number(cached._domRenderedCount || 0), tracks.length));
-
-  if (alreadyRendered >= tracks.length) return false;
-
-  const nextRendered = Math.min(alreadyRendered + PLAYLIST_MODAL_APPEND_DOM_BATCH, tracks.length);
-  const slice = tracks.slice(alreadyRendered, nextRendered);
-  cached._domRenderedCount = nextRendered;
-  appendPlaylistModalTracksChunked(slice, alreadyRendered);
-  updatePlaylistModalSummaryAndState(cached);
-  return true;
+  return false;
 }
 
 function renderLazySearchTrackCards(items, source) {
@@ -10537,6 +12083,231 @@ function renderLazySearchTrackCards(items, source) {
   });
 
   return renderPendingLocalLazyListShell(listId);
+}
+
+
+function disconnectSearchPaginationObserver() {
+  if (searchPaginationState.observer) {
+    searchPaginationState.observer.disconnect();
+    searchPaginationState.observer = null;
+  }
+}
+
+function resetSearchPaginationState() {
+  disconnectSearchPaginationObserver();
+  searchPaginationState.requestToken += 1;
+  searchPaginationState.type = "";
+  searchPaginationState.endpoint = "";
+  searchPaginationState.id = "";
+  searchPaginationState.limit = 20;
+  searchPaginationState.offset = 0;
+  searchPaginationState.total = 0;
+  searchPaginationState.hasMore = false;
+  searchPaginationState.loading = false;
+  searchPaginationState.source = "";
+  searchPaginationState.items = [];
+  searchPaginationState.placementTableId = "";
+  searchPaginationState.appendJobId += 1;
+}
+
+function getSearchPaginationScrollRoot() {
+  return ui.searchResults.querySelector('.search-track-playlists-list')
+    || ui.searchResults.querySelector('.search-entity-scroll')
+    || null;
+}
+
+function getSearchPaginationSentinel() {
+  return ui.searchResults.querySelector('[data-search-pagination-sentinel="1"]');
+}
+
+function updateSearchPaginationSentinel() {
+  const sentinel = getSearchPaginationSentinel();
+  if (!sentinel) return;
+  sentinel.style.display = searchPaginationState.hasMore ? '' : 'none';
+}
+
+function renderSearchPaginatedTrackListShell(emptyHtml = "") {
+  return `
+    <div class="search-paginated-list" data-search-pagination-items="1">${emptyHtml}</div>
+    <div class="lazy-sentinel" data-search-pagination-sentinel="1" aria-hidden="true"></div>
+  `;
+}
+
+function renderSearchPaginatedPlacementShell(playlists) {
+  return `
+    <div data-search-pagination-items="1">${renderPlacementTable(playlists, { bodyScroll: true })}</div>
+    <div class="lazy-sentinel" data-search-pagination-sentinel="1" aria-hidden="true"></div>
+  `;
+}
+
+function appendSearchTrackCardsChunked(container, tracks, startIndex, source) {
+  if (!(container instanceof Element)) return;
+
+  const list = Array.isArray(tracks) ? tracks : [];
+  if (!list.length) return;
+
+  const emptyNote = container.querySelector('.search-track-empty');
+  if (emptyNote) {
+    emptyNote.remove();
+  }
+
+  const jobId = ++searchPaginationState.appendJobId;
+  let cursor = 0;
+
+  const step = () => {
+    if (jobId !== searchPaginationState.appendJobId) return;
+    if (cursor >= list.length) return;
+
+    const end = Math.min(cursor + SEARCH_LOCAL_LAZY_BATCH, list.length);
+    let html = '';
+
+    for (let index = cursor; index < end; index += 1) {
+      html += renderSearchTrackCard(list[index], startIndex + index, source);
+    }
+
+    if (html) {
+      container.insertAdjacentHTML('beforeend', html);
+      requestAnimationFrame(() => {
+        updateHoverMarquees(container);
+        syncPreviewButtons(container);
+      });
+    }
+
+    cursor = end;
+
+    if (cursor < list.length) {
+      requestAnimationFrame(step);
+    }
+  };
+
+  step();
+}
+
+function ensureSearchPaginationObserver() {
+  disconnectSearchPaginationObserver();
+
+  if (!searchPaginationState.hasMore || !searchPaginationState.type) {
+    updateSearchPaginationSentinel();
+    return;
+  }
+
+  const root = getSearchPaginationScrollRoot();
+  const sentinel = getSearchPaginationSentinel();
+  if (!root || !sentinel) return;
+
+  searchPaginationState.observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    if (!searchPaginationState.hasMore || searchPaginationState.loading) return;
+    loadMoreSearchPagination();
+  }, {
+    root,
+    rootMargin: '260px 0px',
+    threshold: 0
+  });
+
+  searchPaginationState.observer.observe(sentinel);
+  updateSearchPaginationSentinel();
+}
+
+function setupSearchPagination(config = {}) {
+  resetSearchPaginationState();
+
+  searchPaginationState.type = String(config.type || '').trim();
+  searchPaginationState.endpoint = String(config.endpoint || '').trim();
+  searchPaginationState.id = String(config.id || '').trim();
+  searchPaginationState.limit = Math.max(1, Number(config.limit) || 20);
+  searchPaginationState.offset = Math.max(0, Number(config.offset) || 0);
+  searchPaginationState.total = Math.max(0, Number(config.total) || 0);
+  searchPaginationState.hasMore = !!config.hasMore;
+  searchPaginationState.source = String(config.source || '').trim();
+  searchPaginationState.items = Array.isArray(config.items) ? config.items.slice() : [];
+  searchPaginationState.placementTableId = String(config.placementTableId || '').trim();
+
+  requestAnimationFrame(() => {
+    ensureSearchPaginationObserver();
+  });
+}
+
+async function loadMoreSearchPagination() {
+  if (!searchPaginationState.hasMore || searchPaginationState.loading || !searchPaginationState.endpoint || !searchPaginationState.id) {
+    return;
+  }
+
+  const requestToken = ++searchPaginationState.requestToken;
+  searchPaginationState.loading = true;
+
+  try {
+    const data = await apiJson(searchPaginationState.endpoint, {
+      id: searchPaginationState.id,
+      limit: searchPaginationState.limit,
+      offset: searchPaginationState.offset
+    });
+
+    if (requestToken !== searchPaginationState.requestToken) {
+      return;
+    }
+
+    if (!data?.found || !data?.result) {
+      searchPaginationState.hasMore = false;
+      return;
+    }
+
+    const result = data.result;
+
+    if (searchPaginationState.type === 'track') {
+      const incoming = Array.isArray(result.playlists) ? result.playlists : [];
+      const tableId = searchPaginationState.placementTableId;
+      const tableState = tableId ? state.placementTables.get(tableId) : null;
+
+      if (tableState && incoming.length) {
+        tableState.items = tableState.items.concat(incoming);
+        rerenderPlacementTable(tableId);
+        requestAnimationFrame(() => {
+          updateHoverMarquees(ui.searchResults);
+          syncPreviewButtons(ui.searchResults);
+        });
+      }
+
+      const baseOffset = Math.max(0, Number(result.playlists_offset) || searchPaginationState.offset);
+      searchPaginationState.offset = baseOffset + incoming.length;
+      searchPaginationState.total = Math.max(0, Number(result.playlists_total) || searchPaginationState.total || (tableState?.items.length || 0));
+      searchPaginationState.hasMore = !!result.playlists_has_more;
+    }
+
+    if (searchPaginationState.type === 'album' || searchPaginationState.type === 'artist') {
+      const incoming = Array.isArray(result.tracks) ? result.tracks : [];
+      const listEl = ui.searchResults.querySelector('[data-search-pagination-items="1"]');
+      const startIndex = searchPaginationState.items.length;
+
+      if (incoming.length && listEl) {
+        appendSearchTrackCardsChunked(listEl, incoming, startIndex, searchPaginationState.source);
+      }
+
+      if (incoming.length) {
+        searchPaginationState.items = searchPaginationState.items.concat(incoming);
+        setSearchPreviewSource(searchPaginationState.source, searchPaginationState.items);
+      }
+
+      const baseOffset = Math.max(0, Number(result.tracks_offset) || searchPaginationState.offset);
+      searchPaginationState.offset = baseOffset + incoming.length;
+      searchPaginationState.total = Math.max(0, Number(result.tracks_total) || searchPaginationState.total || searchPaginationState.items.length);
+      searchPaginationState.hasMore = !!result.tracks_has_more;
+    }
+  } catch (error) {
+    if (requestToken === searchPaginationState.requestToken) {
+      searchPaginationState.hasMore = false;
+    }
+  } finally {
+    if (requestToken === searchPaginationState.requestToken) {
+      searchPaginationState.loading = false;
+      updateSearchPaginationSentinel();
+      if (searchPaginationState.hasMore) {
+        requestAnimationFrame(() => {
+          ensureSearchPaginationObserver();
+        });
+      }
+    }
+  }
 }
 
 function ensurePlaylistListColumnsLayout(columnsCount) {
@@ -10866,6 +12637,7 @@ async function loadCuratorModalPage(reset = false) {
             </button>
           `}
         </div>
+        ${renderPlaylistFlagsBlock(item)}
       </div>
 
       <div class="playlist-main">
@@ -10923,6 +12695,10 @@ async function loadCuratorModalPage(reset = false) {
   `;
 }
 
+    function getPlacementCuratorName(item) {
+      return String(item?.curator?.name || item?.curator_name || item?.curator || "").trim().toLowerCase();
+    }
+
     function getPlacementSortedItems(tableState) {
       const items = [...tableState.items];
       const dir = tableState.sortDir === "asc" ? 1 : -1;
@@ -10940,6 +12716,19 @@ async function loadCuratorModalPage(reset = false) {
           if (av !== bv) return (av - bv) * dir;
         }
 
+        if (tableState.sortKey === "added_at") {
+          const av = Date.parse(getPlacementAddedAt(a)) || 0;
+          const bv = Date.parse(getPlacementAddedAt(b)) || 0;
+          if (av !== bv) return (av - bv) * dir;
+        }
+
+        if (tableState.sortKey === "curator") {
+          const av = getPlacementCuratorName(a);
+          const bv = getPlacementCuratorName(b);
+          const cmp = av.localeCompare(bv, "uk");
+          if (cmp !== 0) return cmp * dir;
+        }
+
         const an = String(a.name || "").toLowerCase();
         const bn = String(b.name || "").toLowerCase();
         return an.localeCompare(bn, "uk");
@@ -10953,61 +12742,88 @@ async function loadCuratorModalPage(reset = false) {
       return tableState.sortDir === "asc" ? "↑" : "↓";
     }
 
-    function renderPlacementTableRows(tableId, items, expandedSet) {
-      return items.map((item) => {
-        const expanded = expandedSet.has(item.playlist_id);
+    function getPlacementAddedAt(item) {
+      return String(
+        item?.added_at ||
+        item?.addedAt ||
+        item?.latest_added_at ||
+        item?.latestAddedAt ||
+        item?.added_date ||
+        item?.addedDate ||
+        ""
+      ).trim();
+    }
 
-        return `
+    function renderPlacementPlaylistCell(item) {
+      const coverUrl = String(item?.cover || item?.playlist_cover || "").trim();
+      const label = escapeHtml(item?.name || item?.playlist_id || "Плейліст");
+      const coverHtml = coverUrl
+        ? `<span class="placement-playlist-cover"><img src="${escapeHtml(coverUrl)}" alt="" loading="lazy" decoding="async"></span>`
+        : `<span class="placement-playlist-cover"><span class="placement-playlist-cover-fallback">${ti("playlist")}</span></span>`;
+
+      return `
+        <button
+          type="button"
+          class="placement-playlist-button"
+          data-playlist-modal-btn="1"
+          data-playlist-id="${escapeHtml(item.playlist_id)}"
+          data-playlist-focus-position="${escapeHtml(String(item.position || 0))}"
+        >
+          ${coverHtml}
+          <span class="placement-playlist-label">
+            <span class="placement-playlist-label-text">${label}</span>
+          </span>
+        </button>
+      `;
+    }
+
+    function renderPlacementTableRows(tableId, items) {
+      return items.map((item) => `
           <tr>
-            <td class="placement-expand-col">
-              <button
-                type="button"
-                class="placement-expand-button ${expanded ? "is-expanded" : ""}"
-                data-placement-toggle="1"
-                data-table-id="${escapeHtml(tableId)}"
-                data-playlist-id="${escapeHtml(item.playlist_id)}"
-                aria-expanded="${expanded ? "true" : "false"}"
-                aria-label="${expanded ? "Згорнути" : "Розгорнути"}"
-                title="${expanded ? "Згорнути" : "Розгорнути"}"
-              >${ti("chevron-down")}</button>
+            <td>
+              ${renderPlacementPlaylistCell(item)}
             </td>
             <td>
-              <a href="${escapeHtml(item.url || `https://open.spotify.com/playlist/${item.playlist_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name || item.playlist_id)}</a>
-            </td>
-            <td>
-              ${item.curator
+              ${extractCuratorIdFromItem(item) || item?.curator || item?.curator_name
                 ? renderCuratorLink(item)
                 : "—"}
             </td>
             <td>${formatUkNumber(getPlaylistFollowerCount(item))}</td>
             <td>${formatUkNumber(getPlaylistTrackCount(item))}</td>
+            <td>${formatIsoDateTimeCompactHtml(getPlacementAddedAt(item))}</td>
             <td>${formatUkNumber(item.position || 0)}</td>
           </tr>
-          <tr class="placement-detail-row ${expanded ? "show" : ""}">
-            <td colspan="6" class="placement-detail-cell">
-              ${renderPlaylistCard(item)}
-            </td>
-          </tr>
-        `;
-      }).join("");
+        `).join("");
     }
 
-    function renderPlacementTableInner(tableId) {
-      const tableState = state.placementTables.get(tableId);
-      if (!tableState || !tableState.items.length) {
-        return `<div class="empty-note">У жодному плейлісті не знайдено.</div>`;
-      }
 
-      const items = getPlacementSortedItems(tableState);
-
+    function renderPlacementTableColgroup() {
       return `
-        <div class="placement-table-wrap">
-          <table class="placement-table">
+            <colgroup>
+              <col class="placement-table-col placement-table-col-playlist">
+              <col class="placement-table-col placement-table-col-curator">
+              <col class="placement-table-col placement-table-col-followers">
+              <col class="placement-table-col placement-table-col-tracks">
+              <col class="placement-table-col placement-table-col-added-at">
+              <col class="placement-table-col placement-table-col-position">
+            </colgroup>
+      `;
+    }
+
+    function renderPlacementTableHead(tableId, tableState) {
+      return `
             <thead>
               <tr>
-                <th class="placement-expand-col"></th>
                 <th>Плейліст</th>
-                <th>Куратор</th>
+                <th
+                  class="is-sortable"
+                  data-placement-sort="1"
+                  data-table-id="${escapeHtml(tableId)}"
+                  data-sort-key="curator"
+                >
+                  Куратор
+                  <span class="placement-sort-indicator">${getPlacementSortIndicator(tableState, "curator")}</span>
+                </th>
                 <th
                   class="is-sortable"
                   data-placement-sort="1"
@@ -11022,6 +12838,15 @@ async function loadCuratorModalPage(reset = false) {
                   class="is-sortable"
                   data-placement-sort="1"
                   data-table-id="${escapeHtml(tableId)}"
+                  data-sort-key="added_at"
+                >
+                  Додано
+                  <span class="placement-sort-indicator">${getPlacementSortIndicator(tableState, "added_at")}</span>
+                </th>
+                <th
+                  class="is-sortable"
+                  data-placement-sort="1"
+                  data-table-id="${escapeHtml(tableId)}"
                   data-sort-key="position"
                 >
                   Позиція
@@ -11029,15 +12854,55 @@ async function loadCuratorModalPage(reset = false) {
                 </th>
               </tr>
             </thead>
+      `;
+    }
+
+    function renderPlacementTableInner(tableId) {
+      const tableState = state.placementTables.get(tableId);
+      if (!tableState || !tableState.items.length) {
+        return `<div class="empty-note">У жодному плейлісті не знайдено.</div>`;
+      }
+
+      const items = getPlacementSortedItems(tableState);
+      const headHtml = renderPlacementTableHead(tableId, tableState);
+      const colgroupHtml = renderPlacementTableColgroup();
+      const rowsHtml = renderPlacementTableRows(tableId, items);
+
+      if (tableState.bodyScroll) {
+        return `
+          <div class="placement-table-wrap is-split-scroll">
+            <div class="placement-table-head">
+              <table class="placement-table">
+                ${colgroupHtml}
+                ${headHtml}
+              </table>
+            </div>
+            <div class="placement-table-body">
+              <table class="placement-table">
+                ${colgroupHtml}
+                <tbody>
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="placement-table-wrap">
+          <table class="placement-table">
+            ${colgroupHtml}
+            ${headHtml}
             <tbody>
-              ${renderPlacementTableRows(tableId, items, tableState.expanded)}
+              ${rowsHtml}
             </tbody>
           </table>
         </div>
       `;
     }
 
-    function renderPlacementTable(playlists) {
+    function renderPlacementTable(playlists, options = {}) {
       if (!playlists.length) {
         return `<div class="empty-note">У жодному плейлісті не знайдено.</div>`;
       }
@@ -11048,11 +12913,12 @@ async function loadCuratorModalPage(reset = false) {
         items: [...playlists],
         sortKey: "position",
         sortDir: "asc",
-        expanded: new Set()
+        expanded: new Set(),
+        bodyScroll: !!options.bodyScroll
       });
 
       return `
-        <div class="placement-table-block" data-placement-table-id="${escapeHtml(tableId)}">
+        <div class="placement-table-block ${options.bodyScroll ? 'is-split-scroll' : ''}" data-placement-table-id="${escapeHtml(tableId)}">
           ${renderPlacementTableInner(tableId)}
         </div>
       `;
@@ -11062,6 +12928,57 @@ async function loadCuratorModalPage(reset = false) {
       const wrap = ui.searchResults.querySelector(`[data-placement-table-id="${CSS.escape(tableId)}"]`);
       if (!wrap) return;
       wrap.innerHTML = renderPlacementTableInner(tableId);
+      requestAnimationFrame(() => {
+        syncPlacementSplitTableColumnWidths(wrap);
+      });
+    }
+
+    function syncPlacementSplitTableColumnWidths(root = ui.searchResults) {
+      const scope = root instanceof Element ? root : ui.searchResults;
+      if (!scope) return;
+
+      const wraps = scope.matches?.('.placement-table-wrap.is-split-scroll')
+        ? [scope]
+        : Array.from(scope.querySelectorAll('.placement-table-wrap.is-split-scroll'));
+
+      wraps.forEach((wrap) => {
+        const headTable = wrap.querySelector('.placement-table-head .placement-table');
+        const bodyTable = wrap.querySelector('.placement-table-body .placement-table');
+        const firstRow = bodyTable?.querySelector('tbody tr');
+        if (!headTable || !bodyTable || !firstRow) return;
+
+        const bodyCells = Array.from(firstRow.children || []);
+        const headCols = Array.from(headTable.querySelectorAll('colgroup col'));
+        const bodyCols = Array.from(bodyTable.querySelectorAll('colgroup col'));
+        if (!bodyCells.length || !headCols.length || headCols.length !== bodyCols.length) return;
+
+        const widths = bodyCells.map((cell) => Math.ceil(cell.getBoundingClientRect().width));
+        widths.forEach((width, index) => {
+          const px = `${Math.max(1, width)}px`;
+          if (headCols[index]) headCols[index].style.width = px;
+          if (bodyCols[index]) bodyCols[index].style.width = px;
+        });
+      });
+    }
+
+
+    function toggleSearchTrackAccordion(accordionId) {
+      const card = ui.searchResults.querySelector(`[data-search-track-accordion-id="${CSS.escape(accordionId)}"]`);
+      if (!card) return;
+      const toggle = card.querySelector(`[data-search-track-toggle="1"][data-search-track-accordion-id="${CSS.escape(accordionId)}"]`);
+      const collapse = card.querySelector(`[data-search-track-collapse="${CSS.escape(accordionId)}"]`);
+      if (!toggle || !collapse) return;
+      const nextExpanded = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+      card.classList.toggle('is-expanded', nextExpanded);
+      collapse.hidden = !nextExpanded;
+      if (nextExpanded) {
+        requestAnimationFrame(() => {
+          updateHoverMarquees(collapse);
+          syncPreviewButtons(collapse);
+          updateSearchStatTooltips(collapse);
+        });
+      }
     }
 
     function togglePlacementSort(tableId, sortKey) {
@@ -11072,7 +12989,7 @@ async function loadCuratorModalPage(reset = false) {
         tableState.sortDir = tableState.sortDir === "asc" ? "desc" : "asc";
       } else {
         tableState.sortKey = sortKey;
-        tableState.sortDir = sortKey === "position" ? "asc" : "desc";
+        tableState.sortDir = (sortKey === "position" || sortKey === "curator") ? "asc" : "desc";
       }
 
       rerenderPlacementTable(tableId);
@@ -11140,36 +13057,90 @@ async function loadCuratorModalPage(reset = false) {
     }
 
     function renderSearchHeadStat(icon, label, value, title = "") {
+      const tooltipHtml = title
+        ? `<div class="search-stat-tooltip">${escapeHtml(title)}</div>`
+        : "";
+
       return `
-        <div class="search-head-stat"${title ? ` title="${escapeHtml(title)}"` : ""}>
-          <div class="search-head-stat-icon">${ti(icon)}</div>
-          <div class="search-head-stat-body">
-            <div class="search-head-stat-label">${escapeHtml(label)}</div>
-            <div class="search-head-stat-value">${escapeHtml(String(value ?? "—"))}</div>
+        <div class="search-stat-tooltip-anchor">
+          <div class="search-head-stat">
+            <div class="search-head-stat-icon">${ti(icon)}</div>
+            <div class="search-head-stat-body">
+              <div class="search-head-stat-label">${escapeHtml(label)}</div>
+              <div class="search-head-stat-value">${escapeHtml(String(value ?? "—"))}</div>
+            </div>
           </div>
+          ${tooltipHtml}
+        </div>
+      `;
+    }
+
+
+    function renderSearchHeadStatHtml(icon, label, valueHtml, title = "") {
+      const tooltipHtml = title
+        ? `<div class="search-stat-tooltip">${escapeHtml(title)}</div>`
+        : "";
+
+      return `
+        <div class="search-stat-tooltip-anchor">
+          <div class="search-head-stat">
+            <div class="search-head-stat-icon">${ti(icon)}</div>
+            <div class="search-head-stat-body">
+              <div class="search-head-stat-label">${escapeHtml(label)}</div>
+              <div class="search-head-stat-value">${valueHtml || "—"}</div>
+            </div>
+          </div>
+          ${tooltipHtml}
         </div>
       `;
     }
 
     function renderSearchInlineStat(icon, label, value, title = "") {
+      const tooltipHtml = title
+        ? `<div class="search-stat-tooltip">${escapeHtml(title)}</div>`
+        : "";
+
       return `
-        <div class="search-inline-stat"${title ? ` title="${escapeHtml(title)}"` : ""}>
-          <div class="search-inline-stat-icon">${ti(icon)}</div>
-          <div class="search-inline-stat-body">
-            <div class="search-inline-stat-label">${escapeHtml(label)}</div>
-            <div class="search-inline-stat-value">${escapeHtml(String(value ?? "—"))}</div>
+        <div class="search-stat-tooltip-anchor">
+          <div class="search-inline-stat">
+            <div class="search-inline-stat-icon">${ti(icon)}</div>
+            <div class="search-inline-stat-body">
+              <div class="search-inline-stat-label">${escapeHtml(label)}</div>
+              <div class="search-inline-stat-value">${escapeHtml(String(value ?? "—"))}</div>
+            </div>
+          </div>
+          ${tooltipHtml}
+        </div>
+      `;
+    }
+
+    function renderSearchEntityShell(headHtml, bodyHtml, options = {}) {
+      const scrollClass = options.scrollClass ? ` ${escapeHtml(options.scrollClass)}` : "";
+      const listClass = options.listClass ? ` ${escapeHtml(options.listClass)}` : "";
+      return `
+        <div class="search-entity-shell">
+          <div class="search-entity-fixed">${headHtml}</div>
+          <div class="search-entity-scroll${scrollClass}">
+            <div class="search-entity-list${listClass}">${bodyHtml}</div>
           </div>
         </div>
       `;
     }
 
-    function renderSearchEntityShell(headHtml, bodyHtml) {
+    function renderSearchHeadAction(url = "", label = "Відкрити у Spotify") {
+      const safeUrl = escapeHtml(url || "#");
       return `
-        <div class="search-entity-shell">
-          <div class="search-entity-fixed">${headHtml}</div>
-          <div class="search-entity-scroll">
-            <div class="search-entity-list">${bodyHtml}</div>
-          </div>
+        <div class="search-stat-tooltip-anchor search-head-action-anchor">
+          <a
+            class="search-head-action"
+            href="${safeUrl}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="${escapeHtml(label)}"
+          >
+            ${ti("brand-spotify")}
+          </a>
+          <div class="search-stat-tooltip is-align-right">${escapeHtml(label)}</div>
         </div>
       `;
     }
@@ -11210,16 +13181,7 @@ async function loadCuratorModalPage(reset = false) {
                 </div>
                 ${subtitleHtml ? `<div class="search-head-subtitle">${subtitleHtml}</div>` : ""}
               </div>
-              <a
-                class="search-head-action"
-                href="${safeTitleUrl}"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Відкрити у Spotify"
-                title="Відкрити у Spotify"
-              >
-                ${ti("brand-spotify")}
-              </a>
+              ${renderSearchHeadAction(safeTitleUrl, "Відкрити у Spotify")}
             </div>
             <div class="search-head-stats">${statsHtml}</div>
           </div>
@@ -11233,22 +13195,30 @@ async function loadCuratorModalPage(reset = false) {
       const artists = renderArtistLinks(info.artists || []);
       const trackName = info.name || info.track_id;
       const trackUrl = info.url || `https://open.spotify.com/track/${info.track_id}`;
+      const accordionId = `search-track-accordion-${++searchTrackAccordionCounter}`;
 
       return `
-        <div class="result-card search-track-result">
+        <div class="result-card search-track-result" data-search-track-card="1" data-search-track-accordion-id="${escapeHtml(accordionId)}">
           <div class="cover">${renderTrackPreviewCover(info, source, index, {
             coverUrl: cover,
             fallbackHtml: ""
           })}</div>
           <div class="result-main">
-            <div class="result-title"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
-            <div class="result-sub">${artists}${albumName ? ` · <a href="${escapeHtml(info.album_url || `https://open.spotify.com/album/${info.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(albumName)}</a>` : ""}</div>
-            <div class="search-inline-stats">
-              ${renderSearchInlineStat("list", "Плейлісти", formatUkNumber(info.playlists_count))}
-              ${renderSearchInlineStat("plus", "Появи", formatUkNumber(info.appearances_count))}
-              ${renderSearchInlineStat("trending-up", "Сер. позиція", round2(info.avg_position), `Усі позиції: ${round2(info.avg_position_all)}`)}
+            <div class="search-track-accordion-toggle" data-search-track-toggle="1" data-search-track-accordion-id="${escapeHtml(accordionId)}" aria-expanded="false" role="button" tabindex="0">
+              <div class="search-track-accordion-main">
+                <div class="result-title"><a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a></div>
+                <div class="result-sub">${artists}${albumName ? ` · <a href="${escapeHtml(info.album_url || `https://open.spotify.com/album/${info.album_id}`)}" target="_blank" rel="noopener noreferrer">${escapeHtml(albumName)}</a>` : ""}</div>
+                <div class="search-inline-stats">
+                  ${renderSearchInlineStat("list", "Плейлісти", formatUkNumber(info.playlists_count))}
+                  ${renderSearchInlineStat("plus", "Появи", formatUkNumber(info.appearances_count))}
+                  ${renderSearchInlineStat("trending-up", "Сер. позиція", round2(info.avg_position), `Усі позиції: ${round2(info.avg_position_all)}`)}
+                </div>
+              </div>
+              <span class="search-track-chevron" aria-hidden="true">${ti("chevron-down")}</span>
             </div>
-            ${renderPlacementTable(info.playlists || [])}
+            <div class="search-track-playlists-collapse" data-search-track-collapse="${escapeHtml(accordionId)}" hidden>
+              ${renderPlacementTable(info.playlists || [])}
+            </div>
           </div>
         </div>
       `;
@@ -11272,7 +13242,7 @@ async function loadCuratorModalPage(reset = false) {
         entityIcon: "music",
         title: summary.name || summary.track_id,
         titleUrl: trackUrl,
-        subtitleHtml: subtitleParts.join(`<span class="artist-separator">•</span>`),
+        subtitleHtml: subtitleParts.join(` <span class="artist-separator">•</span> `),
         image: getSearchEntityCover(summary, "album"),
         fallbackIcon: "music",
         coverHtml: renderTrackPreviewCover(summary, "search-track-results", 0, {
@@ -11282,6 +13252,7 @@ async function loadCuratorModalPage(reset = false) {
         statsHtml: [
           renderSearchHeadStat("list", "Плейлісти", formatUkNumber(summary.playlists_count)),
           renderSearchHeadStat("plus", "Появи", formatUkNumber(summary.appearances_count)),
+          renderSearchHeadStatHtml("clock", "Останнє додавання", escapeHtml(formatIsoDateTimeHeadInline(summary.latest_added_at || ""))),
           renderSearchHeadStat("trending-up", "Сер. позиція", round2(summary.avg_position), `Усі позиції: ${round2(summary.avg_position_all)}`)
         ].join("")
       });
@@ -11302,6 +13273,7 @@ async function loadCuratorModalPage(reset = false) {
         statsHtml: [
           renderSearchHeadStat("music", "Треки", formatUkNumber(summary.unique_tracks_count)),
           renderSearchHeadStat("list", "Плейлісти", formatUkNumber(summary.playlists_count)),
+          renderSearchHeadStatHtml("clock", "Останнє додавання", escapeHtml(formatIsoDateTimeHeadInline(summary.latest_added_at || ""))),
           renderSearchHeadStat("trending-up", "Сер. позиція", round2(summary.avg_position), `Усі позиції: ${round2(summary.avg_position_all)}`)
         ].join("")
       });
@@ -11322,10 +13294,29 @@ async function loadCuratorModalPage(reset = false) {
           renderSearchHeadStat("music", "Унікальні треки", formatUkNumber(summary.unique_tracks_count)),
           renderSearchHeadStat("list", "Плейлісти", formatUkNumber(summary.playlists_count)),
           renderSearchHeadStat("plus", "Появи", formatUkNumber(summary.appearances_count)),
+          renderSearchHeadStatHtml("clock", "Останнє додавання", escapeHtml(formatIsoDateTimeHeadInline(summary.latest_added_at || ""))),
           renderSearchHeadStat("trending-up", "Сер. позиція", round2(summary.avg_position), `Усі позиції: ${round2(summary.avg_position_all)}`)
         ].join("")
       });
     }
+function updateSearchStatTooltips(root = document) {
+  const scope = root instanceof Element || root instanceof Document ? root : document;
+  scope.querySelectorAll('.search-stat-tooltip-anchor').forEach((anchor) => {
+    const tooltip = anchor.querySelector(':scope > .search-stat-tooltip');
+    if (!tooltip) return;
+
+    tooltip.classList.remove('is-open-up');
+
+    const anchorRect = anchor.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+
+    if (anchorRect.bottom + tooltipRect.height + 12 > viewportHeight && anchorRect.top - tooltipRect.height >= 8) {
+      tooltip.classList.add('is-open-up');
+    }
+  });
+}
+
 function initBasicCustomSelect(select) {
   if (!select) return;
 
@@ -11466,14 +13457,133 @@ function setBasicCustomSelectValue(select, value) {
   selected.dataset.value = option.dataset.value;
 }
 
+function getPlaylistSelectedGenres() {
+  return Array.isArray(state.playlist.selectedGenres)
+    ? state.playlist.selectedGenres
+    : [];
+}
+
+function getPlaylistSelectedGenreNames() {
+  const selected = new Set(getPlaylistSelectedGenres());
+  const genres = Array.isArray(state.playlist.filterMeta?.genres)
+    ? state.playlist.filterMeta.genres
+    : [];
+
+  return genres
+    .filter((genre) => selected.has(String(genre?.genre_slug || "").trim()))
+    .map((genre) => String(genre?.genre_name || genre?.genre_slug || "").trim())
+    .filter(Boolean);
+}
+
+function updatePlaylistGenreTriggerLabel() {
+  const names = getPlaylistSelectedGenreNames();
+
+  if (!ui.playlistGenreTriggerValues) return;
+
+  if (!names.length) {
+    ui.playlistGenreTriggerValues.innerHTML = '<span class="curators-genre-trigger-empty">Усі жанри</span>';
+    return;
+  }
+
+  ui.playlistGenreTriggerValues.innerHTML = `<span class="curators-genre-trigger-text">${escapeHtml(names.join(" · "))}</span>`;
+}
+
+function closePlaylistGenreDropdown() {
+  if (!ui.playlistGenreSelect || !ui.playlistGenreTrigger) return;
+  ui.playlistGenreSelect.classList.remove("is-open");
+  ui.playlistGenreTrigger.setAttribute("aria-expanded", "false");
+}
+
+function togglePlaylistGenreDropdown(force) {
+  if (!ui.playlistGenreSelect || !ui.playlistGenreTrigger) return;
+
+  const shouldOpen = typeof force === "boolean"
+    ? force
+    : !ui.playlistGenreSelect.classList.contains("is-open");
+
+  ui.playlistGenreSelect.classList.toggle("is-open", shouldOpen);
+  ui.playlistGenreTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+}
+
+function renderPlaylistGenreFilters() {
+  if (!ui.playlistGenreFilters) return;
+
+  const genres = Array.isArray(state.playlist.filterMeta?.genres)
+    ? state.playlist.filterMeta.genres
+    : [];
+  const selectedGenres = new Set(getPlaylistSelectedGenres());
+
+  if (!genres.length) {
+    ui.playlistGenreFilters.innerHTML = '<div class="curator-empty-note">Жанри 20%+ поки що недоступні.</div>';
+    updatePlaylistGenreTriggerLabel();
+    return;
+  }
+
+  const options = [
+    {
+      isAll: true,
+      label: "Усі жанри",
+      count: state.playlist.total || 0,
+      slug: ""
+    },
+    ...genres.map((genre) => ({
+      isAll: false,
+      label: String(genre?.genre_name || genre?.genre_slug || "").trim(),
+      count: Number(genre?.playlists_count ?? genre?.count ?? 0),
+      slug: String(genre?.genre_slug || "").trim()
+    }))
+  ];
+
+  ui.playlistGenreFilters.innerHTML = options.map((item) => {
+    const isActive = item.isAll ? selectedGenres.size === 0 : selectedGenres.has(item.slug);
+    const dataAttr = item.isAll
+      ? 'data-playlist-genre-all="1"'
+      : `data-playlist-genre="${escapeHtml(item.slug)}"`;
+
+    return `
+      <label class="curator-genre-option ${isActive ? "is-active" : ""}" ${dataAttr}>
+        <input class="curator-genre-checkbox-input" type="radio" name="playlist-genre-radio" ${isActive ? "checked" : ""} tabindex="-1" aria-hidden="true">
+        <span class="curator-genre-checkbox"></span>
+        <span class="curator-genre-option-text">${escapeHtml(item.label)}</span>
+        <span class="curator-genre-option-count">${formatUkNumber(item.count || 0)}</span>
+      </label>
+    `;
+  }).join("");
+
+  updatePlaylistGenreTriggerLabel();
+}
+
+function togglePlaylistGenreFilter(genreSlug) {
+  const slug = String(genreSlug || "").trim();
+  if (!slug) return;
+
+  const current = getPlaylistSelectedGenres();
+  if (current.length === 1 && current[0] === slug) return;
+
+  state.playlist.selectedGenres = [slug];
+  renderPlaylistGenreFilters();
+  schedulePlaylistsReload();
+}
+
+function clearPlaylistGenreFilters() {
+  state.playlist.selectedGenres = [];
+  renderPlaylistGenreFilters();
+  schedulePlaylistsReload();
+}
+
     function getPlaylistFiltersFromUi() {
+  const excludeInactive = !!(ui.playlistExcludeInactive && ui.playlistExcludeInactive.checked);
+  state.playlist.excludeInactive = excludeInactive;
+
   return {
     sortBy: ui.playlistSortBy.querySelector(".selected").dataset.value || "follower",
     sortDir: ui.playlistSortDir.querySelector(".selected").dataset.value || "desc",
     followerMin: ui.followerMin.value.trim(),
     followerMax: ui.followerMax.value.trim(),
     trackMin: ui.trackMin.value.trim(),
-    trackMax: ui.trackMax.value.trim()
+    trackMax: ui.trackMax.value.trim(),
+    genre: getPlaylistSelectedGenres().join(","),
+    excludeInactive: excludeInactive ? "true" : ""
   };
 }
 
@@ -11497,6 +13607,16 @@ let playlistLazyObserver = null;
 let curatorsLazyObserver = null;
 let playlistLazyLastTrigger = 0;
 let curatorsLazyLastTrigger = 0;
+let playlistLazyArmed = false;
+let curatorsLazyArmed = false;
+
+function armPlaylistLazyLoad() {
+  playlistLazyArmed = true;
+}
+
+function armCuratorsLazyLoad() {
+  curatorsLazyArmed = true;
+}
 
 function initPlaylistCatalogLazyLoad() {
   if (playlistLazyObserver) {
@@ -11506,7 +13626,16 @@ function initPlaylistCatalogLazyLoad() {
 
   if (!ui.playlistResultsScroll || !ui.playlistLazySentinel) return;
 
+  playlistLazyArmed = false;
+  ui.playlistResultsScroll.removeEventListener("scroll", armPlaylistLazyLoad);
+  ui.playlistResultsScroll.removeEventListener("wheel", armPlaylistLazyLoad);
+  ui.playlistResultsScroll.removeEventListener("touchmove", armPlaylistLazyLoad);
+  ui.playlistResultsScroll.addEventListener("scroll", armPlaylistLazyLoad, { passive: true });
+  ui.playlistResultsScroll.addEventListener("wheel", armPlaylistLazyLoad, { passive: true });
+  ui.playlistResultsScroll.addEventListener("touchmove", armPlaylistLazyLoad, { passive: true });
+
   playlistLazyObserver = new IntersectionObserver((entries) => {
+    if (!playlistLazyArmed) return;
     if (!entries.some((entry) => entry.isIntersecting)) return;
 
     const now = Date.now();
@@ -11518,7 +13647,7 @@ function initPlaylistCatalogLazyLoad() {
     }
   }, {
     root: ui.playlistResultsScroll,
-    rootMargin: "700px 0px",
+    rootMargin: "220px 0px",
     threshold: 0
   });
 
@@ -11533,7 +13662,16 @@ function initCuratorsCatalogLazyLoad() {
 
   if (!ui.curatorsResultsScroll || !ui.curatorsLazySentinel) return;
 
+  curatorsLazyArmed = false;
+  ui.curatorsResultsScroll.removeEventListener("scroll", armCuratorsLazyLoad);
+  ui.curatorsResultsScroll.removeEventListener("wheel", armCuratorsLazyLoad);
+  ui.curatorsResultsScroll.removeEventListener("touchmove", armCuratorsLazyLoad);
+  ui.curatorsResultsScroll.addEventListener("scroll", armCuratorsLazyLoad, { passive: true });
+  ui.curatorsResultsScroll.addEventListener("wheel", armCuratorsLazyLoad, { passive: true });
+  ui.curatorsResultsScroll.addEventListener("touchmove", armCuratorsLazyLoad, { passive: true });
+
   curatorsLazyObserver = new IntersectionObserver((entries) => {
+    if (!curatorsLazyArmed) return;
     if (!entries.some((entry) => entry.isIntersecting)) return;
 
     const now = Date.now();
@@ -11545,7 +13683,7 @@ function initCuratorsCatalogLazyLoad() {
     }
   }, {
     root: ui.curatorsResultsScroll,
-    rootMargin: "700px 0px",
+    rootMargin: "220px 0px",
     threshold: 0
   });
 
@@ -11556,6 +13694,13 @@ function initPlaylistAutoApply() {
   ui.playlistSortBy.addEventListener("change", schedulePlaylistsReload);
   ui.playlistSortDir.addEventListener("change", schedulePlaylistsReload);
 
+  if (ui.playlistGenreTrigger) {
+    ui.playlistGenreTrigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      togglePlaylistGenreDropdown();
+    });
+  }
+
   [
     "follower-min-range",
     "follower-max-range",
@@ -11565,6 +13710,11 @@ function initPlaylistAutoApply() {
     const el = document.getElementById(id);
     if (el) el.addEventListener("input", schedulePlaylistsReload);
   });
+
+  if (ui.playlistExcludeInactive) {
+    ui.playlistExcludeInactive.checked = !!state.playlist.excludeInactive;
+    ui.playlistExcludeInactive.addEventListener("change", schedulePlaylistsReload);
+  }
 }
     
     async function loadPlaylists(reset = false) {
@@ -11585,6 +13735,7 @@ function initPlaylistAutoApply() {
 
     if (reset) {
       state.playlist.items = data.items || [];
+      playlistLazyArmed = false;
     } else {
       state.playlist.items = state.playlist.items.concat(data.items || []);
     }
@@ -11593,6 +13744,7 @@ function initPlaylistAutoApply() {
     state.playlist.offset = Number(data.offset || 0) + (data.items?.length || 0);
     state.playlist.hasMore = !!data.has_more;
 
+    renderPlaylistGenreFilters();
     renderMainPlaylistList(reset);
 
     if (!state.playlist.items.length) {
@@ -11619,7 +13771,8 @@ function initPlaylistAutoApply() {
 
     async function runTrackSearch(trackId) {
       setSearchSummary("Завантаження даних треку...");
-      const data = await apiJson("/search/track", { id: trackId });
+      resetSearchPaginationState();
+      const data = await apiJson("/search/track", { id: trackId, limit: 20, offset: 0 });
 
       if (!data.found || !data.result) {
         showSearchNoResults("Трек не знайдено в жодному плейлісті бази.");
@@ -11627,22 +13780,43 @@ function initPlaylistAutoApply() {
         return;
       }
 
+      const initialPlaylists = Array.isArray(data.result.playlists) ? data.result.playlists : [];
+
       ui.searchResults.innerHTML = renderSearchEntityShell(
         renderTrackHeader(data.result),
-        renderPlacementTable(data.result.playlists || [])
+        `<div class="search-track-playlists-shell"><div class="search-track-playlists-list">${renderSearchPaginatedPlacementShell(initialPlaylists)}</div></div>`,
+        { scrollClass: 'track-search-scroll', listClass: 'track-search-list-root' }
       );
-      activatePendingLocalLazyLists(ui.searchResults);
+
+      const placementHost = ui.searchResults.querySelector('[data-placement-table-id]');
+      const placementTableId = placementHost ? String(placementHost.getAttribute('data-placement-table-id') || '').trim() : '';
+
       requestAnimationFrame(() => {
         updateHoverMarquees(ui.searchResults);
         syncPreviewButtons(ui.searchResults);
+        updateSearchStatTooltips(ui.searchResults);
+        syncPlacementSplitTableColumnWidths(ui.searchResults);
       });
+
+      setupSearchPagination({
+        type: 'track',
+        endpoint: '/search/track',
+        id: trackId,
+        limit: 20,
+        offset: Math.max(0, Number(data.result.playlists_offset) || 0) + initialPlaylists.length,
+        total: Math.max(0, Number(data.result.playlists_total) || Number(data.result.playlists_count) || initialPlaylists.length),
+        hasMore: !!data.result.playlists_has_more,
+        placementTableId
+      });
+
       setSearchPreviewSource("search-track-results", [data.result]);
       setSearchSummary(`Трек знайдено у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція у топ-50 — ${round2(data.result.avg_position)}.`);
     }
 
     async function runAlbumSearch(albumId) {
       setSearchSummary("Завантаження треків альбому...");
-      const data = await apiJson("/search/album", { id: albumId });
+      resetSearchPaginationState();
+      const data = await apiJson("/search/album", { id: albumId, limit: 20, offset: 0 });
 
       if (!data.found || !data.result) {
         showSearchNoResults("Жоден трек цього альбому не знайдено в плейлістах бази.");
@@ -11650,27 +13824,47 @@ function initPlaylistAutoApply() {
         return;
       }
 
-      const cards = (data.result.tracks || []).length
-        ? renderLazySearchTrackCards((data.result.tracks || []), "search-album-results")
-        : `<div class="search-track-empty">У плейлістах бази не знайдено треків цього альбому.</div>`;
+      const initialTracks = Array.isArray(data.result.tracks) ? data.result.tracks : [];
+      const emptyHtml = (!initialTracks.length && !data.result.tracks_has_more)
+        ? `<div class="search-track-empty">У плейлістах бази не знайдено треків цього альбому.</div>`
+        : "";
 
       ui.searchResults.innerHTML = renderSearchEntityShell(
         renderAlbumHeader(data.result),
-        cards
+        renderSearchPaginatedTrackListShell(emptyHtml)
       );
 
-      activatePendingLocalLazyLists(ui.searchResults);
       requestAnimationFrame(() => {
         updateHoverMarquees(ui.searchResults);
         syncPreviewButtons(ui.searchResults);
+        updateSearchStatTooltips(ui.searchResults);
       });
-      setSearchPreviewSource("search-album-results", data.result.tracks || []);
+
+      setupSearchPagination({
+        type: 'album',
+        endpoint: '/search/album',
+        id: albumId,
+        limit: 20,
+        offset: Math.max(0, Number(data.result.tracks_offset) || 0) + initialTracks.length,
+        total: Math.max(0, Number(data.result.tracks_total) || Number(data.result.unique_tracks_count) || initialTracks.length),
+        hasMore: !!data.result.tracks_has_more,
+        source: 'search-album-results',
+        items: initialTracks
+      });
+
+      const listEl = ui.searchResults.querySelector('[data-search-pagination-items="1"]');
+      if (initialTracks.length && listEl) {
+        appendSearchTrackCardsChunked(listEl, initialTracks, 0, "search-album-results");
+      }
+
+      setSearchPreviewSource("search-album-results", initialTracks);
       setSearchSummary(`Знайдено ${formatUkNumber(data.result.unique_tracks_count)} ${getUkWordForm(data.result.unique_tracks_count, "трек", "треки", "треків")} альбому у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція у топ-50 — ${round2(data.result.avg_position)}.`);
     }
 
     async function runArtistSearch(artistId) {
       setSearchSummary("Завантаження даних артиста...");
-      const data = await apiJson("/search/artist", { id: artistId });
+      resetSearchPaginationState();
+      const data = await apiJson("/search/artist", { id: artistId, limit: 20, offset: 0 });
 
       if (!data.found || !data.result) {
         showSearchNoResults("Треки цього артиста не знайдено в плейлістах бази.");
@@ -11678,25 +13872,45 @@ function initPlaylistAutoApply() {
         return;
       }
 
-      const cards = (data.result.tracks || []).length
-        ? renderLazySearchTrackCards((data.result.tracks || []), "search-artist-results")
-        : `<div class="search-track-empty">У плейлістах бази не знайдено треків цього артиста.</div>`;
+      const initialTracks = Array.isArray(data.result.tracks) ? data.result.tracks : [];
+      const emptyHtml = (!initialTracks.length && !data.result.tracks_has_more)
+        ? `<div class="search-track-empty">У плейлістах бази не знайдено треків цього артиста.</div>`
+        : "";
 
       ui.searchResults.innerHTML = renderSearchEntityShell(
         renderArtistHeader(data.result),
-        cards
+        renderSearchPaginatedTrackListShell(emptyHtml)
       );
 
-      activatePendingLocalLazyLists(ui.searchResults);
       requestAnimationFrame(() => {
         updateHoverMarquees(ui.searchResults);
         syncPreviewButtons(ui.searchResults);
+        updateSearchStatTooltips(ui.searchResults);
       });
-      setSearchPreviewSource("search-artist-results", data.result.tracks || []);
+
+      setupSearchPagination({
+        type: 'artist',
+        endpoint: '/search/artist',
+        id: artistId,
+        limit: 20,
+        offset: Math.max(0, Number(data.result.tracks_offset) || 0) + initialTracks.length,
+        total: Math.max(0, Number(data.result.tracks_total) || Number(data.result.unique_tracks_count) || initialTracks.length),
+        hasMore: !!data.result.tracks_has_more,
+        source: 'search-artist-results',
+        items: initialTracks
+      });
+
+      const listEl = ui.searchResults.querySelector('[data-search-pagination-items="1"]');
+      if (initialTracks.length && listEl) {
+        appendSearchTrackCardsChunked(listEl, initialTracks, 0, "search-artist-results");
+      }
+
+      setSearchPreviewSource("search-artist-results", initialTracks);
       setSearchSummary(`Знайдено ${formatTracksGenitive(data.result.unique_tracks_count)} артиста у ${formatPlaylistsLocative(data.result.playlists_count)}. Середня позиція у топ-50 — ${round2(data.result.avg_position)}.`);
     }
 
     async function runCuratorSearch(searchValue) {
+      resetSearchPaginationState();
       const query = String(searchValue || "").trim();
       if (!query) {
         showSearchNoResults("Куратор не знайдений.");
@@ -11732,12 +13946,14 @@ function initPlaylistAutoApply() {
       requestAnimationFrame(() => {
         updateHoverMarquees(ui.searchResults);
         syncPreviewButtons(ui.searchResults);
+        updateSearchStatTooltips(ui.searchResults);
       });
       setSearchSummary("Оберіть потрібного куратора зі знайдених варіантів.");
     }
 
     async function runPlaylistSearch(playlistId) {
       setSearchSummary("Завантаження даних плейліста...");
+      resetSearchPaginationState();
       const data = await apiJson("/search/playlist", { id: playlistId });
 
       if (!data.found || !data.result) {
@@ -11750,6 +13966,7 @@ function initPlaylistAutoApply() {
       requestAnimationFrame(() => {
         updateHoverMarquees(ui.searchResults);
         syncPreviewButtons(ui.searchResults);
+        updateSearchStatTooltips(ui.searchResults);
       });
       setSearchSummary("Плейліст знайдено.");
     }
@@ -11893,9 +14110,19 @@ setCatalogVisibility(false);
 function getStatsEntityImage(source, type = '') {
   if (!source || Array.isArray(source) || typeof source !== 'object') return '';
 
-  const keys = type === 'curator'
-    ? ['avatar_url', 'avatar', 'image', 'image_url', 'photo', 'photo_url', 'cover', 'cover_url']
-    : ['album_cover', 'cover', 'cover_url', 'image', 'image_url', 'artwork', 'artwork_url', 'picture', 'photo', 'photo_url'];
+  let keys;
+
+  if (type === 'track') {
+    keys = ['album_cover', 'cover', 'cover_url', 'image', 'image_url', 'artwork', 'artwork_url', 'picture', 'photo', 'photo_url'];
+  } else if (type === 'artist') {
+    keys = ['image_url', 'image', 'photo_url', 'photo', 'picture', 'cover', 'cover_url', 'artwork', 'artwork_url'];
+  } else if (type === 'playlist') {
+    keys = ['cover', 'cover_url', 'image', 'image_url', 'artwork', 'artwork_url', 'album_cover', 'picture', 'photo', 'photo_url'];
+  } else if (type === 'curator') {
+    keys = ['avatar_url', 'avatar', 'image', 'image_url', 'photo', 'photo_url', 'cover', 'cover_url'];
+  } else {
+    keys = ['image_url', 'image', 'cover', 'cover_url', 'album_cover', 'artwork', 'artwork_url', 'picture', 'photo', 'photo_url', 'avatar_url', 'avatar'];
+  }
 
   for (const key of keys) {
     const value = source[key];
@@ -11911,7 +14138,7 @@ function getStatsEntityImage(source, type = '') {
   return '';
 }
 
-function renderStatsChartThumb(type, source) {
+function renderStatsChartThumb(type, source, options = {}) {
   const image = getStatsEntityImage(source, type);
   const iconClass = type === 'track'
     ? 'bi-disc-fill'
@@ -11920,6 +14147,21 @@ function renderStatsChartThumb(type, source) {
       : type === 'playlist'
         ? 'bi-music-note-list'
         : 'bi-person-lines-fill';
+
+  if (type === 'track') {
+    const previewSource = String(options.previewSource || '').trim();
+    const previewIndex = Number(options.previewIndex);
+    const fallbackHtml = `<i class="bi ${iconClass}" aria-hidden="true"></i>`;
+
+    return `
+      <div class="chart-entry-thumb is-${escapeHtml(type)}">
+        ${renderTrackPreviewCover(source, previewSource, Number.isInteger(previewIndex) ? previewIndex : 0, {
+          coverUrl: image,
+          fallbackHtml
+        })}
+      </div>
+    `;
+  }
 
   return `
     <div class="chart-entry-thumb is-${escapeHtml(type)}">
@@ -11930,8 +14172,55 @@ function renderStatsChartThumb(type, source) {
   `;
 }
 
-function renderChartMetricChip(value) {
-  return `<span class="chart-entry-chip">${escapeHtml(value)}</span>`;
+
+function getChartMetricIconToken(kind) {
+  switch (String(kind || '').trim()) {
+    case 'playlists':
+      return 'bi-music-note-list';
+    case 'appearances':
+      return 'bi-collection-play-fill';
+    case 'position':
+      return 'bi-sort-numeric-up';
+    case 'unique_tracks':
+      return 'bi-disc-fill';
+    case 'followers':
+      return 'bi-people-fill';
+    case 'tracks':
+      return 'bi-plus-circle-fill';
+    default:
+      return 'bi-dot';
+  }
+}
+
+function getChartPillVisibleValue(text) {
+  const raw = String(text || '').trim();
+  if (!raw) return '';
+
+  const colonIndex = raw.indexOf(':');
+  if (colonIndex !== -1) {
+    return raw.slice(colonIndex + 1).trim();
+  }
+
+  return raw;
+}
+
+function renderChartIconPill(iconClass, tooltipText, variant = 'chip') {
+  const safeVariant = variant === 'metric' ? 'metric' : 'chip';
+  const safeIconClass = String(iconClass || 'bi-dot').trim() || 'bi-dot';
+  const safeTooltipText = String(tooltipText || '').trim() || '—';
+  const visibleValue = getChartPillVisibleValue(safeTooltipText);
+
+  return `
+    <span class="chart-entry-tooltip-anchor" tabindex="0">
+      <span class="chart-entry-${safeVariant}">
+        <i class="bi ${escapeHtml(safeIconClass)}" aria-hidden="true"></i>
+        ${visibleValue ? `<span class="chart-entry-pill-value">${escapeHtml(visibleValue)}</span>` : ''}
+      </span>
+      <div class="chart-entry-tooltip" role="tooltip">
+        <div class="chart-entry-tooltip-title">${escapeHtml(safeTooltipText)}</div>
+      </div>
+    </span>
+  `;
 }
 
 function getDashboardLeaderId(row) {
@@ -11951,7 +14240,7 @@ function getDashboardLeaderValueA(row) {
 
 function getDashboardLeaderValueB(row) {
   if (Array.isArray(row)) return Number(row?.[3] || 0) || 0;
-  return Number(row?.followers_diff_30d ?? row?.followers ?? row?.count_b ?? 0) || 0;
+  return Number(row?.followers_growth_30d ?? row?.followers_diff_30d ?? row?.total_followers ?? row?.followers ?? row?.count_b ?? 0) || 0;
 }
 
 function renderChartPanel(title, subtitle, listShell) {
@@ -11966,31 +14255,37 @@ function renderChartPanel(title, subtitle, listShell) {
   `;
 }
 
-function renderTrackChartEntry(row, index, metricText, metricKind = 'generic') {
+function renderTrackChartEntry(row, index, metricText, metricKind = 'generic', previewSource = '') {
   const artistsHtml = renderArtistLinks(row?.artists || []);
   const trackName = row?.name || row?.track_id || 'Трек';
-  const trackUrl = row?.url || `https://open.spotify.com/track/${row?.track_id || ''}`;
+  const trackId = row?.track_id || '';
+  const trackUrl = row?.url || `https://open.spotify.com/track/${trackId}`;
   const chips = [];
 
-  if (metricKind !== 'playlists' && row?.playlists_count !== undefined) chips.push(renderChartMetricChip(`Плейлісти: ${formatUkNumber(row.playlists_count)}`));
-  if (metricKind !== 'appearances' && row?.appearances_count !== undefined) chips.push(renderChartMetricChip(`Появи: ${formatUkNumber(row.appearances_count)}`));
-  if (metricKind !== 'position' && row?.avg_position !== undefined) chips.push(renderChartMetricChip(`Сер. позиція: ${round2(row.avg_position)}`));
+  if (metricKind !== 'playlists' && metricKind !== 'appearances' && row?.playlists_count !== undefined) chips.push(renderChartIconPill('bi-music-note-list', `Плейлісти: ${formatUkNumber(row.playlists_count)}`));
+  if (row?.appearances_count !== undefined) chips.push(renderChartIconPill('bi-collection-play-fill', `Появи: ${formatUkNumber(row.appearances_count)}`));
+  if (metricKind !== 'position' && row?.avg_position !== undefined) chips.push(renderChartIconPill('bi-sort-numeric-up', `Сер. позиція: ${round2(row.avg_position)}`));
 
-  const titleHtml = renderHoverMarquee(`<a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trackName)}</a>`);
+  const titleHtml = renderHoverMarquee(`<a href="${escapeHtml(trackUrl)}" target="_blank" rel="noopener noreferrer" data-chart-spotify-link="1">${escapeHtml(trackName)}</a>`);
   const subHtml = artistsHtml ? renderHoverMarquee(artistsHtml) : '—';
+  const metricHtml = renderChartIconPill(getChartMetricIconToken(metricKind), metricText, 'metric');
 
   return `
     <div class="chart-entry">
       <div class="stats-rank">#${index + 1}</div>
-      <div class="chart-entry-card is-track">
-        ${renderStatsChartThumb('track', row)}
+      <div
+        class="chart-entry-card is-track"
+        data-chart-track-open="1"
+        data-track-id="${escapeHtml(trackId)}"
+        data-track-name="${escapeHtml(trackName)}"
+      >
+        ${renderStatsChartThumb('track', row, { previewSource, previewIndex: index })}
         <div class="chart-entry-body">
           <div class="chart-entry-top">
             <div class="chart-entry-title">${titleHtml}</div>
-            <div class="chart-entry-metric">${escapeHtml(metricText)}</div>
           </div>
           <div class="chart-entry-sub">${subHtml}</div>
-          ${chips.length ? `<div class="chart-entry-meta">${chips.join('')}</div>` : ''}
+          <div class="chart-entry-meta">${metricHtml}${chips.join('')}</div>
         </div>
       </div>
     </div>
@@ -11998,28 +14293,33 @@ function renderTrackChartEntry(row, index, metricText, metricKind = 'generic') {
 }
 
 function renderArtistChartEntry(row, index, metricText, metricKind = 'generic') {
-  const artistUrl = row?.url || `https://open.spotify.com/artist/${row?.artist_id || ''}`;
-  const artistName = row?.name || row?.artist_id || 'Артист';
+  const artistId = row?.artist_id || '';
+  const artistUrl = row?.url || `https://open.spotify.com/artist/${artistId}`;
+  const artistName = row?.name || artistId || 'Артист';
   const chips = [];
 
-  if (metricKind !== 'playlists' && row?.playlists_count !== undefined) chips.push(renderChartMetricChip(`Плейлісти: ${formatUkNumber(row.playlists_count)}`));
-  if (metricKind !== 'appearances' && row?.appearances_count !== undefined) chips.push(renderChartMetricChip(`Появи: ${formatUkNumber(row.appearances_count)}`));
-  if (metricKind !== 'unique_tracks' && row?.unique_tracks_count !== undefined) chips.push(renderChartMetricChip(`Унікальні треки: ${formatUkNumber(row.unique_tracks_count)}`));
-  if (metricKind !== 'position' && row?.avg_position !== undefined) chips.push(renderChartMetricChip(`Сер. позиція: ${round2(row.avg_position)}`));
+  if (metricKind !== 'playlists' && metricKind !== 'appearances' && row?.playlists_count !== undefined) chips.push(renderChartIconPill('bi-music-note-list', `Плейлісти: ${formatUkNumber(row.playlists_count)}`));
+  if (row?.appearances_count !== undefined) chips.push(renderChartIconPill('bi-collection-play-fill', `Появи: ${formatUkNumber(row.appearances_count)}`));
+  if (metricKind !== 'unique_tracks' && row?.unique_tracks_count !== undefined) chips.push(renderChartIconPill('bi-disc-fill', `Унікальні треки: ${formatUkNumber(row.unique_tracks_count)}`));
+  if (metricKind !== 'position' && row?.avg_position !== undefined) chips.push(renderChartIconPill('bi-sort-numeric-up', `Сер. позиція: ${round2(row.avg_position)}`));
 
-  const titleHtml = renderHoverMarquee(`<a href="${escapeHtml(artistUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(artistName)}</a>`);
+  const titleHtml = renderHoverMarquee(`<a href="${escapeHtml(artistUrl)}" target="_blank" rel="noopener noreferrer" data-chart-spotify-link="1">${escapeHtml(artistName)}</a>`);
 
   return `
     <div class="chart-entry">
       <div class="stats-rank">#${index + 1}</div>
-      <div class="chart-entry-card is-artist">
+      <div
+        class="chart-entry-card is-artist"
+        data-chart-artist-open="1"
+        data-artist-id="${escapeHtml(artistId)}"
+        data-artist-name="${escapeHtml(artistName)}"
+      >
         ${renderStatsChartThumb('artist', row)}
         <div class="chart-entry-body">
           <div class="chart-entry-top">
             <div class="chart-entry-title">${titleHtml}</div>
-            <div class="chart-entry-metric">${escapeHtml(metricText)}</div>
           </div>
-          ${chips.length ? `<div class="chart-entry-meta">${chips.join('')}</div>` : ''}
+          <div class="chart-entry-meta">${renderChartIconPill(getChartMetricIconToken(metricKind), metricText, 'metric')}${chips.join('')}</div>
         </div>
       </div>
     </div>
@@ -12033,8 +14333,8 @@ function renderPlaylistLeaderChartEntry(row, index, metricText, metricKind = 'ge
   const valueB = getDashboardLeaderValueB(row);
   const chips = [];
 
-  if (metricKind !== 'followers' && Number.isFinite(valueB)) chips.push(renderChartMetricChip(`Підписники 30 днів: ${formatSignedFollowersCount(valueB)}`));
-  if (metricKind !== 'tracks' && Number.isFinite(valueA) && valueA > 0) chips.push(renderChartMetricChip(`Додано: ${formatTrackCountWithWord(valueA)}`));
+  if (metricKind !== 'followers' && Number.isFinite(valueB)) chips.push(renderChartIconPill('bi-people-fill', `Підписники 30 днів: ${formatSignedFollowersCount(valueB)}`));
+  if (metricKind !== 'tracks' && Number.isFinite(valueA) && valueA > 0) chips.push(renderChartIconPill('bi-plus-circle-fill', `Додано: ${formatTrackCountWithWord(valueA)}`));
 
   return `
     <div class="chart-entry">
@@ -12044,9 +14344,8 @@ function renderPlaylistLeaderChartEntry(row, index, metricText, metricKind = 'ge
         <div class="chart-entry-body">
           <div class="chart-entry-top">
             <div class="chart-entry-title">${renderHoverMarquee(escapeHtml(name))}</div>
-            <div class="chart-entry-metric">${escapeHtml(metricText)}</div>
           </div>
-          ${chips.length ? `<div class="chart-entry-meta">${chips.join('')}</div>` : ''}
+          <div class="chart-entry-meta">${renderChartIconPill(getChartMetricIconToken(metricKind), metricText, 'metric')}${chips.join('')}</div>
         </div>
       </button>
     </div>
@@ -12060,8 +14359,8 @@ function renderCuratorLeaderChartEntry(row, index, metricText, metricKind = 'gen
   const valueB = getDashboardLeaderValueB(row);
   const chips = [];
 
-  if (metricKind !== 'followers' && Number.isFinite(valueB) && valueB > 0) chips.push(renderChartMetricChip(`Підписники: ${formatUkNumber(valueB)}`));
-  if (metricKind !== 'playlists' && Number.isFinite(valueA) && valueA > 0) chips.push(renderChartMetricChip(`Плейлісти: ${formatUkNumber(valueA)}`));
+  if (metricKind !== 'followers' && Number.isFinite(valueB) && valueB > 0) chips.push(renderChartIconPill('bi-people-fill', `Підписники: ${formatUkNumber(valueB)}`));
+  if (metricKind !== 'playlists' && Number.isFinite(valueA) && valueA > 0) chips.push(renderChartIconPill('bi-music-note-list', `Плейлісти: ${formatUkNumber(valueA)}`));
 
   return `
     <div class="chart-entry">
@@ -12071,9 +14370,8 @@ function renderCuratorLeaderChartEntry(row, index, metricText, metricKind = 'gen
         <div class="chart-entry-body">
           <div class="chart-entry-top">
             <div class="chart-entry-title">${renderHoverMarquee(escapeHtml(name))}</div>
-            <div class="chart-entry-metric">${escapeHtml(metricText)}</div>
           </div>
-          ${chips.length ? `<div class="chart-entry-meta">${chips.join('')}</div>` : ''}
+          <div class="chart-entry-meta">${renderChartIconPill(getChartMetricIconToken(metricKind), metricText, 'metric')}${chips.join('')}</div>
         </div>
       </button>
     </div>
@@ -12095,11 +14393,17 @@ function renderChartListShell(items, batchSize, renderItem) {
   return `<div class="chart-list-shell">${renderPendingLocalLazyListShell(listId)}</div>`;
 }
 
-function renderStatsTrackList(title, subtitle, rows, metricGetter, metricKind = 'generic') {
+function renderStatsTrackList(title, subtitle, rows, metricGetter, metricKind = 'generic', previewSource = '') {
+  const safePreviewSource = String(previewSource || '').trim();
+
+  if (safePreviewSource) {
+    setPreviewQueueForSource(safePreviewSource, rows);
+  }
+
   return renderChartPanel(
     title,
     subtitle,
-    renderChartListShell(rows, 8, (row, index) => renderTrackChartEntry(row, index, metricGetter(row), metricKind))
+    renderChartListShell(rows, 8, (row, index) => renderTrackChartEntry(row, index, metricGetter(row), metricKind, safePreviewSource))
   );
 }
 
@@ -12119,32 +14423,30 @@ function renderStatsLeaderPanel(title, subtitle, rows, kind, metricGetter, metri
   return renderChartPanel(title, subtitle, renderChartListShell(rows, 6, renderer));
 }
 
-function getStatsOverviewModeData(data, mode) {
-  if (mode === "all_time") {
-    return data?.all_time || {
-      top_tracks_by_appearances: [],
-      top_artists_by_appearances: [],
-      top_tracks_by_position: [],
-      top_artists_by_position: []
-    };
+function getStatsOverviewRows(data, key, mode) {
+  const section = data && typeof data === 'object' ? data[key] : null;
+  if (!section || typeof section !== 'object') return [];
+
+  if (mode === 'all_time') {
+    if (Array.isArray(section.all_time)) return section.all_time;
+    return [];
   }
 
-  return data?.recent || {
-    top_tracks_by_appearances: [],
-    top_artists_by_appearances: [],
-    top_tracks_by_position: [],
-    top_artists_by_position: []
-  };
+  if (Array.isArray(section.last_30_days)) return section.last_30_days;
+  return [];
 }
 
-function renderStatsOverviewContent(data, mode, dashboardData = null, chartGroup = "tracks-artists") {
+function renderStatsOverviewContent(data, mode, chartGroup = "tracks-artists") {
   const isRecent = mode === "recent";
-  const source = getStatsOverviewModeData(data, mode);
-  const playlistFollowersRows = Array.isArray(dashboardData?.plf) ? dashboardData.plf : [];
-  const playlistTracksRows = Array.isArray(dashboardData?.plt) ? dashboardData.plt : [];
-  const curatorFollowersRows = Array.isArray(dashboardData?.clf) ? dashboardData.clf : [];
-  const curatorPlaylistsRows = Array.isArray(dashboardData?.clp) ? dashboardData.clp : [];
   const activeGroup = chartGroup === "playlists-curators" ? "playlists-curators" : "tracks-artists";
+  const tracksByAppearancesRows = getStatsOverviewRows(data, 'tracks_by_playlist_appearances', mode);
+  const artistsByAppearancesRows = getStatsOverviewRows(data, 'artists_by_playlist_appearances', mode);
+  const tracksByAveragePositionRows = getStatsOverviewRows(data, 'tracks_by_average_position', mode);
+  const artistsByAveragePositionRows = getStatsOverviewRows(data, 'artists_by_average_position', mode);
+  const playlistFollowersRows = getStatsOverviewRows(data, 'playlists_by_followers_growth', 'recent');
+  const playlistTracksRows = getStatsOverviewRows(data, 'playlists_by_tracks_added', 'recent');
+  const curatorFollowersRows = getStatsOverviewRows(data, 'curators_by_total_followers', 'recent');
+  const curatorPlaylistsRows = getStatsOverviewRows(data, 'curators_by_playlists_count', 'recent');
 
   return `
     <div class="charts-shell">
@@ -12206,16 +14508,18 @@ function renderStatsOverviewContent(data, mode, dashboardData = null, chartGroup
               ${renderStatsTrackList(
                 isRecent ? 'Найчастіше в плейлістах' : 'Найчастіше в плейлістах за весь час',
                 isRecent ? 'Чим вище, тим у більшій кількості плейлістів трек з’являвся за останні 30 днів.' : 'Треки з найбільшою кількістю появ за весь період.',
-                source.top_tracks_by_appearances || [],
-                (row) => `${formatUkNumber(row?.appearances_count || 0)} появ`,
-                'appearances'
+                tracksByAppearancesRows,
+                (row) => `Плейлісти: ${formatUkNumber(row?.playlists_count || 0)}`,
+                'appearances',
+                `stats-tracks-by-appearances-${isRecent ? 'recent' : 'all-time'}`
               )}
               ${renderStatsTrackList(
                 isRecent ? 'Найсильніші позиції' : 'Найсильніші позиції за весь час',
                 'Тут у фокусі не кількість, а середня якість позицій у плейлістах.',
-                source.top_tracks_by_position || [],
+                tracksByAveragePositionRows,
                 (row) => `Сер. позиція: ${round2(row?.avg_position || 0)}`,
-                'position'
+                'position',
+                `stats-tracks-by-position-${isRecent ? 'recent' : 'all-time'}`
               )}
             </div>
           </section>
@@ -12231,14 +14535,14 @@ function renderStatsOverviewContent(data, mode, dashboardData = null, chartGroup
               ${renderStatsArtistList(
                 isRecent ? 'Найчастіше в плейлістах' : 'Найчастіше в плейлістах за весь час',
                 isRecent ? 'Артисти з найбільшою кількістю появ за останні 30 днів.' : 'Артисти з найбільшою кількістю появ за весь період.',
-                source.top_artists_by_appearances || [],
-                (row) => `${formatUkNumber(row?.appearances_count || 0)} появ`,
+                artistsByAppearancesRows,
+                (row) => `Плейлісти: ${formatUkNumber(row?.playlists_count || 0)}`,
                 'appearances'
               )}
               ${renderStatsArtistList(
                 isRecent ? 'Найсильніші позиції' : 'Найсильніші позиції за весь час',
                 'У цьому списку вище ті, хто в середньому стояв ближче до топу.',
-                source.top_artists_by_position || [],
+                artistsByAveragePositionRows,
                 (row) => `Сер. позиція: ${round2(row?.avg_position || 0)}`,
                 'position'
               )}
@@ -12385,26 +14689,12 @@ function buildDashboardGenreOption(data) {
     async function loadStatsModal() {
   ui.statsContent.innerHTML = '<div class="loading-note">Завантаження чартів...</div>';
 
-  const [overviewResult, dashboardResult] = await Promise.allSettled([
-    apiJson("/stats/overview", { limit: 20 }),
-    state.dashboardLoaded && state.dashboardData ? Promise.resolve(state.dashboardData) : apiJson("/stats/dashboard")
-  ]);
-
-  if (overviewResult.status !== 'fulfilled') {
-    throw overviewResult.reason || new Error('Не вдалося завантажити чарти.');
-  }
-
-  const data = overviewResult.value;
+  const data = await apiJson("/stats/overview", { limit: 20 });
 
   state.statsLoaded = true;
   state.statsData = data;
 
-  if (dashboardResult.status === 'fulfilled' && dashboardResult.value) {
-    state.dashboardLoaded = true;
-    state.dashboardData = dashboardResult.value;
-  }
-
-  ui.statsContent.innerHTML = renderStatsOverviewContent(data, state.statsMode, state.dashboardData, state.chartGroup);
+  ui.statsContent.innerHTML = renderStatsOverviewContent(data, state.statsMode, state.chartGroup);
   activatePendingLocalLazyLists(ui.statsContent);
 }
 
@@ -12412,7 +14702,7 @@ function buildDashboardGenreOption(data) {
   activateMainTab("stats");
 
   if (state.statsLoaded && state.statsData) {
-    ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode, state.dashboardData, state.chartGroup);
+    ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode, state.chartGroup);
     activatePendingLocalLazyLists(ui.statsContent);
     return;
   }
@@ -12479,7 +14769,10 @@ function closeDashboardModal() {
       }
 
       if (!state.playlistModal.currentId) return;
-      await loadPlaylistModalPage(state.playlistModal.currentId, true);
+      state.playlistModal.initialOffset = 0;
+      state.playlistModal.focusTrackPosition = 0;
+      state.playlistModal.focusTrackApplied = true;
+      await loadPlaylistModalPage(state.playlistModal.currentId, { reset: true });
       if (isPlaylistModalSearchActive()) {
         runPlaylistModalTrackSearch(state.playlistModal.searchQuery);
       }
@@ -13272,6 +15565,17 @@ function renderCurrentPlaylistModal() {
     initPlaylistModalLazyLoad(ui.playlistContent);
     syncPreviewButtons(ui.playlistContent);
     updatePreviewMiniControls();
+
+    const focusPosition = getPlaylistModalFocusPosition();
+    if (focusPosition > 0 && !state.playlistModal.focusTrackApplied && !isPlaylistModalSearchActive()) {
+      const scrollArea = ui.playlistContent.querySelector('.playlist-modal-scroll-area');
+      const row = ui.playlistContent.querySelector(`[data-playlist-track-position="${CSS.escape(String(focusPosition))}"]`);
+      if (scrollArea && row) {
+        const targetTop = row.offsetTop - Math.max(0, (scrollArea.clientHeight - row.offsetHeight) / 2);
+        scrollArea.scrollTop = Math.max(0, targetTop);
+      }
+      state.playlistModal.focusTrackApplied = true;
+    }
   });
 }
 
@@ -13291,15 +15595,23 @@ function renderCurrentPlaylistModal() {
     if (!cached) return;
     if (getPlaylistModalSearchQuery()) return;
 
+    const nearTop = scrollArea.scrollTop < 220;
     const remaining = scrollArea.scrollHeight - scrollArea.scrollTop - scrollArea.clientHeight;
-    if (remaining > 220) return;
+    const nearBottom = remaining <= 220;
+
+    if (nearTop && cached.tracks_has_prev && !state.playlistModal.prependLoading) {
+      loadPlaylistModalPage(state.playlistModal.currentId, { direction: 'prev' });
+      return;
+    }
+
+    if (!nearBottom) return;
 
     if (appendNextPlaylistModalDomBatch(cached)) {
       return;
     }
 
-    if (cached.tracks_has_more) {
-      loadPlaylistModalPage(state.playlistModal.currentId, false);
+    if (cached.tracks_has_more && !state.playlistModal.appendLoading) {
+      loadPlaylistModalPage(state.playlistModal.currentId, { direction: 'next' });
     }
   }, { passive: true });
 }
@@ -13320,21 +15632,33 @@ function updatePlaylistModalSummaryAndState(cached) {
   }
 }
 
-async function loadPlaylistModalPage(playlistId, reset = false) {
+async function loadPlaylistModalPage(playlistId, options = {}) {
+      const opts = typeof options === 'boolean' ? { reset: options } : (options || {});
+      const reset = !!opts.reset;
+      const direction = reset ? 'reset' : String(opts.direction || 'next');
       if (state.playlistModal.loading) return;
 
       state.playlistModal.loading = true;
+      state.playlistModal.prependLoading = direction === 'prev';
+      state.playlistModal.appendLoading = direction === 'next';
 
       try {
         if (!reset && !getPlaylistModalSearchQuery()) {
           const stateBox = ui.playlistContent.querySelector("#playlist-modal-table-state");
           if (stateBox) {
-            stateBox.innerHTML = '<div class="playlist-modal-empty-state">Завантаження ще треків...</div>';
+            stateBox.innerHTML = `<div class="playlist-modal-empty-state">${direction === 'prev' ? 'Завантаження попередніх треків...' : 'Завантаження ще треків...'}</div>`;
           }
         }
 
         const cached = state.playlistModal.cache.get(playlistId);
-        const offset = reset || !cached ? 0 : (cached.tracks || []).length;
+        let offset = 0;
+        if (reset || !cached) {
+          offset = getPlaylistModalInitialOffset();
+        } else if (direction === 'prev') {
+          offset = Math.max(0, Number(cached.tracks_offset_start || 0) - state.playlistModal.limit);
+        } else {
+          offset = Math.max(0, Number(cached.tracks_offset_end || 0));
+        }
 
         const data = await apiJson("/playlist-details", {
           id: playlistId,
@@ -13349,33 +15673,45 @@ async function loadPlaylistModalPage(playlistId, reset = false) {
           return;
         }
 
-        let nextState;
-        if (reset || !cached) {
-          nextState = {
-            ...data.result,
-            tracks: [...(data.result.tracks || [])]
-          };
-        } else {
-          nextState = {
-            ...cached,
-            ...data.result,
-            tracks: [...(cached.tracks || []), ...(data.result.tracks || [])]
-          };
+        const incoming = Array.isArray(data.result.tracks) ? data.result.tracks : [];
+        let mergedTracks = incoming.slice();
+        let offsetStart = offset;
+
+        if (!reset && cached) {
+          if (direction === 'prev') {
+            mergedTracks = dedupePlaylistModalTracks(incoming.concat(cached.tracks || []));
+            offsetStart = offset;
+          } else {
+            mergedTracks = dedupePlaylistModalTracks((cached.tracks || []).concat(incoming));
+            offsetStart = Math.max(0, Number(cached.tracks_offset_start || 0));
+          }
         }
 
-        if (reset) {
-          nextState._domRenderedCount = Math.min((nextState.tracks || []).length, PLAYLIST_MODAL_INITIAL_DOM_BATCH);
-        } else {
-          nextState._domRenderedCount = Number(cached?._domRenderedCount || 0);
-        }
+        const tracksTotal = Math.max(0, Number(data.result.tracks_total || cached?.tracks_total || mergedTracks.length));
+        const offsetEnd = offsetStart + mergedTracks.length;
+        const nextState = {
+          ...(cached || {}),
+          ...data.result,
+          tracks: mergedTracks,
+          tracks_total: tracksTotal,
+          tracks_loaded: mergedTracks.length,
+          tracks_offset_start: offsetStart,
+          tracks_offset_end: offsetEnd,
+          tracks_has_prev: offsetStart > 0,
+          tracks_has_more: offsetEnd < tracksTotal,
+          _domRenderedCount: mergedTracks.length
+        };
 
-        nextState.tracks_loaded = nextState.tracks.length;
         state.playlistModal.cache.set(playlistId, nextState);
 
         if (reset || getPlaylistModalSearchQuery()) {
           renderCurrentPlaylistModal();
+        } else if (direction === 'prev') {
+          rerenderPlaylistModalRows(nextState, { preserveBottomAnchor: true });
+          updatePlaylistModalSummaryAndState(nextState);
+          setPreviewQueueForSource("playlist-modal", getPlaylistModalDisplayedTracks(nextState));
         } else {
-          appendNextPlaylistModalDomBatch(nextState);
+          appendPlaylistModalTracksChunked(incoming, Math.max(0, Number(cached?.tracks?.length || 0)));
           updatePlaylistModalSummaryAndState(nextState);
           setPreviewQueueForSource("playlist-modal", getPlaylistModalDisplayedTracks(nextState));
         }
@@ -13390,6 +15726,8 @@ async function loadPlaylistModalPage(playlistId, reset = false) {
         }
       } finally {
         state.playlistModal.loading = false;
+        state.playlistModal.prependLoading = false;
+        state.playlistModal.appendLoading = false;
 
         if ((reset || getPlaylistModalSearchQuery()) && state.playlistModal.currentId === playlistId && state.playlistModal.cache.has(playlistId)) {
           renderCurrentPlaylistModal();
@@ -13397,7 +15735,9 @@ async function loadPlaylistModalPage(playlistId, reset = false) {
       }
     }
 
-    async function openPlaylistModal(playlistId) {
+    async function openPlaylistModal(playlistId, options = {}) {
+      const opts = options && typeof options === 'object' ? options : {};
+      const focusPosition = Math.max(0, Number(opts.focusPosition || 0) || 0);
       closePlaylistModal();
       state.playlistModal.currentId = playlistId;
       state.playlistModal.sortKey = "position";
@@ -13407,9 +15747,12 @@ async function loadPlaylistModalPage(playlistId, reset = false) {
       state.playlistModal.searchResults = null;
       state.playlistModal.searchError = "";
       state.playlistModal.searchMeta = { isUrl: false, entityType: "", entityId: "", resolvedLabel: "" };
+      state.playlistModal.initialOffset = focusPosition > 0 ? Math.floor((focusPosition - 1) / state.playlistModal.limit) * state.playlistModal.limit : 0;
+      state.playlistModal.focusTrackPosition = focusPosition;
+      state.playlistModal.focusTrackApplied = false;
       showModal(ui.playlistModal);
       ui.playlistContent.innerHTML = '<div class="loading-note">Завантаження треків...</div>';
-      await loadPlaylistModalPage(playlistId, true);
+      await loadPlaylistModalPage(playlistId, { reset: true });
     }
 
     function closePlaylistModal() {
@@ -13420,6 +15763,9 @@ async function loadPlaylistModalPage(playlistId, reset = false) {
       state.playlistModal.searchResults = null;
       state.playlistModal.searchError = "";
       state.playlistModal.searchMeta = { isUrl: false, entityType: "", entityId: "", resolvedLabel: "" };
+      state.playlistModal.initialOffset = 0;
+      state.playlistModal.focusTrackPosition = 0;
+      state.playlistModal.focusTrackApplied = false;
       state.playlistModal.searchRequestToken += 1;
       if (state.playlistModal.searchDebounceTimer) {
         clearTimeout(state.playlistModal.searchDebounceTimer);
@@ -13680,17 +16026,10 @@ function setCuratorsSearchUiState() {
 
 function setCuratorsSortDirValue(value, notify = false) {
   const nextValue = value === "asc" ? "asc" : "desc";
-  const tooltip = nextValue === "asc" ? "За зростанням" : "За спаданням";
 
-  if (!ui.curatorsSortDirBtn) return;
+  if (!ui.curatorsSortDir) return;
 
-  ui.curatorsSortDirBtn.dataset.value = nextValue;
-  ui.curatorsSortDirBtn.setAttribute("aria-label", tooltip);
-
-  const tooltipEl = ui.curatorsSortDirBtn.querySelector(".curators-sort-dir-tooltip");
-  if (tooltipEl) {
-    tooltipEl.textContent = tooltip;
-  }
+  setBasicCustomSelectValue(ui.curatorsSortDir, nextValue);
 
   if (notify) {
     scheduleCuratorsReload();
@@ -13802,7 +16141,7 @@ function renderCuratorsGenreFilters() {
 
     return `
       <label class="curator-genre-option ${isActive ? "is-active" : ""}" ${dataAttr}>
-        <input class="curator-genre-checkbox-input" type="checkbox" ${isActive ? "checked" : ""} tabindex="-1" aria-hidden="true">
+        <input class="curator-genre-checkbox-input" type="radio" name="curators-genre-radio" ${isActive ? "checked" : ""} tabindex="-1" aria-hidden="true">
         <span class="curator-genre-checkbox"></span>
         <span class="curator-genre-option-text">${escapeHtml(item.label)}</span>
         <span class="curator-genre-option-count">${formatUkNumber(item.count || 0)}</span>
@@ -13817,15 +16156,10 @@ function toggleCuratorGenreFilter(genreSlug) {
   const slug = String(genreSlug || "").trim();
   if (!slug) return;
 
-  const selected = new Set(getCuratorsSelectedGenres());
+  const current = getCuratorsSelectedGenres();
+  if (current.length === 1 && current[0] === slug) return;
 
-  if (selected.has(slug)) {
-    selected.delete(slug);
-  } else {
-    selected.add(slug);
-  }
-
-  state.curatorsCatalog.selectedGenres = Array.from(selected);
+  state.curatorsCatalog.selectedGenres = [slug];
   renderCuratorsGenreFilters();
   scheduleCuratorsReload();
 }
@@ -13840,7 +16174,7 @@ function getCuratorsFiltersFromUi() {
   return {
     search: ui.curatorsSearchQuery.value.trim(),
     sortBy: ui.curatorsSortBy.querySelector(".selected")?.dataset.value || "total_followers",
-    sortDir: ui.curatorsSortDirBtn?.dataset.value || "desc",
+    sortDir: ui.curatorsSortDir?.querySelector(".selected")?.dataset.value || "desc",
     followerMin: ui.curatorsFollowerMin.value.trim(),
     followerMax: ui.curatorsFollowerMax.value.trim(),
     genre: getCuratorsSelectedGenres().join(",")
@@ -13899,10 +16233,7 @@ function initCuratorsAutoApply() {
     }, 0);
   });
 
-  ui.curatorsSortDirBtn.addEventListener("click", () => {
-    const nextValue = ui.curatorsSortDirBtn.dataset.value === "asc" ? "desc" : "asc";
-    setCuratorsSortDirValue(nextValue, true);
-  });
+  ui.curatorsSortDir.addEventListener("change", scheduleCuratorsReload);
 
   ui.curatorsGenreTrigger.addEventListener("click", (event) => {
     event.preventDefault();
@@ -13918,7 +16249,7 @@ function initCuratorsAutoApply() {
   });
 
   setCuratorsSearchUiState();
-  setCuratorsSortDirValue(ui.curatorsSortDirBtn?.dataset.value || "desc");
+  setCuratorsSortDirValue(ui.curatorsSortDir?.querySelector(".selected")?.dataset.value || "desc");
 }
 
 function initCuratorRangeControls(filterMeta) {
@@ -13962,6 +16293,8 @@ function initCuratorRangeControls(filterMeta) {
     safeMax,
     formatUkNumber
   );
+
+  initRangeTooltipAnchors();
 }
 
 async function loadCuratorsFilterMeta() {
@@ -14011,6 +16344,7 @@ async function loadCuratorsCatalog(reset = false) {
 
     if (reset) {
       state.curatorsCatalog.items = data.items || [];
+      curatorsLazyArmed = false;
     } else {
       state.curatorsCatalog.items = state.curatorsCatalog.items.concat(data.items || []);
     }
@@ -14053,7 +16387,8 @@ async function initCuratorsCatalogIfNeeded() {
 
   try {
     initBasicCustomSelect(ui.curatorsSortBy);
-    setCuratorsSortDirValue(ui.curatorsSortDirBtn?.dataset.value || "desc");
+    initBasicCustomSelect(ui.curatorsSortDir);
+    setCuratorsSortDirValue(ui.curatorsSortDir?.querySelector(".selected")?.dataset.value || "desc");
 
     const filterMeta = await loadCuratorsFilterMeta();
     state.curatorsCatalog.filterMeta = filterMeta;
@@ -14094,7 +16429,8 @@ function closeCuratorsCatalogModal() {
       tracks: {
         max: Number(data?.tracks?.max || 0),
         scale: Array.isArray(data?.tracks?.scale) ? data.tracks.scale : []
-      }
+      },
+      genres: Array.isArray(data?.genres) ? data.genres : []
     };
   } catch (error) {
     return {
@@ -14105,12 +16441,82 @@ function closeCuratorsCatalogModal() {
       tracks: {
         max: 5000,
         scale: []
-      }
+      },
+      genres: []
     };
   }
 }
     
-    async function initApp() {
+    let activeRangeTooltipAnchor = null;
+
+function closeRangeTooltip(anchor) {
+  if (!anchor) return;
+
+  if (document.activeElement instanceof HTMLElement && anchor.contains(document.activeElement) && typeof document.activeElement.blur === "function") {
+    document.activeElement.blur();
+  }
+
+  anchor.classList.remove("is-tooltip-open");
+
+  if (activeRangeTooltipAnchor === anchor) {
+    activeRangeTooltipAnchor = null;
+  }
+}
+
+function closeAllRangeTooltips(exceptAnchor = null) {
+  document.querySelectorAll(".range-tooltip-anchor.is-tooltip-open").forEach((anchor) => {
+    if (anchor !== exceptAnchor) {
+      closeRangeTooltip(anchor);
+    }
+  });
+}
+
+function initRangeTooltipAnchors(root = document) {
+  const anchors = root.querySelectorAll(".range-tooltip-anchor");
+
+  anchors.forEach((anchor) => {
+    if (anchor.dataset.rangeTooltipInit === "1") return;
+    anchor.dataset.rangeTooltipInit = "1";
+
+    const openAnchor = () => {
+      closeAllRangeTooltips(anchor);
+      activeRangeTooltipAnchor = anchor;
+      anchor.classList.add("is-tooltip-open");
+    };
+
+    const maybeCloseAnchor = () => {
+      requestAnimationFrame(() => {
+        if (!anchor.isConnected) return;
+        if (anchor.matches(":hover") || anchor.matches(":focus-within")) return;
+        closeRangeTooltip(anchor);
+      });
+    };
+
+    anchor.addEventListener("mouseenter", openAnchor);
+    anchor.addEventListener("focusin", openAnchor);
+    anchor.addEventListener("mouseleave", maybeCloseAnchor);
+    anchor.addEventListener("focusout", maybeCloseAnchor);
+    anchor.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      openAnchor();
+    }, true);
+  });
+}
+
+document.addEventListener("pointerdown", (event) => {
+  const anchor = event.target instanceof Element ? event.target.closest(".range-tooltip-anchor") : null;
+
+  if (anchor) {
+    closeAllRangeTooltips(anchor);
+    activeRangeTooltipAnchor = anchor;
+    anchor.classList.add("is-tooltip-open");
+    return;
+  }
+
+  closeAllRangeTooltips();
+}, true);
+
+async function initApp() {
   activateMainTab("playlists");
   updateSearchIntroVisibility();
   initPreviewPlayer();
@@ -14119,9 +16525,12 @@ function closeCuratorsCatalogModal() {
   initBasicCustomSelect(ui.playlistSortDir);
 
   const filterMeta = await loadPlaylistFilterMeta();
+  state.playlist.filterMeta = filterMeta;
 
   initPlaylistRangeControls(filterMeta);
+  initRangeTooltipAnchors();
   initPlaylistAutoApply();
+  renderPlaylistGenreFilters();
 
   try {
     await loadPlaylists(true);
@@ -14345,9 +16754,21 @@ ui.searchQuery.addEventListener("click", () => {
         return;
       }
 
+      const searchTrackToggle = event.target.closest("[data-search-track-toggle='1']");
+      if (searchTrackToggle) {
+        if (!event.target.closest('a[href], [data-preview-play="1"], .placement-playlist-button')) {
+          toggleSearchTrackAccordion(searchTrackToggle.getAttribute('data-search-track-accordion-id') || '');
+          return;
+        }
+      }
+
       const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
       if (playlistModalTrigger) {
-        openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"));
+        event.preventDefault();
+        openPlaylistModal(
+          playlistModalTrigger.getAttribute("data-playlist-id"),
+          { focusPosition: Number(playlistModalTrigger.getAttribute('data-playlist-focus-position') || 0) || 0 }
+        );
         return;
       }
 
@@ -14360,14 +16781,15 @@ ui.searchQuery.addEventListener("click", () => {
         return;
       }
 
-      const toggleTrigger = event.target.closest("[data-placement-toggle='1']");
-      if (toggleTrigger) {
-        togglePlacementDetails(
-          toggleTrigger.getAttribute("data-table-id"),
-          toggleTrigger.getAttribute("data-playlist-id")
-        );
-      }
     }); 
+
+    ui.searchResults.addEventListener("keydown", (event) => {
+      const searchTrackToggle = event.target.closest("[data-search-track-toggle='1']");
+      if (!searchTrackToggle) return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      toggleSearchTrackAccordion(searchTrackToggle.getAttribute('data-search-track-accordion-id') || '');
+    });
 
     ui.playlistList.addEventListener("click", (event) => {
       const curatorModalTrigger = event.target.closest("[data-curator-modal-btn='1']");
@@ -14379,7 +16801,7 @@ ui.searchQuery.addEventListener("click", () => {
 
       const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
       if (!playlistModalTrigger) return;
-      openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"));
+      openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"), { focusPosition: Number(playlistModalTrigger.getAttribute("data-playlist-focus-position") || 0) || 0 });
     });
 
     ui.playlistContent.addEventListener("click", (event) => {
@@ -14448,12 +16870,16 @@ ui.searchQuery.addEventListener("click", () => {
     });
     
     ui.statsContent.addEventListener("click", (event) => {
+  if (handlePreviewTriggerClick(event)) {
+    return;
+  }
+
   const modeBtn = event.target.closest("[data-stats-mode]");
   if (modeBtn && state.statsData) {
     const nextMode = modeBtn.getAttribute("data-stats-mode");
     if (nextMode && nextMode !== state.statsMode) {
       state.statsMode = nextMode;
-      ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode, state.dashboardData, state.chartGroup);
+      ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode, state.chartGroup);
       activatePendingLocalLazyLists(ui.statsContent);
     }
     return;
@@ -14464,9 +16890,58 @@ ui.searchQuery.addEventListener("click", () => {
     const nextGroup = groupBtn.getAttribute("data-chart-group");
     if (nextGroup && nextGroup !== state.chartGroup) {
       state.chartGroup = nextGroup;
-      ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode, state.dashboardData, state.chartGroup);
+      ui.statsContent.innerHTML = renderStatsOverviewContent(state.statsData, state.statsMode, state.chartGroup);
       activatePendingLocalLazyLists(ui.statsContent);
     }
+    return;
+  }
+
+  const chartLink = event.target.closest("a[href]");
+  if (chartLink) {
+    return;
+  }
+
+  const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
+  if (playlistModalTrigger) {
+    event.preventDefault();
+    openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"), { focusPosition: Number(playlistModalTrigger.getAttribute("data-playlist-focus-position") || 0) || 0 });
+    return;
+  }
+
+  const curatorModalTrigger = event.target.closest("[data-curator-modal-btn='1']");
+  if (curatorModalTrigger) {
+    event.preventDefault();
+    openCuratorModal(curatorModalTrigger.getAttribute("data-curator-id"));
+    return;
+  }
+
+  const trackChartTrigger = event.target.closest("[data-chart-track-open='1']");
+  if (trackChartTrigger) {
+    event.preventDefault();
+    clearSearchOutput();
+    runSuggestionItem({
+      type: "track",
+      id: trackChartTrigger.getAttribute("data-track-id"),
+      name: trackChartTrigger.getAttribute("data-track-name") || ""
+    }).catch(() => {
+      setSearchSummary("Сталася помилка під час пошуку треку.");
+      showSearchNoResults("Не вдалося відкрити дані треку.");
+    });
+    return;
+  }
+
+  const artistChartTrigger = event.target.closest("[data-chart-artist-open='1']");
+  if (artistChartTrigger) {
+    event.preventDefault();
+    clearSearchOutput();
+    runSuggestionItem({
+      type: "artist",
+      id: artistChartTrigger.getAttribute("data-artist-id"),
+      name: artistChartTrigger.getAttribute("data-artist-name") || ""
+    }).catch(() => {
+      setSearchSummary("Сталася помилка під час пошуку артиста.");
+      showSearchNoResults("Не вдалося відкрити дані артиста.");
+    });
   }
 }); 
 
@@ -14500,10 +16975,28 @@ ui.searchQuery.addEventListener("click", () => {
       }
     });
 
+    ui.catalogShell.addEventListener("click", (event) => {
+      const genreAllTrigger = event.target.closest("[data-playlist-genre-all]");
+      if (genreAllTrigger) {
+        event.preventDefault();
+        clearPlaylistGenreFilters();
+        return;
+      }
+
+      const genreTrigger = event.target.closest("[data-playlist-genre]");
+      if (genreTrigger) {
+        event.preventDefault();
+        togglePlaylistGenreFilter(genreTrigger.getAttribute("data-playlist-genre"));
+      }
+    });
+
     document.addEventListener("click", (event) => {
-      if (!ui.curatorsGenreSelect) return;
-      if (ui.curatorsGenreSelect.contains(event.target)) return;
-      closeCuratorsGenreDropdown();
+      if (ui.curatorsGenreSelect && !ui.curatorsGenreSelect.contains(event.target)) {
+        closeCuratorsGenreDropdown();
+      }
+      if (ui.playlistGenreSelect && !ui.playlistGenreSelect.contains(event.target)) {
+        closePlaylistGenreDropdown();
+      }
     });
     
     ui.playlistContent.addEventListener("input", (event) => {
@@ -14603,7 +17096,7 @@ ui.searchQuery.addEventListener("click", () => {
       const playlistModalTrigger = event.target.closest("[data-playlist-modal-btn='1']");
       if (playlistModalTrigger) {
         event.preventDefault();
-        openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"));
+        openPlaylistModal(playlistModalTrigger.getAttribute("data-playlist-id"), { focusPosition: Number(playlistModalTrigger.getAttribute("data-playlist-focus-position") || 0) || 0 });
         return;
       }
 
