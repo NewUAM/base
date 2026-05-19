@@ -2949,6 +2949,41 @@ function fixKeyboardLayout(input) {
 
     return input.split('').map(char => enToRu[char] || char).join('');
 }
+
+function normalizeSearchText(input) {
+    return String(input || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[’‘ʼ`´]/g, "'")
+        .replace(/[‐‑‒–—―]/g, '-')
+        .replace(/[^a-z0-9а-яёіїєґ\s'&.-]/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function normalizeSearchCompact(input) {
+    return normalizeSearchText(input).replace(/[^a-z0-9а-яёіїєґ]/gi, '');
+}
+
+function buildSearchVariants(input) {
+    const normalized = normalizeSearchText(input);
+    const transliterated = normalizeSearchText(transliterate(normalized));
+    const fixedKeyboard = normalizeSearchText(fixKeyboardLayout(normalized));
+
+    return Array.from(new Set([
+        normalized,
+        transliterated,
+        fixedKeyboard,
+        normalizeSearchCompact(normalized),
+        normalizeSearchCompact(transliterated),
+        normalizeSearchCompact(fixedKeyboard)
+    ].filter(Boolean)));
+}
+
+function buildArtistSearchText(artistName) {
+    return buildSearchVariants(artistName).join(' ');
+}
   
   let allArtistURLs = new Set();
 
@@ -4383,12 +4418,16 @@ infoIcon.style.justifyContent = 'center';
 let flexSearchIndex;
 let flexSearchUrlIndex;
 const artists = [];
+const artistSearchTexts = [];
 
 function initializeSearchIndex(artistsData) {
+    artists.length = 0;
+    artistSearchTexts.length = 0;
+
     flexSearchIndex = new FlexSearch.Document({
         document: {
             id: 'id',
-            index: ['Артист'],
+            index: ['Артист', 'АртистSearch'],
             store: ['Артист']
         },
         tokenize: 'forward',
@@ -4411,9 +4450,12 @@ function initializeSearchIndex(artistsData) {
 
     artistsData.forEach((artist, id) => {
         if (artist['Артист']) {
+            const artistSearchText = buildArtistSearchText(artist['Артист']);
+
             flexSearchIndex.add({
                 id: id,
-                Артист: artist['Артист']
+                Артист: artist['Артист'],
+                АртистSearch: artistSearchText
             });
 
             const urls = {};
@@ -4429,7 +4471,9 @@ function initializeSearchIndex(artistsData) {
                     ...urls
                 });
             }
+
             artists[id] = artist;
+            artistSearchTexts[id] = artistSearchText;
         }
     });
 }
@@ -4442,24 +4486,34 @@ function normalizeUrl(url) {
 function filterArtistsByName(query) {
     requestAnimationFrame(() => {
         let searchResults = [];
+        let queryVariants = [];
+
         if (query.includes("spotify.com")) {
             searchResults.push(...flexSearchUrlIndex.search(normalizeUrl(query)));
         } else {
-            const transliteratedQuery = transliterate(query);
-            const fixedKeyboardQuery = fixKeyboardLayout(query);
+            queryVariants = buildSearchVariants(query);
 
-            searchResults.push(...flexSearchIndex.search(query));
-            if (transliteratedQuery !== query) {
-                searchResults.push(...flexSearchIndex.search(transliteratedQuery));
-            }
-            if (fixedKeyboardQuery !== query) {
-                searchResults.push(...flexSearchIndex.search(fixedKeyboardQuery));
-            }
+            queryVariants.forEach(searchQuery => {
+                searchResults.push(...flexSearchIndex.search(searchQuery));
+            });
         }
 
-        const uniqueResults = Array.from(new Set(searchResults.flat().map(result => result.result).flat()));
+        const uniqueResultIds = new Set(searchResults.flat().map(result => result.result).flat());
 
-        const filteredArtists = uniqueResults.map(id => artists[id]);
+        if (!query.includes("spotify.com")) {
+            queryVariants.forEach(searchQuery => {
+                artists.forEach((artist, id) => {
+                    const artistSearchText = artistSearchTexts[id];
+                    if (artist && artistSearchText && artistSearchText.includes(searchQuery)) {
+                        uniqueResultIds.add(id);
+                    }
+                });
+            });
+        }
+
+        const filteredArtists = Array.from(uniqueResultIds)
+            .map(id => artists[id])
+            .filter(Boolean);
 
         const noArtistsNameMessage = document.getElementById('no-artists-name-message');
         noArtistsNameMessage.style.display = 'none';
