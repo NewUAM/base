@@ -3535,11 +3535,6 @@ body.base-initial-pending #artist-search { pointer-events: none; }
   </div>
   </div>
 <script>
-function isIOS() {
-    const iOSDetected = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const firefoxDetected = /Firefox/.test(navigator.userAgent);
-    return iOSDetected || firefoxDetected;
-}
   
 let displayOffset = 0;
 const displayBatchSize = 50;
@@ -7055,11 +7050,7 @@ function updateGenresDisplay(artists) {
         genreButton.className = 'genre-button';
         genreButton.dataset.originalCount = data.count;
         genreButton.dataset.genre = genre;
-        if (isIOS()) {
-            genreButton.innerHTML = `<span class="genre-name">${genre}</span>`;
-        } else {
-            genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${data.count})</span>`;
-        }
+        genreButton.innerHTML = `<span class="genre-name">${genre}</span><span class="genre-count">(${data.count})</span>`;
 
         if (data.count === 0) {
             genreButton.classList.add('gray-out');
@@ -7147,11 +7138,7 @@ function updateLabelsDisplay(artists) {
         labelButton.className = 'genre-button';
         labelButton.dataset.label = label;
 
-        if (isIOS()) {
-            labelButton.innerHTML = `<span class="genre-name">${label}</span>`;
-        } else {
-            labelButton.innerHTML = `<span class="genre-name">${label}</span><span class="genre-count">(${data.count})</span>`;
-        }
+        labelButton.innerHTML = `<span class="genre-name">${label}</span><span class="genre-count">(${data.count})</span>`;
 
         if (removedLabels.includes(label)) {
             labelButton.classList.add('removed');
@@ -7232,11 +7219,7 @@ function updateCitiesDisplay(artists) {
         cityButton.className = 'genre-button';
         cityButton.dataset.city = city;
 
-        if (isIOS()) {
-            cityButton.innerHTML = `<span class="genre-name">${city}</span>`;
-        } else {
-            cityButton.innerHTML = `<span class="genre-name">${city}</span><span class="genre-count">(${data.count})</span>`;
-        }
+        cityButton.innerHTML = `<span class="genre-name">${city}</span><span class="genre-count">(${data.count})</span>`;
 
         if (removedCities.includes(city)) {
             cityButton.classList.add('removed');
